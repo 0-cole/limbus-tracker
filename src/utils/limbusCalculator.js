@@ -127,21 +127,27 @@ export function generateRoadmap(
     // 2. Perform runs and consume bonuses
     let gainedExpFromRuns = 0;
     let runsList = [];
+    let modulesUsedToday = 0;
+    // Dailies always cost 5 modules if not yet done
+    if (!currentDailiesDone) modulesUsedToday += 5;
     for(let r=0; r<runsCountToday; r++){
         if (bpState && bpState.hasMdHard && currentBonuses >= 3) {
             currentBonuses -= 3;
             gainedExpFromRuns += 225;
             totalModulesNeeded += 18;
-            runsList.push({ type: 'Hard Bonus', exp: 225 });
+            modulesUsedToday += 18;
+            runsList.push({ type: 'Hard Bonus', exp: 225, modules: 18 });
         } else if (currentBonuses >= 1) {
             currentBonuses -= 1;
             gainedExpFromRuns += 45;
             totalModulesNeeded += 5;
-            runsList.push({ type: 'Normal Bonus', exp: 45 });
+            modulesUsedToday += 5;
+            runsList.push({ type: 'Normal Bonus', exp: 45, modules: 5 });
         } else {
             gainedExpFromRuns += 30;
             totalModulesNeeded += 5;
-            runsList.push({ type: 'Normal', exp: 30 });
+            modulesUsedToday += 5;
+            runsList.push({ type: 'Normal', exp: 30, modules: 5 });
         }
     }
 
@@ -163,7 +169,8 @@ export function generateRoadmap(
       gainedExpFromRuns: gainedExpFromRuns,
       passiveGained: passiveGained,
       gained: totalGainedToday,
-      totalExp: cumulativeExp
+      totalExp: cumulativeExp,
+      modulesUsed: modulesUsedToday
     });
 
     // 5. Advance Cursor to next day and trigger resets if necessary

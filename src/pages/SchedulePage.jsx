@@ -230,10 +230,11 @@ export default function SchedulePage() {
         <Calendar size={24} className="text-[#c9a84c]" /> Grind Roadmap (Next 30 Days)
       </h2>
       <div className="bg-[#111] border border-[#333] rounded-xl overflow-hidden mb-12">
-         <div className="grid grid-cols-4 bg-black/60 p-4 border-b border-[#333] font-bold text-sm text-gray-400 uppercase tracking-wider">
+         <div className="grid grid-cols-5 bg-black/60 p-4 border-b border-[#333] font-bold text-sm text-gray-400 uppercase tracking-wider">
             <div>Day</div>
             <div>Required MDs</div>
             <div>EXP Gained</div>
+            <div className="text-[#60a5fa]">Modules Cost</div>
             <div>Total EXP Generated</div>
          </div>
            <div className="max-h-[300px] overflow-y-auto">
@@ -242,7 +243,7 @@ export default function SchedulePage() {
                 return roadmap.map((row, idx) => {
                   const isGoal = idx === goalIdx;
                   return (
-                    <div key={idx} className={`grid grid-cols-4 p-4 border-b border-[#333]/50 text-sm ${isGoal ? 'bg-[#22c55e]/20 border-[#22c55e]' : row.day % 7 === 1 ? 'bg-[#c9a84c]/10' : ''}`}>
+                    <div key={idx} className={`grid grid-cols-5 p-4 border-b border-[#333]/50 text-sm ${isGoal ? 'bg-[#22c55e]/20 border-[#22c55e]' : row.day % 7 === 1 ? 'bg-[#c9a84c]/10' : ''}`}>
                         <div className="font-bold text-white flex items-center">
                           Day {row.day} <span className="text-xs text-gray-400 font-normal ml-2">({row.weekday})</span>
                           {row.day % 7 === 1 && !isGoal && <span className="text-xs text-[#c9a84c] ml-2">(Weekly Reset)</span>}
@@ -269,6 +270,22 @@ export default function SchedulePage() {
                             <div className="text-[11px] text-[#c9a84c] font-normal">
                               +{row.passiveGained} <span className="text-gray-500">Missions</span>
                             </div>
+                          )}
+                        </div>
+                        <div className="flex flex-col justify-center">
+                          {row.modulesUsed > 0 ? (
+                            <div className="flex flex-col gap-0.5">
+                              <span className="text-[#60a5fa] font-bold font-mono">{row.modulesUsed} <span className="text-[10px] text-gray-400 font-normal">modules</span></span>
+                              <div className="flex flex-col gap-0.5">
+                                {!row.runsList.length && <span className="text-[10px] text-gray-500">5 Dailies</span>}
+                                {row.runsList.length > 0 && <span className="text-[10px] text-gray-500">5 Dailies</span>}
+                                {row.runsList.map((run, i) => (
+                                  <span key={i} className="text-[10px] text-gray-500">{run.modules} {run.type}</span>
+                                ))}
+                              </div>
+                            </div>
+                          ) : (
+                            <span className="text-gray-600 text-xs">0</span>
                           )}
                         </div>
                         <div className="text-white font-mono font-bold flex flex-col justify-center">
