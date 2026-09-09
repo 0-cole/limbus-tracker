@@ -1,0 +1,12 @@
+node_modules/
+dist/
+release/
+release2/
+win-unpacked/
+asar-out/
+wiki_cache/
+.env
+*.exe
+*.zip
+*.log
+.DS_Store

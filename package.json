@@ -1,0 +1,65 @@
+{
+  "name": "limbus-tracker",
+  "version": "1.0.10",
+  "description": "Limbus Company Companion App — Track IDs, EGOs, Schedules, Shards & Weeklies",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "build": "vite build",
+    "preview": "vite preview",
+    "package": "electron-builder --win -c.extraMetadata.main=electron/main.cjs"
+  },
+  "dependencies": {
+    "cheerio": "^1.2.0",
+    "framer-motion": "^12.0.0",
+    "lucide-react": "^0.500.0",
+    "playwright": "^1.62.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-joyride": "^3.2.0",
+    "react-router-dom": "^7.0.0",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.5.0",
+    "autoprefixer": "^10.4.0",
+    "concurrently": "^9.0.0",
+    "electron": "^36.0.0",
+    "electron-builder": "^26.15.3",
+    "postcss": "^8.5.0",
+    "puppeteer": "^25.10.0",
+    "tailwindcss": "^3.4.0",
+    "vite": "^6.0.0",
+    "wait-on": "^8.0.0"
+  },
+  "build": {
+    "appId": "com.limbustracker.app",
+    "productName": "Limbus Tracker",
+    "directories": {
+      "output": "release2"
+    },
+    "files": [
+      "dist",
+      "electron",
+      "package.json",
+      "src/data/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    }
+  }
+}
