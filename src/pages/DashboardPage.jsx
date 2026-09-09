@@ -244,20 +244,6 @@ export default function DashboardPage() {
         </h2>
         
         <div className="space-y-4">
-          <div className="bg-[#111] border border-[#333] p-6 rounded-lg flex flex-col md:flex-row items-center justify-between gap-6">
-            <div>
-              <h3 className="font-bold text-white mb-1">Replay App Tutorial</h3>
-              <p className="text-sm text-gray-400">Launch the interactive UI tutorial again to learn how the tracker works.</p>
-            </div>
-            <button 
-              onClick={() => {
-                useStore.getState().setTutorialCompleted(false);
-              }}
-              className="px-4 py-2 bg-[#222] border border-[#444] hover:border-[#c9a84c] text-white font-bold rounded transition-colors whitespace-nowrap"
-            >
-              Replay Tutorial
-            </button>
-          </div>
 
           {window.electronAPI?.setGameLaunchPreference && (
             <label className="bg-[#111] border border-[#333] p-6 rounded-lg flex flex-col md:flex-row items-center justify-between gap-6 cursor-pointer">

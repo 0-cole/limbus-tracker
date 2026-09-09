@@ -23,7 +23,7 @@ export default function OnboardingModal() {
       >
         <div className="bg-[#1a1a1a] p-4 border-b border-[#333] flex justify-between items-center">
           <h2 className="text-[#c9a84c] font-bold text-xl tracking-wider uppercase">Welcome to Limbus Tracker</h2>
-          <div className="text-gray-500 font-mono text-sm">Step {step} of 4</div>
+          <div className="text-gray-500 font-mono text-sm">Step {step} of 5</div>
         </div>
         
         <div className="p-8 flex-1 min-h-[300px]">
@@ -185,6 +185,31 @@ export default function OnboardingModal() {
                 </div>
               </motion.div>
             )}
+            {step === 5 && (
+              <motion.div key="step5" initial={{opacity:0, x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}} className="space-y-6">
+                <div>
+                  <h3 className="text-2xl text-white font-bold mb-2">Quick App Guide</h3>
+                  <p className="text-gray-400">Here's a quick overview of each section so you know where everything lives.</p>
+                </div>
+                <div className="space-y-3 pt-2">
+                  {[
+                    { emoji: '🏠', name: 'Dashboard', desc: 'High-level overview of your progress, daily checklist, and a snapshot of today\'s grind plan.' },
+                    { emoji: '📅', name: 'Schedule', desc: 'The heart of the app. Configure your BP level and Canto — it calculates exactly how many Mirror Dungeons you need to reach your Wishlist goals.' },
+                    { emoji: '🎒', name: 'Inventory', desc: 'Track your Enkephalin (with live regen timer), Shards, Crates, and Enkephalin Modules.' },
+                    { emoji: '⭐', name: 'Wishlist', desc: 'Add Identities and E.G.O you want — they automatically feed into the Schedule calculator.' },
+                    { emoji: '📖', name: 'Databases', desc: 'Browse every Identity and E.G.O. Mark them as Acquired to keep your collection up to date.' },
+                  ].map(({ emoji, name, desc }) => (
+                    <div key={name} className="flex gap-3 bg-black/50 p-3 border border-[#333] rounded-lg">
+                      <div className="text-2xl w-8 flex-shrink-0 text-center">{emoji}</div>
+                      <div>
+                        <div className="text-white font-bold text-sm">{name}</div>
+                        <div className="text-gray-400 text-xs mt-0.5">{desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
           </AnimatePresence>
         </div>
         
@@ -197,7 +222,7 @@ export default function OnboardingModal() {
             Back
           </button>
           
-          {step < 4 ? (
+          {step < 5 ? (
             <button 
               onClick={() => setStep(step + 1)}
               className="px-6 py-2 bg-[#c9a84c] text-black font-bold rounded hover:bg-[#d4b96a] transition-colors flex items-center gap-2"
@@ -209,7 +234,7 @@ export default function OnboardingModal() {
               onClick={handleComplete}
               className="px-6 py-2 bg-[#22c55e] text-black font-bold rounded hover:bg-[#34d399] transition-colors flex items-center gap-2 shadow-[0_0_15px_rgba(34,197,94,0.3)]"
             >
-              <Check size={16} /> Complete Setup
+              <Check size={16} /> Let's Go!
             </button>
           )}
         </div>
