@@ -9,7 +9,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Battery,
-  Calendar
+  Calendar,
+  GitBranch
 } from 'lucide-react';
 
 const navItems = [
@@ -19,6 +20,7 @@ const navItems = [
   { path: '/want-list', icon: Heart, label: 'Wishlist', description: 'Targeted Goals' },
   { path: '/identities', icon: Users, label: 'Identities', description: 'ID Database' },
   { path: '/ego', icon: Sparkles, label: 'E.G.O', description: 'EGO Database' },
+  { path: '/changelog', icon: GitBranch, label: 'Changelog', description: 'Version History' },
 ];
 
 export default function Sidebar() {

@@ -142,6 +142,65 @@ ipcMain.handle('get-app-version', () => {
   return app.getVersion();
 });
 
+ipcMain.handle('download-update', async (event, url, filename) => {
+  const https = require('https');
+  const http = require('http');
+  const os = require('os');
+  const tmpPath = path.join(os.tmpdir(), filename || 'LimbusTrackerUpdate.exe');
+
+  return new Promise((resolve, reject) => {
+    const proto = url.startsWith('https') ? https : http;
+    const file = fs.createWriteStream(tmpPath);
+
+    const doRequest = (reqUrl) => {
+      proto.get(reqUrl, (res) => {
+        // Follow redirects
+        if (res.statusCode === 301 || res.statusCode === 302 || res.statusCode === 303) {
+          file.close();
+          const redirectProto = res.headers.location.startsWith('https') ? https : http;
+          redirectProto.get(res.headers.location, (res2) => {
+            const total = parseInt(res2.headers['content-length'] || '0', 10);
+            let received = 0;
+            res2.pipe(file);
+            res2.on('data', (chunk) => {
+              received += chunk.length;
+              if (total > 0) {
+                event.sender.send('update-progress', Math.round((received / total) * 100));
+              }
+            });
+            file.on('finish', () => {
+              file.close();
+              shell.openPath(tmpPath);
+              resolve(tmpPath);
+            });
+          }).on('error', (err) => { fs.unlink(tmpPath, () => {}); reject(err.message); });
+          return;
+        }
+
+        const total = parseInt(res.headers['content-length'] || '0', 10);
+        let received = 0;
+        res.pipe(file);
+        res.on('data', (chunk) => {
+          received += chunk.length;
+          if (total > 0) {
+            event.sender.send('update-progress', Math.round((received / total) * 100));
+          }
+        });
+        file.on('finish', () => {
+          file.close();
+          shell.openPath(tmpPath);
+          resolve(tmpPath);
+        });
+      }).on('error', (err) => {
+        fs.unlink(tmpPath, () => {});
+        reject(err.message);
+      });
+    };
+
+    doRequest(url);
+  });
+});
+
 ipcMain.handle('get-data-path', () => {
   return DATA_PATH;
 });

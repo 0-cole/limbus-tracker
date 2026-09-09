@@ -8,6 +8,7 @@ import EgoPage from './pages/EgoPage';
 import WantListPage from './pages/WantListPage';
 import InventoryPage from './pages/InventoryPage';
 import SchedulePage from './pages/SchedulePage';
+import ChangelogPage from './pages/ChangelogPage';
 import OnboardingModal from './components/OnboardingModal';
 import TutorialTour from './components/TutorialTour';
 import UpdateNotification from './components/UpdateNotification';
@@ -89,6 +90,7 @@ export default function App() {
               <Route path="/identities" element={<IdentitiesPage />} />
               <Route path="/ego" element={<EgoPage />} />
               <Route path="/want-list" element={<WantListPage />} />
+              <Route path="/changelog" element={<ChangelogPage />} />
             </Routes>
           </motion.div>
         </AnimatePresence>
