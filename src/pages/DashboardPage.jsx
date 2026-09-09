@@ -3,30 +3,16 @@ import { motion } from 'framer-motion';
 import { useStore } from '../stores/useStore.js';
 import { CheckCircle, XCircle, AlertCircle, Calendar, Target, Flame, CalendarDays, Battery } from 'lucide-react';
 import { calculateLimbusGrind, generateRoadmap } from '../utils/limbusCalculator.js';
+import { getSeasonEndDate } from '../utils/seasonUtils.js';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 export default function DashboardPage() {
   const { weeklyProgress, updateWeekly, scheduleState, updateScheduleState, bpState, inventory, wantList, identitiesData, egosData, activeBanner } = useStore();
-  const [canto, setCanto] = useState(bpState.canto || 6);
-  const hasMdHard = canto >= 7;
+  const [showWhenGameStarts, setShowWhenGameStarts] = useState(true);
+  const hasMdHard = bpState.hasMdHard !== false;
 
-  const SEASON_END_DATES = { 'Season 7': new Date('2026-09-17T10:00:00+09:00') };
-  const seasonEndDate = React.useMemo(() => {
-    let endDate = null;
-    if (activeBanner?.text) {
-      for (const [seasonName, date] of Object.entries(SEASON_END_DATES)) {
-        if (activeBanner.text.toLowerCase().includes(seasonName.toLowerCase().replace('season ', 's'))) {
-          endDate = date; break;
-        }
-      }
-    }
-    if (!endDate) {
-      const dates = Object.values(SEASON_END_DATES);
-      endDate = dates[dates.length - 1];
-    }
-    return endDate.toISOString();
-  }, [activeBanner]);
+  const seasonEndDate = getSeasonEndDate(bpState);
 
   const targetItems = [...(wantList || [])].map(name => {
     return identitiesData?.find(id => id.name === name) || egosData?.find(ego => ego.name === name);
@@ -38,8 +24,8 @@ export default function DashboardPage() {
   ), [calcItems, inventory, bpState, hasMdHard, scheduleState, seasonEndDate]);
 
   const roadmap = React.useMemo(() => generateRoadmap(
-    calcResult.daysLeft, calcResult.plannedRuns, scheduleState
-  ), [calcResult.daysLeft, calcResult.plannedRuns, scheduleState]);
+    calcResult.daysLeft, calcResult.plannedRuns, scheduleState, { ...bpState, hasMdHard }
+  ), [calcResult.daysLeft, calcResult.plannedRuns, scheduleState, bpState, hasMdHard]);
   
   const todayRoadmap = roadmap[0] || { runs: 0 };
   const mdRequiredToday = todayRoadmap.runs > 0;
@@ -74,6 +60,11 @@ export default function DashboardPage() {
       updateWeekly(updated);
     }
   }, [weeklyProgress, updateWeekly, scheduleState.dailiesDone]);
+
+  useEffect(() => {
+    if (!window.electronAPI?.getGameLaunchPreference) return;
+    window.electronAPI.getGameLaunchPreference().then(setShowWhenGameStarts).catch(() => {});
+  }, []);
 
   const toggleToday = () => {
     const updated = { ...weeklyProgress };
@@ -267,6 +258,26 @@ export default function DashboardPage() {
               Replay Tutorial
             </button>
           </div>
+
+          {window.electronAPI?.setGameLaunchPreference && (
+            <label className="bg-[#111] border border-[#333] p-6 rounded-lg flex flex-col md:flex-row items-center justify-between gap-6 cursor-pointer">
+              <div>
+                <h3 className="font-bold text-white mb-1">Open when Limbus Company starts</h3>
+                <p className="text-sm text-gray-400">The tracker starts quietly in the background with Windows so it can open when the game launches. Turn this off to disable both behaviors.</p>
+              </div>
+              <input
+                type="checkbox"
+                checked={showWhenGameStarts}
+                onChange={async (event) => {
+                  const enabled = event.target.checked;
+                  setShowWhenGameStarts(enabled);
+                  const saved = await window.electronAPI.setGameLaunchPreference(enabled);
+                  if (!saved) setShowWhenGameStarts(!enabled);
+                }}
+                className="w-5 h-5 accent-[#c9a84c]"
+              />
+            </label>
+          )}
 
           <div className="bg-red-900/10 border border-red-900/50 p-6 rounded-lg flex flex-col md:flex-row items-center justify-between gap-6">
             <div>

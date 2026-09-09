@@ -70,8 +70,7 @@ function checkEnkephalin(userData) {
        const quote = quotes[Math.floor(Math.random() * quotes.length)];
        new Notification({
          title: 'Enkephalin Restored',
-         body: quote,
-         icon: __dirname + '/../public/icon.png' // Make sure an icon exists
+         body: quote
        }).show();
        notifiedForThisCycle = true;
     }

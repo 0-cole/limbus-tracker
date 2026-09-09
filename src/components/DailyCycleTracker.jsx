@@ -3,28 +3,13 @@ import { Target, Flame, CalendarDays, CheckCircle } from 'lucide-react';
 import { useStore } from '../stores/useStore';
 import { calculateLimbusGrind, generateRoadmap } from '../utils/limbusCalculator.js';
 import { getNextResets } from '../utils/timeUtils.js';
+import { getSeasonEndDate } from '../utils/seasonUtils.js';
 
 export default function DailyCycleTracker() {
   const { scheduleState, updateScheduleState, bpState, injectBpExp, inventory, wantList, identitiesData, egosData, activeBanner } = useStore();
-  const canto = bpState.canto || 6;
-  const hasMdHard = canto >= 7;
+  const hasMdHard = bpState.hasMdHard !== false;
 
-  const SEASON_END_DATES = { 'Season 7': new Date('2026-09-17T10:00:00+09:00') };
-  const seasonEndDate = React.useMemo(() => {
-    let endDate = null;
-    if (activeBanner?.text) {
-      for (const [seasonName, date] of Object.entries(SEASON_END_DATES)) {
-        if (activeBanner.text.toLowerCase().includes(seasonName.toLowerCase().replace('season ', 's'))) {
-          endDate = date; break;
-        }
-      }
-    }
-    if (!endDate) {
-      const dates = Object.values(SEASON_END_DATES);
-      endDate = dates[dates.length - 1];
-    }
-    return endDate.toISOString();
-  }, [activeBanner]);
+  const seasonEndDate = getSeasonEndDate(bpState);
 
   const targetItems = [...(wantList || [])].map(name => {
     return identitiesData?.find(id => id.name === name) || egosData?.find(ego => ego.name === name);
@@ -36,8 +21,8 @@ export default function DailyCycleTracker() {
   ), [calcItems, inventory, bpState, hasMdHard, scheduleState, seasonEndDate]);
 
   const roadmap = React.useMemo(() => generateRoadmap(
-    calcResult.daysLeft, calcResult.plannedRuns, scheduleState
-  ), [calcResult.daysLeft, calcResult.plannedRuns, scheduleState]);
+    calcResult.daysLeft, calcResult.plannedRuns, scheduleState, { ...bpState, hasMdHard }
+  ), [calcResult.daysLeft, calcResult.plannedRuns, scheduleState, bpState, hasMdHard]);
   
   const todayRoadmap = roadmap[0] || { runs: 0, runsList: [] };
   const mdRequiredToday = todayRoadmap.runs > 0;

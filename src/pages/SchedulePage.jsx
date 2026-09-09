@@ -6,6 +6,7 @@ import DailyCycleTracker from '../components/DailyCycleTracker.jsx';
 import sinnersData from '../data/sinners.json';
 import { calculateLimbusGrind, generateRoadmap } from '../utils/limbusCalculator.js';
 import { getEntityImageUrl } from '../utils/imageUtils.js';
+import { DEFAULT_SEASON_END_DATE, getSeasonEndDate } from '../utils/seasonUtils.js';
 
 const CANTOS = [
   { id: 1, name: 'Canto I: The Outcast' },
@@ -20,10 +21,6 @@ const CANTOS = [
   { id: 10, name: 'Canto X' }
 ];
 
-const SEASON_END_DATES = {
-  'Season 7': new Date('2026-09-17T10:00:00+09:00'),
-};
-
 export default function SchedulePage() {
   const { scheduleState, updateScheduleState, bpState, updateBpState, inventory, wantList, identitiesData, egosData, activeBanner } = useStore();
   const [safeMath, setSafeMath] = useState(false);
@@ -37,23 +34,8 @@ export default function SchedulePage() {
 
   const hasMdHard = canto >= 9;
 
-  // Auto-calculate days left from the current season end date
-  const seasonEndDate = useMemo(() => {
-    let endDate = null;
-    if (activeBanner?.text) {
-      for (const [seasonName, date] of Object.entries(SEASON_END_DATES)) {
-        if (activeBanner.text.toLowerCase().includes(seasonName.toLowerCase().replace('season ', 's'))) {
-          endDate = date;
-          break;
-        }
-      }
-    }
-    if (!endDate) {
-      const dates = Object.values(SEASON_END_DATES);
-      endDate = dates[dates.length - 1];
-    }
-    return endDate.toISOString();
-  }, [activeBanner]);
+  // Players can update this once a new season is announced; it is always KST.
+  const seasonEndDate = getSeasonEndDate(bpState);
 
   // 1. Figure out targeted goals
   const targetItems = [...(wantList || [])].map(name => {
@@ -123,9 +105,22 @@ export default function SchedulePage() {
             <label className="flex justify-between items-center bg-black/50 p-3 rounded">
               <div>
                 <span className="text-gray-300 font-bold text-sm">Days Left in Season</span>
-                <span className="text-[10px] text-gray-500 ml-2">Auto-calculated</span>
+                <span className="text-[10px] text-gray-500 ml-2">Calculated from the date below</span>
               </div>
               <span className="text-white font-mono text-lg font-bold bg-black/60 border border-[#c9a84c]/30 px-3 py-0.5 rounded">{calcResult.daysLeft}</span>
+            </label>
+
+            <label className="flex justify-between items-center bg-black/50 p-3 rounded gap-3">
+              <div>
+                <span className="text-gray-300 font-bold text-sm block">Season End (KST)</span>
+                <span className="text-[10px] text-gray-500">Update this when Project Moon announces a new season.</span>
+              </div>
+              <input
+                type="datetime-local"
+                value={bpState.seasonEndDate || DEFAULT_SEASON_END_DATE}
+                onChange={e => updateBpState({ seasonEndDate: e.target.value || DEFAULT_SEASON_END_DATE })}
+                className="bg-[#1a1a1a] border border-[#444] text-white text-sm rounded p-1.5 focus:border-[#c9a84c] outline-none"
+              />
             </label>
 
             <div className="flex gap-4">

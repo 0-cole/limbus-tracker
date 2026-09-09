@@ -1,6 +1,6 @@
 {
   "name": "limbus-tracker",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Limbus Company Companion App — Track IDs, EGOs, Schedules, Shards & Weeklies",
   "type": "module",
   "main": "electron/main.cjs",
@@ -8,7 +8,7 @@
     "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
     "build": "vite build",
     "preview": "vite preview",
-    "package": "electron-builder --win -c.extraMetadata.main=electron/main.cjs"
+    "package": "electron-builder --win --publish never"
   },
   "dependencies": {
     "cheerio": "^1.2.0",
@@ -49,12 +49,6 @@
       "target": [
         {
           "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        },
-        {
-          "target": "portable",
           "arch": [
             "x64"
           ]
