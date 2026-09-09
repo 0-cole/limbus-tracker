@@ -10,6 +10,7 @@ import InventoryPage from './pages/InventoryPage';
 import SchedulePage from './pages/SchedulePage';
 import OnboardingModal from './components/OnboardingModal';
 import TutorialTour from './components/TutorialTour';
+import UpdateNotification from './components/UpdateNotification';
 import { useStore } from './stores/useStore';
 
 class ErrorBoundary extends React.Component {
@@ -64,6 +65,7 @@ export default function App() {
 
   return (
     <>
+      <UpdateNotification />
       <OnboardingModal />
       <TutorialTour />
       <div className="flex h-screen bg-[#0a0a0a] overflow-hidden">

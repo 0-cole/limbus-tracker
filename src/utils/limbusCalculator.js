@@ -160,6 +160,8 @@ export function generateRoadmap(
       weekday: weekdayStr,
       runs: runsCountToday,
       runsList: runsList,
+      gainedExpFromRuns: gainedExpFromRuns,
+      passiveGained: passiveGained,
       gained: totalGainedToday,
       totalExp: cumulativeExp
     });

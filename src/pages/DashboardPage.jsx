@@ -285,17 +285,13 @@ export default function DashboardPage() {
               <p className="text-sm text-gray-400">This will permanently wipe all of your inventory, settings, and checklists, and run the initial setup wizard again.</p>
             </div>
             <button 
-              onClick={() => {
-                if (window.confirm('Are you absolutely sure you want to wipe all data? This cannot be undone.')) {
-                   localStorage.removeItem('limbus-tracker-data');
-                   if (window.electronAPI) {
-                     window.electronAPI.saveData({}).then(() => window.location.reload());
-                   } else {
-                     window.location.reload();
-                   }
+              onClick={async () => {
+                if (window.confirm('Are you absolutely sure you want to wipe all data? This will reset all IDs, inventory, and settings, and start the setup wizard again.')) {
+                   await useStore.getState().resetAllData();
+                   window.location.reload();
                 }
               }}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded transition-colors whitespace-nowrap"
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded transition-colors whitespace-nowrap shadow-[0_0_15px_rgba(220,38,38,0.3)]"
             >
               Wipe All Data
             </button>

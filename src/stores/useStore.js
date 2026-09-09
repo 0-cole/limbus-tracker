@@ -8,7 +8,7 @@ import { checkResets } from '../utils/timeUtils.js';
 const defaultState = {
   onboardingCompleted: false,
   tutorialCompleted: false,
-  acquiredIds: new Set(personalPreset.acquiredIds),
+  acquiredIds: new Set(),
   acquiredEgos: new Set(),
   wantList: new Set(),
   
@@ -258,6 +258,26 @@ export const useStore = create((set, get) => ({
       };
     });
     get().saveStore();
+  },
+
+  resetAllData: async () => {
+    try {
+      localStorage.removeItem('limbus-tracker-data');
+      if (window.electronAPI && window.electronAPI.wipeData) {
+        await window.electronAPI.wipeData();
+      }
+    } catch(e) {
+      console.error('Error wiping data:', e);
+    }
+    set({
+      ...defaultState,
+      acquiredIds: new Set(),
+      acquiredEgos: new Set(),
+      wantList: new Set(),
+      onboardingCompleted: false,
+      tutorialCompleted: false,
+      isLoaded: true
+    });
   },
 
   updateScheduleState: (updates) => {

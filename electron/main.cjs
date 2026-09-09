@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { exec } = require('child_process');
@@ -116,6 +116,30 @@ ipcMain.handle('load-data', () => {
 ipcMain.handle('save-data', (_, data) => {
   // Renderer saves intentionally omit app-level preferences, so retain them.
   return saveUserData({ ...data, appSettings: loadUserData().appSettings });
+});
+
+ipcMain.handle('wipe-data', () => {
+  try {
+    if (fs.existsSync(DATA_PATH)) {
+      fs.unlinkSync(DATA_PATH);
+    }
+    return true;
+  } catch (e) {
+    console.error('Failed to wipe data:', e);
+    return false;
+  }
+});
+
+ipcMain.handle('open-external-url', (_, url) => {
+  if (url && (url.startsWith('https://') || url.startsWith('http://'))) {
+    shell.openExternal(url);
+    return true;
+  }
+  return false;
+});
+
+ipcMain.handle('get-app-version', () => {
+  return app.getVersion();
 });
 
 ipcMain.handle('get-data-path', () => {

@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Joyride, STATUS } from 'react-joyride';
 import { useStore } from '../stores/useStore';
 
 export default function TutorialTour() {
   const { onboardingCompleted, tutorialCompleted, setTutorialCompleted } = useStore();
-  const [run, setRun] = useState(true);
+  const [stepIndex, setStepIndex] = useState(0);
+  const [run, setRun] = useState(false);
 
-  // Do not run tutorial until they finish the onboarding modal, or if they already did it
+  useEffect(() => {
+    if (onboardingCompleted && !tutorialCompleted) {
+      setStepIndex(0);
+      setRun(true);
+    } else {
+      setRun(false);
+    }
+  }, [onboardingCompleted, tutorialCompleted]);
+
+  // Do not run tutorial until they finish onboarding, or if tutorial is marked completed
   if (!onboardingCompleted || tutorialCompleted) return null;
 
   const steps = [
@@ -14,45 +24,57 @@ export default function TutorialTour() {
       target: '.sidebar-item:nth-child(1)',
       content: 'Welcome to your Dashboard! This is where you can see a high-level overview of your roster.',
       disableBeacon: true,
+      placement: 'right',
     },
     {
       target: '.sidebar-item:nth-child(2)',
       content: 'The Schedule tab is the heart of the app. It calculates exactly how many Mirror Dungeons you need to run to get your targeted IDs.',
       disableBeacon: true,
+      placement: 'right',
     },
     {
       target: '.sidebar-item:nth-child(3)',
       content: 'The Inventory tab tracks your Enkephalin, Shards, and Crates. Make sure to sync your Enkephalin here!',
       disableBeacon: true,
+      placement: 'right',
     },
     {
       target: '.sidebar-item:nth-child(4)',
       content: 'Your Wishlist! Any Identities or E.G.O you add to your Wishlist will automatically feed into the Schedule calculator.',
       disableBeacon: true,
+      placement: 'right',
     },
     {
       target: '.sidebar-item:nth-child(5)',
       content: 'And finally, the Databases. You can browse every Identity and E.G.O here, and mark them as Acquired as your roster grows.',
       disableBeacon: true,
+      placement: 'right',
     }
   ];
 
   const handleJoyrideCallback = (data) => {
-    const { status } = data;
-    const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
-    if (finishedStatuses.includes(status)) {
+    const { status, index, type } = data;
+    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
       setRun(false);
       setTutorialCompleted(true);
+    } else if (type === 'step:after') {
+      setStepIndex(index + 1);
+    } else if (type === 'target:not_found') {
+      setStepIndex(index + 1);
     }
   };
 
   return (
     <Joyride
+      key={tutorialCompleted ? 'inactive' : 'active-tour'}
       steps={steps}
+      stepIndex={stepIndex}
       run={run}
       continuous={true}
       showSkipButton={true}
       showProgress={true}
+      disableBeacon={true}
+      hideBeacon={true}
       callback={handleJoyrideCallback}
       styles={{
         options: {
@@ -67,10 +89,16 @@ export default function TutorialTour() {
         buttonNext: {
           backgroundColor: '#c9a84c',
           color: '#000',
-          fontWeight: 'bold'
+          fontWeight: 'bold',
+          padding: '8px 16px',
+          borderRadius: '6px'
         },
         buttonBack: {
-          color: '#c9a84c'
+          color: '#c9a84c',
+          marginRight: '8px'
+        },
+        buttonSkip: {
+          color: '#888'
         }
       }}
     />

@@ -259,10 +259,24 @@ export default function SchedulePage() {
                               </div>
                             ) : <span className="text-gray-500">Rest</span>}
                           </div>
-                        <div className="text-green-400 font-mono">+{row.gained}</div>
-                        <div className="text-white font-mono font-bold flex items-center gap-1">
-                          {row.totalExp} 
-                          {isGoal && <span className="text-[#22c55e] text-xs">/ {calcResult.bpExpNeeded}</span>}
+                        <div className="font-mono text-sm flex flex-col justify-center">
+                          {row.runs > 0 ? (
+                            <div className="text-green-400 font-bold">+{row.gainedExpFromRuns} <span className="text-[10px] text-gray-400 font-normal">MD</span></div>
+                          ) : (
+                            <div className="text-gray-500 text-xs">0 MD</div>
+                          )}
+                          {row.passiveGained > 0 && (
+                            <div className="text-[11px] text-[#c9a84c] font-normal">
+                              +{row.passiveGained} <span className="text-gray-500">Missions</span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="text-white font-mono font-bold flex flex-col justify-center">
+                          <div className="flex items-center gap-1.5">
+                            <span>{row.totalExp}</span>
+                            <span className="text-xs text-gray-500 font-normal">(+{row.gained})</span>
+                          </div>
+                          {isGoal && <span className="text-[#22c55e] text-xs font-bold mt-0.5">Goal Met ({calcResult.bpExpNeeded} EXP)</span>}
                         </div>
                     </div>
                   );

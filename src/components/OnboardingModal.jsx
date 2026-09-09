@@ -126,6 +126,19 @@ export default function OnboardingModal() {
 
                   <label className="flex items-center justify-between bg-black/50 p-4 border border-[#333] rounded-lg cursor-pointer hover:border-[#c9a84c] transition-colors">
                     <div>
+                      <div className="text-white font-bold text-[#eab308]">Current Enkephalin Modules</div>
+                      <div className="text-sm text-gray-400">How many crafted modules do you currently have?</div>
+                    </div>
+                    <input 
+                      type="number" min="0" max="9999"
+                      className="bg-black border border-[#333] rounded px-3 py-2 text-white w-24 text-right focus:border-[#c9a84c] focus:outline-none font-bold"
+                      value={inventory.modules || 0}
+                      onChange={(e) => updateInventory({ modules: e.target.value === '' ? '' : parseInt(e.target.value) })}
+                    />
+                  </label>
+
+                  <label className="flex items-center justify-between bg-black/50 p-4 border border-[#333] rounded-lg cursor-pointer hover:border-[#c9a84c] transition-colors">
+                    <div>
                       <div className="text-white font-bold">Max Enkephalin Capacity</div>
                       <div className="text-sm text-gray-400">Based on your Company Level.</div>
                     </div>

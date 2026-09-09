@@ -77,44 +77,82 @@ export default function InventoryPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        {/* Enkephalin Tracker */}
+        {/* Enkephalin & Module Tracker */}
         <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} className="bg-[#111] border border-[#333] rounded-xl p-6 relative overflow-hidden">
           <div className="absolute -right-10 -top-10 text-[#222] rotate-12 pointer-events-none">
             <Battery size={200} />
           </div>
           <h2 className="text-xl font-bold text-white mb-6 relative z-10 flex items-center gap-2">
-            <Battery className="text-[#22c55e]" /> Enkephalin Tracker
+            <Battery className="text-[#22c55e]" /> Enkephalin & Modules
           </h2>
           
-          <div className="flex items-end gap-2 mb-4 relative z-10">
-            <input 
-              type="number" 
-              value={currentEnkephalin}
-              onChange={handleManualSync}
-              className="text-5xl font-black bg-transparent w-24 border-b-2 border-[#c9a84c] text-[#22c55e] focus:outline-none"
-            />
-            <span className="text-2xl text-gray-500 font-bold mb-2">/ {inventory.maxEnkephalin}</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 relative z-10">
+            {/* Enkephalin Box */}
+            <div className="bg-black/50 p-4 border border-[#333] rounded-lg">
+              <span className="text-xs text-gray-400 font-bold uppercase tracking-wider block mb-1">Current Enkephalin</span>
+              <div className="flex items-end gap-2">
+                <input 
+                  type="number" 
+                  value={currentEnkephalin}
+                  onChange={handleManualSync}
+                  className="text-4xl font-black bg-transparent w-24 border-b-2 border-[#22c55e] text-[#22c55e] focus:outline-none"
+                />
+                <span className="text-xl text-gray-500 font-bold mb-1">/ {inventory.maxEnkephalin}</span>
+              </div>
+              <div className="text-xs text-gray-400 font-mono mt-2">
+                <p>1 point every 6m</p>
+                <p>Full Capacity at: <span className="text-white font-bold">{timeUntilFull()}</span></p>
+              </div>
+            </div>
+
+            {/* Modules Box */}
+            <div className="bg-black/50 p-4 border border-[#333] rounded-lg">
+              <span className="text-xs text-[#c9a84c] font-bold uppercase tracking-wider block mb-1">Current Modules</span>
+              <div className="flex items-end gap-2">
+                <input 
+                  type="number" 
+                  min="0"
+                  value={inventory.modules || 0}
+                  onChange={e => {
+                    updateInventory({ modules: Math.max(0, parseInt(e.target.value) || 0) });
+                    saveStore();
+                  }}
+                  className="text-4xl font-black bg-transparent w-24 border-b-2 border-[#c9a84c] text-[#eab308] focus:outline-none"
+                />
+                <div className="flex gap-1 mb-1">
+                  <button onClick={() => { updateInventory({ modules: Math.max(0, (inventory.modules||0) + 1) }); saveStore(); }} className="px-2 py-0.5 bg-[#222] hover:bg-[#333] border border-[#444] text-xs font-bold rounded text-white">+1</button>
+                  <button onClick={() => { updateInventory({ modules: Math.max(0, (inventory.modules||0) + 5) }); saveStore(); }} className="px-2 py-0.5 bg-[#222] hover:bg-[#333] border border-[#444] text-xs font-bold rounded text-white">+5</button>
+                  <button onClick={() => { updateInventory({ modules: Math.max(0, (inventory.modules||0) - 1) }); saveStore(); }} className="px-2 py-0.5 bg-[#222] hover:bg-[#333] border border-[#444] text-xs font-bold rounded text-gray-400">-1</button>
+                </div>
+              </div>
+              <div className="text-xs text-gray-400 font-mono mt-2">
+                {modulesNeeded > 0 ? (
+                  <p>
+                    <span className="text-[#c9a84c] font-bold">{modulesNeeded}</span> modules needed for roadmap{' '}
+                    {(inventory.modules || 0) >= modulesNeeded ? (
+                      <span className="text-green-400 font-bold">✅ Ready</span>
+                    ) : (
+                      <span className="text-red-400">({modulesNeeded - (inventory.modules || 0)} more needed)</span>
+                    )}
+                  </p>
+                ) : (
+                  <p className="text-green-400">Roadmap covered!</p>
+                )}
+              </div>
+            </div>
           </div>
           
-          <div className="text-gray-400 font-mono text-sm relative z-10 mb-6">
-            <p>1 point every 6 minutes.</p>
-            <p>Full Capacity at: <span className="text-white font-bold">{timeUntilFull()}</span></p>
-            <div className="mt-2 flex gap-4">
-              <p className="text-[#c9a84c] font-bold flex flex-col justify-center">
-                <span>Modules: {inventory.modules}</span>
-                {modulesNeeded > 0 && <span className="text-xs text-gray-400 font-normal mt-0.5">({modulesNeeded} needed for roadmap)</span>}
-              </p>
-              <label className="flex items-center gap-2">
-                Company Lvl: 
-                <input type="number" min="1" max="300" className="w-12 bg-transparent border-b border-[#333] text-white focus:outline-none" value={Object.keys(enkephalinCaps).find(k => enkephalinCaps[k] === inventory.maxEnkephalin) || ''} onChange={e => {
-                  const lvl = parseInt(e.target.value);
-                  if (lvl >= 1 && lvl <= 300) {
-                    updateInventory({ maxEnkephalin: enkephalinCaps[lvl] });
-                    saveStore();
-                  }
-                }} />
-              </label>
-            </div>
+          <div className="text-gray-400 font-mono text-sm relative z-10 flex items-center justify-between pt-2 border-t border-[#222]">
+            <label className="flex items-center gap-2 text-xs">
+              Company Level: 
+              <input type="number" min="1" max="300" className="w-14 bg-transparent border-b border-[#333] text-white focus:outline-none text-center font-bold" value={Object.keys(enkephalinCaps).find(k => enkephalinCaps[k] === inventory.maxEnkephalin) || ''} onChange={e => {
+                const lvl = parseInt(e.target.value);
+                if (lvl >= 1 && lvl <= 300) {
+                  updateInventory({ maxEnkephalin: enkephalinCaps[lvl] });
+                  saveStore();
+                }
+              }} />
+            </label>
           </div>
         </motion.div>
 
