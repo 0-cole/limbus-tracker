@@ -4,16 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Star, Edit3, CheckCircle, Info } from 'lucide-react';
 import { useStore } from '../stores/useStore.js';
 import sinnersData from '../data/sinners.json';
+import { normalizeText, normalizeSinnerId, getSinnerInfo, getSinnerSortIndex } from '../utils/textUtils.js';
 
 const SIN_COLORS = { Wrath: '#dc2626', Lust: '#ea580c', Sloth: '#ca8a04', Gluttony: '#16a34a', Gloom: '#0ea5e9', Pride: '#4f46e5', Envy: '#9333ea' };
 const KEYWORD_COLORS = { Burn: '#ef4444', Bleed: '#dc2626', Tremor: '#d97706', Rupture: '#22c55e', Sinking: '#3b82f6', Poise: '#06b6d4', Charge: '#8b5cf6' };
 const ATTACK_TYPES = ['Slash', 'Pierce', 'Blunt'];
-const SINNER_ORDER = ['yi-sang', 'faust', 'don-quixote', 'ryoshu', 'ryoshū', 'meursault', 'hong-lu', 'heathcliff', 'ishmael', 'rodion', 'sinclair', 'outis', 'gregor'];
 
 function generateSlug(name) {
-  return name.toLowerCase()
-    .replace(/[ō]/g, 'o')
-    .replace(/[ū]/g, 'u')
+  return normalizeText(name)
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
@@ -21,7 +19,7 @@ function generateSlug(name) {
 }
 
 function IdCard({ id, meta, acquired, onToggleAcquired, onEdit, onClickDetails }) {
-  const sinnerInfo = sinnersData.find(s => s.id === id.sinner);
+  const sinnerInfo = getSinnerInfo(id.sinner);
   const [imgError, setImgError] = useState(false);
   
   // Use LimbusDeck CDN for images (slug was scraped and stored in identities.json)
@@ -138,11 +136,18 @@ export default function IdentitiesPage() {
   };
 
   const filteredIdentities = useMemo(() => {
+    const normSearch = normalizeText(search);
+    const selectedSinnerIds = new Set(Array.from(filters.sinners).map(s => normalizeSinnerId(s)));
+
     let result = (identitiesData || []).filter(id => {
       if (id.grade) return false; // EGO safety filter
-      if (search && !id.name.toLowerCase().includes(search.toLowerCase())) return false;
+      if (normSearch) {
+        const normName = normalizeText(id.name);
+        const normSinner = normalizeText(id.sinner);
+        if (!normName.includes(normSearch) && !normSinner.includes(normSearch)) return false;
+      }
       if (showAcquiredOnly && !acquiredIds.has(id.name)) return false;
-      if (filters.sinners.size > 0 && !filters.sinners.has(id.sinner)) return false;
+      if (selectedSinnerIds.size > 0 && !selectedSinnerIds.has(normalizeSinnerId(id.sinner))) return false;
       if (filters.rarity.size > 0 && !filters.rarity.has(id.rarity)) return false;
       
       const meta = getMetadata(id);
@@ -155,8 +160,8 @@ export default function IdentitiesPage() {
     result.sort((a, b) => {
       if (sortBy === 'Name') return a.name.localeCompare(b.name);
       if (sortBy === 'By Sinner') {
-        const sinA = SINNER_ORDER.indexOf(a.sinner.toLowerCase());
-        const sinB = SINNER_ORDER.indexOf(b.sinner.toLowerCase());
+        const sinA = getSinnerSortIndex(a.sinner);
+        const sinB = getSinnerSortIndex(b.sinner);
         if (sinA !== sinB) return sinA - sinB;
         if (a.tierIndex !== b.tierIndex) return a.tierIndex - b.tierIndex;
         if (a.rarity !== b.rarity) return b.rarity - a.rarity;

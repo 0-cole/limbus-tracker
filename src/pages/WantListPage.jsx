@@ -3,12 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../stores/useStore.js';
 import { Search, Plus, Trash2, Calculator } from 'lucide-react';
 import { getEntityImageUrl } from '../utils/imageUtils.js';
+import { normalizeText, getSinnerSortIndex } from '../utils/textUtils.js';
+
 export default function WantListPage() {
   const { wantList, toggleWantList, inventory, updateInventory, acquiredIds, acquiredEgos, identitiesData, egosData } = useStore();
   const [search, setSearch] = useState('');
   
   const GRADE_ORDER = { ZAYIN: 1, TETH: 2, HE: 3, WAW: 4, ALEPH: 5 };
-  const SINNER_ORDER = ['yi-sang', 'faust', 'don-quixote', 'ryoshu', 'ryoshū', 'meursault', 'hong-lu', 'heathcliff', 'ishmael', 'rodion', 'sinclair', 'outis', 'gregor'];
 
   // Combine unowned IDs and EGOs
   const unownedItems = [
@@ -16,17 +17,23 @@ export default function WantListPage() {
     ...egosData.filter(ego => !acquiredEgos.has(ego.name)).map(ego => ({ ...ego, type: 'ego' }))
   ];
 
+  const normSearch = normalizeText(search);
+
   const filteredUnowned = unownedItems
-    .filter(item => 
-      item.name.toLowerCase().includes(search.toLowerCase()) && !wantList.has(item.name)
-    )
+    .filter(item => {
+      if (wantList.has(item.name)) return false;
+      if (!normSearch) return true;
+      const normName = normalizeText(item.name);
+      const normSinner = normalizeText(item.sinner);
+      return normName.includes(normSearch) || normSinner.includes(normSearch);
+    })
     .sort((a, b) => {
       // 1. Sort by Type: IDs first, EGOs second
       if (a.type !== b.type) return a.type === 'id' ? -1 : 1;
       
       // 2. Sort by Sinner Number (1 through 12)
-      const sinnerA = SINNER_ORDER.indexOf(a.sinner.toLowerCase());
-      const sinnerB = SINNER_ORDER.indexOf(b.sinner.toLowerCase());
+      const sinnerA = getSinnerSortIndex(a.sinner);
+      const sinnerB = getSinnerSortIndex(b.sinner);
       if (sinnerA !== sinnerB) return sinnerA - sinnerB;
 
       // 3. Sort logic based on Type

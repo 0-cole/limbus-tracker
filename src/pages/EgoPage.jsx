@@ -4,17 +4,15 @@ import { Search, Edit3, CheckCircle, Info } from 'lucide-react';
 import { useStore } from '../stores/useStore.js';
 import sinnersData from '../data/sinners.json';
 import { parseEffectsIntoTriggerGroups, getSkillTriggerColor, extractKeywordsFromEffects } from '../utils/skillParser';
+import { normalizeText, normalizeSinnerId, getSinnerInfo, getSinnerSortIndex } from '../utils/textUtils.js';
 
 const KEYWORD_COLORS = { Burn: '#ef4444', Bleed: '#dc2626', Tremor: '#eab308', Poise: '#22c55e', Charge: '#a855f7', Rupture: '#0ea5e9', Sinking: '#3b82f6' };
 const SIN_COLORS = { Wrath: '#dc2626', Lust: '#ea580c', Sloth: '#ca8a04', Gluttony: '#16a34a', Gloom: '#0ea5e9', Pride: '#4f46e5', Envy: '#9333ea' };
 const GRADE_COLORS = { ZAYIN: '#22c55e', TETH: '#06b6d4', HE: '#eab308', WAW: '#a855f7', ALEPH: '#ef4444' };
 const GRADE_ORDER = { ZAYIN: 0, TETH: 1, HE: 2, WAW: 3, ALEPH: 4 };
-const SINNER_ORDER = ['yi-sang', 'faust', 'don-quixote', 'ryoshu', 'ryoshū', 'meursault', 'hong-lu', 'heathcliff', 'ishmael', 'rodion', 'sinclair', 'outis', 'gregor'];
 
 function generateSlug(name) {
-  return name.toLowerCase()
-    .replace(/[ō]/g, 'o')
-    .replace(/[ū]/g, 'u')
+  return normalizeText(name)
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
@@ -22,7 +20,7 @@ function generateSlug(name) {
 }
 
 function EgoCard({ ego, meta, acquired, onToggleAcquired, onEdit, onClickDetails }) {
-  const sinnerInfo = sinnersData.find(s => s.id === ego.sinner);
+  const sinnerInfo = getSinnerInfo(ego.sinner);
   const [imgError, setImgError] = useState(false);
   
   // Use LimbusDeck CDN for images
@@ -129,11 +127,18 @@ export default function EgoPage() {
   };
 
   const filteredEgos = useMemo(() => {
+    const normSearch = normalizeText(search);
+    const selectedSinnerIds = new Set(Array.from(filters.sinners).map(s => normalizeSinnerId(s)));
+
     let result = (egosData || []).filter(ego => {
       if (!ego.grade) return false; // Identity safety filter
-      if (search && !ego.name.toLowerCase().includes(search.toLowerCase())) return false;
+      if (normSearch) {
+        const normName = normalizeText(ego.name);
+        const normSinner = normalizeText(ego.sinner);
+        if (!normName.includes(normSearch) && !normSinner.includes(normSearch)) return false;
+      }
       if (showAcquiredOnly && !acquiredEgos.has(ego.name)) return false;
-      if (filters.sinners.size > 0 && !filters.sinners.has(ego.sinner)) return false;
+      if (selectedSinnerIds.size > 0 && !selectedSinnerIds.has(normalizeSinnerId(ego.sinner))) return false;
       if (filters.grades.size > 0 && !filters.grades.has(ego.grade)) return false;
       
       const meta = getMetadata(ego);
@@ -144,8 +149,8 @@ export default function EgoPage() {
     result.sort((a, b) => {
       if (sortBy === 'Name') return a.name.localeCompare(b.name);
       if (sortBy === 'By Sinner') {
-        const sinA = SINNER_ORDER.indexOf(a.sinner.toLowerCase());
-        const sinB = SINNER_ORDER.indexOf(b.sinner.toLowerCase());
+        const sinA = getSinnerSortIndex(ego.sinner);
+        const sinB = getSinnerSortIndex(ego.sinner);
         if (sinA !== sinB) return sinA - sinB;
         
         const gradeA = GRADE_ORDER[a.grade] || 99;
