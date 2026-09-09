@@ -81,7 +81,8 @@
           "[Before Attack] For every 7 Poise on self, Atk Weight +1 (Max +2)  [On Use] Until this Skill ends, this unit cannot be Staggered from taking damage  [On Use] Deal +2% damage on Critical Hit for every Poise Potency on self (Max 50%)  +30% Damage on Critical Hit  Deal +0.5% damage for every 1% missing HP on self (Max 25%)  If this Skill targets only a single enemy, deal +100% damage (In Focused Encounters, a single Part)"
         ]
       }
-    ]
+    ],
+    "slug": "blade-lineage-mentor-meursault"
   },
   {
     "name": "Blade Lineage Salsu Don Quixote",
@@ -151,7 +152,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "blade-lineage-salsu-don-quixote"
   },
   {
     "name": "Blade Lineage Salsu Faust",
@@ -223,7 +225,8 @@
         "[On Use] For every 4 Poise on self, gain Final Power +1 (max 5)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "blade-lineage-salsu-faust"
   },
   {
     "name": "Blade Lineage Salsu Outis",
@@ -295,7 +298,8 @@
         "At 6+ Poise, Coin Power +3"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "blade-lineage-salsu-outis"
   },
   {
     "name": "Blade Lineage Salsu Sinclair",
@@ -367,7 +371,8 @@
         "[On Use] Gain 1 Damage Up next turn  [On Use] Gain +3 Poise Count"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "blade-lineage-salsu-sinclair"
   },
   {
     "name": "Blade Lineage Salsu Yi Sang",
@@ -437,7 +442,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "blade-lineage-salsu-yi-sang"
   },
   {
     "name": "Blade of the House of Spiders Ryōshū",
@@ -578,7 +584,8 @@
           "[On Use] Final Power +1 for every 4 Poise on self (max 5)  [On Use] Base Power +1 for every 6 (Burn + Bleed) on the main target (max 5)  [On Use] Deal +5% damage for every Entanglement on self  [On Use] Gain 5 Poise  [On Use] Gain +1 Atk Weight for every 2 Entanglement on self (max 2)  [On Use] Deal +30% damage for every excess Atk Weight beyond the # of actual targets (in Focused Encounters, the Parts)  [Attack End] Randomly inflict (Entanglement on self + 10) Bladetrail -Afterimage- between targets hit by this Skill"
         ]
       }
-    ]
+    ],
+    "slug": "blade-of-the-house-of-spiders-ryoshu"
   },
   {
     "name": "Cinq Assoc. East Section 3 Don Quixote",
@@ -650,7 +657,8 @@
         "If this unit's Speed is faster than the target's, gain +1 Coin Power for every 2 Speed difference (max 2)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "cinq-assoc-east-section-3-don-quixote"
   },
   {
     "name": "Cinq Assoc. East Section 3 Hong Lu",
@@ -730,7 +738,8 @@
         "If this unit's Speed is faster than the attacker's by 2 or more, Coin Power +1  [Combat Start] Gain +3 Poise Count (once per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "cinq-assoc-east-section-3-hong-lu"
   },
   {
     "name": "Cinq Assoc. South Section 4 Director Sinclair",
@@ -800,7 +809,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "cinq-assoc-south-section-4-director-sinclair"
   },
   {
     "name": "Cinq Assoc. South Section 4 Outis",
@@ -872,7 +882,8 @@
         "If this unit's Speed is faster than the target's, gain Coin Power based on Speed difference (Coin Power +1 for every Speed difference; max 3)  [On Evade] Gain 1 Poise (Max 10)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "cinq-assoc-south-section-4-outis"
   },
   {
     "name": "Cinq Assoc. South Section 5 Director Don Quixote",
@@ -944,7 +955,8 @@
         "[On Evade] Target loses 3 SP"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "cinq-assoc-south-section-5-director-don-quixote"
   },
   {
     "name": "Cinq Assoc. West Section 3 Meursault",
@@ -1016,7 +1028,8 @@
         "[On Use] If this unit's Speed is faster than the target's by 3 or more, Coin Power +2"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "cinq-assoc-west-section-3-meursault"
   },
   {
     "name": "Dawn Office Fixer Faust",
@@ -1139,7 +1152,8 @@
           "[Coin Effect] If this unit has {{StatusEffect|Battle Instinct|b"
         ]
       }
-    ]
+    ],
+    "slug": "dawn-office-fixer-faust"
   },
   {
     "name": "Dawn Office Fixer Sinclair",
@@ -1230,7 +1244,8 @@
           "[Coin Effect] Deal 2.5% > 4% damage for every 1 {{StatusEffect|Burn|d"
         ]
       }
-    ]
+    ],
+    "slug": "dawn-office-fixer-sinclair"
   },
   {
     "name": "Dawn Office Rep Gregor",
@@ -1343,7 +1358,8 @@
           "[Coin Effect] [On Hit] Inflict 5 {{StatusEffect|Burn|d"
         ]
       }
-    ]
+    ],
+    "slug": "dawn-office-rep-gregor"
   },
   {
     "name": "Dead Rabbits Boss Meursault",
@@ -1415,7 +1431,8 @@
         "[On Hit] Inflict 1 Rupture"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "dead-rabbits-boss-meursault"
   },
   {
     "name": "Devyat' Assoc. North Section 3 Rodion",
@@ -1507,7 +1524,8 @@
           "[Combat Start] If this Skill is to be activated, gain (Courier Trunk - Rodion)% of this unit's max HP as Shield (max 25%, once per turn)  [Turn End] Activate Strategic R&R Mode"
         ]
       }
-    ]
+    ],
+    "slug": "devyat-assoc-north-section-3-rodion"
   },
   {
     "name": "Devyat' Assoc. North Section 3 Sinclair",
@@ -1599,7 +1617,8 @@
           "[Combat Start] If this Skill is to be activated, gain (Courier Trunk - Sinclair)% of this unit's max HP as Shield (max 25%, once per turn)  [Turn End] Activate Strategic R&R Mode"
         ]
       }
-    ]
+    ],
+    "slug": "devyat-assoc-north-section-3-sinclair"
   },
   {
     "name": "Dieci Assoc. South Section 4 Director Meursault",
@@ -1671,7 +1690,8 @@
         "[On Use] Discard 1 Skill of the highest rank in all of this unit's Skill Slots  [On Use] Gain +6 Aggro to this Skill Slot next turn"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "dieci-assoc-south-section-4-director-meursault"
   },
   {
     "name": "Dieci Assoc. South Section 4 Hong Lu",
@@ -1743,7 +1763,8 @@
         "[On Use] Randomly Discard 2 of this unit's Skills in ascending order of ranks from all of its Skill Slots"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "dieci-assoc-south-section-4-hong-lu"
   },
   {
     "name": "Dieci Assoc. South Section 4 Rodion",
@@ -1815,7 +1836,8 @@
         "[On Use] Discard 1 Skill of the highest rank in all of this unit's Skill Slots  [On Use] This Slot gains 5 Aggro next turn"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "dieci-assoc-south-section-4-rodion"
   },
   {
     "name": "Dieci Assoc. South Section 4 Yi Sang",
@@ -1895,7 +1917,8 @@
         "[On Use] Randomly Discard 2 of this unit's Skills in ascending order of ranks from all of its Skill Slots  [On Use] Gain +5 Aggro to this Skill Slot next turn"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "dieci-assoc-south-section-4-yi-sang"
   },
   {
     "name": "District 20 Yurodivy Hong Lu",
@@ -1967,7 +1990,8 @@
         "[On Use] Gain 2 x (Tremor Count on target) as Shield HP (max 13)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "district-20-yurodivy-hong-lu"
   },
   {
     "name": "District 20 Yurodivy Ryōshū",
@@ -2039,7 +2063,8 @@
         "[On Use] Gain 2 x (Tremor Count on self) as Shield HP (max 10)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "district-20-yurodivy-ryoshu"
   },
   {
     "name": "Drifting Blade of Hongyuan Ryōshū",
@@ -2119,7 +2144,8 @@
         "Clashable Guard  [Combat Start] Gain 2 Protector's Stance  [On Use] This Skill gains +1 Defense Level for every 10% HP this unit cumulatively lost in this Encounter (max 6; based on max HP at the time of activation)  [Clash Win] Gain Poise by Rupture on target (max 5; once per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "drifting-blade-of-hongyuan-ryoshu"
   },
   {
     "name": "Edgar Family Butler Ishmael",
@@ -2191,7 +2217,8 @@
         "[On Evade] Heal 5 SP (once per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "edgar-family-butler-ishmael"
   },
   {
     "name": "Edgar Family Chief Butler Ryōshū",
@@ -2263,7 +2290,8 @@
         "[On Evade] Heal 3 SP (5 times per turn)  [On Evade] Gain +1 Poise Count (5 times per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "edgar-family-chief-butler-ryoshu"
   },
   {
     "name": "Edgar Family Heir Gregor",
@@ -2335,7 +2363,8 @@
         "[On Use] Coin Power +1 for every 3 Sinking on target (max 3)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "edgar-family-heir-gregor"
   },
   {
     "name": "Effloresced E.G.O::Spicebush Yi Sang",
@@ -2407,7 +2436,8 @@
         "[On Evade] Inflict 1 Sinking"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "effloresced-ego-spicebush-yi-sang"
   },
   {
     "name": "Family Hierarch Candidate Ishmael",
@@ -2499,7 +2529,8 @@
           "[On Use] At 3+ Ready -待-, Coin Power +1"
         ]
       }
-    ]
+    ],
+    "slug": "family-hierarch-candidate-ishmael"
   },
   {
     "name": "Fanghunt Office Fixer Hong Lu",
@@ -2571,7 +2602,8 @@
         "[Combat Start] Lose 2 Bleed Potency on self (3 times per turn. If Bleed Potency drops to 0 or less, the Bleed effect expires)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "fanghunt-office-fixer-hong-lu"
   },
   {
     "name": "Firefist Office Survivor Gregor",
@@ -2651,7 +2683,8 @@
         "[Clashable Counter]  [Combat Start] Gain 100 District 12 Fuel"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "firefist-office-survivor-gregor"
   },
   {
     "name": "Full-Stop Office Fixer Heathcliff",
@@ -2755,7 +2788,8 @@
           "[Coin Effect] +100% > +130% Damage on Critical Hit  +(target's Pierce Res. x 50)% Damage on Critical Hit"
         ]
       }
-    ]
+    ],
+    "slug": "full-stop-office-fixer-heathcliff"
   },
   {
     "name": "Full-Stop Office Rep Hong Lu",
@@ -2886,7 +2920,8 @@
           "[Coin Effect] +30% > +50% Damage on Critical Hit"
         ]
       }
-    ]
+    ],
+    "slug": "full-stop-office-rep-hong-lu"
   },
   {
     "name": "G Corp. Head Manager Outis",
@@ -2954,7 +2989,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "g-corp-head-manager-outis"
   },
   {
     "name": "G Corp. Manager Corporal Gregor",
@@ -3024,7 +3060,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "g-corp-manager-corporal-gregor"
   },
   {
     "name": "Heishou Pack - Mao Branch Adept Faust",
@@ -3128,7 +3165,8 @@
           "[Coin Effect] [Reuse - On Hit] Inflict {{StatusEffect|Deathrite -Haste-|d"
         ]
       }
-    ]
+    ],
+    "slug": "heishou-pack-mao-branch-adept-faust"
   },
   {
     "name": "Heishou Pack - Mao Branch Outis",
@@ -3200,7 +3238,8 @@
         "[Clashable Counter]  [On Use] Gain 3 Strider -Mao-  [On Use] If this unit's Speed is faster than the target's, gain Base Power based on Speed difference (Base Power +1 for every 2 Speed difference; max 2)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "heishou-pack-mao-branch-outis"
   },
   {
     "name": "Heishou Pack - Mao Branch Ryōshū",
@@ -3272,7 +3311,8 @@
         "[Clashable Counter]  [On Use] Gain 3 Strider -Mao-  [On Use] If this unit's Speed is faster than the target's, gain Base Power based on Speed difference (Base Power +1 for every 2 Speed difference; max 2)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "heishou-pack-mao-branch-ryoshu"
   },
   {
     "name": "Heishou Pack - Si Branch Gregor",
@@ -3344,7 +3384,8 @@
         "Clashable Guard  [Combat Start] Gain 3 Serpent Arm next turn  [On Use] At 10+ Poise Count, Coin Power +1"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "heishou-pack-si-branch-gregor"
   },
   {
     "name": "Heishou Pack - Si Branch Rodion",
@@ -3416,7 +3457,8 @@
         "Clashable Guard  [Combat Start] Gain 3 Serpent Arm next turn  [On Use] At 10+ Poise Count, Coin Power +1"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "heishou-pack-si-branch-rodion"
   },
   {
     "name": "Heishou Pack - Wei Branch Don Quixote",
@@ -3496,7 +3538,8 @@
         "[Clashable Counter]  Final Power +1 for every 3 (Rupture + Sinking) on target (max 3)  [On Use] Gain 3 Burgeoning of Horns -發角- next turn"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "heishou-pack-wei-branch-don-quixote"
   },
   {
     "name": "Heishou Pack - Wu Branch Adept Yi Sang",
@@ -3596,7 +3639,8 @@
           "If this unit's Speed is faster than the target's:  - Final Power +1  - Deal +(Linebreaker on self x 20)% damage (max 80%)  Deal +(Shield HP on self x 2)% damage (max 50%)  [Before Use] At 5 Linebreaker, consume all of it to activate \"Obsidian Stormrider's Crescent Decapitator\" instead  [On Use] Gain 3 Strider -Wu-  [On Use] Coin Power +1 for every 5 (Rupture + Tremor) on target (max 2)  [On Use] At 3+ Linebreaker, convert all Coins to Unbreakable Coins"
         ]
       }
-    ]
+    ],
+    "slug": "heishou-pack-wu-branch-adept-yi-sang"
   },
   {
     "name": "Heishou Pack - You Branch Adept Heathcliff",
@@ -3697,7 +3741,8 @@
           "[Coin Effect] [On Hit] Deal (20% of this Coin's final damage) Wrath damage against all targets  - If this is the final Coin, heal HP by the amount of damage the above effect dealt"
         ]
       }
-    ]
+    ],
+    "slug": "heishou-pack-you-branch-adept-heathcliff"
   },
   {
     "name": "Heishou Pack - You Branch Sinclair",
@@ -3777,7 +3822,8 @@
         "[Clashable Counter]  [On Use] Gain 3 Bloodflame -血炎- next turn  [On Use] If target has 10+ (Burn + Rupture), Base Power +1  [On Use] If this unit has Bloodflame -血炎-, Coin Power +1  [On Use] This Skill deals +1% damage for every 3% HP this unit cumulatively lost in this Encounter (max 30%)  [Clash Lose] Apply 2 Burn to target and self"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "heishou-pack-you-branch-sinclair"
   },
   {
     "name": "Hook Office Fixer Hong Lu",
@@ -3849,7 +3895,8 @@
         "If target has 7+ Bleed, gain +2 Coin Power  [On Evade] Gain 1 Haste next turn (3 times per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "hook-office-fixer-hong-lu"
   },
   {
     "name": "Jeong's Office Rep Ishmael",
@@ -3941,7 +3988,8 @@
           "[Coin Effect] [Heads Hit] Inflict 1 {{StatusEffect|Defense Level Down|d"
         ]
       }
-    ]
+    ],
+    "slug": "jeongs-office-rep-ishmael"
   },
   {
     "name": "Kurokumo Clan Captain Gregor",
@@ -4011,7 +4059,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "kurokumo-clan-captain-gregor"
   },
   {
     "name": "Kurokumo Clan Captain Ishmael",
@@ -4091,7 +4140,8 @@
         "[Combat Start] Gain 1 Protection (once per turn)  [Combat Start] On (2 + highest Reson.) allied Kurokumo Clan Identities, including this unit, with the fastest Speed: apply 2 Defense Power Up (once per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "kurokumo-clan-captain-ishmael"
   },
   {
     "name": "Kurokumo Clan Wakashu Heathcliff",
@@ -4171,7 +4221,8 @@
         "[Clashable Counter]  If Kurokumo Clan Captain Ishmael is on the field, activate the following:  - Convert all Coins in this Skill into Unbreakable Coins  - Final Power +4 to this Skill upon Clash Lose  Deal +10% damage for every type of negative effect on target (max 100%)  [On Use] If this unit has Cumulus Wall, unconditionally activate all Reuse effects on this Skill's Coins"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "kurokumo-clan-wakashu-heathcliff"
   },
   {
     "name": "Kurokumo Clan Wakashu Hong Lu",
@@ -4239,7 +4290,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "kurokumo-clan-wakashu-hong-lu"
   },
   {
     "name": "Kurokumo Clan Wakashu Rodion",
@@ -4323,7 +4375,8 @@
           "If target has 6+ Bleed, double the crit chance  At 10+ Poise, +100% Critical Damage"
         ]
       }
-    ]
+    ],
+    "slug": "kurokumo-clan-wakashu-rodion"
   },
   {
     "name": "Kurokumo Clan Wakashu Ryōshū",
@@ -4405,7 +4458,8 @@
           "If target has 9+ Bleed Count, deal +40% damage"
         ]
       }
-    ]
+    ],
+    "slug": "kurokumo-clan-wakashu-ryoshu"
   },
   {
     "name": "K Corp. Class 3 Excision Staff Hong Lu",
@@ -4477,7 +4531,8 @@
         "[On Use] Gain 1 K Corp Ampule next turn  [On Use] Gain +5 Aggro to this Skill Slot next turn"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "k-corp-class-3-excision-staff-hong-lu"
   },
   {
     "name": "LCA Udjat Vanguard Team 3 Leader Outis",
@@ -4557,7 +4612,8 @@
         "When hit while this unit has Shield, inflict 3 Sinking against the attacker (3 times per turn)  [On Use] If this unit has The Udjat -Vanguard-, gain 1 Protection (once per turn)  [On Use] For every Protection on self, gain Shield equal to 5% of this unit's max HP (max 15%; once per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lca-udjat-vanguard-team-3-leader-outis"
   },
   {
     "name": "LCB Sinner Don Quixote",
@@ -4627,7 +4683,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lcb-sinner-don-quixote"
   },
   {
     "name": "LCB Sinner Faust",
@@ -4691,7 +4748,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lcb-sinner-faust"
   },
   {
     "name": "LCB Sinner Gregor",
@@ -4755,7 +4813,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lcb-sinner-gregor"
   },
   {
     "name": "LCB Sinner Heathcliff",
@@ -4821,7 +4880,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lcb-sinner-heathcliff"
   },
   {
     "name": "LCB Sinner Hong Lu",
@@ -4889,7 +4949,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lcb-sinner-hong-lu"
   },
   {
     "name": "LCB Sinner Ishmael",
@@ -4955,7 +5016,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lcb-sinner-ishmael"
   },
   {
     "name": "LCB Sinner Meursault",
@@ -5023,7 +5085,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lcb-sinner-meursault"
   },
   {
     "name": "LCB Sinner Outis",
@@ -5089,7 +5152,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lcb-sinner-outis"
   },
   {
     "name": "LCB Sinner Rodion",
@@ -5155,7 +5219,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lcb-sinner-rodion"
   },
   {
     "name": "LCB Sinner Ryōshū",
@@ -5221,7 +5286,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lcb-sinner-ryoshu"
   },
   {
     "name": "LCB Sinner Sinclair",
@@ -5289,7 +5355,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lcb-sinner-sinclair"
   },
   {
     "name": "LCB Sinner Yi Sang",
@@ -5353,7 +5420,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lcb-sinner-yi-sang"
   },
   {
     "name": "LCCB Assistant Manager Ishmael",
@@ -5423,7 +5491,8 @@
         "[On Use] Gain +4 Aggro to this Skill Slot next turn  At 0 Ammo, gain 2 more Aggro"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lccb-assistant-manager-ishmael"
   },
   {
     "name": "LCCB Assistant Manager Rodion",
@@ -5493,7 +5562,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lccb-assistant-manager-rodion"
   },
   {
     "name": "LCCB Assistant Manager Ryōshū",
@@ -5563,7 +5633,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lccb-assistant-manager-ryoshu"
   },
   {
     "name": "LCD OSIR Team Ishmael",
@@ -5688,7 +5759,8 @@
           "[Coin Effect] [On Crit] Gain 1 {{StatusEffect|Mook Workshop - Ye -銳- Type II Bladedraw / Thrust Force - Dokkaebi Fire|b"
         ]
       }
-    ]
+    ],
+    "slug": "lcd-osir-team-ishmael"
   },
   {
     "name": "Liu Assoc. South Section 3 Yi Sang",
@@ -5760,7 +5832,8 @@
         "[Before Getting Hit] Gain Shield equal to Burn on target (max 15, once per turn)  [On Use] If target has 10+ Burn, deal +10% more damage"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "liu-assoc-south-section-3-yi-sang"
   },
   {
     "name": "Liu Assoc. South Section 4 Director Rodion",
@@ -5830,7 +5903,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "liu-assoc-south-section-4-director-rodion"
   },
   {
     "name": "Liu Assoc. South Section 4 Ishmael",
@@ -5892,7 +5966,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "liu-assoc-south-section-4-ishmael"
   },
   {
     "name": "Liu Assoc. South Section 4 Ryōshū",
@@ -5962,7 +6037,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "liu-assoc-south-section-4-ryoshu"
   },
   {
     "name": "Liu Assoc. South Section 5 Hong Lu",
@@ -6032,7 +6108,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "liu-assoc-south-section-5-hong-lu"
   },
   {
     "name": "Liu Assoc. South Section 6 Gregor",
@@ -6102,7 +6179,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "liu-assoc-south-section-6-gregor"
   },
   {
     "name": "Liu Assoc. South Section 6 Meursault",
@@ -6168,7 +6246,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "liu-assoc-south-section-6-meursault"
   },
   {
     "name": "Lobotomy Corp. Remnant Faust",
@@ -6236,7 +6315,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lobotomy-corp-remnant-faust"
   },
   {
     "name": "Lobotomy E.G.O::Faint Aroma & Solitude Ryōshū",
@@ -6339,7 +6419,8 @@
           "[On Use] Coin Power +1 for every 6 (Tremor + Sinking) on target (max 2)  [On Use] Deal +1% damage for every Faint Aroma on target"
         ]
       }
-    ]
+    ],
+    "slug": "lobotomy-ego-faint-aroma-and-solitude-ryoshu"
   },
   {
     "name": "Lobotomy E.G.O::In the Name of Love and Hate Don Quixote",
@@ -6457,7 +6538,8 @@
           "Deal +30% damage for every Magical Arcana on self (max 90%)  [On Use] At 2+ Love-Hate, deal +(Love-Hate x 25)% damage (max 125%)  [On Use] At 2+ Love-Hate, Base Power +2  [On Use] Consume Love-Hate Count to gain Coin Power (Coin Power +1 for every 5 Count consumed, max 4)  [On Use] Gain +6 Love-Hate Count  [Attack End] Gain 1 Magical Arcana"
         ]
       }
-    ]
+    ],
+    "slug": "lobotomy-ego-in-the-name-of-love-and-hate-don-quixote"
   },
   {
     "name": "Lobotomy E.G.O::Lamp Gregor",
@@ -6545,7 +6627,8 @@
         "Clashable Guard  [Combat Start] Gain Lamp up to 8 Stack; for every Stack gained, take HP damage equal to 1% of max HP (this effect does not reduce this unit's HP below 1)  [Turn End] Apply 1 Haste next turn to (Bind on self / 2) other allies with the slowest Speed (once per turn; rounded down)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lobotomy-ego-lamp-gregor"
   },
   {
     "name": "Lobotomy E.G.O::Lantern Don Quixote",
@@ -6617,7 +6700,8 @@
         "[On Use] If target has 6+ Rupture, Final Power +3  [Skill End] Heal HP equal to remaining Shield HP (Once per turn. Max Heal amount: 10% of Max HP)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lobotomy-ego-lantern-don-quixote"
   },
   {
     "name": "Lobotomy E.G.O::Magic Bullet Outis",
@@ -6689,7 +6773,8 @@
         "[On Use] Gain 1 Magic Bullet (Once per turn)  [On Use] Gain Final Power equal to (Magic Bullet x2)  [Skill End] Lose SP equal to Magic Bullet"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lobotomy-ego-magic-bullet-outis"
   },
   {
     "name": "Lobotomy E.G.O::Red Eyes & Penitence Ryōshū",
@@ -6792,7 +6877,8 @@
           "[Coin Effect] Deal +2.5% > +4% damage for every {{StatusEffect|Red Eyes|b"
         ]
       }
-    ]
+    ],
+    "slug": "lobotomy-ego-red-eyes-and-penitence-ryoshu"
   },
   {
     "name": "Lobotomy E.G.O::Red Sheet Sinclair",
@@ -6858,7 +6944,8 @@
         "[On Use] Gain 1 Talisman"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lobotomy-ego-red-sheet-sinclair"
   },
   {
     "name": "Lobotomy E.G.O::Regret Faust",
@@ -6930,7 +7017,8 @@
         "[On Use] Gain +6 Tremor Count"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lobotomy-ego-regret-faust"
   },
   {
     "name": "Lobotomy E.G.O::Sloshing Ishmael",
@@ -7002,7 +7090,8 @@
         "[On Use] Gain +4 Aggro to this Skill Slot next turn"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lobotomy-ego-sloshing-ishmael"
   },
   {
     "name": "Lobotomy E.G.O::Solemn Lament Yi Sang",
@@ -7082,7 +7171,8 @@
         "[Combat Start] Reload (Solemn Lament) (once per turn)  [Combat Start] Gain Shield equal to (the sum of both Butterfly on the selected target)% HP (max 20% per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lobotomy-ego-solemn-lament-yi-sang"
   },
   {
     "name": "Lobotomy E.G.O::Sunshower Heathcliff",
@@ -7154,7 +7244,8 @@
         "[On Use] Gain 5 Sinking"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "lobotomy-ego-sunshower-heathcliff"
   },
   {
     "name": "Lobotomy E.G.O::The Sword Sharpened with Tears Rodion",
@@ -7262,7 +7353,8 @@
           "[Clashable Counter]  [Combat Start] Final Power +1 for every 2 Piercing Sword (max 2)  [On Use] Gain 5 Deep Tears (2 times per turn)  [Turn End] At less than 3 Tear-sharpened, lose 15 SP and gain 1 Tear-sharpened (once per turn)  - If this unit has Tear-sharpened, lose (Tear-sharpened Stack x 15) more SP"
         ]
       }
-    ]
+    ],
+    "slug": "lobotomy-ego-the-sword-sharpened-with-tears-rodion"
   },
   {
     "name": "Los Mariachis Jefe Sinclair",
@@ -7334,7 +7426,8 @@
         "[On Evade] Gain +1 Poise Count"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "los-mariachis-jefe-sinclair"
   },
   {
     "name": "Molar Boatworks Fixer Ishmael",
@@ -7406,7 +7499,8 @@
         "[On Use] Gain 2 Rupture Protection (6 times per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "molar-boatworks-fixer-ishmael"
   },
   {
     "name": "Molar Boatworks Fixer Sinclair",
@@ -7478,7 +7572,8 @@
         "[On Use] Gain 1 Rupture Protection (3 times per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "molar-boatworks-fixer-sinclair"
   },
   {
     "name": "Molar Office Fixer Outis",
@@ -7550,7 +7645,8 @@
         "[On Use] Discard the Skill of lowest rank in all of this unit's Skill Slots"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "molar-office-fixer-outis"
   },
   {
     "name": "Molar Office Fixer Yi Sang",
@@ -7622,7 +7718,8 @@
         "[On Use] Discard 1 Skill of the lowest rank in all of this unit's Skill Slots"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "molar-office-fixer-yi-sang"
   },
   {
     "name": "MultiCrack Office Fixer Heathcliff",
@@ -7694,7 +7791,8 @@
         "[On Use] Gain +3 Charge Count (2 times per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "multicrack-office-fixer-heathcliff"
   },
   {
     "name": "MultiCrack Office Rep Faust",
@@ -7766,7 +7864,8 @@
         "[On Use] Gain +4 Charge Count (2 times per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "multicrack-office-rep-faust"
   },
   {
     "name": "Night Awls Capitano Gregor",
@@ -7872,7 +7971,8 @@
           "[Coin Effect] [On Hit] Inflict 4 {{StatusEffect|Tremor|d"
         ]
       }
-    ]
+    ],
+    "slug": "night-awls-capitano-gregor"
   },
   {
     "name": "N Corp. E.G.O::Contempt, Awe Ryōshū",
@@ -7985,7 +8085,8 @@
           "[Coin Effect] Deal +30% > +40% Damage for every {{StatusEffect|Torn Memory|r"
         ]
       }
-    ]
+    ],
+    "slug": "n-corp-ego-contempt-awe-ryoshu"
   },
   {
     "name": "N Corp. E.G.O::Fell Bullet Yi Sang",
@@ -8065,7 +8166,8 @@
         "[Clashable Counter]  [On Use] Coin Power +1 for every 2 Poise on self (max 3)  [On Use] Gain 2 Torn Memory"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "n-corp-ego-fell-bullet-yi-sang"
   },
   {
     "name": "N Corp. Großhammer Meursault",
@@ -8137,7 +8239,8 @@
         "[Combat Start] Gain 1 Protection  At less than 50% HP, Final Power +2"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "n-corp-grosshammer-meursault"
   },
   {
     "name": "N Corp. Kleinhammer Heathcliff",
@@ -8203,7 +8306,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "n-corp-kleinhammer-heathcliff"
   },
   {
     "name": "N Corp. Mittelhammer Don Quixote",
@@ -8267,7 +8371,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "n-corp-mittelhammer-don-quixote"
   },
   {
     "name": "N Corp. Mittelhammer Rodion",
@@ -8335,7 +8440,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "n-corp-mittelhammer-rodion"
   },
   {
     "name": "R.B. Chef de Cuisine Ryōshū",
@@ -8405,7 +8511,8 @@
         "[On Evade] Gain 1 Haste next turn"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "rb-chef-de-cuisine-ryoshu"
   },
   {
     "name": "R.B. Sous-chef Gregor",
@@ -8475,7 +8582,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "rb-sous-chef-gregor"
   },
   {
     "name": "Rosespanner Workshop Fixer Gregor",
@@ -8545,7 +8653,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "rosespanner-workshop-fixer-gregor"
   },
   {
     "name": "Rosespanner Workshop Fixer Meursault",
@@ -8615,7 +8724,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "rosespanner-workshop-fixer-meursault"
   },
   {
     "name": "Rosespanner Workshop Rep Rodion",
@@ -8687,7 +8797,8 @@
         "[Combat Start] Gain +2 Charge Count"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "rosespanner-workshop-rep-rodion"
   },
   {
     "name": "R Corp. 4th Pack Rabbit Heathcliff",
@@ -8757,7 +8868,8 @@
         "[On Use] Gain +1 Charge Count"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "r-corp-4th-pack-rabbit-heathcliff"
   },
   {
     "name": "R Corp. 4th Pack Reindeer Hong Lu",
@@ -8829,7 +8941,8 @@
         "[On Use] At 10+ Charge Count, Coin Power +4  [On Use] Gain +3 Charge Count (2 times per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "r-corp-4th-pack-reindeer-hong-lu"
   },
   {
     "name": "R Corp. 4th Pack Reindeer Ishmael",
@@ -8901,7 +9014,8 @@
         "[On Evade] Gain +1 Charge Count"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "r-corp-4th-pack-reindeer-ishmael"
   },
   {
     "name": "R Corp. 4th Pack Reindeer Rodion",
@@ -8965,7 +9079,8 @@
         "[On Use] At 5+ Charge Count, Base Power +2[On Use] Gain +3 Charge Count (2 times per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "r-corp-4th-pack-reindeer-rodion"
   },
   {
     "name": "R Corp. 4th Pack Rhino Meursault",
@@ -9037,7 +9152,8 @@
         "[On Use] If attacked while shielded, gain +2 Charge Count (Max 10 per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "r-corp-4th-pack-rhino-meursault"
   },
   {
     "name": "Seven Assoc. South Section 4 Faust",
@@ -9109,7 +9225,8 @@
         "[On Use] Gain 1 Haste next turn (3 times per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "seven-assoc-south-section-4-faust"
   },
   {
     "name": "Seven Assoc. South Section 4 Heathcliff",
@@ -9179,7 +9296,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "seven-assoc-south-section-4-heathcliff"
   },
   {
     "name": "Seven Assoc. South Section 6 Director Outis",
@@ -9251,7 +9369,8 @@
         "[On Use] Gain 1 Haste and 1 Defense Power Up next turn"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "seven-assoc-south-section-6-director-outis"
   },
   {
     "name": "Seven Assoc. South Section 6 Ryōshū",
@@ -9319,7 +9438,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "seven-assoc-south-section-6-ryoshu"
   },
   {
     "name": "Seven Assoc. South Section 6 Yi Sang",
@@ -9385,7 +9505,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "seven-assoc-south-section-6-yi-sang"
   },
   {
     "name": "Shi Assoc. East Section 3 Faust",
@@ -9489,7 +9610,8 @@
           "[Coin Effect] [On Crit Kill Against Enemy] Gain +4 {{StatusEffect|Poise|b"
         ]
       }
-    ]
+    ],
+    "slug": "shi-assoc-east-section-3-faust"
   },
   {
     "name": "Shi Assoc. South Section 5 Director Don Quixote",
@@ -9559,7 +9681,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "shi-assoc-south-section-5-director-don-quixote"
   },
   {
     "name": "Shi Assoc. South Section 5 Heathcliff",
@@ -9631,7 +9754,8 @@
         "[On Use] Lose 5 HP  At 3+ Poise Count, Damage +50%"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "shi-assoc-south-section-5-heathcliff"
   },
   {
     "name": "Shi Assoc. South Section 5 Ishmael",
@@ -9703,7 +9827,8 @@
         "At 5+ Poise Count, +50% Critical Damage"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "shi-assoc-south-section-5-ishmael"
   },
   {
     "name": "S Corp. Ch'unokkun Hong Lu",
@@ -9783,7 +9908,8 @@
         "[Clashable Counter]  [On Use] At 6+ (Poise on self + Bleed on target), Clash Power +2  [On Use] Gain 5 Poise  [Clash Win] Gain +3 Poise Count"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "s-corp-chunokkun-hong-lu"
   },
   {
     "name": "The Barber of La Manchaland Outis",
@@ -9863,7 +9989,8 @@
         "[On Use] At 10+ Blood-tinged Scissorblades (Ally), Base Power +1  - At 20+ Blood-tinged Scissorblades (Ally), Base Power +2 instead  [On Use] Coin Power +1 for every 5 Bleed on self (max 3)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "the-barber-of-la-manchaland-outis"
   },
   {
     "name": "The House of Spiders: The Index Nursefather Yi Sang",
@@ -9980,7 +10107,8 @@
           "[Coin Effect] Deal +90% Damage on Critical Hit"
         ]
       }
-    ]
+    ],
+    "slug": "the-house-of-spiders-the-index-nursefather-yi-sang"
   },
   {
     "name": "The House of Spiders: The Middle Apprentice Ishmael",
@@ -10060,7 +10188,8 @@
         "[Combat Start] At 6+ sum of Envy A-Reson., use 'Violet~ Breaking Slam' as Counter  (Activates from the leftmost Skill Slot. Activates 2 times per turn)  [Combat Start] Gain 25% of missing HP as Shield (once per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "the-house-of-spiders-the-middle-apprentice-ishmael"
   },
   {
     "name": "The House of Spiders: The Middle Nursefather Outis",
@@ -10235,7 +10364,8 @@
           "Final Power +1 for every 4 (Burn + Bleed) on target (max 3)  At 6+ Envy A-Reson., Coin Power +1  [Before Use] If this unit has Lævateinn (Outis), activate as \"Complete and Total Extermination\"  [On Use] This Skill gains Offense Level equal to (highest Reson.) (max 6)  [On Use] Final Power +1 for every The Middle - Vengeance Tattoo -Great Sister- on self (max 3)  [On Use] Convert this Skill's Coins into Unbreakable Coins equal to The Middle - Vengeance Tattoo -Great Sister- on this unit, beginning with Coin 3  [On Use] If this unit's sword is at First Seal Removed (Outis) or Second Seal Removed (Outis) stage, inflict Burn by the base amount of Bleed the Skill inflicts On Coin Hit  [Attack End] Consume all The Middle - Grudge (Outis) on self  [Attack End] If this Skill was activated as a Counter Skill, gain 1 Blunt DMG Up next turn (once per turn)"
         ]
       }
-    ]
+    ],
+    "slug": "the-house-of-spiders-the-middle-nursefather-outis"
   },
   {
     "name": "The House of Spiders: The Pinky Apprentice Sinclair",
@@ -10327,7 +10457,8 @@
           "[Combat Start] Gain Shield equal to Moonlit Azure Blade Stack (once per turn)  [Combat Start] Gain +4 Poise Count (once per turn)  [On Evade] Gain 1 Crit DMG Up next turn (max 2 times per turn)"
         ]
       }
-    ]
+    ],
+    "slug": "the-house-of-spiders-the-pinky-apprentice-sinclair"
   },
   {
     "name": "The House of Spiders: The Ring Apprentice Faust",
@@ -10475,7 +10606,8 @@
           "[Coin Effect] [On Hit] Inflict 4 {{StatusEffect|Bleed|d"
         ]
       }
-    ]
+    ],
+    "slug": "the-house-of-spiders-the-ring-apprentice-faust"
   },
   {
     "name": "The House of Spiders: The Ring Nursefather Hong Lu",
@@ -10611,7 +10743,8 @@
           "[Coin Effect] [On Hit] Inflict 3 {{StatusEffect|Bleed|d"
         ]
       }
-    ]
+    ],
+    "slug": "the-house-of-spiders-the-ring-nursefather-hong-lu"
   },
   {
     "name": "The House of Spiders: The Thumb Apprentice Heathcliff",
@@ -10733,7 +10866,8 @@
           "[Coin Effect] [On Hit] Trigger {{StatusEffect|Tremor Burst|d"
         ]
       }
-    ]
+    ],
+    "slug": "the-house-of-spiders-the-thumb-apprentice-heathcliff"
   },
   {
     "name": "The House of Spiders: The Thumb Nursefather Rodion",
@@ -10876,7 +11010,8 @@
           "[Coin Effect] Deal +10% damage for every {{StatusEffect|Acceleration Round|r"
         ]
       }
-    ]
+    ],
+    "slug": "the-house-of-spiders-the-thumb-nursefather-rodion"
   },
   {
     "name": "The Index Proxy - Effloresced E.G.O::Procuration Don Quixote",
@@ -11022,7 +11157,8 @@
           "[Coin Effect] This Coin gains Power +1 and deals +20% > +40% damage for every {{StatusEffect|Unlock|b"
         ]
       }
-    ]
+    ],
+    "slug": "the-index-proxy-effloresced-ego-procuration-don-quixote"
   },
   {
     "name": "The Lord of Hongyuan Hong Lu",
@@ -11138,7 +11274,8 @@
           "[Coin Effect] [On Kill] Gain 2 {{StatusEffect|Attack Power Up|b"
         ]
       }
-    ]
+    ],
+    "slug": "the-lord-of-hongyuan-hong-lu"
   },
   {
     "name": "The Manager of La Manchaland Don Quixote",
@@ -11283,7 +11420,8 @@
           "[Coin Effect] [On Hit] Inflict 8 {{StatusEffect|Bleed|d"
         ]
       }
-    ]
+    ],
+    "slug": "the-manager-of-la-manchaland-don-quixote"
   },
   {
     "name": "The Middle Big Brother Heathcliff",
@@ -11383,7 +11521,8 @@
           "Final Power +1 for every 4 (Burn + Bleed) on the main target (max 3)  Final Power +1 for every 2 Envy Reson. (max 3)  [Combat Start] This Skill gains (highest Reson.) Offense Level (max 6)  [On Use] If the main target has Vengeance Mark, Final Power +2  [On Use] At 6+ Envy A-Reson., gain +1 Atk Weight  [On Use] At 20+ Book of Vengeance -Heathcliff-, gain +1 Atk Weight  [On Use] Deal +60% damage for every excess Atk Weight beyond the # of actual targets (in Focused Encounters, the Part)  [On Kill] For every enemy killed using this Skill, gain 2 Vengeance Tattoo (max 6 per turn)"
         ]
       }
-    ]
+    ],
+    "slug": "the-middle-big-brother-heathcliff"
   },
   {
     "name": "The Middle Little Brother Meursault",
@@ -11455,7 +11594,8 @@
         "At 4+ Envy Reson., Coin Power +1"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "the-middle-little-brother-meursault"
   },
   {
     "name": "The Middle Little Brother Sinclair",
@@ -11527,7 +11667,8 @@
         "[Combat Start] Skill behavior changes based on the sum of Envy A-Reson.:  - At 4+ sum of A-Reson., use 'Payback with Interest' as Counter  - At 6+ sum of A-Reson., use 'Write 'em all down' as Counter  (Activates from the leftmost Skill Slot. Activates 2 times per turn)  [Combat Start] Gain 30% of missing HP as Shield (once per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "the-middle-little-brother-sinclair"
   },
   {
     "name": "The Middle Little Sister Don Quixote",
@@ -11599,7 +11740,8 @@
         "[Combat Start] At 6+ sum of Envy A-Reson., use 'A Just Vengeance' as Counter.  Upon activating the above effect, the Skill's affinity is changed to Envy.  (Leftmost 'Multifold Retribution' is activated first. Activates 2 times per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "the-middle-little-sister-don-quixote"
   },
   {
     "name": "The One Who Grips Faust",
@@ -11669,7 +11811,8 @@
         "[On Evade] Target loses 3 SP"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "the-one-who-grips-faust"
   },
   {
     "name": "The One Who Shall Grip Sinclair",
@@ -11741,7 +11884,8 @@
         "[Combat Start] Heal 5~10 SP"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "the-one-who-shall-grip-sinclair"
   },
   {
     "name": "The Pequod Captain Ishmael",
@@ -11821,7 +11965,8 @@
         "[On Use] Heal 5 SP for 2 allies adjacent to this unit on the Dashboard (2 times max)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "the-pequod-captain-ishmael"
   },
   {
     "name": "The Pequod First Mate Yi Sang",
@@ -11891,7 +12036,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "the-pequod-first-mate-yi-sang"
   },
   {
     "name": "The Pequod Harpooneer Heathcliff",
@@ -11963,7 +12109,8 @@
         "[On Use] Gain +5 Aggro to this Skill Slot next turn  [Combat Start] Gain Defense Level Up for every Poise on self (Max 10)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "the-pequod-harpooneer-heathcliff"
   },
   {
     "name": "The Priest of La Manchaland Gregor",
@@ -12043,7 +12190,8 @@
         "[Combat Start] At 40%+ HP, gain 5 Bleed and activate Bleed up to 3 times on self (once per turn; lose Bleed Count equal to the number of times it was activated)  [Combat Start] At less than 40% HP, consume up to 20 Bloodfeast and heal the same value as HP (once per turn)  [Combat Start] Gain 3 Ailing Heart (Ally) (once per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "the-priest-of-la-manchaland-gregor"
   },
   {
     "name": "The Princess of La Manchaland Rodion",
@@ -12136,7 +12284,8 @@
           "[Coin Effect] [On Hit] Inflict +1 > +2 {{StatusEffect|Rupture|d"
         ]
       }
-    ]
+    ],
+    "slug": "the-princess-of-la-manchaland-rodion"
   },
   {
     "name": "The Prince of La Manchaland Meursault",
@@ -12237,7 +12386,8 @@
           "[Coin Effect] [On Hit] Inflict 2 {{StatusEffect|La Mancha Parade|d"
         ]
       }
-    ]
+    ],
+    "slug": "the-prince-of-la-manchaland-meursault"
   },
   {
     "name": "The Ring Fauvist Docent Rodion",
@@ -12348,7 +12498,8 @@
           "Deal +20% damage for every type of negative effect on target (max 60%)  If target has Palette Vibrante, deal +20% damage  [Before Use] If target has 6+ types of negative effect, activate as \"Burst Forth the Pulsing Crimson under Your Skin\" (once per turn)  [On Use] Coin Power +1 for every 4 (Bleed + Sinking) on target (max 2)"
         ]
       }
-    ]
+    ],
+    "slug": "the-ring-fauvist-docent-rodion"
   },
   {
     "name": "The Ring Fauvist Student Meursault",
@@ -12428,7 +12579,8 @@
         "[Clashable Counter]  If this unit has Le Fauvisme - Masque de Chien, Base Power +2  [On Use] If target has 6+ (Bleed + Sinking), Coin Power +1"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "the-ring-fauvist-student-meursault"
   },
   {
     "name": "The Ring Pointillist Student Outis",
@@ -12508,7 +12660,8 @@
         "[On Use] If target has 10+ Bleed, Coin Power +7"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "the-ring-pointillist-student-outis"
   },
   {
     "name": "The Ring Pointillist Student Yi Sang",
@@ -12588,7 +12741,8 @@
         "Base Power +1 for every 1 Bleed on target (max 10)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "the-ring-pointillist-student-yi-sang"
   },
   {
     "name": "The Thumb East Capo IIII Meursault",
@@ -12685,7 +12839,8 @@
           "[Coin Effect] [On Hit] Trigger {{StatusEffect|Tremor Burst|d"
         ]
       }
-    ]
+    ],
+    "slug": "the-thumb-east-capo-iiii-meursault"
   },
   {
     "name": "The Thumb East Soldato II Sinclair",
@@ -12765,7 +12920,8 @@
         "Inflict 2 Tremor against the Attacker when hit as long as this unit has remaining Shield (4 times per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "the-thumb-east-soldato-ii-sinclair"
   },
   {
     "name": "Tingtang Gang Gangleader Hong Lu",
@@ -12835,7 +12991,8 @@
         "If target has 5+ Bleed, Coin Power +2  [On Evade] Heal 3 SP"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "tingtang-gang-gangleader-hong-lu"
   },
   {
     "name": "Twinhook Pirates First Mate Gregor",
@@ -12907,7 +13064,8 @@
         "[On Evade] Gain 1 Poise (Max 5 per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "twinhook-pirates-first-mate-gregor"
   },
   {
     "name": "T Corp. Class 2 Collection Staff Rodion",
@@ -12979,7 +13137,8 @@
         "[Combat Start] If this unit is not in a Borrowed Time state, gain 3 Borrowed Time at Turn End (once per turn) [On Use] For this turn: when hit by an enemy, inflict 2 Tremor on target next turn (6 times per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "t-corp-class-2-collection-staff-rodion"
   },
   {
     "name": "T Corp. Class 3 Collection Staff Don Quixote",
@@ -13051,7 +13210,8 @@
         "[Combat Start] If this unit is not in a Borrowed Time state, gain 4 Borrowed Time at Turn End (once per turn)  [On Use] For this turn: when hit by an enemy, inflict 3 Tremor on target next turn (6 times per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "t-corp-class-3-collection-staff-don-quixote"
   },
   {
     "name": "T Corp. Class 3 VDCU Staff Outis",
@@ -13123,7 +13283,8 @@
         "Clashable Guard  [Combat Start] If this unit is not in a Borrowed Time state, gain 4 Borrowed Time at Turn End (once per turn)  [Clash Win] Apply +2 Tremor Count to both the target and self  [Clash Lose] Gain +4 Tremor Count"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "t-corp-class-3-vdcu-staff-outis"
   },
   {
     "name": "Öufi Assoc. South Section 3 Heathcliff",
@@ -13195,7 +13356,8 @@
         "When attacked while this unit has Shield, inflict +1 Tremor Count on the attacker (this Skill's effect does not stack with multiple uses)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "oufi-assoc-south-section-3-heathcliff"
   },
   {
     "name": "Wild Hunt Heathcliff",
@@ -13289,7 +13451,8 @@
           "[Coin Effect] [On Hit] Inflict Gloom Affinity damage equal to {{StatusEffect|Sinking|d"
         ]
       }
-    ]
+    ],
+    "slug": "wild-hunt-heathcliff"
   },
   {
     "name": "Wuthering Heights Butler Faust",
@@ -13361,7 +13524,8 @@
         "[On Use] If target has 10+ Sinking, Coin Power +7"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "wuthering-heights-butler-faust"
   },
   {
     "name": "Wuthering Heights Chief Butler Outis",
@@ -13433,7 +13597,8 @@
         "[On Evade] Inflict 1 Sinking (6 times per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "wuthering-heights-chief-butler-outis"
   },
   {
     "name": "W Corp. L2 Cleanup Agent Faust",
@@ -13503,7 +13668,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "w-corp-l2-cleanup-agent-faust"
   },
   {
     "name": "W Corp. L2 Cleanup Agent Hong Lu",
@@ -13575,7 +13741,8 @@
         "[On Use] Gain 3 Charge Barrier (3 times per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "w-corp-l2-cleanup-agent-hong-lu"
   },
   {
     "name": "W Corp. L2 Cleanup Agent Meursault",
@@ -13647,7 +13814,8 @@
         "[Combat Start] Gain +2 Charge Count"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "w-corp-l2-cleanup-agent-meursault"
   },
   {
     "name": "W Corp. L3 Cleanup Agent Don Quixote",
@@ -13717,7 +13885,8 @@
       "coins": 1,
       "effects": ""
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "w-corp-l3-cleanup-agent-don-quixote"
   },
   {
     "name": "W Corp. L3 Cleanup Agent Ryōshū",
@@ -13789,7 +13958,8 @@
         "Base Power +1 per 5 Charge Count (max 3)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "w-corp-l3-cleanup-agent-ryoshu"
   },
   {
     "name": "W Corp. L3 Cleanup Agent Yi Sang",
@@ -13861,7 +14031,8 @@
         "Base Power +1 for every 5 Charge Count (max 2)  [On Evade] Next turn, when inflicting Rupture with a Skill for the first time, inflict +1 more Rupture (max +3 per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "w-corp-l3-cleanup-agent-yi-sang"
   },
   {
     "name": "W Corp. L3 Cleanup Captain Outis",
@@ -13933,7 +14104,8 @@
         "[On Use] Base Power +1 for every Charge Count on self (max 10)  [On Use] Gain +2 Charge Count (3 times per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "w-corp-l3-cleanup-captain-outis"
   },
   {
     "name": "W Corp. L4 Cleanup Agent - CCA Heathcliff",
@@ -14013,7 +14185,8 @@
         "Clashable Guard  [Combat Start] At less than 15 Charge Count, gain the following effects:  - Gain Overcharge next turn (max 1 per turn)  - Turn End: Remove this unit's first Stagger Threshold (once per Encounter)  - Turn End: Add 1 Rip Space - CCA Overdrive to the list of Skills for the next upcoming turn (once per turn)"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "w-corp-l4-cleanup-agent-cca-heathcliff"
   },
   {
     "name": "Zwei Assoc. South Section 4 Faust",
@@ -14085,7 +14258,8 @@
         "[On Use] Gain +3 Aggro to this Skill Slot next turn"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "zwei-assoc-south-section-4-faust"
   },
   {
     "name": "Zwei Assoc. South Section 4 Gregor",
@@ -14157,7 +14331,8 @@
         "[Combat Start] Gain Shield by (2 * Defense Level Up on self)  [On Use] Gain +5 Aggro to this Skill Slot next turn"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "zwei-assoc-south-section-4-gregor"
   },
   {
     "name": "Zwei Assoc. South Section 5 Rodion",
@@ -14229,7 +14404,8 @@
         "[On Use] Gain +5 Aggro to this Skill Slot next turn"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "zwei-assoc-south-section-5-rodion"
   },
   {
     "name": "Zwei Assoc. South Section 6 Sinclair",
@@ -14301,7 +14477,8 @@
         "[On Use] Gain +4 Aggro to this Skill Slot next turn"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "zwei-assoc-south-section-6-sinclair"
   },
   {
     "name": "Zwei Assoc. West Section 3 Ishmael",
@@ -14373,7 +14550,8 @@
         "Clashable Guard  [Combat Start] Gain 2 Defensive Stance. (once per turn)  [On Use] Gain +10 Tremor Count (once per turn)  [Clash Win] Trigger Tremor Burst"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "zwei-assoc-west-section-3-ishmael"
   },
   {
     "name": "Zwei Assoc. West Section 3 Sinclair",
@@ -14445,7 +14623,8 @@
         "Clashable Guard  [Combat Start] Gain +5 Aggro to this Skill Slot next turn  [On Use] Gain +3 Tremor Count (once per turn)  [Clash Win] Trigger Tremor Burst"
       ]
     },
-    "alternateSkills": []
+    "alternateSkills": [],
+    "slug": "zwei-assoc-west-section-3-sinclair"
   },
   {
     "name": "LCE E.G.O::AEDD Gregor",
@@ -14516,7 +14695,8 @@
           "- At 5+ Charge, inflict 5 Charged Sting this turn and next turn instead (once per turn)"
         ]
       }
-    ]
+    ],
+    "slug": "lce-ego-aedd-gregor"
   },
   {
     "name": "LCE E.G.O::Ardor Blossom Star Faust",
@@ -14585,7 +14765,8 @@
           "[On Hit] Inflict 4 Burn [On Hit] Inflict 4 Burn"
         ]
       }
-    ]
+    ],
+    "slug": "lce-ego-ardor-blossom-star-faust"
   },
   {
     "name": "LCE E.G.O::Dimension Shredder Yi Sang",
@@ -14648,7 +14829,8 @@
           "[Combat Start] Gain Charge Barrier equal to Charge Potency on self (once per turn; max 5)"
         ]
       }
-    ]
+    ],
+    "slug": "lce-ego-dimension-shredder-yi-sang"
   },
   {
     "name": "LCE E.G.O::Lantern Yi Sang",
@@ -14718,7 +14900,8 @@
           "[On Hit] Inflict +1 > +2 Rupture Count"
         ]
       }
-    ]
+    ],
+    "slug": "lce-ego-lantern-yi-sang"
   },
   {
     "slug": "lobotomy-ego-hornet-alteration-meursault",

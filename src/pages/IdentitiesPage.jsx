@@ -4,30 +4,21 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Star, Edit3, CheckCircle, Info } from 'lucide-react';
 import { useStore } from '../stores/useStore.js';
 import sinnersData from '../data/sinners.json';
-import { normalizeText, normalizeSinnerId, getSinnerInfo, getSinnerSortIndex } from '../utils/textUtils.js';
+import { normalizeText, normalizeSinnerId, getSinnerInfo, getSinnerSortIndex, parseSeasonNumber, getCardImageUrl } from '../utils/textUtils.js';
 
 const SIN_COLORS = { Wrath: '#dc2626', Lust: '#ea580c', Sloth: '#ca8a04', Gluttony: '#16a34a', Gloom: '#0ea5e9', Pride: '#4f46e5', Envy: '#9333ea' };
 const KEYWORD_COLORS = { Burn: '#ef4444', Bleed: '#dc2626', Tremor: '#d97706', Rupture: '#22c55e', Sinking: '#3b82f6', Poise: '#06b6d4', Charge: '#8b5cf6' };
 const ATTACK_TYPES = ['Slash', 'Pierce', 'Blunt'];
 
-function generateSlug(name) {
-  return normalizeText(name)
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .trim();
-}
-
 function IdCard({ id, meta, acquired, onToggleAcquired, onEdit, onClickDetails }) {
   const sinnerInfo = getSinnerInfo(id.sinner);
   const [imgError, setImgError] = useState(false);
+  const [useAltUrl, setUseAltUrl] = useState(false);
   
-  // Use LimbusDeck CDN for images (slug was scraped and stored in identities.json)
-  let bgUrl = null;
-  if (!imgError) {
-     const slug = id.slug || generateSlug(id.name);
-     bgUrl = `https://assets.limbusdeck.com/identities/full-uptied/${slug}.webp`;
-  }
+  // Use LimbusDeck CDN for images (slug stored in identities.json)
+  const defaultBg = getCardImageUrl(id);
+  const altBg = id.slug ? `https://assets.limbusdeck.com/identities/full/${id.slug}.webp` : null;
+  const bgUrl = imgError ? null : (useAltUrl ? altBg : defaultBg);
 
   return (
     <motion.div 
@@ -38,9 +29,22 @@ function IdCard({ id, meta, acquired, onToggleAcquired, onEdit, onClickDetails }
       {/* Background Art */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-110"
-        style={{ backgroundImage: bgUrl ? `url(${bgUrl})` : 'none' }}
+        style={{ backgroundImage: bgUrl ? `url("${encodeURI(bgUrl)}")` : 'none' }}
       />
-      {bgUrl && <img src={bgUrl} onError={() => setImgError(true)} className="hidden" alt="preload check" />}
+      {bgUrl && (
+        <img 
+          src={bgUrl} 
+          onError={() => {
+            if (!useAltUrl && altBg && altBg !== defaultBg) {
+              setUseAltUrl(true);
+            } else {
+              setImgError(true);
+            }
+          }} 
+          className="hidden" 
+          alt="preload check" 
+        />
+      )}
       
       {/* Gradient Overlay for text readability */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/60" />
@@ -163,12 +167,22 @@ export default function IdentitiesPage() {
         const sinA = getSinnerSortIndex(a.sinner);
         const sinB = getSinnerSortIndex(b.sinner);
         if (sinA !== sinB) return sinA - sinB;
-        if (a.tierIndex !== b.tierIndex) return a.tierIndex - b.tierIndex;
+        const seasonDiff = parseSeasonNumber(b.season) - parseSeasonNumber(a.season);
+        if (seasonDiff !== 0) return seasonDiff;
         if (a.rarity !== b.rarity) return b.rarity - a.rarity;
         return a.name.localeCompare(b.name);
       }
-      if (sortBy === 'By Rarity') return b.rarity - a.rarity;
-      return a.tierIndex - b.tierIndex; // Default "Newest/Tier"
+      if (sortBy === 'By Rarity') {
+        if (a.rarity !== b.rarity) return b.rarity - a.rarity;
+        const seasonDiff = parseSeasonNumber(b.season) - parseSeasonNumber(a.season);
+        if (seasonDiff !== 0) return seasonDiff;
+        return a.name.localeCompare(b.name);
+      }
+      // Default: 'Newest'
+      const seasonDiff = parseSeasonNumber(b.season) - parseSeasonNumber(a.season);
+      if (seasonDiff !== 0) return seasonDiff;
+      if (a.rarity !== b.rarity) return b.rarity - a.rarity;
+      return a.name.localeCompare(b.name);
     });
     return result;
   }, [search, filters, showAcquiredOnly, sortBy, acquiredIds, customMetadata]);

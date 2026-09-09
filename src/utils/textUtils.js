@@ -65,3 +65,33 @@ export function getSinnerSortIndex(sinner) {
   const idx = CANONICAL_SINNER_ORDER.indexOf(norm);
   return idx === -1 ? 99 : idx;
 }
+
+/**
+ * Extracts a numeric season for reliable sorting (e.g. "Season 7 Burn-Bleed Hybrid" -> 7, null -> 0).
+ */
+export function parseSeasonNumber(season) {
+  if (season === null || season === undefined || season === 'Standard') return 0;
+  if (typeof season === 'number') return season;
+  const match = String(season).match(/\d+/);
+  return match ? parseInt(match[0], 10) : 0;
+}
+
+/**
+ * Robust image URL generator for Identities and E.G.O with automatic fallbacks.
+ */
+export function getCardImageUrl(item, isEgo = false) {
+  if (!item) return null;
+  const slug = item.slug;
+  if (!slug) return null;
+
+  if (isEgo || item.grade) {
+    return `https://assets.limbusdeck.com/egos/full/${slug}.webp`;
+  }
+
+  // 1-star Base IDs are at /identities/full/, 2-star & 3-star are at /identities/full-uptied/
+  if (item.rarity === 1) {
+    return `https://assets.limbusdeck.com/identities/full/${slug}.webp`;
+  }
+  return `https://assets.limbusdeck.com/identities/full-uptied/${slug}.webp`;
+}
+

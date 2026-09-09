@@ -149,50 +149,50 @@ ipcMain.handle('download-update', async (event, url, filename) => {
   const tmpPath = path.join(os.tmpdir(), filename || 'LimbusTrackerUpdate.exe');
 
   return new Promise((resolve, reject) => {
-    const proto = url.startsWith('https') ? https : http;
     const file = fs.createWriteStream(tmpPath);
 
-    const doRequest = (reqUrl) => {
-      proto.get(reqUrl, (res) => {
-        // Follow redirects
+    // Follow redirects recursively without closing the write stream
+    const doRequest = (reqUrl, depth = 0) => {
+      if (depth > 10) { reject('Too many redirects'); return; }
+      const proto = reqUrl.startsWith('https') ? https : http;
+      proto.get(reqUrl, { headers: { 'User-Agent': 'LimbusTracker-Updater/1.0' } }, (res) => {
         if (res.statusCode === 301 || res.statusCode === 302 || res.statusCode === 303) {
-          file.close();
-          const redirectProto = res.headers.location.startsWith('https') ? https : http;
-          redirectProto.get(res.headers.location, (res2) => {
-            const total = parseInt(res2.headers['content-length'] || '0', 10);
-            let received = 0;
-            res2.pipe(file);
-            res2.on('data', (chunk) => {
-              received += chunk.length;
-              if (total > 0) {
-                event.sender.send('update-progress', Math.round((received / total) * 100));
-              }
-            });
-            file.on('finish', () => {
-              file.close();
-              shell.openPath(tmpPath);
-              resolve(tmpPath);
-            });
-          }).on('error', (err) => { fs.unlink(tmpPath, () => {}); reject(err.message); });
+          res.resume(); // Discard body, follow redirect
+          doRequest(res.headers.location, depth + 1);
+          return;
+        }
+
+        if (res.statusCode !== 200) {
+          file.close(() => fs.unlink(tmpPath, () => {}));
+          reject(`Download failed with status ${res.statusCode}`);
           return;
         }
 
         const total = parseInt(res.headers['content-length'] || '0', 10);
         let received = 0;
-        res.pipe(file);
+
         res.on('data', (chunk) => {
           received += chunk.length;
           if (total > 0) {
             event.sender.send('update-progress', Math.round((received / total) * 100));
           }
         });
+
+        res.pipe(file);
+
         file.on('finish', () => {
-          file.close();
-          shell.openPath(tmpPath);
-          resolve(tmpPath);
+          file.close(() => {
+            shell.openPath(tmpPath);
+            resolve(tmpPath);
+          });
+        });
+
+        res.on('error', (err) => {
+          file.close(() => fs.unlink(tmpPath, () => {}));
+          reject(err.message);
         });
       }).on('error', (err) => {
-        fs.unlink(tmpPath, () => {});
+        file.close(() => fs.unlink(tmpPath, () => {}));
         reject(err.message);
       });
     };

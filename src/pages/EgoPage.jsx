@@ -4,31 +4,19 @@ import { Search, Edit3, CheckCircle, Info } from 'lucide-react';
 import { useStore } from '../stores/useStore.js';
 import sinnersData from '../data/sinners.json';
 import { parseEffectsIntoTriggerGroups, getSkillTriggerColor, extractKeywordsFromEffects } from '../utils/skillParser';
-import { normalizeText, normalizeSinnerId, getSinnerInfo, getSinnerSortIndex } from '../utils/textUtils.js';
+import { normalizeText, normalizeSinnerId, getSinnerInfo, getSinnerSortIndex, parseSeasonNumber, getCardImageUrl } from '../utils/textUtils.js';
 
 const KEYWORD_COLORS = { Burn: '#ef4444', Bleed: '#dc2626', Tremor: '#eab308', Poise: '#22c55e', Charge: '#a855f7', Rupture: '#0ea5e9', Sinking: '#3b82f6' };
 const SIN_COLORS = { Wrath: '#dc2626', Lust: '#ea580c', Sloth: '#ca8a04', Gluttony: '#16a34a', Gloom: '#0ea5e9', Pride: '#4f46e5', Envy: '#9333ea' };
 const GRADE_COLORS = { ZAYIN: '#22c55e', TETH: '#06b6d4', HE: '#eab308', WAW: '#a855f7', ALEPH: '#ef4444' };
 const GRADE_ORDER = { ZAYIN: 0, TETH: 1, HE: 2, WAW: 3, ALEPH: 4 };
 
-function generateSlug(name) {
-  return normalizeText(name)
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .trim();
-}
-
 function EgoCard({ ego, meta, acquired, onToggleAcquired, onEdit, onClickDetails }) {
   const sinnerInfo = getSinnerInfo(ego.sinner);
   const [imgError, setImgError] = useState(false);
   
   // Use LimbusDeck CDN for images
-  let bgUrl = null;
-  if (!imgError) {
-     const slug = ego.slug || generateSlug(ego.name);
-     bgUrl = `https://assets.limbusdeck.com/egos/full/${slug}.webp`;
-  }
+  const bgUrl = imgError ? null : getCardImageUrl(ego, true);
 
   return (
     <motion.div 
@@ -39,7 +27,7 @@ function EgoCard({ ego, meta, acquired, onToggleAcquired, onEdit, onClickDetails
       {/* Background Art */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-110"
-        style={{ backgroundImage: bgUrl ? `url(${bgUrl})` : 'none' }}
+        style={{ backgroundImage: bgUrl ? `url("${encodeURI(bgUrl)}")` : 'none' }}
       />
       {bgUrl && <img src={bgUrl} onError={() => setImgError(true)} className="hidden" alt="preload check" />}
       
@@ -60,11 +48,14 @@ function EgoCard({ ego, meta, acquired, onToggleAcquired, onEdit, onClickDetails
       <div className="relative mt-auto p-3 z-10">
         <h3 className="font-bold text-[16px] leading-tight text-white drop-shadow-md mb-2">{ego.name}</h3>
         
-        {/* Resource Cost */}
         <div className="flex flex-wrap gap-1 mb-3">
-          {meta.cost?.map((sin, idx) => (
-            <span key={idx} className="w-4 h-4 rounded-full border border-white/30 shadow-sm" style={{ backgroundColor: SIN_COLORS[sin] }} title={sin} />
-          ))}
+          {meta.keywords?.length > 0 ? meta.keywords.map(kw => (
+            <span key={kw} className="text-[10px] px-1.5 py-0.5 rounded text-white font-medium bg-black/60 border border-white/20 shadow-sm" style={{ borderColor: KEYWORD_COLORS[kw] }}>
+              <span style={{color: KEYWORD_COLORS[kw]}}>●</span> {kw}
+            </span>
+          )) : (
+            <span className="text-[10px] text-gray-400 font-mono bg-black/60 px-1 rounded border border-gray-600 shadow-sm">No Tags</span>
+          )}
         </div>
 
         <div className="flex justify-between items-center pt-2 border-t border-white/20">
@@ -81,14 +72,14 @@ function EgoCard({ ego, meta, acquired, onToggleAcquired, onEdit, onClickDetails
 }
 
 export default function EgoPage() {
-  const { acquiredEgos, toggleAcquiredEgo, customMetadata, updateCustomMetadata, egosData } = useStore();
+  const { egosData, acquiredEgos, toggleAcquiredEgo, customMetadata, updateCustomMetadata } = useStore();
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState({ sinners: new Set(), grades: new Set(), sins: new Set() });
   const [showAcquiredOnly, setShowAcquiredOnly] = useState(false);
   const [sortBy, setSortBy] = useState('Newest');
-
-  const [editingId, setEditingId] = useState(null);
-  const [detailsId, setDetailsId] = useState(null);
+  
+  const [editingEgo, setEditingEgo] = useState(null);
+  const [detailsEgo, setDetailsEgo] = useState(null);
 
   const toggleFilter = (category, value) => {
     setFilters(prev => {
@@ -119,9 +110,8 @@ export default function EgoPage() {
     });
     
     return { 
-      cost: Array.from(sins), // For UI cost representation 
-      sins: Array.from(sins), // For filtering
-      affinity: null, 
+      cost: Array.from(sins), 
+      sins: Array.from(sins), 
       keywords: Array.from(keywords)
     };
   };
@@ -131,7 +121,7 @@ export default function EgoPage() {
     const selectedSinnerIds = new Set(Array.from(filters.sinners).map(s => normalizeSinnerId(s)));
 
     let result = (egosData || []).filter(ego => {
-      if (!ego.grade) return false; // Identity safety filter
+      if (!ego.grade) return false;
       if (normSearch) {
         const normName = normalizeText(ego.name);
         const normSinner = normalizeText(ego.sinner);
@@ -149,17 +139,31 @@ export default function EgoPage() {
     result.sort((a, b) => {
       if (sortBy === 'Name') return a.name.localeCompare(b.name);
       if (sortBy === 'By Sinner') {
-        const sinA = getSinnerSortIndex(ego.sinner);
-        const sinB = getSinnerSortIndex(ego.sinner);
+        const sinA = getSinnerSortIndex(a.sinner);
+        const sinB = getSinnerSortIndex(b.sinner);
         if (sinA !== sinB) return sinA - sinB;
-        
-        const gradeA = GRADE_ORDER[a.grade] || 99;
-        const gradeB = GRADE_ORDER[b.grade] || 99;
-        if (gradeA !== gradeB) return gradeA - gradeB;
-
+        const seasonDiff = parseSeasonNumber(b.season) - parseSeasonNumber(a.season);
+        if (seasonDiff !== 0) return seasonDiff;
+        const gradeA = GRADE_ORDER[a.grade] ?? -1;
+        const gradeB = GRADE_ORDER[b.grade] ?? -1;
+        if (gradeA !== gradeB) return gradeB - gradeA;
         return a.name.localeCompare(b.name);
       }
-      return 0;
+      if (sortBy === 'By Grade') {
+        const gradeA = GRADE_ORDER[a.grade] ?? -1;
+        const gradeB = GRADE_ORDER[b.grade] ?? -1;
+        if (gradeA !== gradeB) return gradeB - gradeA;
+        const seasonDiff = parseSeasonNumber(b.season) - parseSeasonNumber(a.season);
+        if (seasonDiff !== 0) return seasonDiff;
+        return a.name.localeCompare(b.name);
+      }
+      // Default: 'Newest'
+      const seasonDiff = parseSeasonNumber(b.season) - parseSeasonNumber(a.season);
+      if (seasonDiff !== 0) return seasonDiff;
+      const gradeA = GRADE_ORDER[a.grade] ?? -1;
+      const gradeB = GRADE_ORDER[b.grade] ?? -1;
+      if (gradeA !== gradeB) return gradeB - gradeA;
+      return a.name.localeCompare(b.name);
     });
     return result;
   }, [search, filters, showAcquiredOnly, sortBy, acquiredEgos, customMetadata]);
@@ -169,7 +173,7 @@ export default function EgoPage() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-4xl font-bold font-limbus text-[#c9a84c]">E.G.O</h1>
         <div className="flex gap-2">
-          {['Newest', 'By Sinner', 'Name'].map(sort => (
+          {['Newest', 'By Sinner', 'By Grade', 'Name'].map(sort => (
             <button key={sort} onClick={() => setSortBy(sort)} className={`px-4 py-2 rounded glass-card text-sm font-bold transition-colors ${sortBy === sort ? 'text-[#c9a84c] border-[#c9a84c]' : 'text-[#737373] hover:text-white'}`}>
               {sort}
             </button>

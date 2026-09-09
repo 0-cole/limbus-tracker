@@ -62,7 +62,8 @@
       "Wrath": 3,
       "Pride": 2,
       "Envy": 1
-    }
+    },
+    "slug": "4th-match-flame-rodion"
   },
   {
     "name": "4th Match Flame Ryōshū",
@@ -130,7 +131,8 @@
     "cost": {
       "Wrath": 4,
       "Pride": 2
-    }
+    },
+    "slug": "4th-match-flame-ryoshu"
   },
   {
     "name": "4th Match Flame Yi Sang",
@@ -195,7 +197,8 @@
       "Wrath": 5,
       "Sloth": 1,
       "Gluttony": 1
-    }
+    },
+    "slug": "4th-match-flame-yi-sang"
   },
   {
     "name": "9:2 Faust",
@@ -264,7 +267,8 @@
       "Lust": 1,
       "Gluttony": 3,
       "Pride": 1
-    }
+    },
+    "slug": "92-faust"
   },
   {
     "name": "9:2 Sinclair",
@@ -333,7 +337,8 @@
       "Wrath": 2,
       "Lust": 5,
       "Envy": 1
-    }
+    },
+    "slug": "92-sinclair"
   },
   {
     "name": "AEDD Gregor",
@@ -401,7 +406,8 @@
     "cost": {
       "Gloom": 3,
       "Envy": 3
-    }
+    },
+    "slug": "aedd-gregor"
   },
   {
     "name": "AEDD Heathcliff",
@@ -469,7 +475,8 @@
     "cost": {
       "Gloom": 3,
       "Envy": 2
-    }
+    },
+    "slug": "aedd-heathcliff"
   },
   {
     "name": "Ardor Blossom Star Faust",
@@ -538,7 +545,8 @@
       "Wrath": 3,
       "Sloth": 2,
       "Pride": 2
-    }
+    },
+    "slug": "ardor-blossom-star-faust"
   },
   {
     "name": "Ardor Blossom Star Ishmael",
@@ -607,7 +615,8 @@
       "Wrath": 4,
       "Lust": 2,
       "Envy": 1
-    }
+    },
+    "slug": "ardor-blossom-star-ishmael"
   },
   {
     "name": "Asymmetrical Inertia Heathcliff",
@@ -677,7 +686,8 @@
       "Gloom": 1,
       "Pride": 2,
       "Envy": 2
-    }
+    },
+    "slug": "asymmetrical-inertia-heathcliff"
   },
   {
     "name": "Binds Heathcliff",
@@ -747,7 +757,8 @@
       "Gloom": 4,
       "Pride": 2,
       "Envy": 3
-    }
+    },
+    "slug": "binds-heathcliff"
   },
   {
     "name": "Binds Outis",
@@ -817,7 +828,8 @@
       "Lust": 1,
       "Sloth": 4,
       "Pride": 4
-    }
+    },
+    "slug": "binds-outis"
   },
   {
     "name": "Blind Obsession Ishmael",
@@ -887,7 +899,8 @@
       "Gloom": 3,
       "Pride": 3,
       "Envy": 3
-    }
+    },
+    "slug": "blind-obsession-ishmael"
   },
   {
     "name": "Blind Obsession Ryōshū",
@@ -956,7 +969,8 @@
       "Gloom": 2,
       "Pride": 2,
       "Envy": 2
-    }
+    },
+    "slug": "blind-obsession-ryoshu"
   },
   {
     "name": "Bodysack Heathcliff",
@@ -999,7 +1013,8 @@
     "cost": {
       "Lust": 2,
       "Envy": 2
-    }
+    },
+    "slug": "bodysack-heathcliff"
   },
   {
     "name": "Branch of Knowledge Sinclair",
@@ -1042,7 +1057,8 @@
     "cost": {
       "Wrath": 1,
       "Gluttony": 3
-    }
+    },
+    "slug": "branch-of-knowledge-sinclair"
   },
   {
     "name": "Bygone Days Gregor",
@@ -1110,7 +1126,8 @@
     "cost": {
       "Lust": 2,
       "Gloom": 4
-    }
+    },
+    "slug": "bygone-days-gregor"
   },
   {
     "name": "Bygone Days Ishmael",
@@ -1179,7 +1196,8 @@
       "Lust": 2,
       "Sloth": 1,
       "Gloom": 3
-    }
+    },
+    "slug": "bygone-days-ishmael"
   },
   {
     "name": "Bygone Days Yi Sang",
@@ -1247,7 +1265,8 @@
     "cost": {
       "Sloth": 3,
       "Gloom": 3
-    }
+    },
+    "slug": "bygone-days-yi-sang"
   },
   {
     "name": "Capote Ishmael",
@@ -1316,7 +1335,8 @@
       "Wrath": 2,
       "Lust": 2,
       "Sloth": 1
-    }
+    },
+    "slug": "capote-ishmael"
   },
   {
     "name": "Capote Meursault",
@@ -1385,7 +1405,8 @@
       "Wrath": 2,
       "Lust": 1,
       "Sloth": 2
-    }
+    },
+    "slug": "capote-meursault"
   },
   {
     "name": "Cavernous Wailing Hong Lu",
@@ -1454,7 +1475,8 @@
       "Sloth": 3,
       "Gloom": 3,
       "Pride": 2
-    }
+    },
+    "slug": "cavernous-wailing-hong-lu"
   },
   {
     "name": "Cavernous Wailing Sinclair",
@@ -1523,7 +1545,8 @@
       "Lust": 1,
       "Sloth": 2,
       "Gloom": 3
-    }
+    },
+    "slug": "cavernous-wailing-sinclair"
   },
   {
     "name": "Chains of Others Meursault",
@@ -1567,7 +1590,8 @@
       "Sloth": 1,
       "Gloom": 1,
       "Envy": 2
-    }
+    },
+    "slug": "chains-of-others-meursault"
   },
   {
     "name": "Christmas Nightmare Gregor",
@@ -1637,7 +1661,8 @@
       "Gluttony": 2,
       "Gloom": 2,
       "Pride": 2
-    }
+    },
+    "slug": "christmas-nightmare-gregor"
   },
   {
     "name": "Christmas Nightmare Ishmael",
@@ -1706,7 +1731,8 @@
       "Sloth": 4,
       "Gluttony": 1,
       "Pride": 2
-    }
+    },
+    "slug": "christmas-nightmare-ishmael"
   },
   {
     "name": "Command : Meltdown Faust",
@@ -1775,7 +1801,8 @@
       "Sloth": 1,
       "Gluttony": 5,
       "Pride": 2
-    }
+    },
+    "slug": "command-meltdown-faust"
   },
   {
     "name": "Contempt, Awe Ryōshū",
@@ -1845,7 +1872,8 @@
       "Lust": 4,
       "Pride": 4,
       "Envy": 3
-    }
+    },
+    "slug": "contempt-awe-ryoshu"
   },
   {
     "name": "Crow's Eye View Yi Sang",
@@ -1888,7 +1916,8 @@
     "cost": {
       "Wrath": 1,
       "Sloth": 3
-    }
+    },
+    "slug": "crows-eye-view-yi-sang"
   },
   {
     "name": "Crushbound Past Meursault",
@@ -1958,7 +1987,8 @@
       "Lust": 2,
       "Sloth": 6,
       "Envy": 1
-    }
+    },
+    "slug": "crushbound-past-meursault"
   },
   {
     "name": "Dimension Shredder Hong Lu",
@@ -2026,7 +2056,8 @@
     "cost": {
       "Gluttony": 3,
       "Pride": 3
-    }
+    },
+    "slug": "dimension-shredder-hong-lu"
   },
   {
     "name": "Dimension Shredder Outis",
@@ -2096,7 +2127,8 @@
       "Gloom": 3,
       "Pride": 1,
       "Envy": 4
-    }
+    },
+    "slug": "dimension-shredder-outis"
   },
   {
     "name": "Dimension Shredder Yi Sang",
@@ -2164,7 +2196,8 @@
     "cost": {
       "Sloth": 3,
       "Gluttony": 3
-    }
+    },
+    "slug": "dimension-shredder-yi-sang"
   },
   {
     "name": "Ebony Stem Outis",
@@ -2230,7 +2263,8 @@
       "Gluttony": 3,
       "Gloom": 1,
       "Pride": 4
-    }
+    },
+    "slug": "ebony-stem-outis"
   },
   {
     "name": "Effervescent Corrosion Hong Lu",
@@ -2298,7 +2332,8 @@
     "cost": {
       "Gluttony": 6,
       "Gloom": 1
-    }
+    },
+    "slug": "effervescent-corrosion-hong-lu"
   },
   {
     "name": "Effervescent Corrosion Rodion",
@@ -2367,7 +2402,8 @@
       "Sloth": 2,
       "Gloom": 2,
       "Pride": 2
-    }
+    },
+    "slug": "effervescent-corrosion-rodion"
   },
   {
     "name": "Electric Screaming Don Quixote",
@@ -2435,7 +2471,8 @@
     "cost": {
       "Pride": 2,
       "Envy": 4
-    }
+    },
+    "slug": "electric-screaming-don-quixote"
   },
   {
     "name": "Electric Screaming Meursault",
@@ -2503,7 +2540,8 @@
     "cost": {
       "Wrath": 1,
       "Envy": 4
-    }
+    },
+    "slug": "electric-screaming-meursault"
   },
   {
     "name": "Everlasting Faust",
@@ -2573,7 +2611,8 @@
       "Sloth": 4,
       "Gloom": 2,
       "Pride": 3
-    }
+    },
+    "slug": "everlasting-faust"
   },
   {
     "name": "Fell Bullet Heathcliff",
@@ -2642,7 +2681,8 @@
       "Wrath": 1,
       "Pride": 3,
       "Envy": 2
-    }
+    },
+    "slug": "fell-bullet-heathcliff"
   },
   {
     "name": "Fell Bullet Yi Sang",
@@ -2710,7 +2750,8 @@
     "cost": {
       "Wrath": 2,
       "Pride": 6
-    }
+    },
+    "slug": "fell-bullet-yi-sang"
   },
   {
     "name": "Fluid Sac Don Quixote",
@@ -2775,7 +2816,8 @@
       "Lust": 1,
       "Gloom": 4,
       "Pride": 2
-    }
+    },
+    "slug": "fluid-sac-don-quixote"
   },
   {
     "name": "Fluid Sac Faust",
@@ -2840,7 +2882,8 @@
       "Lust": 2,
       "Gloom": 4,
       "Envy": 3
-    }
+    },
+    "slug": "fluid-sac-faust"
   },
   {
     "name": "Forest for the Flames Ryōshū",
@@ -2883,7 +2926,8 @@
     "cost": {
       "Wrath": 2,
       "Lust": 2
-    }
+    },
+    "slug": "forest-for-the-flames-ryoshu"
   },
   {
     "name": "Garden of Thorns Gregor",
@@ -2956,7 +3000,8 @@
       "Gloom": 2,
       "Pride": 2,
       "Envy": 2
-    }
+    },
+    "slug": "garden-of-thorns-gregor"
   },
   {
     "name": "Harmony Sinclair",
@@ -3027,7 +3072,8 @@
       "Sloth": 1,
       "Pride": 1,
       "Envy": 1
-    }
+    },
+    "slug": "harmony-sinclair"
   },
   {
     "name": "Hex Nail Faust",
@@ -3090,7 +3136,8 @@
     "sanityCost": 20,
     "cost": {
       "Envy": 6
-    }
+    },
+    "slug": "hex-nail-faust"
   },
   {
     "name": "Hex Nail Rodion",
@@ -3159,7 +3206,8 @@
       "Lust": 2,
       "Pride": 1,
       "Envy": 4
-    }
+    },
+    "slug": "hex-nail-rodion"
   },
   {
     "name": "Hex Nail Sinclair",
@@ -3228,7 +3276,8 @@
       "Lust": 2,
       "Pride": 2,
       "Envy": 2
-    }
+    },
+    "slug": "hex-nail-sinclair"
   },
   {
     "name": "Holiday Heathcliff",
@@ -3292,7 +3341,8 @@
     "cost": {
       "Gluttony": 3,
       "Envy": 2
-    }
+    },
+    "slug": "holiday-heathcliff"
   },
   {
     "name": "Holiday Outis",
@@ -3358,7 +3408,8 @@
       "Sloth": 1,
       "Pride": 3,
       "Envy": 2
-    }
+    },
+    "slug": "holiday-outis"
   },
   {
     "name": "I'll Go fer Scissors. How 'Bout You? Don Quixote",
@@ -3425,7 +3476,8 @@
     "sanityCost": 20,
     "cost": {
       "Envy": 5
-    }
+    },
+    "slug": "ill-go-fer-scissors-how-bout-you-don-quixote"
   },
   {
     "name": "I'll Go fer Scissors. How 'Bout You? Outis",
@@ -3493,7 +3545,8 @@
     "cost": {
       "Lust": 1,
       "Envy": 3
-    }
+    },
+    "slug": "ill-go-fer-scissors-how-bout-you-outis"
   },
   {
     "name": "Impending Day Sinclair",
@@ -3561,7 +3614,8 @@
     "cost": {
       "Wrath": 3,
       "Lust": 2
-    }
+    },
+    "slug": "impending-day-sinclair"
   },
   {
     "name": "Indicant's Trial Rodion",
@@ -3629,7 +3683,8 @@
     "cost": {
       "Wrath": 7,
       "Pride": 3
-    }
+    },
+    "slug": "indicants-trial-rodion"
   },
   {
     "name": "Into the Sunset Rodion",
@@ -3697,7 +3752,8 @@
     "cost": {
       "Wrath": 2,
       "Lust": 3
-    }
+    },
+    "slug": "into-the-sunset-rodion"
   },
   {
     "name": "In the Name of Love and Hate Don Quixote",
@@ -3767,7 +3823,8 @@
       "Gloom": 2,
       "Pride": 2,
       "Envy": 6
-    }
+    },
+    "slug": "in-the-name-of-love-and-hate-don-quixote"
   },
   {
     "name": "Land of Illusion Hong Lu",
@@ -3814,7 +3871,8 @@
     "cost": {
       "Lust": 1,
       "Gloom": 5
-    }
+    },
+    "slug": "land-of-illusion-hong-lu"
   },
   {
     "name": "Lantern Gregor",
@@ -3878,7 +3936,8 @@
     "cost": {
       "Sloth": 1,
       "Gluttony": 4
-    }
+    },
+    "slug": "lantern-gregor"
   },
   {
     "name": "Lantern Sinclair",
@@ -3947,7 +4006,8 @@
       "Lust": 1,
       "Gluttony": 4,
       "Pride": 2
-    }
+    },
+    "slug": "lantern-sinclair"
   },
   {
     "name": "Lasso Faust",
@@ -4016,7 +4076,8 @@
       "Lust": 1,
       "Gluttony": 3,
       "Envy": 2
-    }
+    },
+    "slug": "lasso-faust"
   },
   {
     "name": "Lasso Hong Lu",
@@ -4085,7 +4146,8 @@
       "Lust": 1,
       "Gluttony": 4,
       "Pride": 1
-    }
+    },
+    "slug": "lasso-hong-lu"
   },
   {
     "name": "La Sangre de Sancho Don Quixote",
@@ -4128,7 +4190,8 @@
     "cost": {
       "Lust": 2,
       "Pride": 2
-    }
+    },
+    "slug": "la-sangre-de-sancho-don-quixote"
   },
   {
     "name": "Legerdemain Gregor",
@@ -4192,7 +4255,8 @@
     "cost": {
       "Sloth": 1,
       "Gluttony": 3
-    }
+    },
+    "slug": "legerdemain-gregor"
   },
   {
     "name": "Lifetime Stew Don Quixote",
@@ -4259,7 +4323,8 @@
     "sanityCost": 20,
     "cost": {
       "Lust": 5
-    }
+    },
+    "slug": "lifetime-stew-don-quixote"
   },
   {
     "name": "Lifetime Stew Sinclair",
@@ -4328,7 +4393,8 @@
       "Wrath": 3,
       "Lust": 2,
       "Gluttony": 1
-    }
+    },
+    "slug": "lifetime-stew-sinclair"
   },
   {
     "name": "Magic Bullet Outis",
@@ -4397,7 +4463,8 @@
       "Wrath": 2,
       "Lust": 2,
       "Pride": 4
-    }
+    },
+    "slug": "magic-bullet-outis"
   },
   {
     "name": "Move-in Reg. Heathcliff",
@@ -4466,7 +4533,8 @@
       "Wrath": 2,
       "Gluttony": 1,
       "Envy": 3
-    }
+    },
+    "slug": "move-in-reg-heathcliff"
   },
   {
     "name": "Pursuance Meursault",
@@ -4535,7 +4603,8 @@
       "Sloth": 4,
       "Gloom": 1,
       "Pride": 2
-    }
+    },
+    "slug": "pursuance-meursault"
   },
   {
     "name": "Pursuance Rodion",
@@ -4599,7 +4668,8 @@
     "cost": {
       "Sloth": 4,
       "Pride": 3
-    }
+    },
+    "slug": "pursuance-rodion"
   },
   {
     "name": "Red Eyes (Open) Ryōshū",
@@ -4668,7 +4738,8 @@
       "Wrath": 2,
       "Lust": 2,
       "Envy": 3
-    }
+    },
+    "slug": "red-eyes-(open)-ryoshu"
   },
   {
     "name": "Red Eyes Ryōshū",
@@ -4733,7 +4804,8 @@
       "Lust": 2,
       "Gluttony": 2,
       "Envy": 1
-    }
+    },
+    "slug": "red-eyes-ryoshu"
   },
   {
     "name": "Red Sheet Don Quixote",
@@ -4799,7 +4871,8 @@
       "Gluttony": 5,
       "Gloom": 2,
       "Pride": 1
-    }
+    },
+    "slug": "red-sheet-don-quixote"
   },
   {
     "name": "Regret Meursault",
@@ -4867,7 +4940,8 @@
     "cost": {
       "Wrath": 3,
       "Pride": 2
-    }
+    },
+    "slug": "regret-meursault"
   },
   {
     "name": "Representation Emitter Faust",
@@ -4910,7 +4984,8 @@
     "cost": {
       "Gluttony": 2,
       "Pride": 4
-    }
+    },
+    "slug": "representation-emitter-faust"
   },
   {
     "name": "Rime Shank Rodion",
@@ -4978,7 +5053,8 @@
     "cost": {
       "Gloom": 5,
       "Envy": 3
-    }
+    },
+    "slug": "rime-shank-rodion"
   },
   {
     "name": "Roseate Desire Hong Lu",
@@ -5042,7 +5118,8 @@
     "cost": {
       "Lust": 4,
       "Envy": 2
-    }
+    },
+    "slug": "roseate-desire-hong-lu"
   },
   {
     "name": "Roseate Desire Ishmael",
@@ -5110,7 +5187,8 @@
     "cost": {
       "Wrath": 1,
       "Lust": 4
-    }
+    },
+    "slug": "roseate-desire-ishmael"
   },
   {
     "name": "Sanguine Desire Rodion",
@@ -5180,7 +5258,8 @@
       "Lust": 3,
       "Pride": 3,
       "Envy": 3
-    }
+    },
+    "slug": "sanguine-desire-rodion"
   },
   {
     "name": "Screwloose Wallop Meursault",
@@ -5249,7 +5328,8 @@
       "Sloth": 2,
       "Pride": 1,
       "Envy": 2
-    }
+    },
+    "slug": "screwloose-wallop-meursault"
   },
   {
     "name": "Snagharpoon Ishmael",
@@ -5296,7 +5376,8 @@
     "cost": {
       "Wrath": 2,
       "Gloom": 2
-    }
+    },
+    "slug": "snagharpoon-ishmael"
   },
   {
     "name": "Soda Hong Lu",
@@ -5361,7 +5442,8 @@
       "Gluttony": 3,
       "Gloom": 2,
       "Envy": 2
-    }
+    },
+    "slug": "soda-hong-lu"
   },
   {
     "name": "Soda Ryōshū",
@@ -5426,7 +5508,8 @@
       "Gluttony": 2,
       "Pride": 2,
       "Envy": 2
-    }
+    },
+    "slug": "soda-ryoshu"
   },
   {
     "name": "Solemn Lament Gregor",
@@ -5496,7 +5579,8 @@
       "Sloth": 2,
       "Gloom": 2,
       "Envy": 2
-    }
+    },
+    "slug": "solemn-lament-gregor"
   },
   {
     "name": "Solemn Lament Yi Sang",
@@ -5565,7 +5649,8 @@
       "Sloth": 1,
       "Gloom": 4,
       "Pride": 2
-    }
+    },
+    "slug": "solemn-lament-yi-sang"
   },
   {
     "name": "Suddenly, One Day Gregor",
@@ -5608,7 +5693,8 @@
     "cost": {
       "Lust": 3,
       "Gloom": 1
-    }
+    },
+    "slug": "suddenly-one-day-gregor"
   },
   {
     "name": "Sunshower Outis",
@@ -5677,7 +5763,8 @@
       "Sloth": 2,
       "Gluttony": 2,
       "Gloom": 1
-    }
+    },
+    "slug": "sunshower-outis"
   },
   {
     "name": "Sunshower Yi Sang",
@@ -5747,7 +5834,8 @@
       "Gluttony": 2,
       "Gloom": 2,
       "Pride": 2
-    }
+    },
+    "slug": "sunshower-yi-sang"
   },
   {
     "name": "Telepole Don Quixote",
@@ -5808,7 +5896,8 @@
       "Wrath": 1,
       "Gloom": 2,
       "Envy": 2
-    }
+    },
+    "slug": "telepole-don-quixote"
   },
   {
     "name": "Telepole Faust",
@@ -5873,7 +5962,8 @@
       "Wrath": 1,
       "Lust": 3,
       "Envy": 2
-    }
+    },
+    "slug": "telepole-faust"
   },
   {
     "name": "Telepole Heathcliff",
@@ -5942,7 +6032,8 @@
       "Wrath": 3,
       "Lust": 2,
       "Envy": 3
-    }
+    },
+    "slug": "telepole-heathcliff"
   },
   {
     "name": "Thoracalgia Faust",
@@ -6011,7 +6102,8 @@
       "Sloth": 1,
       "Gloom": 1,
       "Pride": 5
-    }
+    },
+    "slug": "thoracalgia-faust"
   },
   {
     "name": "Thoracalgia Ryōshū",
@@ -6080,7 +6172,8 @@
       "Wrath": 1,
       "Lust": 1,
       "Pride": 5
-    }
+    },
+    "slug": "thoracalgia-ryoshu"
   },
   {
     "name": "Tidal Elegy Ishmael",
@@ -6148,7 +6241,8 @@
     "cost": {
       "Gloom": 4,
       "Pride": 2
-    }
+    },
+    "slug": "tidal-elegy-ishmael"
   },
   {
     "name": "To Páthos Máthos Outis",
@@ -6195,7 +6289,8 @@
     "cost": {
       "Sloth": 2,
       "Pride": 2
-    }
+    },
+    "slug": "to-páthos-máthos-outis"
   },
   {
     "name": "Unbrilliant Glory Gregor",
@@ -6243,7 +6338,8 @@
       "Wrath": 2,
       "Sloth": 3,
       "Pride": 2
-    }
+    },
+    "slug": "unbrilliant-glory-gregor"
   },
   {
     "name": "What is Cast Rodion",
@@ -6290,7 +6386,8 @@
     "cost": {
       "Gloom": 1,
       "Pride": 3
-    }
+    },
+    "slug": "what-is-cast-rodion"
   },
   {
     "name": "Wingbeat Ishmael",
@@ -6359,7 +6456,8 @@
       "Lust": 1,
       "Gluttony": 3,
       "Pride": 2
-    }
+    },
+    "slug": "wingbeat-ishmael"
   },
   {
     "name": "Wishing Cairn Don Quixote",
@@ -6424,7 +6522,8 @@
       "Wrath": 2,
       "Sloth": 2,
       "Pride": 1
-    }
+    },
+    "slug": "wishing-cairn-don-quixote"
   },
   {
     "name": "Wishing Cairn Yi Sang",
@@ -6492,7 +6591,8 @@
     "cost": {
       "Sloth": 4,
       "Gloom": 1
-    }
+    },
+    "slug": "wishing-cairn-yi-sang"
   },
   {
     "name": "Ya Śūnyatā Tad Rūpam Heathcliff",
@@ -6562,7 +6662,8 @@
       "Lust": 2,
       "Sloth": 2,
       "Gloom": 2
-    }
+    },
+    "slug": "ya-śunyatā-tad-rupam-heathcliff"
   },
   {
     "name": "Ya Śūnyatā Tad Rūpam Outis",
@@ -6631,7 +6732,8 @@
       "Lust": 2,
       "Sloth": 2,
       "Pride": 2
-    }
+    },
+    "slug": "ya-śunyatā-tad-rupam-outis"
   },
   {
     "name": "Yearning-Mircalla Don Quixote",
@@ -6701,7 +6803,8 @@
       "Gluttony": 3,
       "Pride": 2,
       "Envy": 2
-    }
+    },
+    "slug": "yearning-mircalla-don-quixote"
   },
   {
     "name": "Yearning-Mircalla Meursault",
@@ -6770,7 +6873,8 @@
       "Lust": 4,
       "Pride": 3,
       "Envy": 4
-    }
+    },
+    "slug": "yearning-mircalla-meursault"
   },
   {
     "slug": "shadow-vested-bladesinger-[着影揮刀]-meursault",
