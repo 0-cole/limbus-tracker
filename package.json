@@ -1,6 +1,6 @@
 {
   "name": "limbus-tracker",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "Limbus Company Companion App — Track IDs, EGOs, Schedules, Shards & Weeklies",
   "type": "module",
   "main": "electron/main.cjs",
@@ -36,6 +36,7 @@
   "build": {
     "appId": "com.limbustracker.app",
     "productName": "Limbus Tracker",
+    "icon": "build/icon.ico",
     "directories": {
       "output": "release2"
     },
@@ -46,6 +47,7 @@
       "src/data/**/*"
     ],
     "win": {
+      "icon": "build/icon.ico",
       "target": [
         {
           "target": "nsis",
