@@ -14916,11 +14916,70 @@
       "Bleed",
       "Burn"
     ],
-    "skills": [],
+    "skills": [
+      {
+        "name": "Warning Shot",
+        "affinity": "Lust",
+        "type": "Pierce",
+        "basePower": 4,
+        "coinPower": 4,
+        "coins": 2,
+        "effects": [
+          "[Combat Start] If this unit has Loyalty Pheromone, convert Coins equal to Loyalty Pheromone into Unbreakable Coins, beginning with the 1st Coin",
+          "[On Use] Gain +2 Spore Round [Base]",
+          "Spend 1 Spore Round [Base] [On Hit] Inflict 2 Burn and 2 Bleed",
+          "Spend 1 Spore Round [Base] [On Hit] Inflict 2 Burn and 2 Bleed"
+        ]
+      },
+      {
+        "name": "E.G.O Alteration - Buckshot",
+        "affinity": "Wrath",
+        "type": "Pierce",
+        "basePower": 4,
+        "coinPower": 4,
+        "coins": 3,
+        "effects": [
+          "[Combat Start] If this unit has Loyalty Pheromone, convert Coins equal to Loyalty Pheromone into Unbreakable Coins, beginning with the 2nd Coin",
+          "[On Use] Gain +3 Spore Round [Buckshot]",
+          "[On Hit] Inflict 2 Spore to target",
+          "Spend 1 Spore Round [Buckshot] [On Hit] Deal +30% damage and inflict 3 Bleed",
+          "Spend 1 Spore Round [Buckshot] [On Hit] Deal +30% damage and inflict 3 Burn"
+        ]
+      },
+      {
+        "name": "Field Test - Dust Spark",
+        "affinity": "Wrath",
+        "type": "Pierce",
+        "basePower": 4,
+        "coinPower": 3,
+        "coins": 4,
+        "effects": [
+          "[Combat Start] At 3 Loyalty Pheromone, gain +1 Atk Weight. Convert Coins equal to Loyalty Pheromone into Unbreakable Coins, beginning with the 3rd Coin",
+          "[Before Use] At 2 or fewer Spore Round [Base], consume 6 SP to gain 3 Spore Round [Base]",
+          "[On Use] Coin Power +1 for every 6 (Burn + Bleed) on the main target (max 3)",
+          "Spend 1 Spore Round [Base] [On Hit] Inflict 3 Burn",
+          "Spend 1 Spore Round [Base] [On Hit] Inflict 2 Bleed",
+          "Spend 1 Spore Round [Buckshot] Deal -50% damage against sub-targets. Deals +5% damage per Loyalty Pheromone on self (max 15%)",
+          "[On Hit without Cracking] If target's Spore is at max Stack, deal (Burn Potency x Spore Stack / 10) Wrath damage. Target loses 1 Burn Count. Target's Spore expires. [On Hit] Inflict +1 Burn Count and +2 Bleed Count"
+        ]
+      }
+    ],
+    "defense": {
+      "name": "Spore Germination",
+      "affinity": "Wrath",
+      "type": "Evade",
+      "basePower": 4,
+      "coinPower": 10,
+      "coins": 1,
+      "effects": [
+        "[On Use] Gain +2 Spore Round [Base]",
+        "[On Evade] Inflict 1 Spore on attacker"
+      ]
+    },
     "passives": [
       {
         "name": "E.G.O Alteration / Spore Round",
-        "description": "Always Active: Begin Encounters with 10 Spore Round -Base- and 6 Spore Round -Buckshot- On Hit using Coins that spend Spore Round: - If Spore Round -Base- was spent, inflict 2 Spore - If Spore Round -Buckshot- was spent, inflict 3 Spore - This counts as \"inflicting negative effects with the Skill\" Before Coin Use of a Coin that spends Spore Round -Buckshot-, if this unit does not have Spore Round -Buckshot-, consume 2 SP and 2 Spore Round -Base- to gain 1 Spore Round -Buckshot- If this unit runs out of Spore Round mid-Skill, cancel all subsequent Coins and Reload -Germination- When targets that have Spore are killed, gain 1 Loyalty Pheromone|flavor=\"The research team's—that's us—examination has confirmed that even gears that were outcomes of stable, refined extractions may undergo slight mutations depending on the user. No, I wouldn't attribute that to incompleteness. Rather, such changes may even be a process of these gears reaching their own completion, like real E.G.O. Let us label this phenomenon \"Alteration\" for now.\""
+        "description": "Always Active: Begin Encounters with 10 Spore Round -Base- and 6 Spore Round -Buckshot- On Hit using Coins that spend Spore Round: - If Spore Round -Base- was spent, inflict 2 Spore - If Spore Round -Buckshot- was spent, inflict 3 Spore - This counts as \"inflicting negative effects with the Skill\" Before Coin Use of a Coin that spends Spore Round -Buckshot-, if this unit does not have Spore Round -Buckshot-, consume 2 SP and 2 Spore Round -Base- to gain 1 Spore Round -Buckshot- If this unit runs out of Spore Round mid-Skill, cancel all subsequent Coins and Reload -Germination- When targets that have Spore are killed, gain 1 Loyalty Pheromone"
       },
       {
         "name": "Spore Diffusion",
@@ -14954,7 +15013,63 @@
       "Poise",
       "Sinking"
     ],
-    "skills": [],
+    "skills": [
+      {
+        "name": "Unerringly, as the Prescript Demands",
+        "affinity": "Sloth",
+        "type": "Slash",
+        "basePower": 3,
+        "coinPower": 4,
+        "coins": 2,
+        "effects": [
+          "[On Use] Gain +2 Poise Count",
+          "[On Hit] Inflict 1 Sinking",
+          "[On Hit] Gain 2 Poise"
+        ]
+      },
+      {
+        "name": "Undertake the Prescript, Again Undertake",
+        "affinity": "Pride",
+        "type": "Slash",
+        "basePower": 4,
+        "coinPower": 4,
+        "coins": 3,
+        "effects": [
+          "[On Use] If marked with Mark of the Prescript, Coin Power +1",
+          "[On Hit] Inflict 1 Sinking",
+          "[On Hit] Gain 2 Poise",
+          "[On Hit] Inflict +2 Sinking Count"
+        ]
+      },
+      {
+        "name": "As the Prescript Demands, You Will Be Eliminated.",
+        "affinity": "Gloom",
+        "type": "Slash",
+        "basePower": 5,
+        "coinPower": 4,
+        "coins": 3,
+        "effects": [
+          "[On Use] If marked with Mark of the Prescript, Clash Power +2 and deal +25% damage",
+          "[On Hit] Inflict 2 Sinking and +2 Sinking Count",
+          "[On Hit] Gain 3 Poise and +2 Poise Count",
+          "[On Hit] If target has The Prescript's Target, deal +40% damage and inflict 3 Sinking"
+        ]
+      }
+    ],
+    "defense": {
+      "name": "Prescript-granted, Prescript-woven Fabric",
+      "affinity": "Gloom",
+      "type": "Counter",
+      "basePower": 3,
+      "coinPower": 3,
+      "coins": 3,
+      "effects": [
+        "[On Use] Gain 2 Poise",
+        "[On Hit] Inflict 1 Sinking",
+        "[On Hit] Gain 1 Poise",
+        "[On Hit] Inflict 1 Sinking"
+      ]
+    },
     "passives": [
       {
         "name": "Prescript Delivered on Paper Slips",

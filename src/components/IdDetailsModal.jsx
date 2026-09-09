@@ -17,8 +17,9 @@ export default function IdDetailsModal({ idData, onClose }) {
   const [activeTab, setActiveTab] = useState(0);
   const [navSection, setNavSection] = useState('skills');
 
-  const slug = generateSlug(idData.name);
-  const bgUrl = `https://assets.limbusdeck.com/identities/full/${slug}.webp`;
+  const slug = idData.slug || generateSlug(idData.name);
+  const rarity = idData.rarity || 3;
+  const bgUrl = `https://assets.limbusdeck.com/identities/${rarity === 1 ? 'full' : 'full-uptied'}/${slug}.webp`;
 
   const skills = idData.skills || [];
   const passives = idData.passives || [];
@@ -117,13 +118,23 @@ export default function IdDetailsModal({ idData, onClose }) {
         )}
       </div>
       
-      {/* ALTERNATE SKILLS */}
-      {!isAlt && alternateSkills && alternateSkills.length > 0 && alternateSkills.filter(alt => alt.name && skill.name && (alt.name.includes(skill.name.split(' [')[0]) || skill.name.includes(alt.name.split(' [')[0]) || alt.name.toLowerCase().includes(skill.name.toLowerCase()) || skill.name.toLowerCase().includes(alt.name.toLowerCase()))).map((alt, altIdx) => (
-         <div key={`alt-${altIdx}`} className="mt-6 mb-6 rounded-lg overflow-hidden border-2 border-dashed border-[#c9a84c]/50 bg-black/40 p-1">
+      {/* ALTERNATE SKILLS — slot/index based, no fragile name matching */}
+      {!isAlt && alternateSkills && alternateSkills.length > 0 && (() => {
+        const tabIdx = idx;
+        const relevant = alternateSkills.filter(alt => {
+          if (alt.slot !== undefined && alt.slot !== null) return alt.slot === tabIdx;
+          if (alt.replaces !== undefined && alt.replaces !== null) return alt.replaces === tabIdx;
+          // No positional data — show under last skill tab only
+          return tabIdx === (attackSkills.length - 1);
+        });
+        if (!relevant.length) return null;
+        return relevant.map((alt, altIdx) => (
+          <div key={`alt-${altIdx}`} className="mt-6 mb-6 rounded-lg overflow-hidden border-2 border-dashed border-[#c9a84c]/50 bg-black/40 p-1">
             <div className="text-[11px] text-[#c9a84c] uppercase tracking-widest font-bold mb-1 mt-1 ml-2">Alternate / Enhanced Skill</div>
             {renderSkillBlock(alt, idx, true)}
-         </div>
-      ))}
+          </div>
+        ));
+      })()}
     </>
   );
   };

@@ -78,8 +78,8 @@ export default function EgoPage() {
   const [showAcquiredOnly, setShowAcquiredOnly] = useState(false);
   const [sortBy, setSortBy] = useState('Newest');
   
-  const [editingEgo, setEditingEgo] = useState(null);
-  const [detailsEgo, setDetailsEgo] = useState(null);
+  const [editingId, setEditingId] = useState(null);
+  const [detailsId, setDetailsId] = useState(null);
 
   const toggleFilter = (category, value) => {
     setFilters(prev => {

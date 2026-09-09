@@ -75,11 +75,20 @@ async function scrapeSkills(html) {
   return skills;
 }
 
+function canonicalKey(name) {
+  if (!name) return '';
+  return String(name)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[\s\-_【】\[\]:]/g, '')
+    .toLowerCase();
+}
+
 async function checkForUpdates(baseIds, baseEgos) {
   console.log('[AutoUpdater] Checking for new Identities and EGOs...');
   
   const dynamicData = JSON.parse(fs.readFileSync(dynamicDataPath, 'utf-8'));
-  const knownIds = new Set(baseIds.map(i => i.name).concat(dynamicData.identities.map(i => i.name)));
+  const knownIds = new Set(baseIds.map(i => canonicalKey(i.name)).concat(dynamicData.identities.map(i => canonicalKey(i.name))));
   
   const idsHtml = await fetchWikiAPI('List_of_Identities');
   if (idsHtml) {
@@ -89,15 +98,14 @@ async function checkForUpdates(baseIds, baseEgos) {
     // Convert array of elements to an array to allow await inside a loop
     const idLinks = $('.IDRec a').toArray();
     for (const el of idLinks) {
-        const title = $(el).attr('title');
-        // If it has "LCB Sinner" but doesn't exist, it's new.
-        if (title && !knownIds.has(title) && !title.includes('File:')) {
-            console.log(`[AutoUpdater] Found new Identity: ${title}`);
-            const html = await fetchWikiAPI(title);
-            let skills = [];
-            if (html) {
-                skills = await scrapeSkills(html);
-            }
+      const title = $(el).attr('title');
+      if (title && !knownIds.has(canonicalKey(title)) && !title.includes('File:')) {
+        console.log(`[AutoUpdater] Found new Identity: ${title}`);
+        const html = await fetchWikiAPI(title);
+        let skills = [];
+        if (html) {
+          skills = await scrapeSkills(html);
+        }
             
             // Try to extract rarity/sinner from the title
             let rarity = 3;

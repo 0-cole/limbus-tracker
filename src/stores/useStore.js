@@ -74,14 +74,33 @@ export const useStore = create((set, get) => ({
         if (local) data = JSON.parse(local);
       }
 
+      function canonicalKey(name) {
+        if (!name) return '';
+        return String(name)
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[\s\-_【】\[\]:]/g, '')
+          .toLowerCase();
+      }
+
       const mergedIdsMap = new Map();
-      baseIdentities.forEach(id => mergedIdsMap.set(id.name, id));
-      (dynamicData.identities || []).forEach(id => mergedIdsMap.set(id.name, id));
+      baseIdentities.forEach(id => mergedIdsMap.set(canonicalKey(id.name), id));
+      (dynamicData.identities || []).forEach(id => {
+        const key = canonicalKey(id.name);
+        if (!mergedIdsMap.has(key)) {
+          mergedIdsMap.set(key, id);
+        }
+      });
       const mergedIds = Array.from(mergedIdsMap.values());
 
       const mergedEgosMap = new Map();
-      baseEgos.forEach(ego => mergedEgosMap.set(ego.name, ego));
-      (dynamicData.egos || []).forEach(ego => mergedEgosMap.set(ego.name, ego));
+      baseEgos.forEach(ego => mergedEgosMap.set(canonicalKey(ego.name), ego));
+      (dynamicData.egos || []).forEach(ego => {
+        const key = canonicalKey(ego.name);
+        if (!mergedEgosMap.has(key)) {
+          mergedEgosMap.set(key, ego);
+        }
+      });
       const mergedEgos = Array.from(mergedEgosMap.values());
 
       if (data && Object.keys(data).length > 0) {
