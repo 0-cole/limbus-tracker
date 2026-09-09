@@ -153,9 +153,11 @@ export function generateRoadmap(
     // 4. Record Day
     let totalGainedToday = gainedExpFromRuns + passiveGained;
     cumulativeExp += totalGainedToday;
+    const weekdayStr = new Date(cursorMs).toLocaleDateString('en-US', { weekday: 'short' });
 
     roadmap.push({
       day: i + 1,
+      weekday: weekdayStr,
       runs: runsCountToday,
       runsList: runsList,
       gained: totalGainedToday,

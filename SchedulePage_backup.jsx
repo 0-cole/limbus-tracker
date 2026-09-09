@@ -249,7 +249,7 @@ export default function SchedulePage() {
                   return (
                     <div key={idx} className={`grid grid-cols-4 p-4 border-b border-[#333]/50 text-sm ${isGoal ? 'bg-[#22c55e]/20 border-[#22c55e]' : row.day % 7 === 1 ? 'bg-[#c9a84c]/10' : ''}`}>
                         <div className="font-bold text-white flex items-center">
-                          Day {row.day} <span className="text-xs text-gray-400 font-normal ml-2">({row.weekday})</span>
+                          Day {row.day} 
                           {row.day % 7 === 1 && !isGoal && <span className="text-xs text-[#c9a84c] ml-2">(Weekly Reset)</span>}
                           {isGoal && <span className="text-[10px] uppercase tracking-wider bg-[#22c55e] text-black px-2 py-0.5 rounded font-black ml-2 shadow-[0_0_8px_rgba(34,197,94,0.6)]">Goal Reached</span>}
                         </div>

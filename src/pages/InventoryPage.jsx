@@ -7,13 +7,20 @@ import { calculateLimbusGrind, generateRoadmap } from '../utils/limbusCalculator
 import enkephalinCaps from '../data/enkephalinCap.json';
 
 export default function InventoryPage() {
-  const { inventory, updateInventory, saveStore, wishlist, bpState, scheduleState, activeBanner } = useStore();
+  const { inventory, updateInventory, saveStore, wantList, bpState, scheduleState, activeBanner, identitiesData, egosData } = useStore();
   const [currentEnkephalin, setCurrentEnkephalin] = useState(inventory.enkephalin);
   
   // Calculate Roadmap Modules Needed
   const modulesNeeded = React.useMemo(() => {
+    if (!wantList || !identitiesData || !egosData) return 0;
+    
+    const targetItems = [...wantList].map(name => {
+      return identitiesData.find(id => id.name === name) || egosData.find(ego => ego.name === name);
+    }).filter(Boolean);
+    const calcItems = targetItems.map(item => ({ sinnerId: item.sinner, rarity: !!item.grade ? 'EGO' : (item.rarity === 3 ? '000' : '00') }));
+    
     const calcResult = calculateLimbusGrind(
-      wishlist,
+      calcItems,
       inventory,
       bpState,
       scheduleState,
@@ -21,7 +28,7 @@ export default function InventoryPage() {
     );
     const { totalModulesNeeded } = generateRoadmap(calcResult.daysLeft, calcResult.plannedRuns, scheduleState, bpState);
     return totalModulesNeeded;
-  }, [wishlist, inventory, bpState, scheduleState, activeBanner]);
+  }, [wantList, identitiesData, egosData, inventory, bpState, scheduleState, activeBanner]);
   
   // Real-time enkephalin predictor
   useEffect(() => {
