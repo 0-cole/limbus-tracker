@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useStore } from '../stores/useStore.js';
-import { CheckCircle, XCircle, AlertCircle, Calendar, Target, Flame, CalendarDays, Battery } from 'lucide-react';
+import { CheckCircle, XCircle, AlertCircle, Calendar, Target, Flame, CalendarDays, Battery, Archive, Award, Trash2, Clock, Check } from 'lucide-react';
 import { calculateLimbusGrind, generateRoadmap } from '../utils/limbusCalculator.js';
 import { getNextResets } from '../utils/timeUtils.js';
 import { getSeasonEndDate } from '../utils/seasonUtils.js';
@@ -11,7 +11,11 @@ import DailyCycleTracker from '../components/DailyCycleTracker.jsx';
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 export default function DashboardPage() {
-  const { weeklyProgress, updateWeekly, scheduleState, updateScheduleState, bpState, updateBpState, inventory, wantList, identitiesData, egosData, activeBanner } = useStore();
+  const { 
+    weeklyProgress, updateWeekly, scheduleState, updateScheduleState, 
+    bpState, updateBpState, inventory, wantList, identitiesData, egosData, 
+    activeBanner, weeklyArchive = [], archiveCurrentWeek, deleteWeeklyArchive 
+  } = useStore();
   const [showWhenGameStarts, setShowWhenGameStarts] = useState(true);
 
   const cantoUnlockedHard = (bpState.canto === undefined || bpState.canto >= 8);
@@ -219,6 +223,157 @@ export default function DashboardPage() {
                   </div>
                 );
               })}
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* ── Total User Progress & Weekly Archives ── */}
+      {(() => {
+        const curWeek = scheduleState.currentWeekStats || {};
+        const todayRuns = scheduleState.todayLoggedRuns || [];
+        const todayShards = scheduleState.todayLoggedShards || [];
+        
+        const currentWeekRuns = (curWeek.mdRuns || 0) + todayRuns.length;
+        const currentWeekExp = (curWeek.expEarned || 0) + todayRuns.reduce((s, r) => s + (r.exp || 0), 0);
+        const currentWeekShards = (curWeek.shardsEarned || 0) + todayShards.reduce((s, sh) => s + (sh.amount > 0 ? sh.amount : 0), 0);
+        const currentWeekCrates = (curWeek.cratesEarned || 0) + todayShards.filter(s => s.crateType).reduce((s, c) => s + (c.amount > 0 ? c.amount : 0), 0);
+
+        const lifetimeRuns = weeklyArchive.reduce((acc, a) => acc + (a.mdRunsCompleted || 0), 0) + currentWeekRuns;
+        const lifetimeExp = weeklyArchive.reduce((acc, a) => acc + (a.totalExpEarned || 0), 0) + currentWeekExp;
+        const lifetimeShards = weeklyArchive.reduce((acc, a) => acc + (a.shardsEarned || 0), 0) + currentWeekShards;
+        const lifetimeCrates = weeklyArchive.reduce((acc, a) => acc + (a.cratesEarned || 0), 0) + currentWeekCrates;
+
+        return (
+          <div className="mt-12 pt-8 border-t border-[#333]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div>
+                <h2 className="text-2xl font-bold font-limbus text-[#c9a84c] flex items-center gap-2">
+                  <Award size={24} /> Total User Progress & Weekly Archives
+                </h2>
+                <p className="text-xs text-gray-400 mt-1">
+                  Lifetime grinding accomplishments and archived weekly reset history.
+                </p>
+              </div>
+
+              <button
+                onClick={() => {
+                  if (window.confirm('Snapshot and archive your progress for the current cycle?')) {
+                    archiveCurrentWeek();
+                  }
+                }}
+                className="px-3.5 py-2 rounded-lg bg-black/60 border border-[#c9a84c]/50 hover:border-[#c9a84c] text-xs font-bold text-[#c9a84c] hover:text-white transition-all flex items-center gap-2 self-start sm:self-auto shadow-sm"
+                title="Manually archive current cycle stats"
+              >
+                <Archive size={14} />
+                <span>Archive Current Cycle</span>
+              </button>
+            </div>
+
+            {/* Lifetime Summary KPI Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+              <div className="bg-[#111] border border-[#333] rounded-xl p-4 text-center">
+                <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider block mb-1">Lifetime MD Runs</span>
+                <span className="text-2xl font-black text-white font-mono">{lifetimeRuns}</span>
+              </div>
+              <div className="bg-[#111] border border-[#333] rounded-xl p-4 text-center">
+                <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider block mb-1">Lifetime EXP</span>
+                <span className="text-2xl font-black text-[#22c55e] font-mono">+{lifetimeExp}</span>
+              </div>
+              <div className="bg-[#111] border border-[#333] rounded-xl p-4 text-center">
+                <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider block mb-1">Shards Farmed</span>
+                <span className="text-2xl font-black text-[#eab308] font-mono">+{lifetimeShards}</span>
+              </div>
+              <div className="bg-[#111] border border-[#333] rounded-xl p-4 text-center">
+                <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider block mb-1">Past Cycles</span>
+                <span className="text-2xl font-black text-purple-400 font-mono">{weeklyArchive.length}</span>
+              </div>
+            </div>
+
+            {/* Current Cycle Live Stats */}
+            <div className="bg-gradient-to-r from-black/80 via-[#14120c] to-black/80 border border-[#c9a84c]/30 rounded-xl p-4 mb-6">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#c9a84c] animate-pulse" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#c9a84c]">Active Weekly Cycle (In Progress)</span>
+                </div>
+                <span className="text-[10px] text-gray-500 font-mono">Auto-resets Wed 5:00 PM EST</span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs mt-3">
+                <div className="bg-black/50 p-2.5 rounded border border-[#222]">
+                  <span className="text-gray-500 text-[10px] block">Runs Completed</span>
+                  <span className="text-white font-bold font-mono text-sm">{currentWeekRuns} MDs</span>
+                </div>
+                <div className="bg-black/50 p-2.5 rounded border border-[#222]">
+                  <span className="text-gray-500 text-[10px] block">EXP Generated</span>
+                  <span className="text-green-400 font-bold font-mono text-sm">+{currentWeekExp} EXP</span>
+                </div>
+                <div className="bg-black/50 p-2.5 rounded border border-[#222]">
+                  <span className="text-gray-500 text-[10px] block">Shards Farmed</span>
+                  <span className="text-yellow-400 font-bold font-mono text-sm">+{currentWeekShards} Shards</span>
+                </div>
+                <div className="bg-black/50 p-2.5 rounded border border-[#222]">
+                  <span className="text-gray-500 text-[10px] block">Bonuses Left</span>
+                  <span className="text-white font-bold font-mono text-sm">{Math.max(0, 3 - (scheduleState.mdBonusesClaimed || 0))} / 3</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Past Weekly Archives Accordion / History */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 flex items-center gap-2">
+                <Archive size={14} /> Archived Weekly Records ({weeklyArchive.length})
+              </h3>
+
+              {weeklyArchive.length === 0 ? (
+                <div className="bg-[#111]/60 border border-[#222] rounded-xl p-8 text-center">
+                  <Archive size={32} className="mx-auto text-gray-600 mb-2 opacity-60" />
+                  <p className="text-sm font-bold text-gray-300">No past weekly archives yet</p>
+                  <p className="text-xs text-gray-500 max-w-md mx-auto mt-1">
+                    Every Wednesday at 5:00 PM EST, when Mirror Dungeons reset, your completed runs and earned resources are automatically archived here!
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-2.5">
+                  {weeklyArchive.map((entry) => (
+                    <div
+                      key={entry.id}
+                      className="bg-[#111] border border-[#2a2a2a] hover:border-[#3a3a3a] transition-colors rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4"
+                    >
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-white text-sm">{entry.weekLabel}</span>
+                          {entry.weekliesCompleted && (
+                            <span className="text-[9px] bg-yellow-500/20 text-yellow-300 font-bold px-1.5 py-0.5 rounded border border-yellow-500/30">
+                              👑 Weeklies Completed
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex flex-wrap gap-4 text-xs text-gray-400 font-mono">
+                          <span>MDs: <strong className="text-white">{entry.mdRunsCompleted || 0}</strong></span>
+                          <span>EXP: <strong className="text-green-400">+{entry.totalExpEarned || 0}</strong></span>
+                          <span>Shards: <strong className="text-yellow-400">+{entry.shardsEarned || 0}</strong></span>
+                          {entry.cratesEarned > 0 && <span>Crates: <strong className="text-amber-300">+{entry.cratesEarned}</strong></span>}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 self-end md:self-auto">
+                        <button
+                          onClick={() => {
+                            if (window.confirm(`Delete archive record for ${entry.weekLabel}?`)) {
+                              deleteWeeklyArchive(entry.id);
+                            }
+                          }}
+                          className="p-1.5 rounded text-gray-500 hover:text-red-400 hover:bg-red-950/30 transition-colors"
+                          title="Delete archive entry"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         );

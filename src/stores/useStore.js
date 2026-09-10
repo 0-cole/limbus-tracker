@@ -51,9 +51,11 @@ const defaultState = {
     todayLoggedRuns: [], // [ { id, type, exp, modules, bonusUsed } ]
     todayLoggedShards: [], // [ { id, sinnerId, amount, label } ]
     mdBonusesClaimed: 0, // 0 to 3
-    lastResetCheck: Date.now() // Used to determine if a daily/weekly reset has passed
+    lastResetCheck: Date.now(), // Used to determine if a daily/weekly reset has passed
+    currentWeekStats: { mdRuns: 0, expEarned: 0, shardsEarned: 0, cratesEarned: 0, dailiesDoneCount: 0, runs: [] }
   },
 
+  weeklyArchive: [], // [ { id, weekLabel, archivedAt, mdRunsCompleted, totalExpEarned, shardsEarned, cratesEarned, weekliesCompleted, dailiesCompleted, runs: [] } ]
   shardCounts: {}, // Legacy, keeping for backwards compatibility
   weeklyProgress: {
     lastCheckedDate: null,
@@ -117,13 +119,59 @@ export const useStore = create((set, get) => ({
         
         // Check for daily/weekly resets
         const resets = checkResets(loadedSchedule.lastResetCheck);
-        if (resets.hasDailyReset) {
+        if (resets.hasDailyReset && !resets.hasWeeklyReset && !resets.hasMdWeeklyReset) {
+            const oldRuns = loadedSchedule.todayLoggedRuns || [];
+            const oldShards = loadedSchedule.todayLoggedShards || [];
+            const curW = loadedSchedule.currentWeekStats || { mdRuns: 0, expEarned: 0, shardsEarned: 0, cratesEarned: 0, dailiesDoneCount: 0, runs: [] };
+            loadedSchedule.currentWeekStats = {
+              mdRuns: (curW.mdRuns || 0) + oldRuns.length,
+              expEarned: (curW.expEarned || 0) + oldRuns.reduce((s, r) => s + (r.exp || 0), 0),
+              shardsEarned: (curW.shardsEarned || 0) + oldShards.reduce((s, sh) => s + (sh.amount > 0 ? sh.amount : 0), 0),
+              cratesEarned: (curW.cratesEarned || 0) + oldShards.filter(s => s.crateType).reduce((s, c) => s + (c.amount > 0 ? c.amount : 0), 0),
+              dailiesDoneCount: (curW.dailiesDoneCount || 0) + (loadedSchedule.dailiesProgress >= 5 ? 1 : 0),
+              runs: [...(curW.runs || []), ...oldRuns]
+            };
             loadedSchedule.dailiesDone = false;
             loadedSchedule.dailiesProgress = 0;
             loadedSchedule.mdTodayDone = false;
             loadedSchedule.todayLoggedRuns = [];
             loadedSchedule.todayLoggedShards = [];
         }
+        
+        let loadedWeeklyArchive = data.weeklyArchive || [];
+        if ((resets.hasWeeklyReset || resets.hasMdWeeklyReset) && data.scheduleState) {
+          const oldSchedule = data.scheduleState;
+          const oldWeekStats = oldSchedule.currentWeekStats || { mdRuns: 0, expEarned: 0, shardsEarned: 0, cratesEarned: 0, runs: [] };
+          const oldRuns = oldSchedule.todayLoggedRuns || [];
+          const oldShards = oldSchedule.todayLoggedShards || [];
+          const totalRuns = (oldWeekStats.mdRuns || 0) + oldRuns.length;
+          const totalExp = (oldWeekStats.expEarned || 0) + oldRuns.reduce((s, r) => s + (r.exp || 0), 0);
+          const totalShards = (oldWeekStats.shardsEarned || 0) + oldShards.reduce((s, sh) => s + (sh.amount > 0 ? sh.amount : 0), 0);
+          const totalCrates = (oldWeekStats.cratesEarned || 0) + oldShards.filter(s => s.crateType).reduce((s, c) => s + (c.amount > 0 ? c.amount : 0), 0);
+
+          if (totalRuns > 0 || totalExp > 0 || totalShards > 0) {
+            const dateObj = new Date(oldSchedule.lastResetCheck || Date.now());
+            const oneWeekAgo = new Date(dateObj.getTime() - 7 * 24 * 60 * 60 * 1000);
+            const weekLabel = `${oneWeekAgo.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+            loadedWeeklyArchive = [
+              {
+                id: `archive_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+                weekLabel,
+                archivedAt: Date.now(),
+                mdRunsCompleted: totalRuns,
+                totalExpEarned: totalExp,
+                shardsEarned: totalShards,
+                cratesEarned: totalCrates,
+                weekliesCompleted: oldSchedule.weekliesDone || false,
+                dailiesCompleted: oldSchedule.dailiesProgress || 0,
+                runs: [...(oldWeekStats.runs || []), ...oldRuns]
+              },
+              ...loadedWeeklyArchive
+            ];
+          }
+          loadedSchedule.currentWeekStats = { mdRuns: 0, expEarned: 0, shardsEarned: 0, cratesEarned: 0, dailiesDoneCount: 0, runs: [] };
+        }
+
         if (resets.hasWeeklyReset) {
             loadedSchedule.weekliesDone = false;
             loadedSchedule.canClaimWeeklies = false;
@@ -142,6 +190,7 @@ export const useStore = create((set, get) => ({
           inventory: { ...defaultState.inventory, ...(data.inventory || {}) },
           bpState: { ...defaultState.bpState, ...(data.bpState || {}) },
           scheduleState: loadedSchedule,
+          weeklyArchive: loadedWeeklyArchive,
           shardCounts: data.shardCounts || {},
           weeklyProgress: data.weeklyProgress || defaultState.weeklyProgress,
           customMetadata: data.customMetadata || {},
@@ -164,6 +213,31 @@ export const useStore = create((set, get) => ({
         const currentSchedule = get().scheduleState;
         const intervalResets = checkResets(currentSchedule.lastResetCheck);
         if (intervalResets.hasDailyReset || intervalResets.hasWeeklyReset || intervalResets.hasMdWeeklyReset) {
+          if (intervalResets.hasWeeklyReset || intervalResets.hasMdWeeklyReset) {
+            get().archiveCurrentWeek();
+          } else if (intervalResets.hasDailyReset) {
+            const s = currentSchedule;
+            const oldRuns = s.todayLoggedRuns || [];
+            const oldShards = s.todayLoggedShards || [];
+            const curW = s.currentWeekStats || { mdRuns: 0, expEarned: 0, shardsEarned: 0, cratesEarned: 0, dailiesDoneCount: 0, runs: [] };
+            get().updateScheduleState({
+              currentWeekStats: {
+                mdRuns: (curW.mdRuns || 0) + oldRuns.length,
+                expEarned: (curW.expEarned || 0) + oldRuns.reduce((sum, r) => sum + (r.exp || 0), 0),
+                shardsEarned: (curW.shardsEarned || 0) + oldShards.reduce((sum, sh) => sum + (sh.amount > 0 ? sh.amount : 0), 0),
+                cratesEarned: (curW.cratesEarned || 0) + oldShards.filter(sh => sh.crateType).reduce((sum, c) => sum + (c.amount > 0 ? c.amount : 0), 0),
+                dailiesDoneCount: (curW.dailiesDoneCount || 0) + (s.dailiesProgress >= 5 ? 1 : 0),
+                runs: [...(curW.runs || []), ...oldRuns]
+              },
+              dailiesDone: false,
+              dailiesProgress: 0,
+              mdTodayDone: false,
+              todayLoggedRuns: [],
+              todayLoggedShards: [],
+              lastResetCheck: intervalResets.now
+            });
+            return;
+          }
           get().updateScheduleState({
             ...(intervalResets.hasDailyReset ? { dailiesDone: false, dailiesProgress: 0, mdTodayDone: false, todayLoggedRuns: [], todayLoggedShards: [] } : {}),
             ...(intervalResets.hasWeeklyReset ? { weekliesDone: false, canClaimWeeklies: false } : {}),
@@ -190,6 +264,7 @@ export const useStore = create((set, get) => ({
       wantList: Array.from(state.wantList),
       shardCounts: state.shardCounts,
       weeklyProgress: state.weeklyProgress,
+      weeklyArchive: state.weeklyArchive || [],
       customMetadata: state.customMetadata,
       inventory: state.inventory,
       bpState: state.bpState,
@@ -491,6 +566,53 @@ export const useStore = create((set, get) => ({
     }));
     get().saveStore();
     return record;
+  },
+
+  archiveCurrentWeek: () => {
+    const state = get();
+    const schedule = state.scheduleState || {};
+    const weekStats = schedule.currentWeekStats || { mdRuns: 0, expEarned: 0, shardsEarned: 0, cratesEarned: 0, runs: [] };
+    const todayRuns = schedule.todayLoggedRuns || [];
+    const todayShards = schedule.todayLoggedShards || [];
+
+    const totalRuns = (weekStats.mdRuns || 0) + todayRuns.length;
+    const totalExp = (weekStats.expEarned || 0) + todayRuns.reduce((s, r) => s + (r.exp || 0), 0);
+    const totalShards = (weekStats.shardsEarned || 0) + todayShards.reduce((s, sh) => s + (sh.amount > 0 ? sh.amount : 0), 0);
+    const totalCrates = (weekStats.cratesEarned || 0) + todayShards.filter(s => s.crateType).reduce((s, c) => s + (c.amount > 0 ? c.amount : 0), 0);
+
+    const now = new Date();
+    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const weekLabel = `${oneWeekAgo.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+
+    const archiveRecord = {
+      id: `archive_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+      weekLabel,
+      archivedAt: Date.now(),
+      mdRunsCompleted: totalRuns,
+      totalExpEarned: totalExp,
+      shardsEarned: totalShards,
+      cratesEarned: totalCrates,
+      weekliesCompleted: schedule.weekliesDone || false,
+      dailiesCompleted: schedule.dailiesProgress || 0,
+      runs: [...(weekStats.runs || []), ...todayRuns]
+    };
+
+    set((s) => ({
+      weeklyArchive: [archiveRecord, ...(s.weeklyArchive || [])],
+      scheduleState: {
+        ...s.scheduleState,
+        currentWeekStats: { mdRuns: 0, expEarned: 0, shardsEarned: 0, cratesEarned: 0, dailiesDoneCount: 0, runs: [] }
+      }
+    }));
+    get().saveStore();
+    return archiveRecord;
+  },
+
+  deleteWeeklyArchive: (id) => {
+    set((s) => ({
+      weeklyArchive: (s.weeklyArchive || []).filter(a => a.id !== id)
+    }));
+    get().saveStore();
   },
 
   reanchorSchedule: () => {

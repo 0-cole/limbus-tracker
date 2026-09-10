@@ -179,10 +179,20 @@ export function generateRoadmap(
   let nextWeeklyResetMs = getNextResets(cursorMs).nextWeekly;
   const todayDateStr = new Date().toISOString().split('T')[0];
 
+  // Count how many bonus runs have already been logged today vs. the mdBonusesClaimed total.
+  // This prevents the roadmap from suggesting bonus runs that the player already did today
+  // via Quick Log (which already incremented mdBonusesClaimed).
+  const todayLoggedRuns = scheduleState?.todayLoggedRuns || [];
+  const todayBonusesUsed = todayLoggedRuns.reduce((sum, r) => sum + (r.bonusUsed || 0), 0);
+  const todayExpLogged = todayLoggedRuns.reduce((sum, r) => sum + (r.exp || 0), 0);
+
+  // currentBonuses = bonuses still available for the rest of the week
+  // (mdBonusesClaimed already includes today's Quick Log runs)
   let currentBonuses = Math.max(0, 3 - (scheduleState?.mdBonusesClaimed || 0));
   let currentDailiesDone = (scheduleState?.dailiesProgress || 0) >= 5;
   let currentWeekliesDone = scheduleState?.weekliesDone || false;
   const effectiveHasMdHard = (bpState?.canto === undefined || bpState?.canto >= 8) && (bpState?.preferHardMd !== false) && (bpState?.hasMdHard !== false);
+
   
   const safeMath = bpState?.safeMath === true;
   const R_crate = safeMath ? 1.5 : 2.0;
@@ -270,7 +280,6 @@ export function generateRoadmap(
       runsCountToday = 0;
     } else if (paceMode === 'rush') {
       runsCountToday = Math.min(customDailyRuns, remainingRunsPool);
-      remainingRunsPool -= runsCountToday;
     } else {
       runsCountToday = baseMdsPerDay;
       if (remainderMds > 0) {
@@ -280,7 +289,6 @@ export function generateRoadmap(
       if (asapMode && runsCountToday === 0 && remainingRunsPool > 0) {
         runsCountToday = Math.min(1, remainingRunsPool);
       }
-      remainingRunsPool = Math.max(0, remainingRunsPool - runsCountToday);
     }
     
     // 3. Perform runs and consume bonuses
@@ -289,7 +297,19 @@ export function generateRoadmap(
     let modulesUsedToday = 0;
     // Dailies always cost 5 modules if not yet done
     if (!currentDailiesDone) modulesUsedToday += 5;
-    for(let r=0; r<runsCountToday; r++){
+
+    // For today (day 0): only suggest runs that haven't been logged yet.
+    // todayLoggedRuns are already in the store, so we subtract them from
+    // what the roadmap would otherwise suggest, and pre-credit their EXP.
+    let effectiveRunsCountToday = runsCountToday;
+    if (isToday && todayLoggedRuns.length > 0) {
+      // Clamp remaining runs to what's still needed after already-logged ones
+      effectiveRunsCountToday = Math.max(0, runsCountToday - todayLoggedRuns.length);
+    }
+    const runsToDeductFromPool = isToday ? effectiveRunsCountToday : runsCountToday;
+    remainingRunsPool = Math.max(0, remainingRunsPool - runsToDeductFromPool);
+
+    for(let r=0; r<effectiveRunsCountToday; r++){
         if (effectiveHasMdHard && currentBonuses >= 3) {
             currentBonuses -= 3;
             gainedExpFromRuns += 225;
@@ -308,6 +328,10 @@ export function generateRoadmap(
             modulesUsedToday += 5;
             runsList.push({ type: 'Normal', runKey: 'normal_nobonus', exp: 30, modules: 5 });
         }
+    }
+    // Credit EXP from runs already logged today
+    if (isToday) {
+      gainedExpFromRuns += todayExpLogged;
     }
 
     // 4. Passive EXP

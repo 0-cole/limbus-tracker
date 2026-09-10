@@ -1,5 +1,8 @@
 import IdDetailsModal from '../components/IdDetailsModal.jsx';
 import VergiliusModal from '../components/VergiliusModal.jsx';
+import RoachEmperorModal from '../components/RoachEmperorModal.jsx';
+import MugaRyoshuModal from '../components/MugaRyoshuModal.jsx';
+import vergiliusImg from '../assets/vergilius.png';
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Star, Edit3, CheckCircle, Info, Clock, Compass, Sparkles } from 'lucide-react';
@@ -97,6 +100,8 @@ export default function IdentitiesPage() {
   const [editingId, setEditingId] = useState(null);
   const [detailsId, setDetailsId] = useState(null);
   const [showVergiliusModal, setShowVergiliusModal] = useState(false);
+  const [showRoachModal, setShowRoachModal] = useState(false);
+  const [showMugaModal, setShowMugaModal] = useState(false);
 
   const toggleFilter = (category, value) => {
     setFilters(prev => {
@@ -260,11 +265,17 @@ export default function IdentitiesPage() {
 
       {/* Easter Egg Flags */}
       {(() => {
-        const isVergilius = search.trim() === 'Vergilius';
-        const isDante = search.trim().toLowerCase() === 'dante' || search.trim().toLowerCase() === 'clock';
-        const isCharon = search.trim().toLowerCase() === 'charon' || search.trim().toLowerCase() === 'vroom';
+        const cleanSearch = search.trim().toLowerCase();
+        const isVergilius = cleanSearch === 'vergilius';
+        const isDante = cleanSearch === 'dante' || cleanSearch === 'clock';
+        const isCharon = cleanSearch === 'charon' || cleanSearch === 'vroom';
+        const isRoachEmperor = cleanSearch === 'roach emperor' || cleanSearch === 'roachking' || cleanSearch === 'roach king' || (cleanSearch.includes('roach') && cleanSearch.includes('gregor'));
+        const isMuga = cleanSearch === 'muga' || cleanSearch === 'muga ryoshu' || cleanSearch === 'muga ryōshū';
+        const isErlkonig = cleanSearch === 'erlkonig' || cleanSearch === 'erlkönig' || cleanSearch === 'wild hunt' || cleanSearch === 'every heathcliff';
+        const isSancho = cleanSearch === 'sancho' || cleanSearch === 'bloodfiend' || cleanSearch === 'second kindred';
+        const isCarmen = cleanSearch === 'carmen' || cleanSearch === 'distortion' || cleanSearch === 'the light' || cleanSearch === 'the voice';
 
-        const totalResultsCount = filteredIdentities.length + (isVergilius ? 1 : 0) + (isDante ? 1 : 0) + (isCharon ? 1 : 0);
+        const totalResultsCount = filteredIdentities.length + (isVergilius ? 1 : 0) + (isDante ? 1 : 0) + (isCharon ? 1 : 0) + (isRoachEmperor ? 1 : 0) + (isMuga ? 1 : 0) + (isErlkonig ? 1 : 0) + (isSancho ? 1 : 0) + (isCarmen ? 1 : 0);
 
         return (
           <>
@@ -288,7 +299,7 @@ export default function IdentitiesPage() {
                     {/* Background Art */}
                     <div 
                       className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110"
-                      style={{ backgroundImage: 'url("/images/vergilius.png")' }}
+                      style={{ backgroundImage: `url("${vergiliusImg}")` }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-red-950/40" />
 
@@ -398,18 +409,192 @@ export default function IdentitiesPage() {
                   </motion.div>
                 )}
 
+                {/* 🪲 Roach Emperor Gregor Easter Egg Card */}
+                {isRoachEmperor && (
+                  <motion.div
+                    key="roach-emperor-easter-egg"
+                    layout
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    onClick={() => setShowRoachModal(true)}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-green-700 shadow-[0_0_25px_rgba(34,197,94,0.3)] hover:shadow-[0_0_40px_rgba(34,197,94,0.6)] hover:border-green-500 transition-all h-64 bg-gradient-to-b from-[#071a07] to-black p-4 cursor-pointer"
+                  >
+                    {/* Creepy crawl overlay */}
+                    <div className="absolute inset-0 opacity-5 pointer-events-none" style={{
+                      backgroundImage: 'radial-gradient(circle, #16a34a 1px, transparent 1px)',
+                      backgroundSize: '18px 18px'
+                    }} />
+                    <div className="flex justify-between items-start relative z-10">
+                      <div className="w-10 h-10 rounded-full bg-green-900/60 border border-green-600 flex items-center justify-center text-2xl animate-pulse">
+                        🪲
+                      </div>
+                      <span className="text-[10px] bg-green-900/50 text-green-300 font-mono px-2 py-0.5 rounded border border-green-700/50 group-hover:bg-green-700 group-hover:text-black transition-colors">
+                        Inspect Boss Dossier ›
+                      </span>
+                    </div>
+                    <div className="mt-auto relative z-10">
+                      <h3 className="font-bold text-lg text-green-300 drop-shadow-[0_0_8px_rgba(34,197,94,0.6)]">The Roach Emperor</h3>
+                      <p className="text-[10px] text-gray-400 mt-0.5 font-mono">Former Molar Office Head — Gregor</p>
+                      <p className="text-[11px] text-green-200/70 mt-1.5 italic leading-snug font-serif">
+                        "The roaches obey. He does not remember giving any orders. He stopped giving orders a long time ago."
+                      </p>
+                      <div className="mt-2 flex gap-1">
+                        <span className="text-[9px] bg-green-950 text-green-300 px-1.5 py-0.5 rounded border border-green-700/50">● Gluttony (Green Coins)</span>
+                        <span className="text-[9px] bg-black text-gray-500 px-1.5 py-0.5 rounded border border-[#222]">Classified Enemy</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* 🩸 Muga Ryōshū Easter Egg Card */}
+                {isMuga && (
+                  <motion.div
+                    key="muga-ryoshu-easter-egg"
+                    layout
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    onClick={() => setShowMugaModal(true)}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-gray-400/60 shadow-[0_0_25px_rgba(200,200,220,0.2)] hover:shadow-[0_0_40px_rgba(200,200,220,0.45)] hover:border-gray-300 transition-all h-64 bg-gradient-to-b from-[#101015] to-black p-4 cursor-pointer"
+                  >
+                    {/* Blood drip effect */}
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-red-800/40 to-transparent" />
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(100,0,0,0.08)_0%,transparent_60%)] pointer-events-none" />
+                    <div className="flex justify-between items-start relative z-10">
+                      <div className="w-10 h-10 rounded-full bg-gray-900 border border-gray-500/50 flex items-center justify-center text-xl">
+                        ⚔️
+                      </div>
+                      <span className="text-[10px] bg-gray-900/80 text-gray-400 font-mono px-2 py-0.5 rounded border border-gray-600/40 group-hover:bg-gray-300 group-hover:text-black transition-colors">
+                        Inspect Assist Dossier ›
+                      </span>
+                    </div>
+                    <div className="mt-auto relative z-10">
+                      <h3 className="font-bold text-lg text-gray-200">Muga — Ryōshū</h3>
+                      <p className="text-[10px] text-gray-500 mt-0.5 font-mono">No-Self State / Assist Unit — ⚠ NOT ACQUIRABLE</p>
+                      <p className="text-[11px] text-gray-400/80 mt-1.5 italic leading-snug font-serif">
+                        "The sword moves on its own now. Do not approach. There is nothing left inside to reason with."
+                      </p>
+                      <div className="mt-2 flex gap-1">
+                        <span className="text-[9px] bg-gray-900 text-gray-400 px-1.5 py-0.5 rounded border border-gray-600/40">● No Sanity</span>
+                        <span className="text-[9px] bg-black text-red-600 px-1.5 py-0.5 rounded border border-red-900/40">● No Mercy</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* 🐎 Erlkönig Heathcliff Easter Egg Card */}
+                {isErlkonig && (
+                  <motion.div
+                    key="erlkonig-easter-egg"
+                    layout
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-purple-800 shadow-[0_0_30px_rgba(147,51,234,0.35)] hover:shadow-[0_0_45px_rgba(168,85,247,0.5)] transition-all h-64 bg-gradient-to-b from-[#180826] via-[#0e0416] to-black p-4 cursor-default"
+                  >
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(168,85,247,0.15)_0%,transparent_70%)] pointer-events-none" />
+                    <div className="flex justify-between items-start relative z-10">
+                      <div className="w-10 h-10 rounded-full bg-purple-950 border border-purple-600 flex items-center justify-center text-xl shadow-[0_0_12px_rgba(168,85,247,0.5)]">
+                        💀
+                      </div>
+                      <span className="text-[10px] bg-purple-950 text-purple-300 font-mono px-2 py-0.5 rounded border border-purple-700/60">
+                        ⚠ CATASTROPHIC DISTORTION
+                      </span>
+                    </div>
+                    <div className="mt-auto relative z-10">
+                      <h3 className="font-bold text-lg text-purple-300 drop-shadow-[0_0_10px_rgba(168,85,247,0.7)]">Erlkönig Heathcliff</h3>
+                      <p className="text-[10px] text-purple-400/80 mt-0.5 font-mono">Leader of the Wild Hunt — ⚠ NON-ACQUIRABLE</p>
+                      <p className="text-[11px] text-purple-200/80 mt-1.5 italic leading-snug font-serif">
+                        "Every Heathcliff in every reflection of this rotting City... must be wiped from existence."
+                      </p>
+                      <div className="mt-2 flex gap-1">
+                        <span className="text-[9px] bg-purple-950 text-purple-300 px-1.5 py-0.5 rounded border border-purple-800/60">● Envy / Sinking</span>
+                        <span className="text-[9px] bg-black text-purple-400 px-1.5 py-0.5 rounded border border-purple-900/40">Grief Unleashed</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* 🩸 Sancho / Bloodfiend Don Quixote Easter Egg Card */}
+                {isSancho && (
+                  <motion.div
+                    key="sancho-easter-egg"
+                    layout
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-red-800 shadow-[0_0_30px_rgba(220,38,38,0.4)] hover:shadow-[0_0_50px_rgba(239,68,68,0.6)] transition-all h-64 bg-gradient-to-b from-[#240406] via-[#140203] to-black p-4 cursor-default"
+                  >
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(220,38,38,0.2)_0%,transparent_60%)] pointer-events-none" />
+                    <div className="flex justify-between items-start relative z-10">
+                      <div className="w-10 h-10 rounded-full bg-red-950 border border-red-600 flex items-center justify-center text-xl shadow-[0_0_12px_rgba(220,38,38,0.6)] animate-pulse">
+                        🦇
+                      </div>
+                      <span className="text-[10px] bg-red-950 text-red-300 font-mono px-2 py-0.5 rounded border border-red-700/60">
+                        ⚠ SECOND KINDRED
+                      </span>
+                    </div>
+                    <div className="mt-auto relative z-10">
+                      <h3 className="font-bold text-lg text-red-300 drop-shadow-[0_0_10px_rgba(239,68,68,0.7)]">Sancho — Bloodfiend</h3>
+                      <p className="text-[10px] text-red-400/80 mt-0.5 font-mono">Barrio of Thirst / Classified Legend — ⚠ NON-ACQUIRABLE</p>
+                      <p className="text-[11px] text-red-200/80 mt-1.5 italic leading-snug font-serif">
+                        "Awaken, my dream-clad child... Cast aside the lance, and let the carnival of blood begin anew."
+                      </p>
+                      <div className="mt-2 flex gap-1">
+                        <span className="text-[9px] bg-red-950 text-red-300 px-1.5 py-0.5 rounded border border-red-800/60">● Lust / Bleed</span>
+                        <span className="text-[9px] bg-black text-red-400 px-1.5 py-0.5 rounded border border-red-900/40">Unending Thirst</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* ✨ The Voice / Carmen Easter Egg Card */}
+                {isCarmen && (
+                  <motion.div
+                    key="carmen-easter-egg"
+                    layout
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-amber-400/70 shadow-[0_0_35px_rgba(251,191,36,0.35)] hover:shadow-[0_0_55px_rgba(251,191,36,0.55)] transition-all h-64 bg-gradient-to-b from-[#221c08] via-[#141004] to-black p-4 cursor-default"
+                  >
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(251,191,36,0.15)_0%,transparent_70%)] pointer-events-none" />
+                    <div className="flex justify-between items-start relative z-10">
+                      <div className="w-10 h-10 rounded-full bg-amber-950/80 border border-amber-500/70 flex items-center justify-center text-xl shadow-[0_0_15px_rgba(251,191,36,0.5)] animate-spin-slow">
+                        ✨
+                      </div>
+                      <span className="text-[10px] bg-amber-950 text-amber-300 font-mono px-2 py-0.5 rounded border border-amber-600/50">
+                        ⚠ THE VOICE
+                      </span>
+                    </div>
+                    <div className="mt-auto relative z-10">
+                      <h3 className="font-bold text-lg text-amber-200 drop-shadow-[0_0_10px_rgba(251,191,36,0.7)]">Carmen — The Light</h3>
+                      <p className="text-[10px] text-amber-400/70 mt-0.5 font-mono">Source of Distortion — ⚠ DO NOT LISTEN</p>
+                      <p className="text-[11px] text-amber-100/80 mt-1.5 italic leading-snug font-serif">
+                        "Why must you suppress what you truly feel? Listen closely to the beating in your chest... Let it bloom."
+                      </p>
+                      <div className="mt-2 flex gap-1">
+                        <span className="text-[9px] bg-amber-950 text-amber-300 px-1.5 py-0.5 rounded border border-amber-700/50">● Whispers of Truth</span>
+                        <span className="text-[9px] bg-black text-amber-400 px-1.5 py-0.5 rounded border border-amber-900/40">Ego Dissolution</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
                 {filteredIdentities.map(id => (
-                  <IdCard 
-                    key={id.name} 
-                    id={id} 
-                    meta={getMetadata(id)} 
-                    acquired={acquiredIds.has(id.name)} 
-                    onToggleAcquired={toggleAcquiredId} 
+                  <IdCard
+                    key={id.name}
+                    id={id}
+                    meta={getMetadata(id)}
+                    acquired={acquiredIds.has(id.name)}
+                    onToggleAcquired={toggleAcquiredId}
                     onEdit={() => setEditingId(id)}
                     onClickDetails={() => setDetailsId(id)}
                   />
                 ))}
               </AnimatePresence>
+
             </div>
           </>
         );
@@ -435,6 +620,14 @@ export default function IdentitiesPage() {
 
       {showVergiliusModal && (
         <VergiliusModal onClose={() => setShowVergiliusModal(false)} />
+      )}
+
+      {showRoachModal && (
+        <RoachEmperorModal onClose={() => setShowRoachModal(false)} />
+      )}
+
+      {showMugaModal && (
+        <MugaRyoshuModal onClose={() => setShowMugaModal(false)} />
       )}
     </motion.div>
   );
