@@ -85,12 +85,14 @@ export const syncEngine = {
       };
 
       isSyncing = true;
-      await supabase.from('user_saves').delete().eq('id', user.id);
-      const { error } = await supabase.from('user_saves').insert({
-        id: user.id,
-        save_data: payload,
-        updated_at: new Date(now).toISOString()
-      });
+      // Upsert directly by user ID so it cleanly updates the single record
+      const { error } = await supabase
+        .from('user_saves')
+        .upsert({
+          id: user.id,
+          save_data: payload,
+          updated_at: new Date(now).toISOString()
+        }, { onConflict: 'id' });
 
       if (error) {
         console.error('Error syncing save to cloud:', error);
@@ -104,10 +106,11 @@ export const syncEngine = {
     }
   },
 
-  pullSaveFromCloud: async () => {
+  // Pull save from cloud (forcePull bypasses timestamp skip for manual button clicks)
+  pullSaveFromCloud: async (forcePull = false) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return false;
+      if (!user) return { success: false, reason: 'not_logged_in' };
 
       const { data, error } = await supabase
         .from('user_saves')
@@ -117,18 +120,20 @@ export const syncEngine = {
 
       if (error) {
         console.error('Error fetching cloud save:', error);
-        return false;
+        return { success: false, reason: error.message };
       }
 
       if (data && data.save_data) {
         const cloudData = data.save_data;
         const cloudLastUpdated = cloudData.lastUpdated || (data.updated_at ? new Date(data.updated_at).getTime() : 0);
 
-        if (lastLocalEdit > cloudLastUpdated) {
-          return false;
-        }
-        if (lastCloudSync >= cloudLastUpdated) {
-          return false;
+        if (!forcePull) {
+          if (lastLocalEdit > cloudLastUpdated) {
+            return { success: false, reason: 'local_newer' };
+          }
+          if (lastCloudSync >= cloudLastUpdated) {
+            return { success: false, reason: 'already_synced' };
+          }
         }
 
         const store = useStore.getState();
@@ -160,14 +165,15 @@ export const syncEngine = {
         }
 
         lastCloudSync = cloudLastUpdated;
-        return true;
+        return { success: true, reason: 'pulled' };
       } else {
+        // No cloud save exists yet, create first upload
         await syncEngine.pushSaveToCloud();
-        return true;
+        return { success: true, reason: 'first_upload' };
       }
     } catch (err) {
       console.error('Failed to pull save from cloud:', err);
-      return false;
+      return { success: false, reason: err.message };
     }
   },
 
@@ -187,7 +193,7 @@ export const syncEngine = {
       if (lastLocalEdit > lastCloudSync) {
         await syncEngine.pushSaveToCloud();
       } else {
-        await syncEngine.pullSaveFromCloud();
+        await syncEngine.pullSaveFromCloud(false);
       }
     }, 15000);
   }
