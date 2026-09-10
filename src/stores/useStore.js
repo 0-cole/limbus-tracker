@@ -33,17 +33,20 @@ const defaultState = {
     canto: 8,
     preferHardMd: true,
     hasMdHard: true,
+    safeMath: false, // 1.5 shards/crate vs 2.0
     daysLeft: 45 // Default
   },
   
   scheduleState: {
     mode: 'general', // 'general' | 'targeted'
+    startDate: new Date().toISOString().split('T')[0], // Persistent schedule baseline anchor
     dailiesDone: false, // Legacy
     dailiesProgress: 0,
     weekliesDone: false,
     canClaimWeeklies: false,
     mdTodayDone: false,
     todayLoggedRuns: [], // [ { id, type, exp, modules, bonusUsed } ]
+    todayLoggedShards: [], // [ { id, sinnerId, amount, label } ]
     mdBonusesClaimed: 0, // 0 to 3
     lastResetCheck: Date.now() // Used to determine if a daily/weekly reset has passed
   },
@@ -116,6 +119,7 @@ export const useStore = create((set, get) => ({
             loadedSchedule.dailiesProgress = 0;
             loadedSchedule.mdTodayDone = false;
             loadedSchedule.todayLoggedRuns = [];
+            loadedSchedule.todayLoggedShards = [];
         }
         if (resets.hasWeeklyReset) {
             loadedSchedule.weekliesDone = false;
@@ -158,7 +162,7 @@ export const useStore = create((set, get) => ({
         const intervalResets = checkResets(currentSchedule.lastResetCheck);
         if (intervalResets.hasDailyReset || intervalResets.hasWeeklyReset || intervalResets.hasMdWeeklyReset) {
           get().updateScheduleState({
-            ...(intervalResets.hasDailyReset ? { dailiesDone: false, dailiesProgress: 0, mdTodayDone: false, todayLoggedRuns: [] } : {}),
+            ...(intervalResets.hasDailyReset ? { dailiesDone: false, dailiesProgress: 0, mdTodayDone: false, todayLoggedRuns: [], todayLoggedShards: [] } : {}),
             ...(intervalResets.hasWeeklyReset ? { weekliesDone: false, canClaimWeeklies: false } : {}),
             ...(intervalResets.hasMdWeeklyReset ? { mdBonusesClaimed: 0 } : {}),
             lastResetCheck: intervalResets.now
@@ -379,6 +383,105 @@ export const useStore = create((set, get) => ({
     }));
 
     get().injectBpExp(-run.exp);
+    get().saveStore();
+  },
+
+  addShards: (sinnerId, amount, label) => {
+    const state = get();
+    const currentOwned = state.inventory.shards[sinnerId] || 0;
+    const newCount = Math.max(0, currentOwned + amount);
+
+    const record = {
+      id: `${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+      sinnerId,
+      amount,
+      label: label || `${amount > 0 ? '+' : ''}${amount} ${sinnerId} Shards`,
+      timestamp: Date.now()
+    };
+
+    const newLogged = [...(state.scheduleState.todayLoggedShards || []), record];
+
+    set((s) => ({
+      inventory: {
+        ...s.inventory,
+        shards: {
+          ...s.inventory.shards,
+          [sinnerId]: newCount
+        }
+      },
+      scheduleState: {
+        ...s.scheduleState,
+        todayLoggedShards: newLogged
+      }
+    }));
+    get().saveStore();
+    return record;
+  },
+
+  undoAddShards: (recordId) => {
+    const state = get();
+    const rec = (state.scheduleState.todayLoggedShards || []).find(r => r.id === recordId);
+    if (!rec) return;
+
+    const currentOwned = state.inventory.shards[rec.sinnerId] || 0;
+    const newCount = Math.max(0, currentOwned - rec.amount);
+    const newLogged = (state.scheduleState.todayLoggedShards || []).filter(r => r.id !== recordId);
+
+    set((s) => ({
+      inventory: {
+        ...s.inventory,
+        shards: {
+          ...s.inventory.shards,
+          [rec.sinnerId]: newCount
+        }
+      },
+      scheduleState: {
+        ...s.scheduleState,
+        todayLoggedShards: newLogged
+      }
+    }));
+    get().saveStore();
+  },
+
+  addCrates: (type, amount) => {
+    // type: 'nominable' | 'random'
+    const state = get();
+    const prop = type === 'nominable' ? 'nominableCrates' : 'randomCrates';
+    const current = state.inventory[prop] || 0;
+    const newCount = Math.max(0, current + amount);
+
+    const record = {
+      id: `${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+      crateType: type,
+      amount,
+      label: `${amount > 0 ? '+' : ''}${amount} ${type === 'nominable' ? 'Nominable' : 'Random'} Crates`,
+      timestamp: Date.now()
+    };
+
+    const newLogged = [...(state.scheduleState.todayLoggedShards || []), record];
+
+    set((s) => ({
+      inventory: {
+        ...s.inventory,
+        [prop]: newCount
+      },
+      scheduleState: {
+        ...s.scheduleState,
+        todayLoggedShards: newLogged
+      }
+    }));
+    get().saveStore();
+    return record;
+  },
+
+  reanchorSchedule: () => {
+    const todayStr = new Date().toISOString().split('T')[0];
+    set((s) => ({
+      scheduleState: {
+        ...s.scheduleState,
+        startDate: todayStr
+      }
+    }));
     get().saveStore();
   }
 }));

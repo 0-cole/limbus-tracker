@@ -22,8 +22,8 @@ const CANTOS = [
 ];
 
 export default function SchedulePage() {
-  const { scheduleState, updateScheduleState, bpState, updateBpState, inventory, wantList, identitiesData, egosData, activeBanner } = useStore();
-  const [safeMath, setSafeMath] = useState(false);
+  const { scheduleState, updateScheduleState, bpState, updateBpState, inventory, wantList, identitiesData, egosData, activeBanner, reanchorSchedule } = useStore();
+  const safeMath = bpState.safeMath === true;
   const canto = bpState.canto || 8;
   const cantoUnlockedHard = canto >= 8;
   const preferHardMd = bpState.preferHardMd !== false;
@@ -42,16 +42,21 @@ export default function SchedulePage() {
     return identitiesData?.find(id => id.name === name) || egosData?.find(ego => ego.name === name);
   }).filter(Boolean);
 
-  const calcItems = targetItems.map(item => ({ sinnerId: item.sinner, rarity: !!item.grade ? 'EGO' : (item.rarity === 3 ? '000' : '00') }));
+  const calcItems = targetItems.map(item => ({ 
+    name: item.name,
+    sinner: item.sinner,
+    sinnerId: item.sinner, 
+    rarity: !!item.grade ? 'EGO' : (item.rarity === 3 ? '000' : '00') 
+  }));
 
   // 2. Math via Deterministic Engine
   const calcResult = useMemo(() => calculateLimbusGrind(
     calcItems,
     inventory,
-    { ...bpState, canto, preferHardMd, hasMdHard },
+    { ...bpState, canto, preferHardMd, hasMdHard, safeMath },
     scheduleState,
     seasonEndDate
-  ), [calcItems, inventory, bpState, canto, preferHardMd, hasMdHard, scheduleState, seasonEndDate]);
+  ), [calcItems, inventory, bpState, canto, preferHardMd, hasMdHard, safeMath, scheduleState, seasonEndDate]);
 
   const pacePerDay = calcResult.daysLeft > 0 ? (calcResult.rawMdsNeeded / calcResult.daysLeft).toFixed(1) : 0;
   
@@ -60,13 +65,15 @@ export default function SchedulePage() {
   if (pacePerDay > 1.5) { burnoutColor = 'text-[#eab308]'; burnoutStatus = 'Moderate Grind'; }
   if (pacePerDay > 3.0) { burnoutColor = 'text-[#ef4444]'; burnoutStatus = 'High Burnout Risk'; }
 
-  // Generate Roadmap
-  const { roadmap, totalModulesNeeded } = useMemo(() => generateRoadmap(
+  // Generate Roadmap with Egoshard Milestones
+  const { roadmap, totalModulesNeeded, targetMilestones } = useMemo(() => generateRoadmap(
     calcResult.daysLeft,
     calcResult.plannedRuns,
     scheduleState,
-    { ...bpState, canto, preferHardMd, hasMdHard }
-  ), [calcResult.daysLeft, calcResult.plannedRuns, scheduleState, bpState, canto, preferHardMd, hasMdHard]);
+    { ...bpState, canto, preferHardMd, hasMdHard, safeMath },
+    targetItems,
+    inventory
+  ), [calcResult.daysLeft, calcResult.plannedRuns, scheduleState, bpState, canto, preferHardMd, hasMdHard, safeMath, targetItems, inventory]);
 
   // Find banner image URL if active banner text is known
   let bannerImageUrl = null;
@@ -187,8 +194,11 @@ export default function SchedulePage() {
               <input type="checkbox" checked={bpState.isPremium} onChange={e => updateBpState({isPremium: e.target.checked})} className="w-5 h-5 accent-[#c9a84c]" />
             </label>
             <label className="flex justify-between items-center bg-black/50 p-3 rounded cursor-pointer group">
-              <span className="text-gray-300 font-bold text-sm group-hover:text-white">Safe Math (1.5 Shards/Crate)</span>
-              <input type="checkbox" checked={safeMath} onChange={e => setSafeMath(e.target.checked)} className="w-5 h-5 accent-[#c9a84c]" />
+              <div>
+                <span className="text-gray-300 font-bold text-sm group-hover:text-white block">Safe Math (1.5 Shards/Crate)</span>
+                <span className="text-[10px] text-gray-500">Uncheck for expected average (2.0 Shards/Crate)</span>
+              </div>
+              <input type="checkbox" checked={safeMath} onChange={e => updateBpState({safeMath: e.target.checked})} className="w-5 h-5 accent-[#c9a84c]" />
             </label>
           </div>
         </div>
@@ -240,29 +250,113 @@ export default function SchedulePage() {
         </div>
       </div>
 
+      {/* Egoshard Allocation & Target Milestones Guide */}
+      {targetMilestones && targetMilestones.length > 0 && (
+        <div className="mb-12">
+          <div className="flex justify-between items-end mb-4">
+            <div>
+              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                <Target size={24} className="text-[#c9a84c]" /> Egoshard Allocation Plan & Milestones
+              </h2>
+              <p className="text-xs text-gray-400 mt-1">
+                Nominable Egocrates are prioritized towards your closest goal first, then automatically rollover to subsequent targets once crafted.
+              </p>
+            </div>
+            <button 
+              onClick={() => {
+                reanchorSchedule();
+                alert("Schedule baseline re-anchored to today!");
+              }} 
+              className="text-xs px-3 py-1.5 rounded bg-black/50 border border-[#444] hover:border-[#c9a84c] text-gray-300 hover:text-white transition-colors flex items-center gap-1.5"
+              title="Reset Day 1 anchor to today's date"
+            >
+              Re-anchor Schedule to Today
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {targetMilestones.map((target, idx) => {
+              const pct = Math.min(100, Math.round((target.currentShards / target.cost) * 100));
+              const isDone = target.completed;
+              return (
+                <div key={idx} className={`p-4 rounded-xl border transition-all relative overflow-hidden ${
+                  isDone 
+                    ? 'bg-gradient-to-br from-[#c9a84c]/20 to-black border-[#c9a84c] shadow-[0_0_20px_rgba(201,168,76,0.15)]' 
+                    : 'bg-[#111] border-[#333]'
+                }`}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-[#c9a84c] text-black">
+                      Step {idx + 1} Target
+                    </span>
+                    <span className="text-xs text-gray-400 capitalize font-medium">{target.sinnerName}</span>
+                  </div>
+
+                  <h3 className="font-bold text-white text-base truncate mb-3" title={target.name}>
+                    {target.name}
+                  </h3>
+
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-400">Shards Progress</span>
+                      <span className="text-white font-mono font-bold">
+                        {Math.floor(target.currentShards)} <span className="text-gray-500">/ {target.cost}</span>
+                      </span>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="w-full bg-[#222] h-2 rounded-full overflow-hidden border border-[#333]">
+                      <div 
+                        className={`h-full transition-all duration-500 ${isDone ? 'bg-[#22c55e]' : 'bg-[#c9a84c]'}`}
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+
+                    <div className="pt-2 flex items-center justify-between border-t border-[#222]">
+                      <span className="text-[11px] text-gray-500">Milestone Date:</span>
+                      <span className={`text-xs font-bold font-mono ${isDone ? 'text-[#22c55e]' : 'text-yellow-400'}`}>
+                        {target.completedDate || (isDone ? `Day ${target.completedDay}` : 'In Progress')}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Roadmap Table */}
       <h2 className="text-2xl font-bold text-white mt-12 mb-6 flex items-center gap-2">
         <Calendar size={24} className="text-[#c9a84c]" /> Grind Roadmap (Next 30 Days)
       </h2>
       <div className="bg-[#111] border border-[#333] rounded-xl overflow-hidden mb-12">
-         <div className="grid grid-cols-5 bg-black/60 p-4 border-b border-[#333] font-bold text-sm text-gray-400 uppercase tracking-wider">
-            <div>Day</div>
+         <div className="grid grid-cols-6 bg-black/60 p-4 border-b border-[#333] font-bold text-sm text-gray-400 uppercase tracking-wider">
+            <div>Day & Date</div>
             <div>Required MDs</div>
             <div>EXP Gained</div>
             <div className="text-[#60a5fa]">Modules Cost</div>
             <div>Total EXP Generated</div>
+            <div className="text-[#c9a84c]">Target & Milestone</div>
          </div>
-           <div className="max-h-[300px] overflow-y-auto">
+           <div className="max-h-[360px] overflow-y-auto">
               {(() => {
                 const goalIdx = calcResult.bpExpNeeded > 0 ? roadmap.findIndex(r => r.totalExp >= calcResult.bpExpNeeded) : -1;
                 return roadmap.map((row, idx) => {
                   const isGoal = idx === goalIdx;
+                  const hasMilestone = row.milestonesReachedToday && row.milestonesReachedToday.length > 0;
                   return (
-                    <div key={idx} className={`grid grid-cols-5 p-4 border-b border-[#333]/50 text-sm ${isGoal ? 'bg-[#22c55e]/20 border-[#22c55e]' : row.day % 7 === 1 ? 'bg-[#c9a84c]/10' : ''}`}>
-                        <div className="font-bold text-white flex items-center">
-                          Day {row.day} <span className="text-xs text-gray-400 font-normal ml-2">({row.weekday})</span>
-                          {row.day % 7 === 1 && !isGoal && <span className="text-xs text-[#c9a84c] ml-2">(Weekly Reset)</span>}
-                          {isGoal && <span className="text-[10px] uppercase tracking-wider bg-[#22c55e] text-black px-2 py-0.5 rounded font-black ml-2 shadow-[0_0_8px_rgba(34,197,94,0.6)]">Goal Reached</span>}
+                    <div key={idx} className={`grid grid-cols-6 p-4 border-b border-[#333]/50 text-sm ${
+                      hasMilestone ? 'bg-[#c9a84c]/20 border-[#c9a84c]' : isGoal ? 'bg-[#22c55e]/20 border-[#22c55e]' : row.isToday ? 'bg-white/10 border-white/50' : row.day % 7 === 1 ? 'bg-[#c9a84c]/5' : ''
+                    }`}>
+                        <div className="font-bold text-white flex flex-col justify-center">
+                          <div className="flex items-center gap-1.5">
+                            <span>Day {row.day}</span>
+                            {row.isToday && <span className="text-[9px] uppercase tracking-wider bg-[#c9a84c] text-black font-black px-1.5 py-0.2 rounded shadow-sm">Today</span>}
+                            {isGoal && !hasMilestone && <span className="text-[9px] uppercase tracking-wider bg-[#22c55e] text-black px-1.5 py-0.2 rounded font-black shadow-[0_0_8px_rgba(34,197,94,0.6)]">Goal Met</span>}
+                          </div>
+                          <span className="text-xs text-gray-400 font-normal">
+                            {row.weekday}, {row.date} {row.day % 7 === 1 && !isGoal && <span className="text-[#c9a84c] ml-1">(Reset)</span>}
+                          </span>
                         </div>
                           <div>
                             {row.runs > 0 ? (
@@ -308,7 +402,33 @@ export default function SchedulePage() {
                             <span>{row.totalExp}</span>
                             <span className="text-xs text-gray-500 font-normal">(+{row.gained})</span>
                           </div>
-                          {isGoal && <span className="text-[#22c55e] text-xs font-bold mt-0.5">Goal Met ({calcResult.bpExpNeeded} EXP)</span>}
+                          {isGoal && <span className="text-[#22c55e] text-xs font-bold mt-0.5">Goal ({calcResult.bpExpNeeded} EXP)</span>}
+                        </div>
+
+                        {/* Egoshard Target / Milestone Column */}
+                        <div className="flex flex-col justify-center text-xs">
+                          {hasMilestone ? (
+                            <div className="space-y-1">
+                              {row.milestonesReachedToday.map((m, mi) => (
+                                <div key={mi} className="bg-[#c9a84c] text-black font-black text-[10px] px-2 py-1 rounded shadow flex items-center gap-1 truncate" title={m.name}>
+                                  <span>🏆</span>
+                                  <span className="truncate">CRAFT: {m.name}</span>
+                                </div>
+                              ))}
+                            </div>
+                          ) : row.activeFarmingTarget ? (
+                            <div className="text-gray-300 flex flex-col">
+                              <span className="text-[10px] text-[#c9a84c] font-bold flex items-center gap-1 truncate">
+                                <span>🎯</span>
+                                <span className="truncate">{row.activeFarmingTarget.name}</span>
+                              </span>
+                              <span className="text-[10px] text-gray-500 font-mono">
+                                {row.activeFarmingTarget.currentShards} / {row.activeFarmingTarget.targetCost} Shards
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="text-gray-600 text-[10px]">All Goals Reached</span>
+                          )}
                         </div>
                     </div>
                   );

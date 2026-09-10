@@ -1,40 +1,54 @@
 /**
  * src/utils/limbusCalculator.js
- * Deterministic Engine & Roadmap Generator
+ * Deterministic Engine & Roadmap Generator with Egoshard Allocation Milestones
  */
 import { getRemainingCycles, getNextResets } from './timeUtils.js';
 
+export function normalizeSinnerId(name) {
+  if (!name) return 'yi-sang';
+  const clean = String(name).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
+  if (clean.includes('yisang') || clean.includes('yi')) return 'yi-sang';
+  if (clean.includes('don') || clean.includes('quixote')) return 'don-quixote';
+  if (clean.includes('hong') || clean.includes('lu')) return 'hong-lu';
+  return clean;
+}
+
 export function calculateLimbusGrind(
-  wishlist,
-  inventory,
-  bpState,
-  scheduleState,
+  wishlist = [],
+  inventory = {},
+  bpState = {},
+  scheduleState = {},
   seasonEndDate
 ) {
+  const safeMath = bpState?.safeMath === true;
+  const R_crate = safeMath ? 1.5 : 2.0;
+  const cratesPerLevel = bpState?.isPremium ? 3 : 1;
+
   // 1. Deficit Math
   const targetShards = {};
   for (const item of wishlist) {
+    const sinnerId = normalizeSinnerId(item.sinnerId || item.sinner);
     const cost = item.rarity === '00' ? 150 : 400;
-    targetShards[item.sinnerId] = (targetShards[item.sinnerId] || 0) + cost;
+    targetShards[sinnerId] = (targetShards[sinnerId] || 0) + cost;
   }
 
+  const shardsInventory = inventory?.shards || {};
   let totalShardDeficit = 0;
   for (const sinner of Object.keys(targetShards)) {
-    const owned = inventory.shards[sinner] || 0;
+    const owned = shardsInventory[sinner] || 0;
     const deficit = Math.max(0, targetShards[sinner] - owned);
     totalShardDeficit += deficit;
   }
 
   // 2. Active Crate to EXP Conversion
-  const R_crate = 2.0; // Expected shards per crate
-  const netCratesNeeded = Math.max(0, Math.ceil(totalShardDeficit / R_crate) - inventory.nominableCrates);
+  const nominableCrates = inventory?.nominableCrates || 0;
+  const netCratesNeeded = Math.max(0, Math.ceil(totalShardDeficit / R_crate) - nominableCrates);
   
-  const cratesPerLevel = bpState.isPremium ? 3 : 1;
   const bpLevelsNeeded = Math.ceil(netCratesNeeded / cratesPerLevel);
   let bpExpNeeded = bpLevelsNeeded * 10;
 
   // Offset by current partial EXP
-  if (bpState.currentExp > 0 && bpExpNeeded > 0) {
+  if (bpState?.currentExp > 0 && bpExpNeeded > 0) {
     bpExpNeeded = Math.max(0, bpExpNeeded - bpState.currentExp);
   }
 
@@ -51,15 +65,15 @@ export function calculateLimbusGrind(
   const futureWeeklyExp = Math.max(0, weeksLeft - 1) * 20;
 
   const truePassiveExp = futureDailyExp + futureWeeklyExp + 
-    (scheduleState.dailiesProgress >= 5 ? 0 : 10) + 
-    (scheduleState.weekliesDone ? 0 : 20);
+    ((scheduleState?.dailiesProgress || 0) >= 5 ? 0 : 10) + 
+    (scheduleState?.weekliesDone ? 0 : 20);
 
   // 5. Active Grind Output
   const BASE_MD_EXP = 30; 
   let expDeficitAfterPassive = Math.max(0, bpExpNeeded - truePassiveExp);
   
   let plannedRuns = [];
-  let availableBonuses = Math.max(0, weeksLeft - 1) * 3 + (3 - (scheduleState.mdBonusesClaimed || 0));
+  let availableBonuses = Math.max(0, weeksLeft - 1) * 3 + (3 - (scheduleState?.mdBonusesClaimed || 0));
   
   // If user has Hard Mode enabled and unlocked, they consume 3 bonuses at once for 225 EXP.
   // If Normal Mode, they consume 1 bonus for 45 EXP.
@@ -90,15 +104,19 @@ export function calculateLimbusGrind(
     expToGrind: Math.max(0, bpExpNeeded - truePassiveExp),
     rawMdsNeeded: plannedRuns.length,
     plannedRuns: plannedRuns,
-    daysLeft
+    daysLeft,
+    safeMath,
+    R_crate
   };
 }
 
 export function generateRoadmap(
   daysLeft,
-  plannedRuns,
-  scheduleState,
-  bpState
+  plannedRuns = [],
+  scheduleState = {},
+  bpState = {},
+  wishlist = [],
+  inventory = {}
 ) {
   const roadmap = [];
   let totalRunsLeft = plannedRuns.length;
@@ -111,12 +129,68 @@ export function generateRoadmap(
   
   // Track our current date cursor to simulate weekly resets
   let cursorMs = Date.now();
-  let currentBonuses = Math.max(0, 3 - (scheduleState.mdBonusesClaimed || 0));
-  let currentDailiesDone = scheduleState.dailiesProgress >= 5;
-  let currentWeekliesDone = scheduleState.weekliesDone;
+  const todayDateStr = new Date().toISOString().split('T')[0];
+
+  let currentBonuses = Math.max(0, 3 - (scheduleState?.mdBonusesClaimed || 0));
+  let currentDailiesDone = (scheduleState?.dailiesProgress || 0) >= 5;
+  let currentWeekliesDone = scheduleState?.weekliesDone || false;
   const effectiveHasMdHard = (bpState?.canto === undefined || bpState?.canto >= 8) && (bpState?.preferHardMd !== false) && (bpState?.hasMdHard !== false);
   
+  const safeMath = bpState?.safeMath === true;
+  const R_crate = safeMath ? 1.5 : 2.0;
+  const cratesPerLevel = bpState?.isPremium ? 3 : 1;
+
+  // 1. Prepare Target Items & Progress for Egoshard Milestones
+  const shardsInventory = inventory?.shards || {};
+  let targetProgress = (wishlist || []).map(item => {
+    const sinnerId = normalizeSinnerId(item.sinnerId || item.sinner);
+    const cost = item.rarity === '00' ? 150 : 400;
+    const owned = shardsInventory[sinnerId] || 0;
+    const remaining = Math.max(0, cost - owned);
+    return {
+      name: item.name || sinnerId,
+      sinnerId,
+      sinnerName: item.sinner || sinnerId,
+      rarity: item.rarity || '000',
+      cost,
+      startingShards: owned,
+      currentShards: owned,
+      remainingDeficit: remaining,
+      completed: owned >= cost,
+      completedDay: owned >= cost ? 0 : null,
+      completedDate: owned >= cost ? 'Already Craftable' : null
+    };
+  });
+
+  // Sort targets: items with lowest remaining deficit (closest to completion) come first!
+  targetProgress.sort((a, b) => a.remainingDeficit - b.remainingDeficit);
+
+  let activeTargetIdx = 0;
+  // Advance past already completed targets
+  while (activeTargetIdx < targetProgress.length && targetProgress[activeTargetIdx].completed) {
+    activeTargetIdx++;
+  }
+
+  // Pre-allocate existing nominable crates in inventory
+  let initialNominableCrates = inventory?.nominableCrates || 0;
+  while (activeTargetIdx < targetProgress.length && initialNominableCrates > 0) {
+    const cur = targetProgress[activeTargetIdx];
+    const needed = cur.cost - cur.currentShards;
+    const cratesToUse = Math.min(initialNominableCrates, Math.ceil(needed / R_crate));
+    const shardYield = cratesToUse * R_crate;
+    cur.currentShards = Math.min(cur.cost, cur.currentShards + shardYield);
+    initialNominableCrates -= cratesToUse;
+    if (cur.currentShards >= cur.cost) {
+      cur.completed = true;
+      cur.completedDay = 1;
+      cur.completedDate = 'Day 1 (From Inventory Crates)';
+      activeTargetIdx++;
+    }
+  }
+
   let totalModulesNeeded = 0;
+  let partialExpAccumulator = bpState?.currentExp || 0;
+  let totalCratesGenerated = 0;
 
   for (let i = 0; i < availableDays; i++) {
     // 1. Calculate how many runs to do today
@@ -158,21 +232,72 @@ export function generateRoadmap(
     if (!currentDailiesDone) passiveGained += 10;
     if (!currentWeekliesDone) passiveGained += 20;
 
-    // 4. Record Day
+    // 4. Calculate Crates & Shard Allocation for Today
     let totalGainedToday = gainedExpFromRuns + passiveGained;
     cumulativeExp += totalGainedToday;
-    const weekdayStr = new Date(cursorMs).toLocaleDateString('en-US', { weekday: 'short' });
+
+    const newExpTotal = partialExpAccumulator + totalGainedToday;
+    const newLevels = Math.floor(newExpTotal / 10);
+    partialExpAccumulator = newExpTotal % 10;
+
+    const cratesEarnedToday = newLevels * cratesPerLevel;
+    totalCratesGenerated += cratesEarnedToday;
+
+    // Allocate earned crates as shards to active target
+    let shardsToAlloc = cratesEarnedToday * R_crate;
+    const milestonesReachedToday = [];
+    const currentDateObj = new Date(cursorMs);
+    const dateStr = currentDateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const weekdayStr = currentDateObj.toLocaleDateString('en-US', { weekday: 'short' });
+    const cursorDateIso = currentDateObj.toISOString().split('T')[0];
+    const isToday = cursorDateIso === todayDateStr;
+
+    while (activeTargetIdx < targetProgress.length && shardsToAlloc > 0) {
+      const cur = targetProgress[activeTargetIdx];
+      const needed = cur.cost - cur.currentShards;
+      const alloc = Math.min(shardsToAlloc, needed);
+      cur.currentShards += alloc;
+      shardsToAlloc -= alloc;
+      if (cur.currentShards >= cur.cost && !cur.completed) {
+        cur.completed = true;
+        cur.completedDay = i + 1;
+        cur.completedDate = `${weekdayStr}, ${dateStr}`;
+        milestonesReachedToday.push({
+          name: cur.name,
+          sinnerId: cur.sinnerId,
+          sinnerName: cur.sinnerName,
+          cost: cur.cost,
+          day: i + 1,
+          date: `${weekdayStr}, ${dateStr}`
+        });
+        activeTargetIdx++;
+      }
+    }
+
+    const currentActiveTarget = activeTargetIdx < targetProgress.length ? targetProgress[activeTargetIdx] : null;
 
     roadmap.push({
       day: i + 1,
+      date: dateStr,
       weekday: weekdayStr,
+      isToday,
       runs: runsCountToday,
       runsList: runsList,
       gainedExpFromRuns: gainedExpFromRuns,
       passiveGained: passiveGained,
       gained: totalGainedToday,
       totalExp: cumulativeExp,
-      modulesUsed: modulesUsedToday
+      modulesUsed: modulesUsedToday,
+      cratesEarnedToday,
+      totalCratesGenerated,
+      milestonesReachedToday,
+      activeFarmingTarget: currentActiveTarget ? {
+        name: currentActiveTarget.name,
+        sinnerId: currentActiveTarget.sinnerId,
+        sinnerName: currentActiveTarget.sinnerName,
+        currentShards: Math.floor(currentActiveTarget.currentShards),
+        targetCost: currentActiveTarget.cost
+      } : null
     });
 
     // 5. Advance Cursor to next day and trigger resets if necessary
@@ -189,5 +314,10 @@ export function generateRoadmap(
     cursorMs = resets.nextDaily;
   }
   
-  return { roadmap, totalModulesNeeded };
+  return { 
+    roadmap, 
+    totalModulesNeeded, 
+    targetMilestones: targetProgress 
+  };
 }
+

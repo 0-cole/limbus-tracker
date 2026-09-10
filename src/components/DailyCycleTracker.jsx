@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Target, Flame, CalendarDays, CheckCircle, Swords } from 'lucide-react';
+import { Target, Flame, CalendarDays, CheckCircle, Swords, PackagePlus, Sparkles } from 'lucide-react';
 import { useStore } from '../stores/useStore';
-import { calculateLimbusGrind, generateRoadmap } from '../utils/limbusCalculator.js';
+import { calculateLimbusGrind, generateRoadmap, normalizeSinnerId } from '../utils/limbusCalculator.js';
 import { getNextResets } from '../utils/timeUtils.js';
 import { getSeasonEndDate } from '../utils/seasonUtils.js';
+import sinnersData from '../data/sinners.json';
 
 export default function DailyCycleTracker() {
   const { 
@@ -13,6 +14,9 @@ export default function DailyCycleTracker() {
     injectBpExp, 
     logMdRun, 
     undoMdRun, 
+    addShards,
+    undoAddShards,
+    addCrates,
     inventory, 
     wantList, 
     identitiesData, 
@@ -34,8 +38,8 @@ export default function DailyCycleTracker() {
   ), [calcItems, inventory, bpState, effectiveHasMdHard, scheduleState, seasonEndDate]);
 
   const roadmap = React.useMemo(() => generateRoadmap(
-    calcResult.daysLeft, calcResult.plannedRuns, scheduleState, { ...bpState, hasMdHard: effectiveHasMdHard }
-  ), [calcResult.daysLeft, calcResult.plannedRuns, scheduleState, bpState, effectiveHasMdHard]);
+    calcResult.daysLeft, calcResult.plannedRuns, scheduleState, { ...bpState, hasMdHard: effectiveHasMdHard }, targetItems, inventory
+  ), [calcResult.daysLeft, calcResult.plannedRuns, scheduleState, bpState, effectiveHasMdHard, targetItems, inventory]);
   
   const todayRoadmap = roadmap[0] || { runs: 0, runsList: [] };
   const mdRequiredToday = todayRoadmap.runs > 0;
@@ -43,6 +47,10 @@ export default function DailyCycleTracker() {
   const [timeUntilDaily, setTimeUntilDaily] = useState('');
   const [timeUntilMd, setTimeUntilMd] = useState('');
   const [showManualLogger, setShowManualLogger] = useState(false);
+  const [showShardLogger, setShowShardLogger] = useState(false);
+
+  const [selectedSinner, setSelectedSinner] = useState('sinclair');
+  const [shardAmount, setShardAmount] = useState(20);
 
   React.useEffect(() => {
     const updateTimers = () => {
@@ -264,6 +272,126 @@ export default function DailyCycleTracker() {
                       onClick={() => undoMdRun(run.id)}
                       className="text-gray-500 hover:text-red-400 ml-1 transition-colors"
                       title="Undo this run"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* LOG EGOSHARDS & CRATES TODAY */}
+        <div className="bg-[#111] border border-[#333] rounded-xl p-4">
+          <div className="flex justify-between items-center mb-3">
+            <div>
+              <h4 className="font-bold text-sm text-white flex items-center gap-2">
+                <PackagePlus size={16} className="text-[#c9a84c]" /> Log Shards & Crates Gained Today
+              </h4>
+              <p className="text-[11px] text-gray-400">
+                Record extra Egoshards or Crates earned from extractions, events, or luxcavations.
+              </p>
+            </div>
+            <button 
+              onClick={() => setShowShardLogger(!showShardLogger)} 
+              className="text-xs text-[#c9a84c] hover:underline font-bold"
+            >
+              {showShardLogger ? 'Hide Options' : '+ Log Shards'}
+            </button>
+          </div>
+
+          {showShardLogger && (
+            <div className="pt-2 border-t border-[#222] space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Target Sinner / Resource</label>
+                  <select 
+                    value={selectedSinner}
+                    onChange={(e) => setSelectedSinner(e.target.value)}
+                    className="w-full bg-black border border-[#444] rounded p-2 text-xs text-white focus:border-[#c9a84c] outline-none"
+                  >
+                    <optgroup label="Sinner Egoshards">
+                      {sinnersData.map(s => (
+                        <option key={s.id} value={s.id}>{s.name} ({inventory.shards?.[s.id] || 0} owned)</option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="Egocrates">
+                      <option value="crate_nominable">Nominable Egocrates ({inventory.nominableCrates || 0} owned)</option>
+                      <option value="crate_random">Random Egocrates ({inventory.randomCrates || 0} owned)</option>
+                    </optgroup>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Amount Gained</label>
+                  <div className="flex gap-2">
+                    <input 
+                      type="number"
+                      min="1"
+                      max="999"
+                      value={shardAmount}
+                      onChange={(e) => setShardAmount(Math.max(1, parseInt(e.target.value) || 1))}
+                      className="w-20 bg-black border border-[#444] rounded p-1.5 text-sm text-white font-mono text-center focus:border-[#c9a84c] outline-none"
+                    />
+                    <div className="flex gap-1">
+                      {[10, 20, 50].map(val => (
+                        <button 
+                          key={val}
+                          type="button"
+                          onClick={() => setShardAmount(val)}
+                          className="px-2 py-1 text-xs bg-black/50 border border-[#333] hover:border-gray-500 rounded text-gray-300 font-mono"
+                        >
+                          +{val}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end pt-1">
+                <button 
+                  onClick={() => {
+                    if (selectedSinner === 'crate_nominable') {
+                      addCrates('nominable', shardAmount);
+                    } else if (selectedSinner === 'crate_random') {
+                      addCrates('random', shardAmount);
+                    } else {
+                      const sinnerObj = sinnersData.find(s => s.id === selectedSinner);
+                      addShards(selectedSinner, shardAmount, `+${shardAmount} ${sinnerObj?.name || selectedSinner} Shards`);
+                    }
+                  }}
+                  className="px-4 py-1.5 bg-[#c9a84c] text-black font-bold text-xs rounded hover:bg-[#d4b96a] transition-colors flex items-center gap-1.5"
+                >
+                  <PackagePlus size={14} /> Add to Inventory
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* List of shards/crates logged today */}
+          {scheduleState.todayLoggedShards && scheduleState.todayLoggedShards.length > 0 && (
+            <div className="mt-3 pt-3 border-t border-[#222]">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Shards & Crates Logged Today</div>
+              <div className="flex flex-wrap gap-2">
+                {scheduleState.todayLoggedShards.map(item => (
+                  <div key={item.id} className="bg-black/60 border border-[#444] rounded px-2.5 py-1 flex items-center gap-2 text-xs">
+                    <span className="text-white font-medium">{item.label}</span>
+                    <button 
+                      onClick={() => {
+                        if (item.sinnerId) undoAddShards(item.id);
+                        else if (item.crateType) {
+                          // Undo crate
+                          const prop = item.crateType === 'nominable' ? 'nominableCrates' : 'randomCrates';
+                          const cur = inventory[prop] || 0;
+                          useStore.getState().updateInventory({ [prop]: Math.max(0, cur - item.amount) });
+                          const newLogged = (scheduleState.todayLoggedShards || []).filter(r => r.id !== item.id);
+                          updateScheduleState({ todayLoggedShards: newLogged });
+                        }
+                      }}
+                      className="text-gray-500 hover:text-red-400 ml-1 transition-colors"
+                      title="Undo this shard entry"
                     >
                       ✕
                     </button>
