@@ -56,7 +56,13 @@ export default function DailyCycleTracker() {
     const updateTimers = () => {
       const now = Date.now();
       const { nextDaily, nextMdWeekly } = getNextResets(now);
+      const nextDailyDate = new Date(nextDaily);
+      const nextMdDate = new Date(nextMdWeekly);
       
+      const localTimeDaily = nextDailyDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      const localDayMd = nextMdDate.toLocaleDateString('en-US', { weekday: 'short' });
+      const localTimeMd = nextMdDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
       const formatDiff = (target) => {
         const diffMs = target - now;
         if (diffMs <= 0) return 'Resetting...';
@@ -66,8 +72,8 @@ export default function DailyCycleTracker() {
         return d > 0 ? `${d}d ${h}h ${m}m` : `${h}h ${m}m`;
       };
       
-      setTimeUntilDaily(formatDiff(nextDaily));
-      setTimeUntilMd(formatDiff(nextMdWeekly));
+      setTimeUntilDaily(`${formatDiff(nextDaily)} (${localTimeDaily})`);
+      setTimeUntilMd(`${formatDiff(nextMdWeekly)} (${localDayMd} ${localTimeMd})`);
     };
     updateTimers();
     const interval = setInterval(updateTimers, 60000);

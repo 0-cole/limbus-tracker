@@ -6,7 +6,14 @@ import DailyCycleTracker from '../components/DailyCycleTracker.jsx';
 import sinnersData from '../data/sinners.json';
 import { calculateLimbusGrind, generateRoadmap } from '../utils/limbusCalculator.js';
 import { getEntityImageUrl } from '../utils/imageUtils.js';
-import { DEFAULT_SEASON_END_DATE, getSeasonEndDate } from '../utils/seasonUtils.js';
+import { 
+  DEFAULT_SEASON_END_DATE, 
+  getSeasonEndDate, 
+  getUserTimeZoneShort, 
+  toLocalInputString, 
+  formatLocalDateTime, 
+  formatKstDateTime 
+} from '../utils/seasonUtils.js';
 
 const CANTOS = [
   { id: 1, name: 'Canto I: The Outcast' },
@@ -34,8 +41,9 @@ export default function SchedulePage() {
     updateBpState({ canto: val, hasMdHard: val >= 8 && preferHardMd });
   };
 
-  // Players can update this once a new season is announced; it is always KST.
+  // Players can update this once a new season is announced; it is converted to their local timezone.
   const seasonEndDate = getSeasonEndDate(bpState);
+  const userTzShort = getUserTimeZoneShort();
 
   // 1. Figure out targeted goals
   const targetItems = [...(wantList || [])].map(name => {
@@ -139,18 +147,34 @@ export default function SchedulePage() {
               <span className="text-white font-mono text-lg font-bold bg-black/60 border border-[#c9a84c]/30 px-3 py-0.5 rounded">{calcResult.daysLeft}</span>
             </label>
 
-            <label className="flex justify-between items-center bg-black/50 p-3 rounded gap-3">
-              <div>
-                <span className="text-gray-300 font-bold text-sm block">Season End (KST)</span>
-                <span className="text-[10px] text-gray-500">Update this when Project Moon announces a new season.</span>
+            <div className="bg-black/50 p-3 rounded space-y-2">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                <div>
+                  <span className="text-gray-300 font-bold text-sm flex items-center gap-1.5">
+                    Season End ({userTzShort})
+                  </span>
+                  <span className="text-[10px] text-gray-500 block mt-0.5">
+                    Automatically matched to your local timezone ({userTzShort}).
+                  </span>
+                </div>
+                <input
+                  type="datetime-local"
+                  value={toLocalInputString(seasonEndDate)}
+                  onChange={e => {
+                    if (!e.target.value) return;
+                    const localDt = new Date(e.target.value);
+                    if (!isNaN(localDt.getTime())) {
+                      updateBpState({ seasonEndDate: localDt.toISOString() });
+                    }
+                  }}
+                  className="bg-[#1a1a1a] border border-[#444] text-white text-sm rounded p-1.5 focus:border-[#c9a84c] outline-none"
+                />
               </div>
-              <input
-                type="datetime-local"
-                value={bpState.seasonEndDate || DEFAULT_SEASON_END_DATE}
-                onChange={e => updateBpState({ seasonEndDate: e.target.value || DEFAULT_SEASON_END_DATE })}
-                className="bg-[#1a1a1a] border border-[#444] text-white text-sm rounded p-1.5 focus:border-[#c9a84c] outline-none"
-              />
-            </label>
+              <div className="pt-2 border-t border-[#333]/60 flex flex-wrap items-center justify-between text-[10px] text-gray-400 gap-2">
+                <span>🌐 Local: <strong className="text-gray-200">{formatLocalDateTime(seasonEndDate)}</strong></span>
+                <span>🇰🇷 KST Maintenance: <strong className="text-amber-400/90">{formatKstDateTime(seasonEndDate)}</strong></span>
+              </div>
+            </div>
 
             <div className="flex gap-4">
               <label className="flex-1 flex justify-between items-center bg-black/50 p-3 rounded">
