@@ -119,11 +119,14 @@ export function generateRoadmap(
   inventory = {}
 ) {
   const roadmap = [];
+  const paceMode = bpState?.paceMode || 'relaxed';
+  const customDailyRuns = Math.max(1, bpState?.customDailyRuns || 3);
   let totalRunsLeft = plannedRuns.length;
   
   const availableDays = daysLeft > 0 ? daysLeft : 1;
   const baseMdsPerDay = Math.floor(totalRunsLeft / availableDays);
   let remainderMds = totalRunsLeft % availableDays;
+  let remainingRunsPool = totalRunsLeft;
   
   let cumulativeExp = 0;
   
@@ -194,10 +197,16 @@ export function generateRoadmap(
 
   for (let i = 0; i < availableDays; i++) {
     // 1. Calculate how many runs to do today
-    let runsCountToday = baseMdsPerDay;
-    if (remainderMds > 0) {
-       runsCountToday++;
-       remainderMds--;
+    let runsCountToday = 0;
+    if (paceMode === 'rush') {
+      runsCountToday = Math.min(customDailyRuns, remainingRunsPool);
+      remainingRunsPool -= runsCountToday;
+    } else {
+      runsCountToday = baseMdsPerDay;
+      if (remainderMds > 0) {
+         runsCountToday++;
+         remainderMds--;
+      }
     }
     
     // 2. Perform runs and consume bonuses

@@ -37,11 +37,11 @@ export default function DailyCycleTracker() {
     calcItems, inventory, { ...bpState, hasMdHard: effectiveHasMdHard }, scheduleState, seasonEndDate
   ), [calcItems, inventory, bpState, effectiveHasMdHard, scheduleState, seasonEndDate]);
 
-  const roadmap = React.useMemo(() => generateRoadmap(
+  const roadmapData = React.useMemo(() => generateRoadmap(
     calcResult.daysLeft, calcResult.plannedRuns, scheduleState, { ...bpState, hasMdHard: effectiveHasMdHard }, targetItems, inventory
   ), [calcResult.daysLeft, calcResult.plannedRuns, scheduleState, bpState, effectiveHasMdHard, targetItems, inventory]);
   
-  const todayRoadmap = roadmap[0] || { runs: 0, runsList: [] };
+  const todayRoadmap = (roadmapData?.roadmap ? roadmapData.roadmap[0] : roadmapData?.[0]) || { runs: 0, runsList: [] };
   const mdRequiredToday = todayRoadmap.runs > 0;
 
   const [timeUntilDaily, setTimeUntilDaily] = useState('');

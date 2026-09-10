@@ -58,12 +58,34 @@ export default function SchedulePage() {
     seasonEndDate
   ), [calcItems, inventory, bpState, canto, preferHardMd, hasMdHard, safeMath, scheduleState, seasonEndDate]);
 
-  const pacePerDay = calcResult.daysLeft > 0 ? (calcResult.rawMdsNeeded / calcResult.daysLeft).toFixed(1) : 0;
+  const paceMode = bpState.paceMode || 'relaxed';
+  const customDailyRuns = bpState.customDailyRuns || 3;
+
+  const rawPacePerDay = calcResult.daysLeft > 0 ? (calcResult.rawMdsNeeded / calcResult.daysLeft) : 0;
+  const effectivePace = paceMode === 'rush' ? customDailyRuns : rawPacePerDay;
+  const paceDisplay = effectivePace.toFixed(effectivePace % 1 === 0 ? 0 : 1);
   
   let burnoutColor = 'text-[#22c55e]';
+  let burnoutBg = 'border-[#22c55e]/30 bg-emerald-950/30';
   let burnoutStatus = 'Relaxed Pace';
-  if (pacePerDay > 1.5) { burnoutColor = 'text-[#eab308]'; burnoutStatus = 'Moderate Grind'; }
-  if (pacePerDay > 3.0) { burnoutColor = 'text-[#ef4444]'; burnoutStatus = 'High Burnout Risk'; }
+  let burnoutDescription = 'Comfortable daily pace with plenty of breathing room.';
+
+  if (effectivePace > 1.5 && effectivePace <= 3.0) {
+    burnoutColor = 'text-[#eab308]';
+    burnoutBg = 'border-[#eab308]/30 bg-amber-950/30';
+    burnoutStatus = 'Moderate Grind';
+    burnoutDescription = 'Steady, consistent grinding pace. Manageable with daily play.';
+  } else if (effectivePace > 3.0 && effectivePace <= 4.5) {
+    burnoutColor = 'text-[#ef4444]';
+    burnoutBg = 'border-[#ef4444]/40 bg-red-950/40';
+    burnoutStatus = 'High Burnout Risk';
+    burnoutDescription = 'Heavy grind load! May cause fatigue and require significant daily time.';
+  } else if (effectivePace > 4.5) {
+    burnoutColor = 'text-red-500';
+    burnoutBg = 'border-red-600 bg-red-950/60 shadow-[0_0_20px_rgba(239,68,68,0.4)]';
+    burnoutStatus = 'Extreme Burnout Chance';
+    burnoutDescription = 'Grinding 5+ Mirror Dungeons per day will lead to extreme fatigue, distorted sanity, and burnout.';
+  }
 
   // Generate Roadmap with Egoshard Milestones
   const { roadmap, totalModulesNeeded, targetMilestones } = useMemo(() => generateRoadmap(
@@ -235,19 +257,108 @@ export default function SchedulePage() {
         </div>
       </div>
 
-      {/* Burnout Meter */}
-      <div className={`border-2 rounded-xl p-8 flex items-center justify-between mb-8 shadow-lg bg-black/40 backdrop-blur ${pacePerDay > 3 ? 'border-red-900/50' : 'border-[#333]'}`}>
-        <div>
-          <h2 className="text-2xl font-black text-white mb-2 flex items-center gap-2">
-            <Flame className={burnoutColor} /> Daily Pace: {pacePerDay} MDs / Day
-          </h2>
-          <p className="text-gray-400">
-            You need to run <strong className="text-white">{calcResult.rawMdsNeeded} Mirror Dungeons</strong> before the season ends to reach your Wishlist goals.
-          </p>
+      {/* Burnout Meter & Pacing Selector */}
+      <div className={`border-2 rounded-xl p-6 md:p-8 mb-8 shadow-lg bg-black/40 backdrop-blur transition-all ${
+        effectivePace > 4.5 ? 'border-red-600 bg-red-950/30 shadow-[0_0_30px_rgba(220,38,38,0.3)]' :
+        effectivePace > 3.0 ? 'border-red-900/60 bg-red-950/20' :
+        effectivePace > 1.5 ? 'border-amber-900/50 bg-amber-950/10' : 'border-[#333]'
+      }`}>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#333]">
+          <div>
+            <div className="flex flex-wrap items-center gap-3 mb-2">
+              <h2 className="text-2xl font-black text-white flex items-center gap-2">
+                <Flame className={burnoutColor} size={28} /> Daily Pace: {paceDisplay} MDs / Day
+              </h2>
+              <span className={`text-xs uppercase font-black px-3 py-1 rounded-full border ${burnoutBg} ${burnoutColor}`}>
+                {burnoutStatus}
+              </span>
+            </div>
+            <p className="text-gray-400 text-sm">
+              {paceMode === 'relaxed' ? (
+                <>You need to run <strong className="text-white">{calcResult.rawMdsNeeded} Mirror Dungeons</strong> spread evenly across the remaining {calcResult.daysLeft} days of the season.</>
+              ) : (
+                <>Rushing at <strong className="text-white">{customDailyRuns} MDs/day</strong> will complete all <strong className="text-white">{calcResult.rawMdsNeeded} required runs</strong> in approximately <strong className="text-amber-400">{Math.ceil(calcResult.rawMdsNeeded / (customDailyRuns || 1))} days</strong>.</>
+              )}
+            </p>
+            <p className={`text-xs mt-1.5 font-medium ${burnoutColor}`}>{burnoutDescription}</p>
+          </div>
+
+          {/* Mode Selector Tabs */}
+          <div className="flex bg-[#111] p-1.5 rounded-lg border border-[#333] self-start md:self-auto shrink-0">
+            <button
+              onClick={() => updateBpState({ paceMode: 'relaxed' })}
+              className={`px-4 py-2 rounded-md text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+                paceMode === 'relaxed' 
+                  ? 'bg-[#c9a84c] text-black shadow-[0_0_15px_rgba(201,168,76,0.3)] font-black' 
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              ☕ Relaxed Pace (Default)
+            </button>
+            <button
+              onClick={() => updateBpState({ paceMode: 'rush' })}
+              className={`px-4 py-2 rounded-md text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+                paceMode === 'rush' 
+                  ? 'bg-red-600 text-white shadow-[0_0_15px_rgba(220,38,38,0.4)] font-black' 
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              ⚡ Rush Pace
+            </button>
+          </div>
         </div>
-        <div className={`text-xl font-bold uppercase tracking-wider px-4 py-2 rounded border ${burnoutColor} ${pacePerDay > 3 ? 'border-red-900 bg-red-950/30' : 'border-[#333] bg-black/50'}`}>
-          {burnoutStatus}
-        </div>
+
+        {/* Rush Mode Controls (Only visible when Rush Pace is selected) */}
+        {paceMode === 'rush' && (
+          <div className="pt-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <span className="text-xs font-bold text-gray-300 uppercase tracking-wider block mb-1">
+                Customize Rush Intensity
+              </span>
+              <p className="text-xs text-gray-500">
+                Choose how many Mirror Dungeons you want to speed-run per day.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3">
+              {/* Stepper */}
+              <div className="flex items-center bg-[#111] border border-[#333] rounded-lg overflow-hidden">
+                <button
+                  onClick={() => updateBpState({ customDailyRuns: Math.max(1, customDailyRuns - 1) })}
+                  className="px-3 py-2 text-gray-400 hover:text-white hover:bg-[#222] font-bold text-base transition-colors"
+                >
+                  -
+                </button>
+                <div className="px-4 py-2 text-white font-black text-sm min-w-[70px] text-center bg-black/40">
+                  {customDailyRuns} / day
+                </div>
+                <button
+                  onClick={() => updateBpState({ customDailyRuns: Math.min(20, customDailyRuns + 1) })}
+                  className="px-3 py-2 text-gray-400 hover:text-white hover:bg-[#222] font-bold text-base transition-colors"
+                >
+                  +
+                </button>
+              </div>
+
+              {/* Quick Presets */}
+              <div className="flex items-center gap-1.5">
+                {[2, 3, 4, 5, 8].map(num => (
+                  <button
+                    key={num}
+                    onClick={() => updateBpState({ customDailyRuns: num })}
+                    className={`px-3 py-1.5 rounded text-xs font-bold transition-all ${
+                      customDailyRuns === num
+                        ? (num >= 5 ? 'bg-red-600 text-white font-black shadow-[0_0_10px_rgba(220,38,38,0.5)]' : 'bg-[#c9a84c] text-black font-black')
+                        : 'bg-[#1a1a1a] text-gray-400 hover:text-white hover:bg-[#2a2a2a] border border-[#333]'
+                    }`}
+                  >
+                    {num >= 5 ? `${num} 🔥` : num}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Egoshard Allocation & Target Milestones Guide */}
