@@ -21,15 +21,46 @@ function formatNotes(body) {
     .filter(line => line.length > 0);
 }
 
-// Overworked LCB Records Keeper (OC) memos
-const TRANSMISSION_HEADERS = [
-  'Incident report filed. Manager Dante has wound the clock 14 times this shift. My hand cramps from stamping paperwork.',
-  'Log entry certified. The Department of Records requests that Sinners stop spilling blood directly on requisition forms.',
-  'Amended and filed. Please remind Heathcliff that replacing broken bus upholstery comes out of team funds, not mine.',
-  'Transmitted via pneumatic tube to Mephistopheles. All discrepancies cross-referenced with field black-box recordings.',
-  'Approved by Records & Archival. I have not slept since Canto IV. Please stop requesting extra Enkephalin rations.',
-  'Filed under: Routine Chaos. At this point, I just stamp whatever comes back from the Mirror Dungeons.',
+// Overworked, powerless, stressed Records Keeper Kenneth (OC) memos
+// Keyed specifically to notable updates, bugs fixed, or features added
+const KENNETH_SPECIFIC_MEMOS = {
+  'v1.0.37': "I'm begging you, Dante... I set up an error alarm that flashes red whenever the cloud packet drops. Please don't throw your clock at the screen if it fails. I can't afford to requisition another monitor.",
+  'v1.0.36': "The terminals kept yelling that they were 'already in sync' when you pressed the button, and then people panicked. I rewrote the memo. It now politely tells you everything is fine. Please breathe.",
+  'v1.0.35': "Fifteen seconds. Every fifteen seconds, the pneumatic tube shoots another batch of mirror logs across the room. My desk is vibrating. I haven't blinked in two hours.",
+  'v1.0.34': "A central account database... Corporate finally authorized it. If anyone forgets their password, please use the reset link and do NOT come knock on the Archives door at 3 AM.",
+  'v1.0.33': "Dante kept spilling overfilled Enkephalin on the roadmap carpet, so I added a prompt to log it before it ruins another rug. Also, I formatted the bonus run counters so Faust stops glaring at me.",
+  'v1.0.32': "Someone searched 'Vergilius' in the Sinner manifest. Vergilius actually walked into my cubicle, stared at my stamp for ten seconds in dead silence, and walked out. I almost fainted.",
+  'v1.0.31': "The Quick Log checkbox was checking itself before you even finished the dungeon... I spent all night fixing the logic gates. I spilled bitter instant coffee on my tie.",
+  'v1.0.30': "Added the ASAP Mode so you can grind Mirror Dungeons instead of waiting for passive weeklies. Heathcliff celebrated by punching a locker. My headache has doubled.",
+  'v1.0.29': "Personal preset data imported. I had to manually transcribe 400 identity cards. My wrist has made a clicking sound since Tuesday.",
+};
+
+const DEFAULT_KENNETH_MEMOS = [
+  "Incident report filed. Manager Dante has wound the clock 14 times this shift. My hand cramps from stamping paperwork.",
+  "Log entry certified. The Department of Records requests that Sinners stop spilling blood directly on requisition forms.",
+  "Amended and filed. Please remind Heathcliff that replacing broken bus upholstery comes out of team funds, not mine.",
+  "Transmitted via pneumatic tube to Mephistopheles. All discrepancies cross-referenced with field black-box recordings.",
+  "Approved by Records & Archival. I have not slept since Canto IV. Please stop requesting extra Enkephalin rations.",
+  "Filed under: Routine Chaos. At this point, I just stamp whatever comes back from the Mirror Dungeons.",
 ];
+
+function getKennethMemo(tag, body, idx) {
+  const cleanTag = (tag || '').trim();
+  if (KENNETH_SPECIFIC_MEMOS[cleanTag]) {
+    return KENNETH_SPECIFIC_MEMOS[cleanTag];
+  }
+  const lowerBody = (body || '').toLowerCase();
+  if (lowerBody.includes('sync') || lowerBody.includes('cloud')) {
+    return "Another cloud transmission synchronized. If the connection flickers, blame the lightning storms outside Mephistopheles, not me.";
+  }
+  if (lowerBody.includes('mirror dungeon') || lowerBody.includes('hard mode')) {
+    return "More Mirror Dungeon logs... Do the Sinners ever stop running these? There are stacks of parchment up to my ceiling.";
+  }
+  if (lowerBody.includes('crate') || lowerBody.includes('shard')) {
+    return "Shards and crates tallied. If a crate count is off by one, Vergilius looks at me with that crimson glare. Everything is double-checked.";
+  }
+  return DEFAULT_KENNETH_MEMOS[idx % DEFAULT_KENNETH_MEMOS.length];
+}
 
 export default function ChangelogPage() {
   const [releases, setReleases] = useState([]);
@@ -119,7 +150,7 @@ export default function ChangelogPage() {
             const date = release.published_at ? new Date(release.published_at).toLocaleDateString('en-US', {
               year: 'numeric', month: 'long', day: 'numeric'
             }) : 'Unknown date';
-            const transmissionNote = TRANSMISSION_HEADERS[idx % TRANSMISSION_HEADERS.length];
+            const transmissionNote = getKennethMemo(tag, release.body, idx);
 
             return (
               <motion.div
@@ -174,11 +205,20 @@ export default function ChangelogPage() {
                   )}
                 </div>
 
-                {/* Records Keeper note */}
-                <div className="px-5 pt-3 pb-0">
-                  <p className="text-[10px] text-gray-600 italic font-mono border-l border-[#c9a84c]/20 pl-2">
-                    Archivist Kenneth: "{transmissionNote}"
-                  </p>
+                {/* Kenneth's Post-It / Memo Box */}
+                <div className="mx-5 mt-4 p-3 rounded-lg bg-[#14120c] border border-[#c9a84c]/30 shadow-inner flex items-start gap-2.5">
+                  <div className="w-6 h-6 rounded-md bg-[#c9a84c]/15 text-[#c9a84c] flex items-center justify-center text-xs font-mono font-bold flex-shrink-0 mt-0.5">
+                    K
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-[#c9a84c] font-mono flex items-center gap-1.5">
+                      <span>Archivist Kenneth's Memo</span>
+                      <span className="text-[9px] text-gray-500 font-normal">(Under duress)</span>
+                    </div>
+                    <p className="text-xs text-amber-100/90 italic font-mono mt-0.5 leading-relaxed">
+                      "{transmissionNote}"
+                    </p>
+                  </div>
                 </div>
 
                 {/* Release body */}

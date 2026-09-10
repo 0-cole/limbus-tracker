@@ -6,8 +6,28 @@ let autoInterval = null;
 let isSyncing = false;
 let lastLocalEdit = 0;
 let lastCloudSync = 0;
+let syncListeners = new Set();
+let currentSyncStatus = { status: 'idle', message: '', error: null, lastSyncedAt: null };
+
+function emitStatus(status, message = '', error = null) {
+  currentSyncStatus = {
+    status, // 'idle' | 'syncing' | 'synced' | 'error'
+    message,
+    error,
+    lastSyncedAt: status === 'synced' ? Date.now() : currentSyncStatus.lastSyncedAt
+  };
+  syncListeners.forEach(listener => listener(currentSyncStatus));
+}
 
 export const syncEngine = {
+  getSyncStatus: () => currentSyncStatus,
+
+  onSyncStatusChange: (callback) => {
+    syncListeners.add(callback);
+    callback(currentSyncStatus);
+    return () => syncListeners.delete(callback);
+  },
+
   getUser: async () => {
     try {
       const { data: { user }, error } = await supabase.auth.getUser();
@@ -37,6 +57,7 @@ export const syncEngine = {
 
   signOut: async () => {
     const { error } = await supabase.auth.signOut();
+    emitStatus('idle', 'Logged out');
     if (error) throw error;
   },
 
@@ -67,6 +88,9 @@ export const syncEngine = {
       const store = useStore.getState();
       if (!store.isLoaded) return;
 
+      isSyncing = true;
+      emitStatus('syncing', 'Syncing data to cloud...');
+
       const now = Date.now();
       const payload = {
         onboardingCompleted: store.onboardingCompleted,
@@ -84,8 +108,6 @@ export const syncEngine = {
         lastUpdated: now
       };
 
-      isSyncing = true;
-      // Upsert directly by user ID so it cleanly updates the single record
       const { error } = await supabase
         .from('user_saves')
         .upsert({
@@ -96,21 +118,26 @@ export const syncEngine = {
 
       if (error) {
         console.error('Error syncing save to cloud:', error);
+        emitStatus('error', 'Auto-Sync Failed.', error.message);
       } else {
         lastCloudSync = now;
+        emitStatus('synced', 'Cloud Synced');
       }
     } catch (err) {
       console.error('Exception during cloud sync push:', err);
+      emitStatus('error', 'Auto-Sync Failed.', err.message);
     } finally {
       isSyncing = false;
     }
   },
 
-  // Pull save from cloud (forcePull bypasses timestamp skip for manual button clicks)
+  // Pull save from cloud (forcePull bypasses timestamp check for manual clicks or initial app loads)
   pullSaveFromCloud: async (forcePull = false) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return { success: false, reason: 'not_logged_in' };
+
+      emitStatus('syncing', 'Checking for cloud updates...');
 
       const { data, error } = await supabase
         .from('user_saves')
@@ -120,6 +147,7 @@ export const syncEngine = {
 
       if (error) {
         console.error('Error fetching cloud save:', error);
+        emitStatus('error', 'Auto-Sync Failed.', error.message);
         return { success: false, reason: error.message };
       }
 
@@ -129,9 +157,11 @@ export const syncEngine = {
 
         if (!forcePull) {
           if (lastLocalEdit > cloudLastUpdated) {
+            emitStatus('synced', 'Local data is up to date');
             return { success: false, reason: 'local_newer' };
           }
           if (lastCloudSync >= cloudLastUpdated) {
+            emitStatus('synced', 'Cloud Synced');
             return { success: false, reason: 'already_synced' };
           }
         }
@@ -165,14 +195,15 @@ export const syncEngine = {
         }
 
         lastCloudSync = cloudLastUpdated;
+        emitStatus('synced', 'Cloud Synced');
         return { success: true, reason: 'pulled' };
       } else {
-        // No cloud save exists yet, create first upload
         await syncEngine.pushSaveToCloud();
         return { success: true, reason: 'first_upload' };
       }
     } catch (err) {
       console.error('Failed to pull save from cloud:', err);
+      emitStatus('error', 'Auto-Sync Failed.', err.message);
       return { success: false, reason: err.message };
     }
   },

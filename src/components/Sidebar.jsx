@@ -12,7 +12,9 @@ import {
   Calendar,
   GitBranch,
   Cloud,
-  CheckCircle2
+  CheckCircle2,
+  AlertTriangle,
+  Loader2
 } from 'lucide-react';
 import AuthModal from './AuthModal';
 import { syncEngine } from '../services/syncEngine';
@@ -34,13 +36,20 @@ export default function Sidebar() {
   const [showDonBanner, setShowDonBanner] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [syncStatus, setSyncStatus] = useState(syncEngine.getSyncStatus());
 
   useEffect(() => {
     syncEngine.getUser().then(setCurrentUser);
     const { data: { subscription } } = syncEngine.onAuthStateChange((_event, session) => {
       setCurrentUser(session?.user || null);
     });
-    return () => subscription?.unsubscribe();
+    const unsubSync = syncEngine.onSyncStatusChange((status) => {
+      setSyncStatus(status);
+    });
+    return () => {
+      subscription?.unsubscribe();
+      unsubSync();
+    };
   }, []);
 
   const handleLogoClick = () => {
@@ -170,25 +179,55 @@ export default function Sidebar() {
           onClick={() => setAuthModalOpen(true)}
           className={`w-full flex items-center gap-2.5 p-2 rounded-xl transition-all border ${
             currentUser
-              ? 'bg-emerald-950/20 border-emerald-500/30 hover:border-emerald-500/50 text-emerald-400'
+              ? syncStatus.status === 'error'
+                ? 'bg-red-950/25 border-red-500/40 hover:border-red-500/60 text-red-400'
+                : syncStatus.status === 'syncing'
+                ? 'bg-amber-950/20 border-amber-500/40 text-amber-300'
+                : 'bg-emerald-950/20 border-emerald-500/30 hover:border-emerald-500/50 text-emerald-400'
               : 'bg-neutral-900/60 border-neutral-800 hover:border-[#c9a84c]/40 text-neutral-300 hover:text-white'
           } ${collapsed ? 'justify-center' : ''}`}
-          title={currentUser ? `Synced as ${currentUser.email}` : 'Log in to sync across devices'}
+          title={currentUser ? (syncStatus.status === 'error' ? `Auto-Sync Failed: ${syncStatus.error || 'Network error'}` : `Synced as ${currentUser.email}`) : 'Log in to sync across devices'}
         >
           <div className="relative flex-shrink-0">
-            <Cloud size={18} className={currentUser ? 'text-emerald-400' : 'text-[#c9a84c]'} />
-            {currentUser && (
+            {currentUser ? (
+              syncStatus.status === 'error' ? (
+                <AlertTriangle size={18} className="text-red-400" />
+              ) : syncStatus.status === 'syncing' ? (
+                <Loader2 size={18} className="text-amber-300 animate-spin" />
+              ) : (
+                <Cloud size={18} className="text-emerald-400" />
+              )
+            ) : (
+              <Cloud size={18} className="text-[#c9a84c]" />
+            )}
+            {currentUser && syncStatus.status !== 'error' && (
               <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-neutral-900" />
+            )}
+            {currentUser && syncStatus.status === 'error' && (
+              <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-neutral-900 animate-ping" />
             )}
           </div>
           {!collapsed && (
             <div className="flex flex-col text-left overflow-hidden">
               <div className="text-xs font-semibold flex items-center gap-1.5">
-                <span>{currentUser ? 'Cloud Synced' : 'Sync Devices'}</span>
-                {currentUser && <CheckCircle2 size={12} className="text-emerald-400" />}
+                <span>
+                  {currentUser
+                    ? syncStatus.status === 'error'
+                      ? 'Auto-Sync Failed'
+                      : syncStatus.status === 'syncing'
+                      ? 'Syncing...'
+                      : 'Cloud Synced'
+                    : 'Sync Devices'}
+                </span>
+                {currentUser && syncStatus.status === 'synced' && <CheckCircle2 size={12} className="text-emerald-400" />}
+                {currentUser && syncStatus.status === 'error' && <AlertTriangle size={12} className="text-red-400" />}
               </div>
               <span className="text-[10px] text-neutral-400 truncate max-w-[140px]">
-                {currentUser ? currentUser.email : 'Log in / Register'}
+                {currentUser
+                  ? syncStatus.status === 'error'
+                    ? 'Click to retry'
+                    : currentUser.email
+                  : 'Log in / Register'}
               </span>
             </div>
           )}
