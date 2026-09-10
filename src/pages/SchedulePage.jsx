@@ -196,7 +196,7 @@ export default function SchedulePage() {
             <label className="flex justify-between items-center bg-black/50 p-3 rounded">
                 <div>
                   <span className="text-gray-300 font-bold text-sm block">Bonuses Claimed This Week</span>
-                  <span className="text-[10px] text-gray-500">Auto-resets on Thursday</span>
+                  <span className="text-[10px] text-gray-500">Auto-resets Wednesday at 5:00 PM local time</span>
                 </div>
                 <input type="number" min="0" max="3" value={scheduleState.mdBonusesClaimed || 0} onChange={e => updateScheduleState({mdBonusesClaimed: parseInt(e.target.value) || 0})} className="w-12 bg-[#1a1a1a] border border-[#444] text-white text-sm rounded p-1 text-right focus:border-[#c9a84c] outline-none" />
               </label>

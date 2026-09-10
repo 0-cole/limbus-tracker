@@ -261,7 +261,8 @@ export default function EgoPage() {
 }
 
 function IdDetailsModal({ egoData, meta, onClose }) {
-  const [selectedThreadspin, setSelectedThreadspin] = useState(4);
+  const maxTier = (egoData?.maxThreadspin === 5 || (egoData?.upties && egoData.upties[5] && egoData.upties[5].length > 0)) ? 5 : 4;
+  const [selectedThreadspin, setSelectedThreadspin] = useState(maxTier);
   
   // Use CDN for background image
   const slug = egoData.slug || generateSlug(egoData.name);
@@ -292,13 +293,17 @@ function IdDetailsModal({ egoData, meta, onClose }) {
                  </p>
                  {/* THREADSPIN SELECTOR */}
                  <div className="flex bg-black/50 rounded-lg p-1 border border-white/10 shadow-inner">
-                    {[1, 2, 3, 4].map(ut => (
+                    {Array.from({ length: maxTier }, (_, i) => i + 1).map(ut => (
                        <button 
                          key={ut} 
                          onClick={() => setSelectedThreadspin(ut)}
-                         className={`px-3 py-1 text-xs font-bold rounded-md transition-all ${selectedThreadspin === ut ? 'bg-[#c9a84c] text-black shadow-md' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                         className={`px-3 py-1 text-xs font-bold rounded-md transition-all ${
+                           selectedThreadspin === ut 
+                             ? (ut === 5 ? 'bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30' : 'bg-[#c9a84c] text-black shadow-md') 
+                             : 'text-gray-400 hover:text-white hover:bg-white/5'
+                         }`}
                        >
-                         Threadspin {ut}
+                         {ut === 5 ? 'Threadspin 5 🔥' : `Threadspin ${ut}`}
                        </button>
                     ))}
                  </div>

@@ -166,6 +166,7 @@ export function generateRoadmap(
   
   // Track our current date cursor to simulate weekly resets
   let cursorMs = Date.now();
+  let nextWeeklyResetMs = getNextResets(cursorMs).nextWeekly;
   const todayDateStr = new Date().toISOString().split('T')[0];
 
   let currentBonuses = Math.max(0, 3 - (scheduleState?.mdBonusesClaimed || 0));
@@ -233,7 +234,25 @@ export function generateRoadmap(
   let totalCratesGenerated = 0;
 
   for (let i = 0; i < availableDays; i++) {
-    // 1. Calculate how many runs to do today
+    // 1. Calendar Date & Weekly Reset for Day i
+    const isToday = i === 0;
+    const dayDate = new Date();
+    dayDate.setDate(dayDate.getDate() + i);
+    const dateStr = dayDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const weekdayStr = dayDate.toLocaleDateString('en-US', { weekday: 'short' });
+    
+    // Check if the upcoming weekly reset falls on this calendar day
+    const dayEndMs = new Date(dayDate.getFullYear(), dayDate.getMonth(), dayDate.getDate(), 23, 59, 59, 999).getTime();
+    let isWeeklyReset = false;
+    if (!isToday && nextWeeklyResetMs <= dayEndMs) {
+      isWeeklyReset = true;
+      nextWeeklyResetMs += 7 * 24 * 60 * 60 * 1000;
+      // On the weekly reset day, bonuses refresh to 3 and weeklies reset
+      currentBonuses = 3;
+      currentWeekliesDone = false;
+    }
+
+    // 2. Calculate how many runs to do today
     let runsCountToday = 0;
     if (paceMode === 'rush') {
       runsCountToday = Math.min(customDailyRuns, remainingRunsPool);
@@ -246,7 +265,7 @@ export function generateRoadmap(
       }
     }
     
-    // 2. Perform runs and consume bonuses
+    // 3. Perform runs and consume bonuses
     let gainedExpFromRuns = 0;
     let runsList = [];
     let modulesUsedToday = 0;
@@ -272,14 +291,6 @@ export function generateRoadmap(
             runsList.push({ type: 'Normal', runKey: 'normal_nobonus', exp: 30, modules: 5 });
         }
     }
-
-    // 3. Calendar Date for Day i
-    const isToday = i === 0;
-    const dayDate = new Date();
-    dayDate.setDate(dayDate.getDate() + i);
-    const dateStr = dayDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    const weekdayStr = dayDate.toLocaleDateString('en-US', { weekday: 'short' });
-    const isWeeklyReset = dayDate.getDay() === 4; // Thursday in local/KST
 
     // 4. Passive EXP
     let dailyExpGained = !currentDailiesDone ? 10 : 0;
@@ -352,12 +363,8 @@ export function generateRoadmap(
       } : null
     });
 
-    // 6. Reset flags for next day simulation
+    // 6. Reset daily flags for next day simulation
     currentDailiesDone = false;
-    if (isWeeklyReset) {
-      currentBonuses = 3;
-      currentWeekliesDone = false;
-    }
   }
   
   return { 
