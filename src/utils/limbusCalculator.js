@@ -95,19 +95,28 @@ export function calculateLimbusGrind(
   const normalBonusYield = 45; // Normal Mode (1 bonus)
   const bonusYield = effectiveHasMdHard ? hardBonusYield : normalBonusYield;
   
-  const futureDailyExp = Math.max(0, daysLeft - 1) * 10;
-  const futureWeeklyExp = Math.max(0, weeksLeft - 1) * 20;
+  const asapMode = bpState?.asapMode === true || bpState?.relyOnMds === true;
 
-  const truePassiveExp = futureDailyExp + futureWeeklyExp + 
-    ((scheduleState?.dailiesProgress || 0) >= 5 ? 0 : 10) + 
-    (scheduleState?.weekliesDone ? 0 : 20);
+  // In ASAP Mode, we rely on Mirror Dungeons directly to reach our shard goals ASAP
+  // rather than waiting days/weeks for passive daily logins and future weekly resets to slowly bridge the gap.
+  const futureDailyExp = asapMode ? 0 : Math.max(0, daysLeft - 1) * 10;
+  const futureWeeklyExp = asapMode ? 0 : Math.max(0, weeksLeft - 1) * 20;
+
+  const todayDailyExp = (scheduleState?.dailiesProgress || 0) >= 5 ? 0 : 10;
+  const todayWeeklyExp = scheduleState?.weekliesDone ? 0 : 20;
+
+  const truePassiveExp = futureDailyExp + futureWeeklyExp + todayDailyExp + todayWeeklyExp;
 
   // 5. Active Grind Output
   const BASE_MD_EXP = 30; 
   let expDeficitAfterPassive = Math.max(0, bpExpNeeded - truePassiveExp);
   
   let plannedRuns = [];
-  let availableBonuses = Math.max(0, weeksLeft - 1) * 3 + (3 - (scheduleState?.mdBonusesClaimed || 0));
+  // In ASAP mode, the player wants to grind NOW and does not wait weeks for future reset cycles.
+  // We only count bonuses available right now this week.
+  let availableBonuses = asapMode
+    ? Math.max(0, 3 - (scheduleState?.mdBonusesClaimed || 0))
+    : Math.max(0, weeksLeft - 1) * 3 + (3 - (scheduleState?.mdBonusesClaimed || 0));
   
   // If user has Hard Mode enabled and unlocked, they consume 3 bonuses at once for 225 EXP.
   // If Normal Mode, they consume 1 bonus for 45 EXP.
@@ -154,6 +163,7 @@ export function generateRoadmap(
 ) {
   const roadmap = [];
   const paceMode = bpState?.paceMode || 'relaxed';
+  const asapMode = bpState?.asapMode === true || bpState?.relyOnMds === true;
   const customDailyRuns = Math.max(1, bpState?.customDailyRuns || 3);
   let totalRunsLeft = plannedRuns.length;
   
@@ -253,8 +263,12 @@ export function generateRoadmap(
     }
 
     // 2. Calculate how many runs to do today
+    const allTargetsAlreadyCompleted = targetProgress.length > 0 && targetProgress.every(t => t.completed);
     let runsCountToday = 0;
-    if (paceMode === 'rush') {
+    if (allTargetsAlreadyCompleted) {
+      // All wishlist targets are already completed! Rest and enjoy.
+      runsCountToday = 0;
+    } else if (paceMode === 'rush') {
       runsCountToday = Math.min(customDailyRuns, remainingRunsPool);
       remainingRunsPool -= runsCountToday;
     } else {
@@ -263,6 +277,10 @@ export function generateRoadmap(
          runsCountToday++;
          remainderMds--;
       }
+      if (asapMode && runsCountToday === 0 && remainingRunsPool > 0) {
+        runsCountToday = Math.min(1, remainingRunsPool);
+      }
+      remainingRunsPool = Math.max(0, remainingRunsPool - runsCountToday);
     }
     
     // 3. Perform runs and consume bonuses

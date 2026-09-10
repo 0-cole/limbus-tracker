@@ -34,6 +34,7 @@ const defaultState = {
     preferHardMd: true,
     hasMdHard: true,
     safeMath: false, // 1.5 shards/crate vs 2.0
+    asapMode: false, // Rely on MDs directly to reach goals ASAP instead of waiting on future passive dailies/weeklies
     paceMode: 'relaxed', // 'relaxed' | 'rush'
     customDailyRuns: 3, // custom MD runs per day when in 'rush' mode
     daysLeft: 45 // Default

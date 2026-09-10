@@ -246,6 +246,22 @@ export default function SchedulePage() {
               </div>
               <input type="checkbox" checked={safeMath} onChange={e => updateBpState({safeMath: e.target.checked})} className="w-5 h-5 accent-[#c9a84c]" />
             </label>
+            <label className="flex justify-between items-center bg-black/50 p-3 rounded cursor-pointer group hover:border-[#c9a84c]/50 transition-colors border border-transparent">
+              <div>
+                <span className="text-white font-bold text-sm group-hover:text-[#c9a84c] transition-colors flex items-center gap-1.5">
+                  🚀 ASAP Mode (Rely on MDs over Dailies)
+                </span>
+                <span className="text-[10px] text-gray-400 block mt-0.5">
+                  Grind MDs to craft goals directly without waiting on future daily logins. Reaches targets days earlier.
+                </span>
+              </div>
+              <input 
+                type="checkbox" 
+                checked={bpState.asapMode || false} 
+                onChange={e => updateBpState({ asapMode: e.target.checked })} 
+                className="w-5 h-5 accent-[#c9a84c]" 
+              />
+            </label>
           </div>
         </div>
 
@@ -268,10 +284,16 @@ export default function SchedulePage() {
               </div>
             </div>
             <div className="mt-8 pt-6 border-t border-[#333] text-center">
-              <p className="text-gray-400 text-sm">
-                You will passively earn <strong className="text-white">{calcResult.passiveExp} EXP</strong> by doing your Dailies and Weeklies.
-                This leaves <strong className="text-red-400">{calcResult.expToGrind} EXP</strong> left to grind.
-              </p>
+              {bpState.asapMode ? (
+                <p className="text-amber-400 text-sm font-medium">
+                  🚀 <strong>ASAP Mode Active:</strong> Grinding purely via Mirror Dungeons (<strong className="text-white">{calcResult.rawMdsNeeded} MDs</strong>) to hit your shard goals directly without waiting on future daily logins!
+                </p>
+              ) : (
+                <p className="text-gray-400 text-sm">
+                  You will passively earn <strong className="text-white">{calcResult.passiveExp} EXP</strong> by doing your Dailies and Weeklies.
+                  This leaves <strong className="text-red-400">{calcResult.expToGrind} EXP</strong> left to grind.
+                </p>
+              )}
             </div>
           </div>
           
@@ -299,35 +321,61 @@ export default function SchedulePage() {
             </div>
             <p className="text-gray-400 text-sm">
               {paceMode === 'relaxed' ? (
-                <>You need to run <strong className="text-white">{calcResult.rawMdsNeeded} Mirror Dungeons</strong> spread evenly across the remaining {calcResult.daysLeft} days of the season.</>
+                <>You need to run <strong className="text-white">{calcResult.rawMdsNeeded} Mirror Dungeons</strong> spread across the remaining {calcResult.daysLeft} days of the season{bpState.asapMode ? ' (relying directly on MDs to reach shard goals ASAP)' : ''}.</>
               ) : (
-                <>Rushing at <strong className="text-white">{customDailyRuns} MDs/day</strong> will complete all <strong className="text-white">{calcResult.rawMdsNeeded} required runs</strong> in approximately <strong className="text-amber-400">{Math.ceil(calcResult.rawMdsNeeded / (customDailyRuns || 1))} days</strong>.</>
+                <>Rushing at <strong className="text-white">{customDailyRuns} MDs/day</strong> will complete all <strong className="text-white">{calcResult.rawMdsNeeded} required runs</strong> in approximately <strong className="text-amber-400">{Math.ceil(calcResult.rawMdsNeeded / (customDailyRuns || 1))} days</strong>{bpState.asapMode ? ' (ASAP pure MD grind)' : ''}.</>
               )}
             </p>
             <p className={`text-xs mt-1.5 font-medium ${burnoutColor}`}>{burnoutDescription}</p>
+            {bpState.asapMode && (
+              <div className="mt-2.5 inline-flex items-center gap-2 px-2.5 py-1 rounded bg-amber-950/40 border border-amber-500/40 text-amber-300 text-xs font-semibold">
+                <span>🚀</span>
+                <span>ASAP Mode Active: Mirror Dungeons scheduled directly to finish goals without waiting on future daily logins!</span>
+              </div>
+            )}
           </div>
 
-          {/* Mode Selector Tabs */}
-          <div className="flex bg-[#111] p-1.5 rounded-lg border border-[#333] self-start md:self-auto shrink-0">
+          {/* Mode Selector Tabs + ASAP Toggle */}
+          <div className="flex flex-wrap items-center gap-3 self-start md:self-auto shrink-0">
+            <div className="flex bg-[#111] p-1.5 rounded-lg border border-[#333]">
+              <button
+                onClick={() => updateBpState({ paceMode: 'relaxed' })}
+                className={`px-4 py-2 rounded-md text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+                  paceMode === 'relaxed' 
+                    ? 'bg-[#c9a84c] text-black shadow-[0_0_15px_rgba(201,168,76,0.3)] font-black' 
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                ☕ Relaxed Pace
+              </button>
+              <button
+                onClick={() => updateBpState({ paceMode: 'rush' })}
+                className={`px-4 py-2 rounded-md text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+                  paceMode === 'rush' 
+                    ? 'bg-red-600 text-white shadow-[0_0_15px_rgba(220,38,38,0.4)] font-black' 
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                ⚡ Rush Pace
+              </button>
+            </div>
+
+            {/* ASAP Mode Pill Button */}
             <button
-              onClick={() => updateBpState({ paceMode: 'relaxed' })}
-              className={`px-4 py-2 rounded-md text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
-                paceMode === 'relaxed' 
-                  ? 'bg-[#c9a84c] text-black shadow-[0_0_15px_rgba(201,168,76,0.3)] font-black' 
-                  : 'text-gray-400 hover:text-white'
+              onClick={() => updateBpState({ asapMode: !bpState.asapMode })}
+              title="Rely on Mirror Dungeons over passive daily logins to reach shard goals as fast as possible"
+              className={`px-3.5 py-2 rounded-lg text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 border ${
+                bpState.asapMode 
+                  ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-black border-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.4)]' 
+                  : 'bg-[#111] text-gray-400 border-[#333] hover:text-white hover:border-[#555]'
               }`}
             >
-              ☕ Relaxed Pace (Default)
-            </button>
-            <button
-              onClick={() => updateBpState({ paceMode: 'rush' })}
-              className={`px-4 py-2 rounded-md text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
-                paceMode === 'rush' 
-                  ? 'bg-red-600 text-white shadow-[0_0_15px_rgba(220,38,38,0.4)] font-black' 
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              ⚡ Rush Pace
+              <span>🚀 ASAP Mode</span>
+              <span className={`text-[10px] px-1.5 py-0.5 rounded font-black font-mono ${
+                bpState.asapMode ? 'bg-black text-amber-400' : 'bg-[#222] text-gray-400'
+              }`}>
+                {bpState.asapMode ? 'ON' : 'OFF'}
+              </span>
             </button>
           </div>
         </div>
