@@ -4,6 +4,7 @@ import { useStore } from '../stores/useStore.js';
 import { Search, Plus, Trash2, Calculator } from 'lucide-react';
 import { getEntityImageUrl } from '../utils/imageUtils.js';
 import { normalizeText, getSinnerSortIndex } from '../utils/textUtils.js';
+import { getOwnedShards } from '../utils/limbusCalculator.js';
 
 export default function WantListPage() {
   const { wantList, toggleWantList, inventory, updateInventory, acquiredIds, acquiredEgos, identitiesData, egosData } = useStore();
@@ -82,7 +83,7 @@ export default function WantListPage() {
               <div className="space-y-4">
                 {wantedItems.map(item => {
                   const req = getRequiredShards(item);
-                  const have = inventory.shards[item.sinner] || 0;
+                  const have = getOwnedShards(inventory.shards, item.sinner);
                   const percent = Math.min(100, Math.round((have / req) * 100));
                   return (
                     <div key={item.name} className="p-3 bg-[#111] rounded border border-[#333] relative overflow-hidden group">

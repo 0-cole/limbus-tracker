@@ -8,9 +8,43 @@ export function normalizeSinnerId(name) {
   if (!name) return 'yi-sang';
   const clean = String(name).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
   if (clean.includes('yisang') || clean.includes('yi')) return 'yi-sang';
+  if (clean.includes('faust')) return 'faust';
   if (clean.includes('don') || clean.includes('quixote')) return 'don-quixote';
+  if (clean.includes('ryoshu')) return 'ryoshu';
+  if (clean.includes('meursault')) return 'meursault';
   if (clean.includes('hong') || clean.includes('lu')) return 'hong-lu';
+  if (clean.includes('heathcliff') || clean.includes('heath')) return 'heathcliff';
+  if (clean.includes('ishmael') || clean.includes('ish')) return 'ishmael';
+  if (clean.includes('rodion') || clean.includes('rodya')) return 'rodion';
+  if (clean.includes('sinclair')) return 'sinclair';
+  if (clean.includes('outis')) return 'outis';
+  if (clean.includes('gregor')) return 'gregor';
   return clean;
+}
+
+export function getOwnedShards(shardsInventory = {}, sinnerInput = '') {
+  if (!shardsInventory || !sinnerInput) return 0;
+  
+  // 1. Direct match
+  if (shardsInventory[sinnerInput] !== undefined) {
+    return Number(shardsInventory[sinnerInput]) || 0;
+  }
+  
+  const targetNorm = normalizeSinnerId(sinnerInput);
+  
+  // 2. Normalized key match
+  if (shardsInventory[targetNorm] !== undefined) {
+    return Number(shardsInventory[targetNorm]) || 0;
+  }
+
+  // 3. Scan all keys in inventory.shards
+  for (const [key, val] of Object.entries(shardsInventory)) {
+    if (normalizeSinnerId(key) === targetNorm) {
+      return Number(val) || 0;
+    }
+  }
+
+  return 0;
 }
 
 export function calculateLimbusGrind(
@@ -35,7 +69,7 @@ export function calculateLimbusGrind(
   const shardsInventory = inventory?.shards || {};
   let totalShardDeficit = 0;
   for (const sinner of Object.keys(targetShards)) {
-    const owned = shardsInventory[sinner] || 0;
+    const owned = getOwnedShards(shardsInventory, sinner);
     const deficit = Math.max(0, targetShards[sinner] - owned);
     totalShardDeficit += deficit;
   }
@@ -148,8 +182,9 @@ export function generateRoadmap(
   let targetProgress = (wishlist || []).map(item => {
     const sinnerId = normalizeSinnerId(item.sinnerId || item.sinner);
     const cost = item.rarity === '00' ? 150 : 400;
-    const owned = shardsInventory[sinnerId] || 0;
+    const owned = getOwnedShards(shardsInventory, item.sinner || item.sinnerId || sinnerId);
     const remaining = Math.max(0, cost - owned);
+    const alreadyCraftable = owned >= cost;
     return {
       name: item.name || sinnerId,
       sinnerId,
@@ -157,11 +192,13 @@ export function generateRoadmap(
       rarity: item.rarity || '000',
       cost,
       startingShards: owned,
+      ownedShards: owned,
       currentShards: owned,
       remainingDeficit: remaining,
-      completed: owned >= cost,
-      completedDay: owned >= cost ? 0 : null,
-      completedDate: owned >= cost ? 'Already Craftable' : null
+      alreadyCraftable,
+      completed: alreadyCraftable,
+      completedDay: alreadyCraftable ? 0 : null,
+      completedDate: alreadyCraftable ? 'Already Craftable' : null
     };
   });
 

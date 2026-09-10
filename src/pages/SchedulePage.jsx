@@ -387,13 +387,18 @@ export default function SchedulePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {targetMilestones.map((target, idx) => {
-              const pct = Math.min(100, Math.round((target.currentShards / target.cost) * 100));
-              const isDone = target.completed;
+              const currentOwned = target.startingShards !== undefined ? target.startingShards : (target.ownedShards || 0);
+              const pct = Math.min(100, Math.round((currentOwned / target.cost) * 100));
+              const isAlreadyCraftable = target.alreadyCraftable;
+              const willCraftInRoadmap = target.completed;
+
               return (
                 <div key={idx} className={`p-4 rounded-xl border transition-all relative overflow-hidden ${
-                  isDone 
-                    ? 'bg-gradient-to-br from-[#c9a84c]/20 to-black border-[#c9a84c] shadow-[0_0_20px_rgba(201,168,76,0.15)]' 
-                    : 'bg-[#111] border-[#333]'
+                  isAlreadyCraftable 
+                    ? 'bg-gradient-to-br from-[#22c55e]/20 to-black border-[#22c55e] shadow-[0_0_20px_rgba(34,197,94,0.15)]' 
+                    : willCraftInRoadmap 
+                      ? 'bg-gradient-to-br from-[#c9a84c]/15 to-black border-[#c9a84c]/70 shadow-[0_0_15px_rgba(201,168,76,0.1)]' 
+                      : 'bg-[#111] border-[#333]'
                 }`}>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-[#c9a84c] text-black">
@@ -408,24 +413,34 @@ export default function SchedulePage() {
 
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs">
-                      <span className="text-gray-400">Shards Progress</span>
+                      <span className="text-gray-400">Current Shards Owned</span>
                       <span className="text-white font-mono font-bold">
-                        {Math.floor(target.currentShards)} <span className="text-gray-500">/ {target.cost}</span>
+                        {Math.floor(currentOwned)} <span className="text-gray-500">/ {target.cost}</span>
                       </span>
                     </div>
 
                     {/* Progress Bar */}
                     <div className="w-full bg-[#222] h-2 rounded-full overflow-hidden border border-[#333]">
                       <div 
-                        className={`h-full transition-all duration-500 ${isDone ? 'bg-[#22c55e]' : 'bg-[#c9a84c]'}`}
+                        className={`h-full transition-all duration-500 ${isAlreadyCraftable ? 'bg-[#22c55e]' : 'bg-[#c9a84c]'}`}
                         style={{ width: `${pct}%` }}
                       />
                     </div>
 
                     <div className="pt-2 flex items-center justify-between border-t border-[#222]">
                       <span className="text-[11px] text-gray-500">Milestone Date:</span>
-                      <span className={`text-xs font-bold font-mono ${isDone ? 'text-[#22c55e]' : 'text-yellow-400'}`}>
-                        {target.completedDate || (isDone ? `Day ${target.completedDay}` : 'In Progress')}
+                      <span className={`text-xs font-bold font-mono ${
+                        isAlreadyCraftable 
+                          ? 'text-[#22c55e]' 
+                          : willCraftInRoadmap 
+                            ? 'text-yellow-400' 
+                            : 'text-gray-500'
+                      }`}>
+                        {isAlreadyCraftable 
+                          ? '✅ Ready to Craft Now' 
+                          : willCraftInRoadmap 
+                            ? `${target.completedDate || `Day ${target.completedDay}`}` 
+                            : `In Progress (+${target.cost - currentOwned} needed)`}
                       </span>
                     </div>
                   </div>

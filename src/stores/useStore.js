@@ -390,14 +390,22 @@ export const useStore = create((set, get) => ({
 
   addShards: (sinnerId, amount, label) => {
     const state = get();
-    const currentOwned = state.inventory.shards[sinnerId] || 0;
+    const shards = state.inventory.shards || {};
+    let targetKey = sinnerId;
+    for (const key of Object.keys(shards)) {
+      if (key.toLowerCase().replace(/[^a-z]/g, '') === String(sinnerId).toLowerCase().replace(/[^a-z]/g, '')) {
+        targetKey = key;
+        break;
+      }
+    }
+    const currentOwned = Number(shards[targetKey]) || 0;
     const newCount = Math.max(0, currentOwned + amount);
 
     const record = {
       id: `${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-      sinnerId,
+      sinnerId: targetKey,
       amount,
-      label: label || `${amount > 0 ? '+' : ''}${amount} ${sinnerId} Shards`,
+      label: label || `${amount > 0 ? '+' : ''}${amount} ${targetKey} Shards`,
       timestamp: Date.now()
     };
 
@@ -408,7 +416,7 @@ export const useStore = create((set, get) => ({
         ...s.inventory,
         shards: {
           ...s.inventory.shards,
-          [sinnerId]: newCount
+          [targetKey]: newCount
         }
       },
       scheduleState: {
@@ -425,7 +433,15 @@ export const useStore = create((set, get) => ({
     const rec = (state.scheduleState.todayLoggedShards || []).find(r => r.id === recordId);
     if (!rec) return;
 
-    const currentOwned = state.inventory.shards[rec.sinnerId] || 0;
+    const shards = state.inventory.shards || {};
+    let targetKey = rec.sinnerId;
+    for (const key of Object.keys(shards)) {
+      if (key.toLowerCase().replace(/[^a-z]/g, '') === String(rec.sinnerId).toLowerCase().replace(/[^a-z]/g, '')) {
+        targetKey = key;
+        break;
+      }
+    }
+    const currentOwned = Number(shards[targetKey]) || 0;
     const newCount = Math.max(0, currentOwned - rec.amount);
     const newLogged = (state.scheduleState.todayLoggedShards || []).filter(r => r.id !== recordId);
 
@@ -434,7 +450,7 @@ export const useStore = create((set, get) => ({
         ...s.inventory,
         shards: {
           ...s.inventory.shards,
-          [rec.sinnerId]: newCount
+          [targetKey]: newCount
         }
       },
       scheduleState: {
