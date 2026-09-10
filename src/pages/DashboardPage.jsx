@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useStore } from '../stores/useStore.js';
 import { CheckCircle, XCircle, AlertCircle, Calendar, Target, Flame, CalendarDays, Battery } from 'lucide-react';
 import { calculateLimbusGrind, generateRoadmap } from '../utils/limbusCalculator.js';
+import { getNextResets } from '../utils/timeUtils.js';
 import { getSeasonEndDate } from '../utils/seasonUtils.js';
 
 import DailyCycleTracker from '../components/DailyCycleTracker.jsx';
@@ -146,61 +147,82 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="glass-card p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold font-limbus text-white">Weekly Calendar Overview</h2>
-          <span className="text-xs text-amber-400 font-bold bg-amber-950/40 border border-amber-800/40 px-2.5 py-1 rounded-full flex items-center gap-1">
-            🔄 Resets every Thursday (06:00 KST)
-          </span>
-        </div>
-        <div className="grid grid-cols-7 gap-2">
-          {DAYS.map((day, idx) => {
-            // Determine date for this day of the week based on today
-            const diff = idx - currentDayIndex;
-            const date = new Date();
-            date.setDate(date.getDate() + diff);
-            const dateStr = date.toISOString().split('T')[0];
-            const status = weeklyProgress.dailyStatus?.[dateStr];
-            const isResetDay = day === 'Thursday';
-            const isToday = diff === 0;
-            const mdDoneToday = isToday && (scheduleState.mdTodayDone || (scheduleState.todayLoggedRuns?.length > 0));
+      {/* Weekly Calendar Overview */}
+      {(() => {
+        const { nextWeekly } = getNextResets(Date.now());
+        const resetDate = new Date(nextWeekly);
+        const resetDayIndex = resetDate.getDay();
+        const resetDayName = DAYS[resetDayIndex];
+        const resetTimeStr = resetDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 
-            let bgClass = "bg-[#111] border-[#333]";
-            let icon = null;
-
-            if (status === 'done') {
-              bgClass = "bg-[#c9a84c]/20 border-[#c9a84c]";
-              icon = <CheckCircle className="text-[#c9a84c] mx-auto mt-2" size={20} />;
-            } else if (status === 'missed' || (diff < 0 && !status)) {
-              bgClass = "bg-red-950/30 border-red-900";
-              icon = <XCircle className="text-red-500 mx-auto mt-2" size={20} />;
-            } else if (isToday) {
-              bgClass = mdDoneToday ? "bg-emerald-950/30 border-emerald-500/50" : "bg-[#222] border-white";
-            }
-
-            return (
-              <div key={day} className={`p-3 rounded-lg border text-center transition-all ${bgClass}`}>
-                <div className="flex items-center justify-center gap-1">
-                  <p className={`text-xs font-bold ${isToday ? 'text-white' : 'text-[#737373]'}`}>{day.slice(0,3)}</p>
-                  {isResetDay && <span className="text-[8px] bg-amber-500/30 text-amber-300 font-black px-1 rounded">Reset</span>}
-                </div>
-                <p className="text-[10px] text-[#555]">{date.getDate()}</p>
-                {icon}
-                {mdDoneToday && (
-                  <div className="mt-1.5 text-[9px] bg-emerald-500/20 text-emerald-300 font-bold px-1 py-0.5 rounded border border-emerald-500/30">
-                    ⚔️ MD Done
-                  </div>
-                )}
-                {isResetDay && scheduleState.weekliesDone && (
-                  <div className="mt-1 text-[9px] bg-yellow-500/20 text-yellow-300 font-bold px-1 py-0.5 rounded border border-yellow-500/30">
-                    👑 Weeklies
-                  </div>
+        return (
+          <div className="glass-card p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+              <div className="flex items-center gap-3">
+                <h2 className="text-xl font-bold font-limbus text-white">Weekly Calendar Overview</h2>
+                {bpState.asapMode && (
+                  <span className="text-[10px] px-2 py-0.5 rounded font-black bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                    🚀 ASAP Mode Active
+                  </span>
                 )}
               </div>
-            );
-          })}
-        </div>
-      </div>
+              <span className="text-xs text-amber-400 font-bold bg-amber-950/40 border border-amber-800/40 px-2.5 py-1 rounded-full flex items-center gap-1 w-fit">
+                🔄 Resets every {resetDayName} ({resetTimeStr} Local / 06:00 KST)
+              </span>
+            </div>
+            <div className="grid grid-cols-7 gap-2">
+              {DAYS.map((day, idx) => {
+                // Determine date for this day of the week based on today
+                const diff = idx - currentDayIndex;
+                const date = new Date();
+                date.setDate(date.getDate() + diff);
+                const dateStr = date.toISOString().split('T')[0];
+                const status = weeklyProgress.dailyStatus?.[dateStr];
+                const isResetDay = idx === resetDayIndex;
+                const isToday = diff === 0;
+                const mdDoneToday = isToday && (scheduleState.mdTodayDone || (scheduleState.todayLoggedRuns?.length > 0));
+
+                let bgClass = "bg-[#111] border-[#333]";
+                let icon = null;
+
+                if (status === 'done') {
+                  bgClass = "bg-[#c9a84c]/20 border-[#c9a84c]";
+                  icon = <CheckCircle className="text-[#c9a84c] mx-auto mt-2" size={20} />;
+                } else if (status === 'missed') {
+                  bgClass = "bg-red-950/30 border-red-900";
+                  icon = <XCircle className="text-red-500 mx-auto mt-2" size={20} />;
+                } else if (diff < 0) {
+                  // Past day without explicit missed flag - keep clean/neutral
+                  bgClass = "bg-black/30 border-[#222] opacity-60";
+                } else if (isToday) {
+                  bgClass = mdDoneToday ? "bg-emerald-950/30 border-emerald-500/50" : "bg-[#222] border-white";
+                }
+
+                return (
+                  <div key={day} className={`p-3 rounded-lg border text-center transition-all ${bgClass}`}>
+                    <div className="flex items-center justify-center gap-1">
+                      <p className={`text-xs font-bold ${isToday ? 'text-white' : 'text-[#737373]'}`}>{day.slice(0,3)}</p>
+                      {isResetDay && <span className="text-[8px] bg-amber-500/30 text-amber-300 font-black px-1 rounded">Reset</span>}
+                    </div>
+                    <p className="text-[10px] text-[#555]">{date.getDate()}</p>
+                    {icon}
+                    {mdDoneToday && (
+                      <div className="mt-1.5 text-[9px] bg-emerald-500/20 text-emerald-300 font-bold px-1 py-0.5 rounded border border-emerald-500/30">
+                        ⚔️ MD Done
+                      </div>
+                    )}
+                    {isResetDay && scheduleState.weekliesDone && (
+                      <div className="mt-1 text-[9px] bg-yellow-500/20 text-yellow-300 font-bold px-1 py-0.5 rounded border border-yellow-500/30">
+                        👑 Weeklies
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Data Management Section */}
       <div className="mt-12 pt-8 border-t border-[#333]">

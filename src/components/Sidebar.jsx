@@ -25,6 +25,25 @@ const navItems = [
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
+  const [lastClickTime, setLastClickTime] = useState(0);
+  const [showDonBanner, setShowDonBanner] = useState(false);
+
+  const handleLogoClick = () => {
+    const now = Date.now();
+    if (now - lastClickTime > 2500) {
+      setClickCount(1);
+    } else {
+      const next = clickCount + 1;
+      setClickCount(next);
+      if (next >= 5) {
+        setShowDonBanner(true);
+        setClickCount(0);
+        setTimeout(() => setShowDonBanner(false), 4500);
+      }
+    }
+    setLastClickTime(now);
+  };
 
   return (
     <motion.aside
@@ -32,10 +51,30 @@ export default function Sidebar() {
       animate={{ width: collapsed ? 72 : 240 }}
       transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
     >
-      {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-5 border-b border-limbus-border">
+      {/* Don Quixote Easter Egg Floating Banner */}
+      {showDonBanner && (
         <motion.div
-          className="w-9 h-9 rounded-xl bg-gradient-to-br from-limbus-accent to-limbus-accent-dim flex items-center justify-center text-black font-bold text-sm flex-shrink-0"
+          initial={{ opacity: 0, scale: 0.8, y: -20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.8, y: -20 }}
+          className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 text-black font-black px-6 py-3 rounded-xl border-2 border-yellow-300 shadow-[0_0_30px_rgba(234,179,8,0.8)] flex items-center gap-3"
+        >
+          <span className="text-2xl animate-bounce">🎠</span>
+          <div>
+            <div className="text-[10px] uppercase tracking-widest text-amber-950 font-mono">Don Quixote Intervention</div>
+            <div className="text-sm font-limbus">"HALT, EVILDOER! JUSTICE SHALL PREVAIL! ROCHINANTE, CHARGE!!!"</div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Header */}
+      <div 
+        onClick={handleLogoClick}
+        className="flex items-center gap-3 px-4 py-5 border-b border-limbus-border cursor-pointer select-none group"
+        title="Limbus Tracker"
+      >
+        <motion.div
+          className="w-9 h-9 rounded-xl bg-gradient-to-br from-limbus-accent to-limbus-accent-dim flex items-center justify-center text-black font-bold text-sm flex-shrink-0 group-hover:shadow-[0_0_12px_rgba(201,168,76,0.6)]"
           whileHover={{ scale: 1.1, rotate: 5 }}
           whileTap={{ scale: 0.95 }}
         >

@@ -125,7 +125,9 @@ export default function EgoPage() {
       if (normSearch) {
         const normName = normalizeText(ego.name);
         const normSinner = normalizeText(ego.sinner);
-        if (!normName.includes(normSearch) && !normSinner.includes(normSearch)) return false;
+        const isRodyaSearch = normSearch === 'rodya' || normSearch.includes('rodya');
+        const matchesRodya = isRodyaSearch && (normSinner.includes('rodion') || normName.includes('rodion'));
+        if (!normName.includes(normSearch) && !normSinner.includes(normSearch) && !matchesRodya) return false;
       }
       if (showAcquiredOnly && !acquiredEgos.has(ego.name)) return false;
       if (selectedSinnerIds.size > 0 && !selectedSinnerIds.has(normalizeSinnerId(ego.sinner))) return false;

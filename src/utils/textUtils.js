@@ -28,7 +28,7 @@ export function normalizeSinnerId(sinner) {
   if (norm.startsWith('meursault')) return 'meursault';
   if (norm.startsWith('heathcliff')) return 'heathcliff';
   if (norm.startsWith('ishmael')) return 'ishmael';
-  if (norm.startsWith('rodion')) return 'rodion';
+  if (norm.startsWith('rodion') || norm.startsWith('rodya')) return 'rodion';
   if (norm.startsWith('sinclair')) return 'sinclair';
   if (norm.startsWith('outis')) return 'outis';
   if (norm.startsWith('gregor')) return 'gregor';

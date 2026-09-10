@@ -1,7 +1,8 @@
 import IdDetailsModal from '../components/IdDetailsModal.jsx';
+import VergiliusModal from '../components/VergiliusModal.jsx';
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Star, Edit3, CheckCircle, Info } from 'lucide-react';
+import { Search, Star, Edit3, CheckCircle, Info, Clock, Compass, Sparkles } from 'lucide-react';
 import { useStore } from '../stores/useStore.js';
 import sinnersData from '../data/sinners.json';
 import { normalizeText, normalizeSinnerId, getSinnerInfo, getSinnerSortIndex, parseSeasonNumber, getCardImageUrl } from '../utils/textUtils.js';
@@ -95,6 +96,7 @@ export default function IdentitiesPage() {
   
   const [editingId, setEditingId] = useState(null);
   const [detailsId, setDetailsId] = useState(null);
+  const [showVergiliusModal, setShowVergiliusModal] = useState(false);
 
   const toggleFilter = (category, value) => {
     setFilters(prev => {
@@ -148,7 +150,9 @@ export default function IdentitiesPage() {
       if (normSearch) {
         const normName = normalizeText(id.name);
         const normSinner = normalizeText(id.sinner);
-        if (!normName.includes(normSearch) && !normSinner.includes(normSearch)) return false;
+        const isRodyaSearch = normSearch === 'rodya' || normSearch.includes('rodya');
+        const matchesRodya = isRodyaSearch && (normSinner.includes('rodion') || normName.includes('rodion'));
+        if (!normName.includes(normSearch) && !normSinner.includes(normSearch) && !matchesRodya) return false;
       }
       if (showAcquiredOnly && !acquiredIds.has(id.name)) return false;
       if (selectedSinnerIds.size > 0 && !selectedSinnerIds.has(normalizeSinnerId(id.sinner))) return false;
@@ -254,23 +258,162 @@ export default function IdentitiesPage() {
         </div>
       </div>
 
-      <p className="text-xs text-[#737373] mb-4">{filteredIdentities.length} results</p>
+      {/* Easter Egg Flags */}
+      {(() => {
+        const isVergilius = search.trim() === 'Vergilius';
+        const isDante = search.trim().toLowerCase() === 'dante' || search.trim().toLowerCase() === 'clock';
+        const isCharon = search.trim().toLowerCase() === 'charon' || search.trim().toLowerCase() === 'vroom';
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 pb-12">
-        <AnimatePresence>
-          {filteredIdentities.map(id => (
-            <IdCard 
-              key={id.name} 
-              id={id} 
-              meta={getMetadata(id)} 
-              acquired={acquiredIds.has(id.name)} 
-              onToggleAcquired={toggleAcquiredId} 
-              onEdit={() => setEditingId(id)}
-              onClickDetails={() => setDetailsId(id)}
-            />
-          ))}
-        </AnimatePresence>
-      </div>
+        const totalResultsCount = filteredIdentities.length + (isVergilius ? 1 : 0) + (isDante ? 1 : 0) + (isCharon ? 1 : 0);
+
+        return (
+          <>
+            <p className="text-xs text-[#737373] mb-4">
+              {totalResultsCount} results {isVergilius && <span className="text-red-500 font-bold ml-2 animate-pulse">⚠️ [RESTRICTED PERSONNEL RECORD]</span>}
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 pb-12">
+              <AnimatePresence>
+                {/* 🔴 Vergilius Easter Egg Card */}
+                {isVergilius && (
+                  <motion.div
+                    key="vergilius-easter-egg"
+                    layout
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    onClick={() => setShowVergiliusModal(true)}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-red-600 shadow-[0_0_25px_rgba(239,68,68,0.4)] hover:shadow-[0_0_40px_rgba(239,68,68,0.7)] transition-all cursor-pointer h-64 bg-black"
+                  >
+                    {/* Background Art */}
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110"
+                      style={{ backgroundImage: 'url("/images/vergilius.png")' }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-red-950/40" />
+
+                    {/* Top Badge */}
+                    <div className="relative flex justify-between items-start p-3 z-10">
+                      <div className="flex gap-0.5 text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star key={i} size={15} fill="currentColor" />
+                        ))}
+                      </div>
+                      <span className="text-xs font-black text-red-400 bg-red-950/80 px-2 py-0.5 rounded border border-red-700/60 uppercase tracking-wider">
+                        Guide
+                      </span>
+                    </div>
+
+                    {/* Bottom Info */}
+                    <div className="relative mt-auto p-3 z-10">
+                      <h3 className="font-black text-[16px] leading-tight text-white drop-shadow-[0_0_10px_rgba(239,68,68,0.9)] mb-1">
+                        The Red Gaze Vergilius
+                      </h3>
+                      
+                      <div className="flex flex-wrap gap-1 mb-2">
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-red-200 font-bold bg-red-950/80 border border-red-600/50 shadow-sm">
+                          ● Color Fixer
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-white font-medium bg-black/60 border border-white/20 shadow-sm">
+                          ● Senior Guide
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-orange-400 font-medium bg-black/60 border border-orange-500/30 shadow-sm">
+                          ● Danger: Extreme
+                        </span>
+                      </div>
+
+                      <p className="text-[11px] italic text-gray-300 line-clamp-2 mb-2 font-serif leading-snug">
+                        "Why are you looking here, Dante..? I'm not one of your lackeys. Do you need.. a <strong className="text-red-400 font-bold underline decoration-red-500">consultation?</strong>"
+                      </p>
+
+                      <div className="flex justify-between items-center pt-2 border-t border-red-900/60 text-[10px]">
+                        <span className="text-red-400 font-bold">Threat: Unknown</span>
+                        <span className="text-gray-400 group-hover:text-white transition-colors flex items-center gap-1 font-bold">
+                          Inspect &rarr;
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* ⏰ Dante Easter Egg Card */}
+                {isDante && (
+                  <motion.div
+                    key="dante-easter-egg"
+                    layout
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.3)] h-64 bg-gradient-to-b from-[#1a1205] to-black p-4"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div className="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-500 flex items-center justify-center text-amber-400">
+                        <Clock className="animate-spin" size={24} style={{ animationDuration: '6s' }} />
+                      </div>
+                      <span className="text-[10px] bg-amber-500/20 text-amber-300 font-mono px-2 py-0.5 rounded border border-amber-500/40">
+                        Rank: Manager
+                      </span>
+                    </div>
+                    <div className="mt-auto">
+                      <h3 className="font-bold text-lg text-amber-300">Executive Manager Dante</h3>
+                      <p className="text-[11px] text-gray-300 mt-1 font-mono italic leading-snug">
+                        &lt;Tick tock, tick tock...!&gt; (Dante is furiously gesturing and frantically winding their clock head. Faust translates: "The Manager requests that you stop searching for them.")
+                      </p>
+                      <div className="mt-2 flex gap-1">
+                        <span className="text-[9px] bg-amber-950 text-amber-300 px-1.5 py-0.5 rounded border border-amber-700/50">Clockhead</span>
+                        <span className="text-[9px] bg-black text-gray-400 px-1.5 py-0.5 rounded border border-[#333]">Revival Device</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* 🚌 Charon Easter Egg Card */}
+                {isCharon && (
+                  <motion.div
+                    key="charon-easter-egg"
+                    layout
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-cyan-500 shadow-[0_0_20px_rgba(6,182,212,0.3)] h-64 bg-gradient-to-b from-[#05151a] to-black p-4"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div className="w-10 h-10 rounded-full bg-cyan-500/20 border border-cyan-500 flex items-center justify-center text-cyan-400 font-bold text-lg">
+                        ⭐
+                      </div>
+                      <span className="text-[10px] bg-cyan-500/20 text-cyan-300 font-mono px-2 py-0.5 rounded border border-cyan-500/40">
+                        Role: Chauffeur
+                      </span>
+                    </div>
+                    <div className="mt-auto">
+                      <h3 className="font-bold text-lg text-cyan-300">Bus Driver Charon</h3>
+                      <p className="text-[11px] text-gray-300 mt-1 font-mono leading-snug">
+                        "Vroom vroom. Mephistopheles is hungry. Charon wants star candies. Dante drive? No. Dante is bad driver. Charon drives."
+                      </p>
+                      <div className="mt-2 flex gap-1">
+                        <span className="text-[9px] bg-cyan-950 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-700/50">Vroom Vroom</span>
+                        <span className="text-[9px] bg-black text-gray-400 px-1.5 py-0.5 rounded border border-[#333]">Star Candy Lover</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {filteredIdentities.map(id => (
+                  <IdCard 
+                    key={id.name} 
+                    id={id} 
+                    meta={getMetadata(id)} 
+                    acquired={acquiredIds.has(id.name)} 
+                    onToggleAcquired={toggleAcquiredId} 
+                    onEdit={() => setEditingId(id)}
+                    onClickDetails={() => setDetailsId(id)}
+                  />
+                ))}
+              </AnimatePresence>
+            </div>
+          </>
+        );
+      })()}
 
       {editingId && (
         <EditMetadataModal 
@@ -288,6 +431,10 @@ export default function IdentitiesPage() {
           identitiesData={identitiesData}
           onClose={() => setDetailsId(null)} 
         />
+      )}
+
+      {showVergiliusModal && (
+        <VergiliusModal onClose={() => setShowVergiliusModal(false)} />
       )}
     </motion.div>
   );
