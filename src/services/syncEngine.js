@@ -1,11 +1,13 @@
-import { supabase } from './supabaseClient';
+﻿import { supabase } from './supabaseClient';
 import { useStore } from '../stores/useStore';
 
 let syncTimeout = null;
+let autoInterval = null;
 let isSyncing = false;
+let lastLocalEdit = 0;
+let lastCloudSync = 0;
 
 export const syncEngine = {
-  // Get current auth user
   getUser: async () => {
     try {
       const { data: { user }, error } = await supabase.auth.getUser();
@@ -17,26 +19,18 @@ export const syncEngine = {
     }
   },
 
-  // Listen to auth changes
   onAuthStateChange: (callback) => {
     return supabase.auth.onAuthStateChange(callback);
   },
 
-  // Auth operations
   signUp: async (email, password) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) throw error;
     return data;
   },
 
   signIn: async (email, password) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
     return data;
   },
@@ -55,23 +49,25 @@ export const syncEngine = {
   },
 
   updatePassword: async (newPassword) => {
-    const { data, error } = await supabase.auth.updateUser({
-      password: newPassword,
-    });
+    const { data, error } = await supabase.auth.updateUser({ password: newPassword });
     if (error) throw error;
     return data;
   },
 
-  // Push local save to cloud
+  notifyLocalEdit: () => {
+    lastLocalEdit = Date.now();
+  },
+
   pushSaveToCloud: async () => {
     if (isSyncing) return;
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return; // Not signed in, no cloud sync needed
+      if (!user) return;
 
       const store = useStore.getState();
       if (!store.isLoaded) return;
 
+      const now = Date.now();
       const payload = {
         onboardingCompleted: store.onboardingCompleted,
         tutorialCompleted: store.tutorialCompleted,
@@ -85,20 +81,21 @@ export const syncEngine = {
         inventory: store.inventory,
         bpState: store.bpState,
         scheduleState: store.scheduleState,
-        lastUpdated: Date.now()
+        lastUpdated: now
       };
 
       isSyncing = true;
-      const { error } = await supabase
-        .from('user_saves')
-        .upsert({
-          id: user.id,
-          save_data: payload,
-          updated_at: new Date().toISOString()
-        });
+      await supabase.from('user_saves').delete().eq('id', user.id);
+      const { error } = await supabase.from('user_saves').insert({
+        id: user.id,
+        save_data: payload,
+        updated_at: new Date(now).toISOString()
+      });
 
       if (error) {
         console.error('Error syncing save to cloud:', error);
+      } else {
+        lastCloudSync = now;
       }
     } catch (err) {
       console.error('Exception during cloud sync push:', err);
@@ -107,7 +104,6 @@ export const syncEngine = {
     }
   },
 
-  // Pull save from cloud
   pullSaveFromCloud: async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -126,13 +122,16 @@ export const syncEngine = {
 
       if (data && data.save_data) {
         const cloudData = data.save_data;
-        const store = useStore.getState();
-
-        // If local data exists, compare timestamps if available
-        const localLastUpdated = store.scheduleState?.lastResetCheck || 0;
         const cloudLastUpdated = cloudData.lastUpdated || (data.updated_at ? new Date(data.updated_at).getTime() : 0);
 
-        // Load into local store
+        if (lastLocalEdit > cloudLastUpdated) {
+          return false;
+        }
+        if (lastCloudSync >= cloudLastUpdated) {
+          return false;
+        }
+
+        const store = useStore.getState();
         useStore.setState({
           onboardingCompleted: cloudData.onboardingCompleted ?? store.onboardingCompleted,
           tutorialCompleted: cloudData.tutorialCompleted ?? store.tutorialCompleted,
@@ -148,7 +147,6 @@ export const syncEngine = {
           scheduleState: { ...store.scheduleState, ...(cloudData.scheduleState || {}) }
         });
 
-        // Persist locally too (electron file or localStorage)
         if (window.electronAPI) {
           const toSave = {
             ...cloudData,
@@ -161,9 +159,9 @@ export const syncEngine = {
           localStorage.setItem('limbus-tracker-data', JSON.stringify(cloudData));
         }
 
+        lastCloudSync = cloudLastUpdated;
         return true;
       } else {
-        // First time cloud user! Upload current local save to cloud
         await syncEngine.pushSaveToCloud();
         return true;
       }
@@ -173,11 +171,26 @@ export const syncEngine = {
     }
   },
 
-  // Debounced auto-push for useStore changes
   queuePush: () => {
+    syncEngine.notifyLocalEdit();
     if (syncTimeout) clearTimeout(syncTimeout);
     syncTimeout = setTimeout(() => {
       syncEngine.pushSaveToCloud();
-    }, 1800); // 1.8s debounce
+    }, 1500);
+  },
+
+  start15sInterval: () => {
+    if (autoInterval) clearInterval(autoInterval);
+    autoInterval = setInterval(async () => {
+      const user = await syncEngine.getUser();
+      if (!user) return;
+      if (lastLocalEdit > lastCloudSync) {
+        await syncEngine.pushSaveToCloud();
+      } else {
+        await syncEngine.pullSaveFromCloud();
+      }
+    }, 15000);
   }
 };
+
+syncEngine.start15sInterval();
