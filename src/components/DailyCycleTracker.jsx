@@ -1,13 +1,26 @@
-import React from 'react';
-import { Target, Flame, CalendarDays, CheckCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { Target, Flame, CalendarDays, CheckCircle, Swords } from 'lucide-react';
 import { useStore } from '../stores/useStore';
 import { calculateLimbusGrind, generateRoadmap } from '../utils/limbusCalculator.js';
 import { getNextResets } from '../utils/timeUtils.js';
 import { getSeasonEndDate } from '../utils/seasonUtils.js';
 
 export default function DailyCycleTracker() {
-  const { scheduleState, updateScheduleState, bpState, injectBpExp, inventory, wantList, identitiesData, egosData, activeBanner } = useStore();
-  const hasMdHard = bpState.hasMdHard !== false;
+  const { 
+    scheduleState, 
+    updateScheduleState, 
+    bpState, 
+    injectBpExp, 
+    logMdRun, 
+    undoMdRun, 
+    inventory, 
+    wantList, 
+    identitiesData, 
+    egosData 
+  } = useStore();
+
+  const cantoUnlockedHard = (bpState.canto === undefined || bpState.canto >= 8);
+  const effectiveHasMdHard = cantoUnlockedHard && (bpState.preferHardMd !== false) && (bpState.hasMdHard !== false);
 
   const seasonEndDate = getSeasonEndDate(bpState);
 
@@ -17,18 +30,19 @@ export default function DailyCycleTracker() {
   const calcItems = targetItems.map(item => ({ sinnerId: item.sinner, rarity: !!item.grade ? 'EGO' : (item.rarity === 3 ? '000' : '00') }));
 
   const calcResult = React.useMemo(() => calculateLimbusGrind(
-    calcItems, inventory, { ...bpState, hasMdHard }, scheduleState, seasonEndDate
-  ), [calcItems, inventory, bpState, hasMdHard, scheduleState, seasonEndDate]);
+    calcItems, inventory, { ...bpState, hasMdHard: effectiveHasMdHard }, scheduleState, seasonEndDate
+  ), [calcItems, inventory, bpState, effectiveHasMdHard, scheduleState, seasonEndDate]);
 
   const roadmap = React.useMemo(() => generateRoadmap(
-    calcResult.daysLeft, calcResult.plannedRuns, scheduleState, { ...bpState, hasMdHard }
-  ), [calcResult.daysLeft, calcResult.plannedRuns, scheduleState, bpState, hasMdHard]);
+    calcResult.daysLeft, calcResult.plannedRuns, scheduleState, { ...bpState, hasMdHard: effectiveHasMdHard }
+  ), [calcResult.daysLeft, calcResult.plannedRuns, scheduleState, bpState, effectiveHasMdHard]);
   
   const todayRoadmap = roadmap[0] || { runs: 0, runsList: [] };
   const mdRequiredToday = todayRoadmap.runs > 0;
 
-  const [timeUntilDaily, setTimeUntilDaily] = React.useState('');
-  const [timeUntilMd, setTimeUntilMd] = React.useState('');
+  const [timeUntilDaily, setTimeUntilDaily] = useState('');
+  const [timeUntilMd, setTimeUntilMd] = useState('');
+  const [showManualLogger, setShowManualLogger] = useState(false);
 
   React.useEffect(() => {
     const updateTimers = () => {
@@ -52,52 +66,222 @@ export default function DailyCycleTracker() {
     return () => clearInterval(interval);
   }, []);
 
+  const bonusesClaimed = scheduleState.mdBonusesClaimed || 0;
+  const bonusesAvailable = Math.max(0, 3 - bonusesClaimed);
+  const todayRuns = scheduleState.todayLoggedRuns || [];
+
+  // Toggle today's required runs
+  const handleToggleRequiredMd = () => {
+    if (scheduleState.mdTodayDone) {
+      // Undo all runs logged today
+      todayRuns.forEach(r => undoMdRun(r.id));
+      updateScheduleState({ mdTodayDone: false });
+    } else {
+      // Automatically log the runs specified in today's roadmap
+      if (todayRoadmap.runsList && todayRoadmap.runsList.length > 0) {
+        todayRoadmap.runsList.forEach(run => {
+          logMdRun(run.runKey || (run.type === 'Hard Bonus' ? 'hard_bonus' : run.type === 'Normal Bonus' ? 'normal_bonus' : 'normal_nobonus'));
+        });
+      } else {
+        // Fallback default run
+        if (effectiveHasMdHard && bonusesAvailable >= 3) {
+          logMdRun('hard_bonus');
+        } else if (bonusesAvailable >= 1) {
+          logMdRun('normal_bonus');
+        } else {
+          logMdRun('normal_nobonus');
+        }
+      }
+      updateScheduleState({ mdTodayDone: true });
+    }
+  };
+
   return (
     <div className="glass-card p-0 overflow-hidden border-[#c9a84c]/20 h-full flex flex-col">
       <div className="bg-[#1a1a1a] p-4 border-b border-[#333] flex items-center justify-between">
         <h2 className="text-xl font-bold font-limbus text-[#c9a84c] flex items-center gap-2">
           <CalendarDays size={20} /> Daily Cycle Tracker
         </h2>
-        <div className="text-right">
-            <div className="text-xs text-gray-400">Daily Reset: <span className="text-white font-mono">{timeUntilDaily}</span></div>
-            <div className="text-xs text-gray-400">MD Reset: <span className="text-[#eab308] font-mono">{timeUntilMd}</span></div>
+        <div className="text-right flex items-center gap-4">
+          <div className="text-xs text-gray-400">Daily: <span className="text-white font-mono">{timeUntilDaily}</span></div>
+          <div className="text-xs text-gray-400">MD Reset: <span className="text-[#eab308] font-mono">{timeUntilMd}</span></div>
         </div>
       </div>
-      <div className="p-6 space-y-6 flex-1 flex flex-col justify-center">
+
+      <div className="p-6 space-y-6 flex-1 flex flex-col justify-start">
         
-        {mdRequiredToday && (
-          <div className={`p-4 rounded-xl border transition-all ${scheduleState.mdTodayDone ? 'bg-[#c9a84c]/10 border-[#c9a84c]/50' : 'bg-red-950/20 border-red-900/50'}`}>
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-bold text-lg text-white flex items-center gap-2">
-                  <Flame size={18} className={scheduleState.mdTodayDone ? 'text-[#c9a84c]' : 'text-red-500'} /> 
-                  Required Mirror Dungeons
+        {/* REQUIRED MD TODAY SECTION */}
+        <div className={`p-4 rounded-xl border transition-all ${
+          scheduleState.mdTodayDone 
+            ? 'bg-[#c9a84c]/10 border-[#c9a84c]/50' 
+            : mdRequiredToday 
+              ? 'bg-red-950/20 border-red-900/50' 
+              : 'bg-[#111] border-[#333]'
+        }`}>
+          <div className="flex items-center justify-between">
+            <div className="flex-1 pr-4">
+              <div className="flex items-center gap-2 mb-1">
+                <Flame size={18} className={scheduleState.mdTodayDone ? 'text-[#c9a84c]' : mdRequiredToday ? 'text-red-500' : 'text-gray-500'} />
+                <h3 className="font-bold text-lg text-white">
+                  {scheduleState.mdTodayDone 
+                    ? "Today's Mirror Dungeon Completed" 
+                    : mdRequiredToday 
+                      ? "Did you do your Mirror Dungeon today?" 
+                      : "No Required MD Today (Rest Day)"}
                 </h3>
-                <div className="flex gap-2 mt-2">
-                  {todayRoadmap.runsList?.map((run, i) => (
-                    <span key={i} className={`text-xs font-bold px-2 py-0.5 rounded ${run.type === 'Hard Bonus' ? 'bg-[#ef4444]/20 text-[#ef4444]' : run.type === 'Normal Bonus' ? 'bg-[#c9a84c]/20 text-[#eab308]' : 'bg-[#333] text-gray-300'}`}>
-                      {run.type}
-                    </span>
-                  ))}
-                </div>
               </div>
-              <button 
-                onClick={() => updateScheduleState({ mdTodayDone: !scheduleState.mdTodayDone })}
-                className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-colors ${scheduleState.mdTodayDone ? 'bg-[#c9a84c] border-[#c9a84c] text-black' : 'border-gray-500 hover:border-[#c9a84c] text-transparent hover:text-white'}`}
+              
+              {mdRequiredToday ? (
+                <div>
+                  <p className="text-xs text-gray-400 mb-2">
+                    {scheduleState.mdTodayDone 
+                      ? "Marked done! BP EXP and weekly bonuses have been updated." 
+                      : `Roadmap requires ${todayRoadmap.runs}x run(s) today:`}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {todayRoadmap.runsList?.map((run, i) => (
+                      <span key={i} className={`text-xs font-bold px-2 py-0.5 rounded flex items-center gap-1 ${
+                        run.type === 'Hard Bonus' 
+                          ? 'bg-[#ef4444]/20 text-[#ef4444] border border-[#ef4444]/30' 
+                          : run.type === 'Normal Bonus' 
+                            ? 'bg-[#c9a84c]/20 text-[#eab308] border border-[#c9a84c]/30' 
+                            : 'bg-[#333] text-gray-300'
+                      }`}>
+                        <span>{run.type}</span>
+                        <span className="text-[10px] text-gray-400">({run.exp} EXP • {run.modules} mod)</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <p className="text-xs text-gray-400">
+                  {scheduleState.mdTodayDone 
+                    ? "You logged extra runs today! Schedule adjusted accordingly." 
+                    : "You are on pace. Feel free to rest or log an extra run below."}
+                </p>
+              )}
+            </div>
+
+            <button 
+              onClick={handleToggleRequiredMd}
+              className={`w-12 h-12 rounded-full border-2 shrink-0 flex items-center justify-center transition-all ${
+                scheduleState.mdTodayDone 
+                  ? 'bg-[#c9a84c] border-[#c9a84c] text-black shadow-[0_0_15px_rgba(201,168,76,0.4)]' 
+                  : 'border-gray-500 hover:border-[#c9a84c] text-transparent hover:text-white'
+              }`}
+              title={scheduleState.mdTodayDone ? "Click to undo today's completion" : "Click to mark completed"}
+            >
+              <CheckCircle size={26} className={scheduleState.mdTodayDone ? 'text-black' : ''} />
+            </button>
+          </div>
+        </div>
+
+        {/* LOG A RUN (MANUAL / AD-HOC LOGGING) */}
+        <div className="bg-[#111] border border-[#333] rounded-xl p-4">
+          <div className="flex justify-between items-center mb-3">
+            <div>
+              <h4 className="font-bold text-sm text-white flex items-center gap-2">
+                <Swords size={16} className="text-[#c9a84c]" /> Log a Mirror Dungeon Run
+              </h4>
+              <p className="text-[11px] text-gray-400">
+                Weekly Bonuses Remaining: <span className="font-bold text-[#eab308]">{bonusesAvailable} / 3</span>
+              </p>
+            </div>
+            <button 
+              onClick={() => setShowManualLogger(!showManualLogger)} 
+              className="text-xs text-[#c9a84c] hover:underline font-bold"
+            >
+              {showManualLogger ? 'Hide Options' : '+ Quick Log'}
+            </button>
+          </div>
+
+          {showManualLogger && (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-[#222]">
+              {/* Hard Bonus Option */}
+              <button
+                disabled={!cantoUnlockedHard || !effectiveHasMdHard || bonusesAvailable < 3}
+                onClick={() => logMdRun('hard_bonus')}
+                className={`p-2.5 rounded border text-left flex flex-col justify-between transition-all ${
+                  cantoUnlockedHard && effectiveHasMdHard && bonusesAvailable >= 3
+                    ? 'bg-red-950/30 border-red-800 hover:border-red-500 text-white cursor-pointer'
+                    : 'bg-black/30 border-[#222] text-gray-600 cursor-not-allowed opacity-50'
+                }`}
               >
-                <CheckCircle size={24} className={scheduleState.mdTodayDone ? 'text-black' : ''} />
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs text-red-400">Hard Bonus</span>
+                  <span className="text-[10px] text-red-300 font-mono">18 mod</span>
+                </div>
+                <div className="text-[11px] text-gray-400 mt-1">
+                  +225 EXP <span className="text-[9px] text-gray-500">(3 bonuses)</span>
+                </div>
+              </button>
+
+              {/* Normal Bonus Option */}
+              <button
+                disabled={bonusesAvailable < 1}
+                onClick={() => logMdRun('normal_bonus')}
+                className={`p-2.5 rounded border text-left flex flex-col justify-between transition-all ${
+                  bonusesAvailable >= 1
+                    ? 'bg-yellow-950/30 border-yellow-800 hover:border-[#c9a84c] text-white cursor-pointer'
+                    : 'bg-black/30 border-[#222] text-gray-600 cursor-not-allowed opacity-50'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs text-[#eab308]">Normal Bonus</span>
+                  <span className="text-[10px] text-yellow-300 font-mono">5 mod</span>
+                </div>
+                <div className="text-[11px] text-gray-400 mt-1">
+                  +45 EXP <span className="text-[9px] text-gray-500">(1 bonus)</span>
+                </div>
+              </button>
+
+              {/* Normal No Bonus Option */}
+              <button
+                onClick={() => logMdRun('normal_nobonus')}
+                className="p-2.5 rounded border bg-black/50 border-[#333] hover:border-gray-400 text-white text-left flex flex-col justify-between transition-all cursor-pointer"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs text-gray-300">Normal (No Bonus)</span>
+                  <span className="text-[10px] text-gray-400 font-mono">5 mod</span>
+                </div>
+                <div className="text-[11px] text-gray-400 mt-1">
+                  +30 EXP <span className="text-[9px] text-gray-500">(0 bonus)</span>
+                </div>
               </button>
             </div>
-          </div>
-        )}
+          )}
 
+          {/* List of runs logged today */}
+          {todayRuns.length > 0 && (
+            <div className="mt-3 pt-3 border-t border-[#222]">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Runs Logged Today</div>
+              <div className="flex flex-wrap gap-2">
+                {todayRuns.map(run => (
+                  <div key={run.id} className="bg-black/60 border border-[#444] rounded px-2.5 py-1 flex items-center gap-2 text-xs">
+                    <span className="text-white font-medium">{run.label || run.type}</span>
+                    <span className="text-green-400 font-bold">+{run.exp} EXP</span>
+                    <button 
+                      onClick={() => undoMdRun(run.id)}
+                      className="text-gray-500 hover:text-red-400 ml-1 transition-colors"
+                      title="Undo this run"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* DAILY MISSIONS (5 STEPS) */}
         <div className={`p-4 rounded-xl border transition-all ${scheduleState.dailiesProgress >= 5 ? 'bg-[#c9a84c]/10 border-[#c9a84c]/50' : 'bg-[#111] border-[#333]'}`}>
           <div className="flex items-center justify-between mb-3">
             <div>
               <h3 className="font-bold text-lg text-white flex items-center gap-2">
                 <Target size={18} className="text-[#c9a84c]" /> Daily Missions
               </h3>
-              <p className="text-sm text-gray-400 mt-1">10 Pass EXP. Login, thread, EXP, and luxcavations.</p>
+              <p className="text-xs text-gray-400 mt-0.5">10 Pass EXP total (+2 EXP per mission step). Login, thread, EXP, and luxcavations.</p>
             </div>
             <div className="text-2xl font-black text-[#c9a84c]">
               {scheduleState.dailiesProgress} <span className="text-lg text-gray-500">/ 5</span>
@@ -113,43 +297,62 @@ export default function DailyCycleTracker() {
                   updateScheduleState({ dailiesProgress: newProgress });
                   injectBpExp(diff * 2);
                 }}
-                className={`h-10 flex-1 rounded cursor-pointer transition-all ${scheduleState.dailiesProgress >= step ? 'bg-[#c9a84c] shadow-[0_0_10px_rgba(201,168,76,0.3)]' : 'bg-[#222] hover:bg-[#333]'}`}
-              />
+                className={`h-10 flex-1 rounded cursor-pointer transition-all flex items-center justify-center font-bold text-xs ${
+                  scheduleState.dailiesProgress >= step 
+                    ? 'bg-[#c9a84c] text-black shadow-[0_0_10px_rgba(201,168,76,0.3)]' 
+                    : 'bg-[#222] text-gray-600 hover:bg-[#333]'
+                }`}
+              >
+                +2
+              </div>
             ))}
           </div>
         </div>
 
+        {/* WEEKLIES SECTION */}
         <div className={`p-4 rounded-xl border transition-all ${scheduleState.weekliesDone ? 'bg-[#c9a84c]/10 border-[#c9a84c]/50' : 'bg-[#111] border-[#333]'}`}>
           {!scheduleState.canClaimWeeklies ? (
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-bold text-lg text-white">Can you claim your Weeklies yet?</h3>
-                <p className="text-sm text-gray-400 mt-1">Requires 1 Normal/Hard MD and minor tasks.</p>
+                <p className="text-xs text-gray-400 mt-0.5">Requires 1 Normal/Hard MD and minor weekly tasks.</p>
               </div>
-              <div className="flex gap-2">
-                <button onClick={() => updateScheduleState({ canClaimWeeklies: true })} className="px-6 py-2 rounded bg-[#222] border border-[#444] hover:border-[#c9a84c] font-bold transition-colors">Yes</button>
-              </div>
+              <button 
+                onClick={() => updateScheduleState({ canClaimWeeklies: true })} 
+                className="px-6 py-2 rounded bg-[#222] border border-[#444] hover:border-[#c9a84c] font-bold text-white transition-colors"
+              >
+                Yes
+              </button>
             </div>
           ) : (
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-bold text-lg text-white">Have you claimed them?</h3>
-                <p className="text-sm text-gray-400 mt-1">20 Pass EXP rewarded instantly.</p>
+                <p className="text-xs text-gray-400 mt-0.5">20 Pass EXP rewarded instantly.</p>
               </div>
               <div className="flex gap-2 items-center">
-                <button onClick={() => {
-                  if (scheduleState.weekliesDone) injectBpExp(-20);
-                  updateScheduleState({ canClaimWeeklies: false, weekliesDone: false });
-                }} className="px-4 py-2 text-sm text-gray-500 hover:text-white">Back</button>
+                <button 
+                  onClick={() => {
+                    if (scheduleState.weekliesDone) injectBpExp(-20);
+                    updateScheduleState({ canClaimWeeklies: false, weekliesDone: false });
+                  }} 
+                  className="px-4 py-2 text-sm text-gray-500 hover:text-white"
+                >
+                  Back
+                </button>
                 <button 
                   onClick={() => {
                     const newWeekliesDone = !scheduleState.weekliesDone;
                     updateScheduleState({ weekliesDone: newWeekliesDone });
                     injectBpExp(newWeekliesDone ? 20 : -20);
                   }}
-                  className={`px-6 py-2 rounded font-bold transition-colors ${scheduleState.weekliesDone ? 'bg-[#c9a84c] text-black shadow-[0_0_10px_rgba(201,168,76,0.3)]' : 'bg-[#222] border border-[#444] hover:border-[#c9a84c]'}`}
+                  className={`px-6 py-2 rounded font-bold transition-colors ${
+                    scheduleState.weekliesDone 
+                      ? 'bg-[#c9a84c] text-black shadow-[0_0_10px_rgba(201,168,76,0.3)]' 
+                      : 'bg-[#222] text-white border border-[#444] hover:border-[#c9a84c]'
+                  }`}
                 >
-                  {scheduleState.weekliesDone ? 'Claimed!' : 'Claim Now'}
+                  {scheduleState.weekliesDone ? 'Claimed (+20 EXP)' : 'Claim Now'}
                 </button>
               </div>
             </div>

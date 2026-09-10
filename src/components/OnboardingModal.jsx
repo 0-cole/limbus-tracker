@@ -55,12 +55,55 @@ export default function OnboardingModal() {
                       <div className="text-sm text-gray-400">Do you own the paid Premium track? (Provides 3x Crates past max level)</div>
                     </div>
                     <input 
-                      type="checkbox"
-                      className="w-6 h-6 accent-[#c9a84c]"
-                      checked={bpState.isPremium}
-                      onChange={(e) => updateBpState({ isPremium: e.target.checked })}
+                      type="checkbox" 
+                      className="w-6 h-6 accent-[#c9a84c]" 
+                      checked={bpState.isPremium} 
+                      onChange={(e) => updateBpState({ isPremium: e.target.checked })} 
                     />
                   </label>
+
+                  <div className="bg-black/50 p-4 border border-[#333] rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <div>
+                        <div className="text-white font-bold">Story Progress</div>
+                        <div className="text-sm text-gray-400">Determines if Hard Mirror Dungeon is available</div>
+                      </div>
+                      <select 
+                        className="bg-black border border-[#333] rounded px-3 py-2 text-white focus:border-[#c9a84c] focus:outline-none text-sm"
+                        value={bpState.canto || 8}
+                        onChange={(e) => {
+                          const val = parseInt(e.target.value);
+                          updateBpState({ canto: val, hasMdHard: val >= 8 && (bpState.preferHardMd !== false) });
+                        }}
+                      >
+                        <option value="1">Canto I</option>
+                        <option value="2">Canto II</option>
+                        <option value="3">Canto III</option>
+                        <option value="4">Canto IV</option>
+                        <option value="5">Canto V</option>
+                        <option value="6">Canto VI</option>
+                        <option value="7">Canto VII</option>
+                        <option value="8">Canto VIII (Hard Unlocked)</option>
+                        <option value="9">Canto IX (Hard Unlocked)</option>
+                        <option value="10">Canto X (Hard Unlocked)</option>
+                      </select>
+                    </div>
+
+                    {(bpState.canto === undefined || bpState.canto >= 8) && (
+                      <label className="flex items-center justify-between pt-2 border-t border-[#222] cursor-pointer">
+                        <div>
+                          <div className="text-white text-xs font-bold">Plan Hard Mirror Dungeon (18 modules for 225 EXP)</div>
+                          <div className="text-[10px] text-gray-400">Uncheck if you prefer 3 Regular runs @ 5 modules each</div>
+                        </div>
+                        <input 
+                          type="checkbox" 
+                          className="w-5 h-5 accent-[#c9a84c]" 
+                          checked={bpState.preferHardMd !== false} 
+                          onChange={(e) => updateBpState({ preferHardMd: e.target.checked, hasMdHard: e.target.checked })} 
+                        />
+                      </label>
+                    )}
+                  </div>
                 </div>
               </motion.div>
             )}

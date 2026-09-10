@@ -24,15 +24,15 @@ const CANTOS = [
 export default function SchedulePage() {
   const { scheduleState, updateScheduleState, bpState, updateBpState, inventory, wantList, identitiesData, egosData, activeBanner } = useStore();
   const [safeMath, setSafeMath] = useState(false);
-  const [canto, setCanto] = useState(bpState.canto || 9);
+  const canto = bpState.canto || 8;
+  const cantoUnlockedHard = canto >= 8;
+  const preferHardMd = bpState.preferHardMd !== false;
+  const hasMdHard = cantoUnlockedHard && preferHardMd;
 
   // Update store when canto changes
   const handleCantoChange = (val) => {
-    setCanto(val);
-    updateBpState({ canto: val, hasMdHard: val >= 9 });
+    updateBpState({ canto: val, hasMdHard: val >= 8 && preferHardMd });
   };
-
-  const hasMdHard = canto >= 9;
 
   // Players can update this once a new season is announced; it is always KST.
   const seasonEndDate = getSeasonEndDate(bpState);
@@ -48,10 +48,10 @@ export default function SchedulePage() {
   const calcResult = useMemo(() => calculateLimbusGrind(
     calcItems,
     inventory,
-    { ...bpState, hasMdHard },
+    { ...bpState, canto, preferHardMd, hasMdHard },
     scheduleState,
     seasonEndDate
-  ), [calcItems, inventory, bpState, hasMdHard, scheduleState, seasonEndDate]);
+  ), [calcItems, inventory, bpState, canto, preferHardMd, hasMdHard, scheduleState, seasonEndDate]);
 
   const pacePerDay = calcResult.daysLeft > 0 ? (calcResult.rawMdsNeeded / calcResult.daysLeft).toFixed(1) : 0;
   
@@ -65,8 +65,8 @@ export default function SchedulePage() {
     calcResult.daysLeft,
     calcResult.plannedRuns,
     scheduleState,
-    bpState
-  ), [calcResult.daysLeft, calcResult.plannedRuns, scheduleState, bpState]);
+    { ...bpState, canto, preferHardMd, hasMdHard }
+  ), [calcResult.daysLeft, calcResult.plannedRuns, scheduleState, bpState, canto, preferHardMd, hasMdHard]);
 
   // Find banner image URL if active banner text is known
   let bannerImageUrl = null;
@@ -159,13 +159,28 @@ export default function SchedulePage() {
                    <option key={c.id} value={c.id}>{c.name}</option>
                 ))}
               </select>
-              <div className="mt-2 text-xs text-gray-500 flex justify-between">
+              <div className="mt-2 text-xs text-gray-500 flex justify-between items-center">
                  <span>MD Hard Mode:</span>
-                 <span className={hasMdHard ? "text-green-400 font-bold" : "text-red-400 font-bold"}>
-                    {hasMdHard ? "Unlocked (225 EXP/wk)" : "Locked (135 EXP/wk)"}
+                 <span className={cantoUnlockedHard ? "text-green-400 font-bold" : "text-red-400 font-bold"}>
+                    {cantoUnlockedHard ? "Unlocked" : "Locked (Canto VIII required)"}
                  </span>
               </div>
             </div>
+
+            {cantoUnlockedHard && (
+              <label className="flex justify-between items-center bg-black/50 p-3 rounded cursor-pointer group hover:border-[#c9a84c]/50 transition-colors border border-transparent">
+                <div>
+                  <span className="text-white font-bold text-sm block group-hover:text-[#c9a84c] transition-colors">Plan Hard Mirror Dungeon</span>
+                  <span className="text-[10px] text-gray-400">18 modules for 225 EXP (uncheck for 3 Regular runs @ 5 mod each)</span>
+                </div>
+                <input 
+                  type="checkbox" 
+                  checked={preferHardMd} 
+                  onChange={e => updateBpState({ preferHardMd: e.target.checked, hasMdHard: e.target.checked })} 
+                  className="w-5 h-5 accent-[#c9a84c]" 
+                />
+              </label>
+            )}
 
             <label className="flex justify-between items-center bg-black/50 p-3 rounded cursor-pointer group">
               <span className="text-[#eab308] font-bold text-sm group-hover:text-white">Premium Pass (3x Crates)</span>

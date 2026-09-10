@@ -5,30 +5,17 @@ import { CheckCircle, XCircle, AlertCircle, Calendar, Target, Flame, CalendarDay
 import { calculateLimbusGrind, generateRoadmap } from '../utils/limbusCalculator.js';
 import { getSeasonEndDate } from '../utils/seasonUtils.js';
 
+import DailyCycleTracker from '../components/DailyCycleTracker.jsx';
+
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 export default function DashboardPage() {
-  const { weeklyProgress, updateWeekly, scheduleState, updateScheduleState, bpState, inventory, wantList, identitiesData, egosData, activeBanner } = useStore();
+  const { weeklyProgress, updateWeekly, scheduleState, updateScheduleState, bpState, updateBpState, inventory, wantList, identitiesData, egosData, activeBanner } = useStore();
   const [showWhenGameStarts, setShowWhenGameStarts] = useState(true);
-  const hasMdHard = bpState.hasMdHard !== false;
 
-  const seasonEndDate = getSeasonEndDate(bpState);
-
-  const targetItems = [...(wantList || [])].map(name => {
-    return identitiesData?.find(id => id.name === name) || egosData?.find(ego => ego.name === name);
-  }).filter(Boolean);
-  const calcItems = targetItems.map(item => ({ sinnerId: item.sinner, rarity: !!item.grade ? 'EGO' : (item.rarity === 3 ? '000' : '00') }));
-
-  const calcResult = React.useMemo(() => calculateLimbusGrind(
-    calcItems, inventory, { ...bpState, hasMdHard }, scheduleState, seasonEndDate
-  ), [calcItems, inventory, bpState, hasMdHard, scheduleState, seasonEndDate]);
-
-  const roadmap = React.useMemo(() => generateRoadmap(
-    calcResult.daysLeft, calcResult.plannedRuns, scheduleState, { ...bpState, hasMdHard }
-  ), [calcResult.daysLeft, calcResult.plannedRuns, scheduleState, bpState, hasMdHard]);
-  
-  const todayRoadmap = roadmap[0] || { runs: 0 };
-  const mdRequiredToday = todayRoadmap.runs > 0;
+  const cantoUnlockedHard = (bpState.canto === undefined || bpState.canto >= 8);
+  const preferHardMd = bpState.preferHardMd !== false;
+  const effectiveHasMdHard = cantoUnlockedHard && preferHardMd && (bpState.hasMdHard !== false);
 
   const [currentDayStr, setCurrentDayStr] = useState('');
   const [currentDayIndex, setCurrentDayIndex] = useState(0);
@@ -66,22 +53,6 @@ export default function DashboardPage() {
     window.electronAPI.getGameLaunchPreference().then(setShowWhenGameStarts).catch(() => {});
   }, []);
 
-  const toggleToday = () => {
-    const updated = { ...weeklyProgress };
-    const currentStatus = updated.dailyStatus[currentDayStr];
-    const isDone = currentStatus === 'done';
-    updated.dailyStatus[currentDayStr] = isDone ? 'pending' : 'done';
-    updateWeekly(updated);
-    updateScheduleState({ dailiesDone: !isDone });
-  };
-
-  const toggleMD = () => {
-    const updated = { ...weeklyProgress };
-    updated.mirrorDungeon = !updated.mirrorDungeon;
-    updateWeekly(updated);
-    updateScheduleState({ weekliesDone: updated.mirrorDungeon });
-  };
-
   // Calculate missed days to suggest backup plans
   const missedDaysCount = Object.values(weeklyProgress.dailyStatus || {}).filter(v => v === 'missed').length;
 
@@ -96,109 +67,82 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        {/* Big Day Block */}
-        <div className="glass-card p-0 lg:col-span-2 overflow-hidden border-[#c9a84c]/20">
-          <div className="bg-[#1a1a1a] p-4 border-b border-[#333] flex items-center justify-between">
-            <h2 className="text-xl font-bold font-limbus text-[#c9a84c] flex items-center gap-2">
-              <CalendarDays size={20} /> Daily Cycle Tracker
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 items-start">
+        {/* Daily Cycle Tracker (Unified) */}
+        <div className="lg:col-span-2">
+          <DailyCycleTracker />
+        </div>
+
+        {/* Right Column: Preferences & Contingency */}
+        <div className="space-y-6">
+          {/* MD Hard Mode Preference Card */}
+          <div className="glass-card p-6 border-[#c9a84c]/20">
+            <h2 className="text-lg font-bold mb-3 font-limbus text-white flex items-center gap-2">
+              <Flame size={18} className="text-[#c9a84c]" /> Mirror Dungeon Preference
             </h2>
-            <div className="text-sm font-mono text-gray-400">Day 1 of Schedule</div>
+            {cantoUnlockedHard ? (
+              <div>
+                <p className="text-xs text-gray-400 mb-4">
+                  You have Hard Mode unlocked. Choose whether to plan 1 Hard run (18 modules for 225 EXP) or 3 Regular runs (15 modules total for 135 EXP).
+                </p>
+                <div className="space-y-2">
+                  <label className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all ${
+                    preferHardMd ? 'bg-[#c9a84c]/10 border-[#c9a84c]' : 'bg-black/40 border-[#333] hover:border-gray-500'
+                  }`}>
+                    <div>
+                      <div className="text-white text-xs font-bold">Hard Mode (18 modules)</div>
+                      <div className="text-[10px] text-gray-400">225 EXP (3 bonuses at once)</div>
+                    </div>
+                    <input 
+                      type="radio" 
+                      name="mdPref" 
+                      checked={preferHardMd} 
+                      onChange={() => updateBpState({ preferHardMd: true, hasMdHard: true })} 
+                      className="accent-[#c9a84c] w-4 h-4" 
+                    />
+                  </label>
+
+                  <label className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all ${
+                    !preferHardMd ? 'bg-[#c9a84c]/10 border-[#c9a84c]' : 'bg-black/40 border-[#333] hover:border-gray-500'
+                  }`}>
+                    <div>
+                      <div className="text-white text-xs font-bold">Regular MDs Only (5 mod/run)</div>
+                      <div className="text-[10px] text-gray-400">45 EXP per bonus (15 mod total)</div>
+                    </div>
+                    <input 
+                      type="radio" 
+                      name="mdPref" 
+                      checked={!preferHardMd} 
+                      onChange={() => updateBpState({ preferHardMd: false, hasMdHard: false })} 
+                      className="accent-[#c9a84c] w-4 h-4" 
+                    />
+                  </label>
+                </div>
+              </div>
+            ) : (
+              <p className="text-xs text-gray-400">
+                Story progress: <strong className="text-white">Canto {bpState.canto || 1}</strong>. Hard Mode unlocks at Canto VIII. All weekly runs will be calculated as Regular MDs (5 modules).
+              </p>
+            )}
           </div>
-          <div className="p-6 space-y-6">
-            
-            {mdRequiredToday && (
-              <div className={`p-4 rounded-xl border transition-all ${scheduleState.mdTodayDone ? 'bg-[#c9a84c]/10 border-[#c9a84c]/50' : 'bg-red-950/20 border-red-900/50'}`}>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-bold text-lg text-white flex items-center gap-2">
-                      <Flame size={18} className={scheduleState.mdTodayDone ? 'text-[#c9a84c]' : 'text-red-500'} /> 
-                      Required Mirror Dungeon
-                    </h3>
-                    <p className="text-sm text-gray-400 mt-1">Your roadmap requires <span className="font-bold text-white">{todayRoadmap.runs}x Mirror Dungeon</span> today to stay on pace.</p>
-                  </div>
-                  <button 
-                    onClick={() => updateScheduleState({ mdTodayDone: !scheduleState.mdTodayDone })}
-                    className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-colors ${scheduleState.mdTodayDone ? 'bg-[#c9a84c] border-[#c9a84c] text-black' : 'border-gray-500 hover:border-[#c9a84c] text-transparent hover:text-white'}`}
-                  >
-                    <CheckCircle size={24} className={scheduleState.mdTodayDone ? 'text-black' : ''} />
-                  </button>
+
+          {/* Missed Days & Backup Plans */}
+          <div className="glass-card p-6 border-red-900/30">
+            <h2 className="text-lg font-bold mb-3 font-limbus text-red-400 flex items-center gap-2">
+              <AlertCircle size={18} /> Contingency Status
+            </h2>
+            {missedDaysCount === 0 ? (
+              <p className="text-[#737373] text-xs">You are currently on schedule. No contingencies required.</p>
+            ) : (
+              <div className="space-y-3">
+                <p className="text-xs text-[#e5e5e5]">You missed <span className="font-bold text-red-400">{missedDaysCount}</span> daily login(s) recently.</p>
+                <div className="p-3 bg-red-950/30 border border-red-900 rounded">
+                  <p className="font-bold text-xs text-red-300 mb-1">Schedule Adjusted:</p>
+                  <p className="text-[11px] text-[#ccc]">The grind roadmap has automatically redistributed your missed EXP over the remaining days of the season.</p>
                 </div>
               </div>
             )}
-
-            <div className={`p-4 rounded-xl border transition-all ${scheduleState.dailiesProgress >= 5 ? 'bg-[#c9a84c]/10 border-[#c9a84c]/50' : 'bg-[#111] border-[#333]'}`}>
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <h3 className="font-bold text-lg text-white flex items-center gap-2">
-                    <Target size={18} className="text-[#c9a84c]" /> Daily Missions
-                  </h3>
-                  <p className="text-sm text-gray-400 mt-1">10 Pass EXP. Login, thread, EXP, and luxcavations.</p>
-                </div>
-                <div className="text-2xl font-black text-[#c9a84c]">
-                  {scheduleState.dailiesProgress} <span className="text-lg text-gray-500">/ 5</span>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                {[1, 2, 3, 4, 5].map(step => (
-                  <div 
-                    key={step} 
-                    onClick={() => updateScheduleState({ dailiesProgress: scheduleState.dailiesProgress === step ? step - 1 : step })}
-                    className={`h-10 flex-1 rounded cursor-pointer transition-all ${scheduleState.dailiesProgress >= step ? 'bg-[#c9a84c] shadow-[0_0_10px_rgba(201,168,76,0.3)]' : 'bg-[#222] hover:bg-[#333]'}`}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div className={`p-4 rounded-xl border transition-all ${scheduleState.weekliesDone ? 'bg-[#c9a84c]/10 border-[#c9a84c]/50' : 'bg-[#111] border-[#333]'}`}>
-              {!scheduleState.canClaimWeeklies ? (
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-bold text-lg text-white">Can you claim your Weeklies yet?</h3>
-                    <p className="text-sm text-gray-400 mt-1">Requires 1 Normal/Hard MD and minor tasks.</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <button onClick={() => updateScheduleState({ canClaimWeeklies: true })} className="px-6 py-2 rounded bg-[#222] border border-[#444] hover:border-[#c9a84c] font-bold transition-colors">Yes</button>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-bold text-lg text-white">Have you claimed them?</h3>
-                    <p className="text-sm text-gray-400 mt-1">20 Pass EXP rewarded instantly.</p>
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <button onClick={() => updateScheduleState({ canClaimWeeklies: false, weekliesDone: false })} className="px-4 py-2 text-sm text-gray-500 hover:text-white">Back</button>
-                    <button 
-                      onClick={() => updateScheduleState({ weekliesDone: !scheduleState.weekliesDone })}
-                      className={`px-6 py-2 rounded font-bold transition-colors ${scheduleState.weekliesDone ? 'bg-[#c9a84c] text-black shadow-[0_0_10px_rgba(201,168,76,0.3)]' : 'bg-[#222] border border-[#444] hover:border-[#c9a84c]'}`}
-                    >
-                      {scheduleState.weekliesDone ? 'Claimed!' : 'Claim Now'}
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
           </div>
-        </div>
-
-        {/* Missed Days & Backup Plans */}
-        <div className="glass-card p-6 border-red-900/30">
-          <h2 className="text-xl font-bold mb-4 font-limbus text-red-400 flex items-center gap-2">
-            <AlertCircle size={20} /> Contingency Plans
-          </h2>
-          {missedDaysCount === 0 ? (
-            <p className="text-[#737373] text-sm">You are on schedule. No contingencies required.</p>
-          ) : (
-            <div className="space-y-4">
-              <p className="text-sm text-[#e5e5e5]">You missed <span className="font-bold text-red-400">{missedDaysCount}</span> daily login(s) recently.</p>
-              <div className="p-3 bg-red-950/30 border border-red-900 rounded">
-                <p className="font-bold text-sm text-red-300 mb-1">Backup Directive:</p>
-                <p className="text-xs text-[#ccc]">Run {missedDaysCount} extra Normal Mirror Dungeon(s) this week to compensate for lost Daily Pass XP.</p>
-              </div>
-            </div>
-          )}
         </div>
       </div>
 

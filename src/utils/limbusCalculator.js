@@ -42,9 +42,10 @@ export function calculateLimbusGrind(
   const { daysLeft, weeksLeft } = getRemainingCycles(seasonEndDate);
 
   // 4. Passive EXP Estimation
+  const effectiveHasMdHard = (bpState?.canto === undefined || bpState?.canto >= 8) && (bpState?.preferHardMd !== false) && (bpState?.hasMdHard !== false);
   const hardBonusYield = 225; // Hard Mode (3 bonuses at once)
   const normalBonusYield = 45; // Normal Mode (1 bonus)
-  const bonusYield = bpState.hasMdHard ? hardBonusYield : normalBonusYield;
+  const bonusYield = effectiveHasMdHard ? hardBonusYield : normalBonusYield;
   
   const futureDailyExp = Math.max(0, daysLeft - 1) * 10;
   const futureWeeklyExp = Math.max(0, weeksLeft - 1) * 20;
@@ -58,12 +59,12 @@ export function calculateLimbusGrind(
   let expDeficitAfterPassive = Math.max(0, bpExpNeeded - truePassiveExp);
   
   let plannedRuns = [];
-  let availableBonuses = Math.max(0, weeksLeft - 1) * 3 + (3 - scheduleState.mdBonusesClaimed);
+  let availableBonuses = Math.max(0, weeksLeft - 1) * 3 + (3 - (scheduleState.mdBonusesClaimed || 0));
   
-  // If user has Hard Mode, they consume 3 bonuses at once for 225 EXP.
+  // If user has Hard Mode enabled and unlocked, they consume 3 bonuses at once for 225 EXP.
   // If Normal Mode, they consume 1 bonus for 45 EXP.
   while (expDeficitAfterPassive > 0 && availableBonuses > 0) {
-      if (bpState.hasMdHard && availableBonuses >= 3) {
+      if (effectiveHasMdHard && availableBonuses >= 3) {
           plannedRuns.push(225);
           availableBonuses -= 3;
           expDeficitAfterPassive -= 225;
@@ -113,6 +114,7 @@ export function generateRoadmap(
   let currentBonuses = Math.max(0, 3 - (scheduleState.mdBonusesClaimed || 0));
   let currentDailiesDone = scheduleState.dailiesProgress >= 5;
   let currentWeekliesDone = scheduleState.weekliesDone;
+  const effectiveHasMdHard = (bpState?.canto === undefined || bpState?.canto >= 8) && (bpState?.preferHardMd !== false) && (bpState?.hasMdHard !== false);
   
   let totalModulesNeeded = 0;
 
@@ -131,23 +133,23 @@ export function generateRoadmap(
     // Dailies always cost 5 modules if not yet done
     if (!currentDailiesDone) modulesUsedToday += 5;
     for(let r=0; r<runsCountToday; r++){
-        if (bpState && bpState.hasMdHard && currentBonuses >= 3) {
+        if (effectiveHasMdHard && currentBonuses >= 3) {
             currentBonuses -= 3;
             gainedExpFromRuns += 225;
             totalModulesNeeded += 18;
             modulesUsedToday += 18;
-            runsList.push({ type: 'Hard Bonus', exp: 225, modules: 18 });
+            runsList.push({ type: 'Hard Bonus', runKey: 'hard_bonus', exp: 225, modules: 18 });
         } else if (currentBonuses >= 1) {
             currentBonuses -= 1;
             gainedExpFromRuns += 45;
             totalModulesNeeded += 5;
             modulesUsedToday += 5;
-            runsList.push({ type: 'Normal Bonus', exp: 45, modules: 5 });
+            runsList.push({ type: 'Normal Bonus', runKey: 'normal_bonus', exp: 45, modules: 5 });
         } else {
             gainedExpFromRuns += 30;
             totalModulesNeeded += 5;
             modulesUsedToday += 5;
-            runsList.push({ type: 'Normal', exp: 30, modules: 5 });
+            runsList.push({ type: 'Normal', runKey: 'normal_nobonus', exp: 30, modules: 5 });
         }
     }
 

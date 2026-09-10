@@ -30,6 +30,8 @@ const defaultState = {
     level: 1,
     currentExp: 0,
     isPremium: false,
+    canto: 8,
+    preferHardMd: true,
     hasMdHard: true,
     daysLeft: 45 // Default
   },
@@ -41,6 +43,7 @@ const defaultState = {
     weekliesDone: false,
     canClaimWeeklies: false,
     mdTodayDone: false,
+    todayLoggedRuns: [], // [ { id, type, exp, modules, bonusUsed } ]
     mdBonusesClaimed: 0, // 0 to 3
     lastResetCheck: Date.now() // Used to determine if a daily/weekly reset has passed
   },
@@ -112,6 +115,7 @@ export const useStore = create((set, get) => ({
             loadedSchedule.dailiesDone = false;
             loadedSchedule.dailiesProgress = 0;
             loadedSchedule.mdTodayDone = false;
+            loadedSchedule.todayLoggedRuns = [];
         }
         if (resets.hasWeeklyReset) {
             loadedSchedule.weekliesDone = false;
@@ -154,7 +158,7 @@ export const useStore = create((set, get) => ({
         const intervalResets = checkResets(currentSchedule.lastResetCheck);
         if (intervalResets.hasDailyReset || intervalResets.hasWeeklyReset || intervalResets.hasMdWeeklyReset) {
           get().updateScheduleState({
-            ...(intervalResets.hasDailyReset ? { dailiesDone: false, dailiesProgress: 0, mdTodayDone: false } : {}),
+            ...(intervalResets.hasDailyReset ? { dailiesDone: false, dailiesProgress: 0, mdTodayDone: false, todayLoggedRuns: [] } : {}),
             ...(intervalResets.hasWeeklyReset ? { weekliesDone: false, canClaimWeeklies: false } : {}),
             ...(intervalResets.hasMdWeeklyReset ? { mdBonusesClaimed: 0 } : {}),
             lastResetCheck: intervalResets.now
@@ -305,4 +309,76 @@ export const useStore = create((set, get) => ({
     }));
     get().saveStore();
   },
+
+  logMdRun: (runType) => {
+    // runType: 'hard_bonus' | 'normal_bonus' | 'normal_nobonus'
+    const state = get();
+    let exp = 30;
+    let modules = 5;
+    let bonusUsed = 0;
+    let label = 'Normal Run (No Bonus)';
+
+    if (runType === 'hard_bonus') {
+      exp = 225;
+      modules = 18;
+      bonusUsed = 3;
+      label = 'Hard Mode Bonus Run';
+    } else if (runType === 'normal_bonus') {
+      exp = 45;
+      modules = 5;
+      bonusUsed = 1;
+      label = 'Normal Mode Bonus Run';
+    }
+
+    const runRecord = {
+      id: `${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+      type: runType,
+      label,
+      exp,
+      modules,
+      bonusUsed,
+      timestamp: Date.now()
+    };
+
+    const newBonuses = Math.min(3, (state.scheduleState.mdBonusesClaimed || 0) + bonusUsed);
+    const newLogged = [...(state.scheduleState.todayLoggedRuns || []), runRecord];
+    const newModules = Math.max(0, (state.inventory.modules || 0) - modules);
+
+    set((s) => ({
+      inventory: { ...s.inventory, modules: newModules },
+      scheduleState: {
+        ...s.scheduleState,
+        mdBonusesClaimed: newBonuses,
+        mdTodayDone: true,
+        todayLoggedRuns: newLogged
+      }
+    }));
+
+    get().injectBpExp(exp);
+    get().saveStore();
+    return runRecord;
+  },
+
+  undoMdRun: (runId) => {
+    const state = get();
+    const run = (state.scheduleState.todayLoggedRuns || []).find(r => r.id === runId);
+    if (!run) return;
+
+    const newLogged = (state.scheduleState.todayLoggedRuns || []).filter(r => r.id !== runId);
+    const newBonuses = Math.max(0, (state.scheduleState.mdBonusesClaimed || 0) - run.bonusUsed);
+    const newModules = (state.inventory.modules || 0) + run.modules;
+
+    set((s) => ({
+      inventory: { ...s.inventory, modules: newModules },
+      scheduleState: {
+        ...s.scheduleState,
+        mdBonusesClaimed: newBonuses,
+        mdTodayDone: newLogged.length > 0,
+        todayLoggedRuns: newLogged
+      }
+    }));
+
+    get().injectBpExp(-run.exp);
+    get().saveStore();
+  }
 }));
