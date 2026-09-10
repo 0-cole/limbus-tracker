@@ -431,7 +431,6 @@ export const useStore = create((set, get) => ({
       scheduleState: {
         ...s.scheduleState,
         mdBonusesClaimed: newBonuses,
-        mdTodayDone: true,
         todayLoggedRuns: newLogged
       }
     }));
@@ -455,7 +454,7 @@ export const useStore = create((set, get) => ({
       scheduleState: {
         ...s.scheduleState,
         mdBonusesClaimed: newBonuses,
-        mdTodayDone: newLogged.length > 0,
+        mdTodayDone: newLogged.length === 0 ? false : s.scheduleState.mdTodayDone,
         todayLoggedRuns: newLogged
       }
     }));

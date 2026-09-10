@@ -84,20 +84,24 @@ export default function DailyCycleTracker() {
   const bonusesAvailable = Math.max(0, 3 - bonusesClaimed);
   const todayRuns = scheduleState.todayLoggedRuns || [];
 
+  const totalRequiredMd = todayRoadmap?.runs || 0;
+  const isMdCompletedToday = totalRequiredMd > 0 ? todayRuns.length >= totalRequiredMd : (scheduleState.mdTodayDone || todayRuns.length > 0);
+  const isMdInProgress = totalRequiredMd > 0 && todayRuns.length > 0 && todayRuns.length < totalRequiredMd;
+
   // Toggle today's required runs
   const handleToggleRequiredMd = () => {
-    if (scheduleState.mdTodayDone) {
+    if (isMdCompletedToday) {
       // Undo all runs logged today
       todayRuns.forEach(r => undoMdRun(r.id));
       updateScheduleState({ mdTodayDone: false });
     } else {
-      // Automatically log the runs specified in today's roadmap
+      // Automatically log the remaining runs specified in today's roadmap
       if (todayRoadmap.runsList && todayRoadmap.runsList.length > 0) {
         todayRoadmap.runsList.forEach(run => {
           logMdRun(run.runKey || (run.type === 'Hard Bonus' ? 'hard_bonus' : run.type === 'Normal Bonus' ? 'normal_bonus' : 'normal_nobonus'));
         });
       } else {
-        // Fallback default run
+        // Fallback default run for rest day
         if (effectiveHasMdHard && bonusesAvailable >= 3) {
           logMdRun('hard_bonus');
         } else if (bonusesAvailable >= 1) {
@@ -126,50 +130,98 @@ export default function DailyCycleTracker() {
         
         {/* REQUIRED MD TODAY SECTION */}
         <div className={`p-4 rounded-xl border transition-all ${
-          scheduleState.mdTodayDone 
+          isMdCompletedToday 
             ? 'bg-[#c9a84c]/10 border-[#c9a84c]/50' 
-            : mdRequiredToday 
-              ? 'bg-red-950/20 border-red-900/50' 
-              : 'bg-[#111] border-[#333]'
+            : isMdInProgress
+              ? 'bg-amber-950/20 border-amber-500/50'
+              : mdRequiredToday 
+                ? 'bg-red-950/20 border-red-900/50' 
+                : 'bg-[#111] border-[#333]'
         }`}>
           <div className="flex items-center justify-between">
             <div className="flex-1 pr-4">
               <div className="flex items-center gap-2 mb-1">
-                <Flame size={18} className={scheduleState.mdTodayDone ? 'text-[#c9a84c]' : mdRequiredToday ? 'text-red-500' : 'text-gray-500'} />
+                <Flame size={18} className={isMdCompletedToday ? 'text-[#c9a84c]' : isMdInProgress ? 'text-amber-400' : mdRequiredToday ? 'text-red-500' : 'text-gray-500'} />
                 <h3 className="font-bold text-lg text-white">
-                  {scheduleState.mdTodayDone 
+                  {isMdCompletedToday 
                     ? "Today's Mirror Dungeon Completed" 
-                    : mdRequiredToday 
-                      ? "Did you do your Mirror Dungeon today?" 
-                      : "No Required MD Today (Rest Day)"}
+                    : isMdInProgress
+                      ? `Today's Mirror Dungeon: In Progress (${todayRuns.length}/${totalRequiredMd} Runs)`
+                      : mdRequiredToday 
+                        ? "Did you do your Mirror Dungeon today?" 
+                        : "No Required MD Today (Rest Day)"}
                 </h3>
               </div>
               
               {mdRequiredToday ? (
                 <div>
                   <p className="text-xs text-gray-400 mb-2">
-                    {scheduleState.mdTodayDone 
-                      ? "Marked done! BP EXP and weekly bonuses have been updated." 
-                      : `Roadmap requires ${todayRoadmap.runs}x run(s) today:`}
+                    {isMdCompletedToday 
+                      ? `Marked done (${todayRuns.length}/${totalRequiredMd} runs)! BP EXP and weekly bonuses have been updated.` 
+                      : isMdInProgress
+                        ? `${todayRuns.length} of ${totalRequiredMd} runs logged today (${totalRequiredMd - todayRuns.length} remaining):`
+                        : `Roadmap requires ${totalRequiredMd}x run(s) today:`}
                   </p>
-                  <div className="flex flex-wrap gap-2">
-                    {todayRoadmap.runsList?.map((run, i) => (
-                      <span key={i} className={`text-xs font-bold px-2 py-0.5 rounded flex items-center gap-1 ${
-                        run.type === 'Hard Bonus' 
-                          ? 'bg-[#ef4444]/20 text-[#ef4444] border border-[#ef4444]/30' 
-                          : run.type === 'Normal Bonus' 
-                            ? 'bg-[#c9a84c]/20 text-[#eab308] border border-[#c9a84c]/30' 
-                            : 'bg-[#333] text-gray-300'
-                      }`}>
-                        <span>{run.type}</span>
-                        <span className="text-[10px] text-gray-400">({run.exp} EXP • {run.modules} mod)</span>
-                      </span>
-                    ))}
-                  </div>
+                  {isMdCompletedToday ? (
+                    <div className="flex flex-wrap gap-2">
+                      {todayRuns.map((r, i) => (
+                        <span key={i} className="text-xs font-bold px-2 py-0.5 rounded bg-emerald-950/40 text-emerald-300 border border-emerald-500/40 flex items-center gap-1">
+                          <span>✓ {r.label || r.type}</span>
+                          <span className="text-[10px] text-emerald-400/80">({r.exp} EXP)</span>
+                        </span>
+                      ))}
+                    </div>
+                  ) : isMdInProgress ? (
+                    <div className="space-y-1.5">
+                      {todayRuns.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 items-center">
+                          <span className="text-[10px] text-emerald-400 font-bold uppercase">Logged:</span>
+                          {todayRuns.map((r, i) => (
+                            <span key={i} className="text-xs font-bold px-2 py-0.5 rounded bg-emerald-950/40 text-emerald-300 border border-emerald-500/40 flex items-center gap-1">
+                              <span>✓ {r.label || r.type}</span>
+                              <span className="text-[10px] text-emerald-400/80">({r.exp} EXP)</span>
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      {todayRoadmap.runsList && todayRoadmap.runsList.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 items-center">
+                          <span className="text-[10px] text-amber-400 font-bold uppercase">Remaining:</span>
+                          {todayRoadmap.runsList.map((run, i) => (
+                            <span key={i} className={`text-xs font-bold px-2 py-0.5 rounded flex items-center gap-1 ${
+                              run.type === 'Hard Bonus' 
+                                ? 'bg-[#ef4444]/20 text-[#ef4444] border border-[#ef4444]/30' 
+                                : run.type === 'Normal Bonus' 
+                                  ? 'bg-[#c9a84c]/20 text-[#eab308] border border-[#c9a84c]/30' 
+                                  : 'bg-[#333] text-gray-300'
+                            }`}>
+                              <span>{run.type}</span>
+                              <span className="text-[10px] text-gray-400">({run.exp} EXP • {run.modules} mod)</span>
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flex flex-wrap gap-2">
+                      {todayRoadmap.runsList?.map((run, i) => (
+                        <span key={i} className={`text-xs font-bold px-2 py-0.5 rounded flex items-center gap-1 ${
+                          run.type === 'Hard Bonus' 
+                            ? 'bg-[#ef4444]/20 text-[#ef4444] border border-[#ef4444]/30' 
+                            : run.type === 'Normal Bonus' 
+                              ? 'bg-[#c9a84c]/20 text-[#eab308] border border-[#c9a84c]/30' 
+                              : 'bg-[#333] text-gray-300'
+                        }`}>
+                          <span>{run.type}</span>
+                          <span className="text-[10px] text-gray-400">({run.exp} EXP • {run.modules} mod)</span>
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <p className="text-xs text-gray-400">
-                  {scheduleState.mdTodayDone 
+                  {isMdCompletedToday 
                     ? "You logged extra runs today! Schedule adjusted accordingly." 
                     : "You are on pace. Feel free to rest or log an extra run below."}
                 </p>
@@ -179,13 +231,15 @@ export default function DailyCycleTracker() {
             <button 
               onClick={handleToggleRequiredMd}
               className={`w-12 h-12 rounded-full border-2 shrink-0 flex items-center justify-center transition-all ${
-                scheduleState.mdTodayDone 
-                  ? 'bg-[#c9a84c] border-[#c9a84c] text-black shadow-[0_0_15px_rgba(201,168,76,0.4)]' 
-                  : 'border-gray-500 hover:border-[#c9a84c] text-transparent hover:text-white'
+                isMdCompletedToday 
+                  ? 'bg-[#c9a84c] border-[#c9a84c] text-black shadow-[0_0_15px_rgba(201,168,76,0.4)] cursor-pointer' 
+                  : isMdInProgress
+                    ? 'border-amber-400 hover:border-[#c9a84c] text-amber-400/50 hover:text-white cursor-pointer'
+                    : 'border-gray-500 hover:border-[#c9a84c] text-transparent hover:text-white cursor-pointer'
               }`}
-              title={scheduleState.mdTodayDone ? "Click to undo today's completion" : "Click to mark completed"}
+              title={isMdCompletedToday ? "Click to undo today's completion" : isMdInProgress ? `Click to log remaining ${totalRequiredMd - todayRuns.length} run(s)` : "Click to mark completed"}
             >
-              <CheckCircle size={26} className={scheduleState.mdTodayDone ? 'text-black' : ''} />
+              <CheckCircle size={26} className={isMdCompletedToday ? 'text-black' : isMdInProgress ? 'text-amber-400' : ''} />
             </button>
           </div>
         </div>

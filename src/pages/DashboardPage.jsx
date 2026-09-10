@@ -25,6 +25,29 @@ export default function DashboardPage() {
   const [currentDayStr, setCurrentDayStr] = useState('');
   const [currentDayIndex, setCurrentDayIndex] = useState(0);
 
+  const seasonEndDate = getSeasonEndDate(bpState);
+
+  const targetItems = React.useMemo(() => {
+    return [...(wantList || [])].map(name => {
+      return identitiesData?.find(id => id.name === name) || egosData?.find(ego => ego.name === name);
+    }).filter(Boolean);
+  }, [wantList, identitiesData, egosData]);
+
+  const calcItems = React.useMemo(() => {
+    return targetItems.map(item => ({ sinnerId: item.sinner, rarity: !!item.grade ? 'EGO' : (item.rarity === 3 ? '000' : '00') }));
+  }, [targetItems]);
+
+  const calcResult = React.useMemo(() => calculateLimbusGrind(
+    calcItems, inventory, { ...bpState, hasMdHard: effectiveHasMdHard }, scheduleState, seasonEndDate
+  ), [calcItems, inventory, bpState, effectiveHasMdHard, scheduleState, seasonEndDate]);
+
+  const roadmapData = React.useMemo(() => generateRoadmap(
+    calcResult.daysLeft, calcResult.plannedRuns, scheduleState, { ...bpState, hasMdHard: effectiveHasMdHard }, targetItems, inventory
+  ), [calcResult.daysLeft, calcResult.plannedRuns, scheduleState, bpState, effectiveHasMdHard, targetItems, inventory]);
+  
+  const todayRoadmap = (roadmapData?.roadmap ? roadmapData.roadmap[0] : roadmapData?.[0]) || { runs: 0, runsList: [] };
+  const totalRequiredMd = todayRoadmap.runs || 0;
+
   useEffect(() => {
     // Determine today
     const now = new Date();
@@ -184,7 +207,9 @@ export default function DashboardPage() {
                 const status = weeklyProgress.dailyStatus?.[dateStr];
                 const isResetDay = idx === resetDayIndex;
                 const isToday = diff === 0;
-                const mdDoneToday = isToday && (scheduleState.mdTodayDone || (scheduleState.todayLoggedRuns?.length > 0));
+                const todayRuns = scheduleState.todayLoggedRuns || [];
+                const mdDoneToday = isToday && (totalRequiredMd > 0 ? todayRuns.length >= totalRequiredMd : (scheduleState.mdTodayDone || todayRuns.length > 0));
+                const mdInProgressToday = isToday && (totalRequiredMd > 0 && todayRuns.length > 0 && todayRuns.length < totalRequiredMd);
 
                 let bgClass = "bg-[#111] border-[#333]";
                 let icon = null;
@@ -199,7 +224,11 @@ export default function DashboardPage() {
                   // Past day without explicit missed flag - keep clean/neutral
                   bgClass = "bg-black/30 border-[#222] opacity-60";
                 } else if (isToday) {
-                  bgClass = mdDoneToday ? "bg-emerald-950/30 border-emerald-500/50" : "bg-[#222] border-white";
+                  bgClass = mdDoneToday 
+                    ? "bg-emerald-950/30 border-emerald-500/50" 
+                    : mdInProgressToday 
+                      ? "bg-amber-950/30 border-amber-500/50" 
+                      : "bg-[#222] border-white";
                 }
 
                 return (
@@ -213,6 +242,11 @@ export default function DashboardPage() {
                     {mdDoneToday && (
                       <div className="mt-1.5 text-[9px] bg-emerald-500/20 text-emerald-300 font-bold px-1 py-0.5 rounded border border-emerald-500/30">
                         ⚔️ MD Done
+                      </div>
+                    )}
+                    {mdInProgressToday && (
+                      <div className="mt-1.5 text-[9px] bg-amber-500/20 text-amber-300 font-bold px-1 py-0.5 rounded border border-amber-500/30">
+                        ⏳ MD {todayRuns.length}/{totalRequiredMd}
                       </div>
                     )}
                     {isResetDay && scheduleState.weekliesDone && (

@@ -549,6 +549,9 @@ export default function SchedulePage() {
                 return roadmap.map((row, idx) => {
                   const isGoal = idx === goalIdx;
                   const hasMilestone = row.milestonesReachedToday && row.milestonesReachedToday.length > 0;
+                  const totalRequiredMd = row.runs || 0;
+                  const mdDoneToday = row.isToday && (totalRequiredMd > 0 ? todayRuns.length >= totalRequiredMd : (scheduleState.mdTodayDone || todayRuns.length > 0));
+                  const mdInProgress = row.isToday && (totalRequiredMd > 0 && todayRuns.length > 0 && todayRuns.length < totalRequiredMd);
                   const isRowCompleted = row.isToday && mdDoneToday && dailiesDone;
 
                   return (
@@ -559,11 +562,13 @@ export default function SchedulePage() {
                           ? 'bg-[#22c55e]/20 border-[#22c55e]' 
                           : isRowCompleted
                             ? 'bg-emerald-950/20 border-emerald-500/40'
-                            : row.isToday 
-                              ? 'bg-[#c9a84c]/10 border-[#c9a84c]/40' 
-                              : row.isWeeklyReset 
-                                ? 'bg-amber-950/15 border-amber-900/30' 
-                                : ''
+                            : row.isToday && mdInProgress
+                              ? 'bg-amber-950/15 border-amber-500/30'
+                              : row.isToday 
+                                ? 'bg-[#c9a84c]/10 border-[#c9a84c]/40' 
+                                : row.isWeeklyReset 
+                                  ? 'bg-amber-950/15 border-amber-900/30' 
+                                  : ''
                     }`}>
                         <div className="font-bold text-white flex flex-col justify-center">
                           <div className="flex items-center gap-1.5 flex-wrap">
@@ -598,7 +603,30 @@ export default function SchedulePage() {
                               </span>
                               {todayRuns.map((r, i) => (
                                 <span key={i} className="text-[10px] text-emerald-400/80 flex items-center gap-1 font-medium">
-                                  ✓ {r.type} (+{r.exp} EXP)
+                                  ✓ {r.label || r.type} (+{r.exp} EXP)
+                                </span>
+                              ))}
+                            </div>
+                          ) : row.isToday && mdInProgress ? (
+                            <div className="flex flex-col gap-1">
+                              <span className="text-[10px] font-black px-2 py-0.5 rounded bg-amber-950/70 border border-amber-500/60 text-amber-300 flex items-center gap-1 w-fit shadow-sm">
+                                ⏳ In Progress ({todayRuns.length}/{row.runs} Runs)
+                              </span>
+                              {todayRuns.map((r, i) => (
+                                <span key={i} className="text-[10px] text-emerald-400/80 flex items-center gap-1 font-medium">
+                                  ✓ {r.label || r.type} (+{r.exp} EXP)
+                                </span>
+                              ))}
+                              <div className="text-[10px] text-amber-400/90 font-bold mt-0.5">Remaining:</div>
+                              {row.runsList.map((run, i) => (
+                                <span key={i} className={`text-[10px] font-bold px-1.5 py-0.5 rounded w-fit ${
+                                  run.type === 'Hard Bonus' 
+                                    ? 'bg-[#ef4444]/20 text-[#ef4444] border border-[#ef4444]/30' 
+                                    : run.type === 'Normal Bonus' 
+                                      ? 'bg-[#c9a84c]/20 text-[#eab308] border border-[#c9a84c]/30' 
+                                      : 'bg-[#333] text-gray-300'
+                                }`}>
+                                  1x {run.type}
                                 </span>
                               ))}
                             </div>
@@ -626,8 +654,8 @@ export default function SchedulePage() {
                           {row.isToday ? (
                             <>
                               {todayRuns.length > 0 ? (
-                                <div className="text-emerald-400 font-bold flex items-center gap-1">
-                                  <Check size={12} /> +{todayRuns.reduce((acc, r) => acc + r.exp, 0)} <span className="text-[10px] text-emerald-300/80 font-normal">MD Logged</span>
+                                <div className={`${mdDoneToday ? 'text-emerald-400' : 'text-amber-400'} font-bold flex items-center gap-1`}>
+                                  {mdDoneToday ? <Check size={12} /> : <span>⏳</span>} +{todayRuns.reduce((acc, r) => acc + r.exp, 0)} <span className="text-[10px] opacity-80 font-normal">MD Logged</span>
                                 </div>
                               ) : row.runs > 0 ? (
                                 <div className="text-green-400 font-bold">+{row.gainedExpFromRuns} <span className="text-[10px] text-gray-400 font-normal">MD</span></div>
