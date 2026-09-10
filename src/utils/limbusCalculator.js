@@ -273,12 +273,20 @@ export function generateRoadmap(
         }
     }
 
-    // 3. Passive EXP
-    let passiveGained = 0;
-    if (!currentDailiesDone) passiveGained += 10;
-    if (!currentWeekliesDone) passiveGained += 20;
+    // 3. Calendar Date for Day i
+    const isToday = i === 0;
+    const dayDate = new Date();
+    dayDate.setDate(dayDate.getDate() + i);
+    const dateStr = dayDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const weekdayStr = dayDate.toLocaleDateString('en-US', { weekday: 'short' });
+    const isWeeklyReset = dayDate.getDay() === 4; // Thursday in local/KST
 
-    // 4. Calculate Crates & Shard Allocation for Today
+    // 4. Passive EXP
+    let dailyExpGained = !currentDailiesDone ? 10 : 0;
+    let weeklyExpGained = (!currentWeekliesDone && (isToday || isWeeklyReset)) ? 20 : 0;
+    let passiveGained = dailyExpGained + weeklyExpGained;
+
+    // 5. Calculate Crates & Shard Allocation for Today
     let totalGainedToday = gainedExpFromRuns + passiveGained;
     cumulativeExp += totalGainedToday;
 
@@ -292,11 +300,6 @@ export function generateRoadmap(
     // Allocate earned crates as shards to active target
     let shardsToAlloc = cratesEarnedToday * R_crate;
     const milestonesReachedToday = [];
-    const currentDateObj = new Date(cursorMs);
-    const dateStr = currentDateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    const weekdayStr = currentDateObj.toLocaleDateString('en-US', { weekday: 'short' });
-    const cursorDateIso = currentDateObj.toISOString().split('T')[0];
-    const isToday = cursorDateIso === todayDateStr;
 
     while (activeTargetIdx < targetProgress.length && shardsToAlloc > 0) {
       const cur = targetProgress[activeTargetIdx];
@@ -327,9 +330,12 @@ export function generateRoadmap(
       date: dateStr,
       weekday: weekdayStr,
       isToday,
+      isWeeklyReset,
       runs: runsCountToday,
       runsList: runsList,
       gainedExpFromRuns: gainedExpFromRuns,
+      dailyExpGained,
+      weeklyExpGained,
       passiveGained: passiveGained,
       gained: totalGainedToday,
       totalExp: cumulativeExp,
@@ -346,18 +352,12 @@ export function generateRoadmap(
       } : null
     });
 
-    // 5. Advance Cursor to next day and trigger resets if necessary
-    const resets = getNextResets(cursorMs);
-    currentDailiesDone = false; // Tomorrow gives daily EXP again
-    if (resets.nextWeekly === resets.nextDaily) {
-        currentWeekliesDone = false;
+    // 6. Reset flags for next day simulation
+    currentDailiesDone = false;
+    if (isWeeklyReset) {
+      currentBonuses = 3;
+      currentWeekliesDone = false;
     }
-    if (resets.nextMdWeekly === resets.nextDaily) {
-        currentBonuses = 3;
-    } else if (resets.nextMdWeekly > cursorMs && resets.nextMdWeekly < resets.nextDaily) {
-        currentBonuses = 3;
-    }
-    cursorMs = resets.nextDaily;
   }
   
   return { 

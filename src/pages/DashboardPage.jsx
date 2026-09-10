@@ -147,7 +147,12 @@ export default function DashboardPage() {
       </div>
 
       <div className="glass-card p-6">
-        <h2 className="text-xl font-bold mb-4 font-limbus text-white">Weekly Calendar Overview</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold font-limbus text-white">Weekly Calendar Overview</h2>
+          <span className="text-xs text-amber-400 font-bold bg-amber-950/40 border border-amber-800/40 px-2.5 py-1 rounded-full flex items-center gap-1">
+            🔄 Resets every Thursday (06:00 KST)
+          </span>
+        </div>
         <div className="grid grid-cols-7 gap-2">
           {DAYS.map((day, idx) => {
             // Determine date for this day of the week based on today
@@ -156,6 +161,9 @@ export default function DashboardPage() {
             date.setDate(date.getDate() + diff);
             const dateStr = date.toISOString().split('T')[0];
             const status = weeklyProgress.dailyStatus?.[dateStr];
+            const isResetDay = day === 'Thursday';
+            const isToday = diff === 0;
+            const mdDoneToday = isToday && (scheduleState.mdTodayDone || (scheduleState.todayLoggedRuns?.length > 0));
 
             let bgClass = "bg-[#111] border-[#333]";
             let icon = null;
@@ -166,15 +174,28 @@ export default function DashboardPage() {
             } else if (status === 'missed' || (diff < 0 && !status)) {
               bgClass = "bg-red-950/30 border-red-900";
               icon = <XCircle className="text-red-500 mx-auto mt-2" size={20} />;
-            } else if (diff === 0) {
-              bgClass = "bg-[#222] border-white";
+            } else if (isToday) {
+              bgClass = mdDoneToday ? "bg-emerald-950/30 border-emerald-500/50" : "bg-[#222] border-white";
             }
 
             return (
-              <div key={day} className={`p-3 rounded border text-center ${bgClass}`}>
-                <p className={`text-xs font-bold ${diff === 0 ? 'text-white' : 'text-[#737373]'}`}>{day.slice(0,3)}</p>
+              <div key={day} className={`p-3 rounded-lg border text-center transition-all ${bgClass}`}>
+                <div className="flex items-center justify-center gap-1">
+                  <p className={`text-xs font-bold ${isToday ? 'text-white' : 'text-[#737373]'}`}>{day.slice(0,3)}</p>
+                  {isResetDay && <span className="text-[8px] bg-amber-500/30 text-amber-300 font-black px-1 rounded">Reset</span>}
+                </div>
                 <p className="text-[10px] text-[#555]">{date.getDate()}</p>
                 {icon}
+                {mdDoneToday && (
+                  <div className="mt-1.5 text-[9px] bg-emerald-500/20 text-emerald-300 font-bold px-1 py-0.5 rounded border border-emerald-500/30">
+                    ⚔️ MD Done
+                  </div>
+                )}
+                {isResetDay && scheduleState.weekliesDone && (
+                  <div className="mt-1 text-[9px] bg-yellow-500/20 text-yellow-300 font-bold px-1 py-0.5 rounded border border-yellow-500/30">
+                    👑 Weeklies
+                  </div>
+                )}
               </div>
             );
           })}

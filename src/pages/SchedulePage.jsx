@@ -465,57 +465,164 @@ export default function SchedulePage() {
             <div className="text-[#c9a84c]">Target & Milestone</div>
          </div>
            <div className="max-h-[360px] overflow-y-auto">
-              {(() => {
+               {(() => {
                 const goalIdx = calcResult.bpExpNeeded > 0 ? roadmap.findIndex(r => r.totalExp >= calcResult.bpExpNeeded) : -1;
+                const todayRuns = scheduleState.todayLoggedRuns || [];
+                const mdDoneToday = scheduleState.mdTodayDone || todayRuns.length > 0;
+                const dailiesProgress = scheduleState.dailiesProgress || 0;
+                const dailiesDone = scheduleState.dailiesDone || dailiesProgress >= 5;
+                const weekliesDone = scheduleState.weekliesDone || false;
+                const canClaimWeeklies = scheduleState.canClaimWeeklies || false;
+
                 return roadmap.map((row, idx) => {
                   const isGoal = idx === goalIdx;
                   const hasMilestone = row.milestonesReachedToday && row.milestonesReachedToday.length > 0;
+                  const isRowCompleted = row.isToday && mdDoneToday && dailiesDone;
+
                   return (
-                    <div key={idx} className={`grid grid-cols-6 p-4 border-b border-[#333]/50 text-sm ${
-                      hasMilestone ? 'bg-[#c9a84c]/20 border-[#c9a84c]' : isGoal ? 'bg-[#22c55e]/20 border-[#22c55e]' : row.isToday ? 'bg-white/10 border-white/50' : row.day % 7 === 1 ? 'bg-[#c9a84c]/5' : ''
+                    <div key={idx} className={`grid grid-cols-6 p-4 border-b border-[#333]/50 text-sm transition-colors ${
+                      hasMilestone 
+                        ? 'bg-[#c9a84c]/20 border-[#c9a84c]' 
+                        : isGoal 
+                          ? 'bg-[#22c55e]/20 border-[#22c55e]' 
+                          : isRowCompleted
+                            ? 'bg-emerald-950/20 border-emerald-500/40'
+                            : row.isToday 
+                              ? 'bg-[#c9a84c]/10 border-[#c9a84c]/40' 
+                              : row.isWeeklyReset 
+                                ? 'bg-amber-950/15 border-amber-900/30' 
+                                : ''
                     }`}>
                         <div className="font-bold text-white flex flex-col justify-center">
-                          <div className="flex items-center gap-1.5">
+                          <div className="flex items-center gap-1.5 flex-wrap">
                             <span>Day {row.day}</span>
-                            {row.isToday && <span className="text-[9px] uppercase tracking-wider bg-[#c9a84c] text-black font-black px-1.5 py-0.2 rounded shadow-sm">Today</span>}
-                            {isGoal && !hasMilestone && <span className="text-[9px] uppercase tracking-wider bg-[#22c55e] text-black px-1.5 py-0.2 rounded font-black shadow-[0_0_8px_rgba(34,197,94,0.6)]">Goal Met</span>}
+                            {row.isToday && (
+                              <span className="text-[9px] uppercase tracking-wider bg-[#c9a84c] text-black font-black px-1.5 py-0.5 rounded shadow-sm">
+                                Today
+                              </span>
+                            )}
+                            {row.isWeeklyReset && (
+                              <span className="text-[9px] uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold px-1.5 py-0.5 rounded">
+                                🔄 Weekly Reset
+                              </span>
+                            )}
+                            {isGoal && !hasMilestone && (
+                              <span className="text-[9px] uppercase tracking-wider bg-[#22c55e] text-black px-1.5 py-0.5 rounded font-black shadow-[0_0_8px_rgba(34,197,94,0.6)]">
+                                Goal Met
+                              </span>
+                            )}
                           </div>
-                          <span className="text-xs text-gray-400 font-normal">
-                            {row.weekday}, {row.date} {row.day % 7 === 1 && !isGoal && <span className="text-[#c9a84c] ml-1">(Reset)</span>}
+                          <span className="text-xs text-gray-400 font-normal mt-0.5">
+                            {row.weekday}, {row.date}
                           </span>
                         </div>
-                          <div>
-                            {row.runs > 0 ? (
-                              <div className="flex flex-col gap-1">
-                                {row.runsList.map((run, i) => (
-                                  <span key={i} className={`text-[10px] font-bold px-1.5 py-0.5 rounded w-fit ${run.type === 'Hard Bonus' ? 'bg-[#ef4444]/20 text-[#ef4444]' : run.type === 'Normal Bonus' ? 'bg-[#c9a84c]/20 text-[#eab308]' : 'bg-[#333] text-gray-300'}`}>
-                                    1x {run.type}
-                                  </span>
-                                ))}
-                              </div>
-                            ) : <span className="text-gray-500">Rest</span>}
-                          </div>
-                        <div className="font-mono text-sm flex flex-col justify-center">
-                          {row.runs > 0 ? (
-                            <div className="text-green-400 font-bold">+{row.gainedExpFromRuns} <span className="text-[10px] text-gray-400 font-normal">MD</span></div>
-                          ) : (
-                            <div className="text-gray-500 text-xs">0 MD</div>
-                          )}
-                          {row.passiveGained > 0 && (
-                            <div className="text-[11px] text-[#c9a84c] font-normal">
-                              +{row.passiveGained} <span className="text-gray-500">Missions</span>
+
+                        {/* Required MDs */}
+                        <div className="flex flex-col justify-center">
+                          {row.isToday && mdDoneToday ? (
+                            <div className="flex flex-col gap-1">
+                              <span className="text-[10px] font-black px-2 py-0.5 rounded bg-emerald-950/70 border border-emerald-500/60 text-emerald-300 flex items-center gap-1 w-fit shadow-sm">
+                                <Check size={12} className="text-emerald-400" /> Done ({todayRuns.length}/{Math.max(1, row.runs)} Runs)
+                              </span>
+                              {todayRuns.map((r, i) => (
+                                <span key={i} className="text-[10px] text-emerald-400/80 flex items-center gap-1 font-medium">
+                                  ✓ {r.type} (+{r.exp} EXP)
+                                </span>
+                              ))}
                             </div>
+                          ) : row.runs > 0 ? (
+                            <div className="flex flex-col gap-1">
+                              {row.runsList.map((run, i) => (
+                                <span key={i} className={`text-[10px] font-bold px-1.5 py-0.5 rounded w-fit ${
+                                  run.type === 'Hard Bonus' 
+                                    ? 'bg-[#ef4444]/20 text-[#ef4444] border border-[#ef4444]/30' 
+                                    : run.type === 'Normal Bonus' 
+                                      ? 'bg-[#c9a84c]/20 text-[#eab308] border border-[#c9a84c]/30' 
+                                      : 'bg-[#333] text-gray-300'
+                                }`}>
+                                  1x {run.type}
+                                </span>
+                              ))}
+                            </div>
+                          ) : (
+                            <span className="text-gray-500 text-xs">Rest (No MD Required)</span>
                           )}
                         </div>
+
+                        {/* EXP Gained */}
+                        <div className="font-mono text-sm flex flex-col justify-center">
+                          {row.isToday ? (
+                            <>
+                              {todayRuns.length > 0 ? (
+                                <div className="text-emerald-400 font-bold flex items-center gap-1">
+                                  <Check size={12} /> +{todayRuns.reduce((acc, r) => acc + r.exp, 0)} <span className="text-[10px] text-emerald-300/80 font-normal">MD Logged</span>
+                                </div>
+                              ) : row.runs > 0 ? (
+                                <div className="text-green-400 font-bold">+{row.gainedExpFromRuns} <span className="text-[10px] text-gray-400 font-normal">MD</span></div>
+                              ) : (
+                                <div className="text-gray-500 text-xs">0 MD</div>
+                              )}
+                              {dailiesDone ? (
+                                <div className="text-[11px] text-emerald-400 flex items-center gap-1">
+                                  <Check size={10} /> +10 Dailies (Done)
+                                </div>
+                              ) : (
+                                <div className="text-[11px] text-[#c9a84c]">
+                                  +{dailiesProgress * 2} / +10 Dailies
+                                </div>
+                              )}
+                              {weekliesDone && (
+                                <div className="text-[11px] text-emerald-400 flex items-center gap-1">
+                                  <Check size={10} /> +20 Weeklies (Done)
+                                </div>
+                              )}
+                              {!weekliesDone && canClaimWeeklies && (
+                                <div className="text-[11px] text-amber-400 font-bold">
+                                  🎁 +20 Weeklies (Claimable)
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              {row.runs > 0 ? (
+                                <div className="text-green-400 font-bold">+{row.gainedExpFromRuns} <span className="text-[10px] text-gray-400 font-normal">MD</span></div>
+                              ) : (
+                                <div className="text-gray-500 text-xs">0 MD</div>
+                              )}
+                              {row.isWeeklyReset ? (
+                                <div className="text-[11px] text-amber-400 font-medium">
+                                  +20 Weeklies + 10 Dailies
+                                </div>
+                              ) : row.passiveGained > 0 ? (
+                                <div className="text-[11px] text-[#c9a84c]">
+                                  +{row.passiveGained} Dailies
+                                </div>
+                              ) : null}
+                            </>
+                          )}
+                        </div>
+
+                        {/* Modules Cost */}
                         <div className="flex flex-col justify-center">
-                          {row.modulesUsed > 0 ? (
+                          {row.isToday && (todayRuns.length > 0 || dailiesDone) ? (
                             <div className="flex flex-col gap-0.5">
-                              <span className="text-[#60a5fa] font-bold font-mono">{row.modulesUsed} <span className="text-[10px] text-gray-400 font-normal">modules</span></span>
-                              <div className="flex flex-col gap-0.5">
-                                {!row.runsList.length && <span className="text-[10px] text-gray-500">5 Dailies</span>}
-                                {row.runsList.length > 0 && <span className="text-[10px] text-gray-500">5 Dailies</span>}
+                              <span className="text-emerald-400 font-bold font-mono text-xs flex items-center gap-1">
+                                <Check size={12} /> {todayRuns.reduce((acc, r) => acc + r.modules, 0) + (dailiesDone ? 5 : 0)} <span className="text-[10px] text-emerald-300/80 font-normal">mod spent</span>
+                              </span>
+                              <div className="flex flex-col gap-0.5 text-[10px] text-gray-500">
+                                {dailiesDone && <span>✓ 5 Dailies</span>}
+                                {todayRuns.map((r, i) => (
+                                  <span key={i}>✓ {r.modules} {r.type}</span>
+                                ))}
+                              </div>
+                            </div>
+                          ) : row.modulesUsed > 0 ? (
+                            <div className="flex flex-col gap-0.5">
+                              <span className="text-[#60a5fa] font-bold font-mono text-xs">{row.modulesUsed} <span className="text-[10px] text-gray-400 font-normal">modules</span></span>
+                              <div className="flex flex-col gap-0.5 text-[10px] text-gray-500">
+                                <span>5 Dailies</span>
                                 {row.runsList.map((run, i) => (
-                                  <span key={i} className="text-[10px] text-gray-500">{run.modules} {run.type}</span>
+                                  <span key={i}>{run.modules} {run.type}</span>
                                 ))}
                               </div>
                             </div>
@@ -523,6 +630,8 @@ export default function SchedulePage() {
                             <span className="text-gray-600 text-xs">0</span>
                           )}
                         </div>
+
+                        {/* Total EXP Generated */}
                         <div className="text-white font-mono font-bold flex flex-col justify-center">
                           <div className="flex items-center gap-1.5">
                             <span>{row.totalExp}</span>
