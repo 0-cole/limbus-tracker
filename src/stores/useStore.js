@@ -3,6 +3,7 @@ import baseIdentities from '../data/identities.json';
 import baseEgos from '../data/egos.json';
 import personalPreset from '../data/personalPreset.json';
 import { checkResets } from '../utils/timeUtils.js';
+import { syncEngine } from '../services/syncEngine.js';
 
 // Initial state values
 const defaultState = {
@@ -247,6 +248,16 @@ export const useStore = create((set, get) => ({
         }
       }, 60000); // Check every minute
 
+      // Check if user is logged into cloud sync and pull latest
+      try {
+        const user = await syncEngine.getUser();
+        if (user) {
+          await syncEngine.pullSaveFromCloud();
+        }
+      } catch (err) {
+        console.warn('Cloud sync check on startup skipped or offline:', err);
+      }
+
     } catch (e) {
       console.error("Store init error:", e);
       set({ isLoaded: true });
@@ -275,6 +286,7 @@ export const useStore = create((set, get) => ({
     } else {
       localStorage.setItem('limbus-tracker-data', JSON.stringify(dataToSave));
     }
+    syncEngine.queuePush();
   },
 
   toggleAcquiredId: (name) => {

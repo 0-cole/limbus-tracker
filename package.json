@@ -1,6 +1,6 @@
 {
   "name": "limbus-tracker",
-  "version": "1.0.33",
+  "version": "1.0.34",
   "description": "Limbus Company Companion App — Track IDs, EGOs, Schedules, Shards & Weeklies",
   "type": "module",
   "main": "electron/main.cjs",
@@ -11,6 +11,7 @@
     "package": "electron-builder --win --publish never"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.116.0",
     "cheerio": "^1.2.0",
     "framer-motion": "^12.0.0",
     "lucide-react": "^0.500.0",

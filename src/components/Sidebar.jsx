@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -10,8 +10,12 @@ import {
   ChevronRight,
   Battery,
   Calendar,
-  GitBranch
+  GitBranch,
+  Cloud,
+  CheckCircle2
 } from 'lucide-react';
+import AuthModal from './AuthModal';
+import { syncEngine } from '../services/syncEngine';
 
 const navItems = [
   { path: '/', icon: LayoutDashboard, label: 'Dashboard', description: 'Overview' },
@@ -28,6 +32,16 @@ export default function Sidebar() {
   const [clickCount, setClickCount] = useState(0);
   const [lastClickTime, setLastClickTime] = useState(0);
   const [showDonBanner, setShowDonBanner] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    syncEngine.getUser().then(setCurrentUser);
+    const { data: { subscription } } = syncEngine.onAuthStateChange((_event, session) => {
+      setCurrentUser(session?.user || null);
+    });
+    return () => subscription?.unsubscribe();
+  }, []);
 
   const handleLogoClick = () => {
     const now = Date.now();
@@ -148,14 +162,49 @@ export default function Sidebar() {
         {collapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
       </motion.button>
 
+      {/* Cloud Sync Status / Button */}
+      <div className="px-2 py-2 border-t border-limbus-border/60">
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => setAuthModalOpen(true)}
+          className={`w-full flex items-center gap-2.5 p-2 rounded-xl transition-all border ${
+            currentUser
+              ? 'bg-emerald-950/20 border-emerald-500/30 hover:border-emerald-500/50 text-emerald-400'
+              : 'bg-neutral-900/60 border-neutral-800 hover:border-[#c9a84c]/40 text-neutral-300 hover:text-white'
+          } ${collapsed ? 'justify-center' : ''}`}
+          title={currentUser ? `Synced as ${currentUser.email}` : 'Log in to sync across devices'}
+        >
+          <div className="relative flex-shrink-0">
+            <Cloud size={18} className={currentUser ? 'text-emerald-400' : 'text-[#c9a84c]'} />
+            {currentUser && (
+              <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-neutral-900" />
+            )}
+          </div>
+          {!collapsed && (
+            <div className="flex flex-col text-left overflow-hidden">
+              <div className="text-xs font-semibold flex items-center gap-1.5">
+                <span>{currentUser ? 'Cloud Synced' : 'Sync Devices'}</span>
+                {currentUser && <CheckCircle2 size={12} className="text-emerald-400" />}
+              </div>
+              <span className="text-[10px] text-neutral-400 truncate max-w-[140px]">
+                {currentUser ? currentUser.email : 'Log in / Register'}
+              </span>
+            </div>
+          )}
+        </motion.button>
+      </div>
+
       {/* Footer */}
-      <div className="px-4 py-3 border-t border-limbus-border">
+      <div className="px-4 py-2 border-t border-limbus-border/40">
         {!collapsed && (
           <p className="text-[10px] text-limbus-muted text-center">
             Limbus Company Companion
           </p>
         )}
       </div>
+
+      <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
     </motion.aside>
   );
 }
