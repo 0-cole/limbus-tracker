@@ -42,7 +42,7 @@ export default function UpdateNotification() {
 
   useEffect(() => {
     checkGitHubRelease();
-    const interval = setInterval(checkGitHubRelease, 300000);
+    const interval = setInterval(checkGitHubRelease, 20000); // Poll every 20 seconds
     return () => clearInterval(interval);
   }, [currentVer]);
 

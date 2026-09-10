@@ -24,6 +24,7 @@ function formatNotes(body) {
 // Overworked, powerless, stressed Records Keeper Kenneth (OC) memos
 // Keyed specifically to notable updates, bugs fixed, or features added
 const KENNETH_SPECIFIC_MEMOS = {
+  'v1.0.38': "Twenty seconds. Now the update radar scans GitHub every twenty seconds. If Corporate releases a patch while I'm eating my lukewarm noodles, the siren goes off. Please have mercy on my ears.",
   'v1.0.37': "I'm begging you, Dante... I set up an error alarm that flashes red whenever the cloud packet drops. Please don't throw your clock at the screen if it fails. I can't afford to requisition another monitor.",
   'v1.0.36': "The terminals kept yelling that they were 'already in sync' when you pressed the button, and then people panicked. I rewrote the memo. It now politely tells you everything is fine. Please breathe.",
   'v1.0.35': "Fifteen seconds. Every fifteen seconds, the pneumatic tube shoots another batch of mirror logs across the room. My desk is vibrating. I haven't blinked in two hours.",
