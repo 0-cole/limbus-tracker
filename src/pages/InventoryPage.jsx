@@ -37,7 +37,11 @@ export default function InventoryPage() {
       const lastSynced = inventory.enkephalinLastSynced || now;
       const diff = now - lastSynced;
       const generated = Math.floor(diff / (6 * 60 * 1000));
-      setCurrentEnkephalin(Math.min(inventory.enkephalin + generated, inventory.maxEnkephalin));
+      if (inventory.enkephalin >= inventory.maxEnkephalin) {
+        setCurrentEnkephalin(inventory.enkephalin);
+      } else {
+        setCurrentEnkephalin(Math.min(inventory.enkephalin + generated, inventory.maxEnkephalin));
+      }
     };
     
     updatePredictor();

@@ -527,249 +527,281 @@ export default function SchedulePage() {
       <h2 className="text-2xl font-bold text-white mt-12 mb-6 flex items-center gap-2">
         <Calendar size={24} className="text-[#c9a84c]" /> Grind Roadmap (Next 30 Days)
       </h2>
-      <div className="bg-[#111] border border-[#333] rounded-xl overflow-hidden mb-12">
-         <div className="grid grid-cols-6 bg-black/60 p-4 border-b border-[#333] font-bold text-sm text-gray-400 uppercase tracking-wider">
-            <div>Day & Date</div>
-            <div>Required MDs</div>
-            <div>EXP Gained</div>
-            <div className="text-[#60a5fa]">Modules Cost</div>
-            <div>Total EXP Generated</div>
-            <div className="text-[#c9a84c]">Target & Milestone</div>
-         </div>
-           <div className="max-h-[360px] overflow-y-auto">
-               {(() => {
-                const goalIdx = calcResult.bpExpNeeded > 0 ? roadmap.findIndex(r => r.totalExp >= calcResult.bpExpNeeded) : -1;
-                const todayRuns = scheduleState.todayLoggedRuns || [];
-                const mdDoneToday = scheduleState.mdTodayDone || todayRuns.length > 0;
-                const dailiesProgress = scheduleState.dailiesProgress || 0;
-                const dailiesDone = scheduleState.dailiesDone || dailiesProgress >= 5;
-                const weekliesDone = scheduleState.weekliesDone || false;
-                const canClaimWeeklies = scheduleState.canClaimWeeklies || false;
+      <div className="bg-[#111] border border-[#333] rounded-xl overflow-x-auto overflow-y-hidden mb-12 shadow-lg">
+         {(() => {
+           const formatRunType = (type) => {
+             if (!type) return 'Normal Run';
+             const str = String(type).trim();
+             if (str === 'hard_bonus' || str === 'Hard Bonus') return 'Hard Mode Bonus';
+             if (str === 'normal_bonus' || str === 'Normal Bonus') return 'Normal Bonus';
+             if (str === 'normal_nobonus' || str === 'Normal' || str === 'Normal Run (No Bonus)') return 'Normal (No Bonus)';
+             const lower = str.toLowerCase();
+             if (lower.includes('hard')) return 'Hard Mode Bonus';
+             if (lower.includes('normal') && lower.includes('bonus')) return 'Normal Bonus';
+             if (lower.includes('normal')) return 'Normal (No Bonus)';
+             return str;
+           };
 
-                return roadmap.map((row, idx) => {
-                  const isGoal = idx === goalIdx;
-                  const hasMilestone = row.milestonesReachedToday && row.milestonesReachedToday.length > 0;
-                  const totalRequiredMd = row.runs || 0;
-                  const mdDoneToday = row.isToday && (totalRequiredMd > 0 ? todayRuns.length >= totalRequiredMd : (scheduleState.mdTodayDone || todayRuns.length > 0));
-                  const mdInProgress = row.isToday && (totalRequiredMd > 0 && todayRuns.length > 0 && todayRuns.length < totalRequiredMd);
-                  const isRowCompleted = row.isToday && mdDoneToday && dailiesDone;
+           const tableGridClass = "grid grid-cols-[130px_minmax(190px,1.2fr)_minmax(250px,1.5fr)_minmax(160px,1fr)_130px_minmax(210px,1.3fr)] min-w-[1080px]";
 
-                  return (
-                    <div key={idx} className={`grid grid-cols-6 p-4 border-b border-[#333]/50 text-sm transition-colors ${
-                      hasMilestone 
-                        ? 'bg-[#c9a84c]/20 border-[#c9a84c]' 
-                        : isGoal 
-                          ? 'bg-[#22c55e]/20 border-[#22c55e]' 
-                          : isRowCompleted
-                            ? 'bg-emerald-950/20 border-emerald-500/40'
-                            : row.isToday && mdInProgress
-                              ? 'bg-amber-950/15 border-amber-500/30'
-                              : row.isToday 
-                                ? 'bg-[#c9a84c]/10 border-[#c9a84c]/40' 
-                                : row.isWeeklyReset 
-                                  ? 'bg-amber-950/15 border-amber-900/30' 
-                                  : ''
-                    }`}>
-                        <div className="font-bold text-white flex flex-col justify-center">
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            <span>Day {row.day}</span>
-                            {row.isToday && (
-                              <span className="text-[9px] uppercase tracking-wider bg-[#c9a84c] text-black font-black px-1.5 py-0.5 rounded shadow-sm">
-                                Today
-                              </span>
-                            )}
-                            {row.isWeeklyReset && (
-                              <span className="text-[9px] uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold px-1.5 py-0.5 rounded">
-                                🔄 Weekly Reset
-                              </span>
-                            )}
-                            {isGoal && !hasMilestone && (
-                              <span className="text-[9px] uppercase tracking-wider bg-[#22c55e] text-black px-1.5 py-0.5 rounded font-black shadow-[0_0_8px_rgba(34,197,94,0.6)]">
-                                Goal Met
-                              </span>
-                            )}
-                          </div>
-                          <span className="text-xs text-gray-400 font-normal mt-0.5">
-                            {row.weekday}, {row.date}
-                          </span>
-                        </div>
+           return (
+             <>
+               <div className={`${tableGridClass} bg-black/80 border-b border-[#333] font-bold text-xs text-gray-400 uppercase tracking-wider`}>
+                  <div className="p-3.5 border-r border-[#333]/80">Day & Date</div>
+                  <div className="p-3.5 border-r border-[#333]/80">Required MDs</div>
+                  <div className="p-3.5 border-r border-[#333]/80">EXP Gained</div>
+                  <div className="p-3.5 border-r border-[#333]/80 text-[#60a5fa]">Modules Cost</div>
+                  <div className="p-3.5 border-r border-[#333]/80">Total EXP</div>
+                  <div className="p-3.5 text-[#c9a84c]">Target & Milestone</div>
+               </div>
+               <div className="max-h-[420px] overflow-y-auto">
+                 {(() => {
+                   const goalIdx = calcResult.bpExpNeeded > 0 ? roadmap.findIndex(r => r.totalExp >= calcResult.bpExpNeeded) : -1;
+                   const todayRuns = scheduleState.todayLoggedRuns || [];
+                   const dailiesProgress = scheduleState.dailiesProgress || 0;
+                   const dailiesDone = scheduleState.dailiesDone || dailiesProgress >= 5;
+                   const weekliesDone = scheduleState.weekliesDone || false;
+                   const canClaimWeeklies = scheduleState.canClaimWeeklies || false;
 
-                        {/* Required MDs */}
-                        <div className="flex flex-col justify-center">
-                          {row.isToday && mdDoneToday ? (
-                            <div className="flex flex-col gap-1">
-                              <span className="text-[10px] font-black px-2 py-0.5 rounded bg-emerald-950/70 border border-emerald-500/60 text-emerald-300 flex items-center gap-1 w-fit shadow-sm">
-                                <Check size={12} className="text-emerald-400" /> Done ({todayRuns.length}/{Math.max(1, row.runs)} Runs)
-                              </span>
-                              {todayRuns.map((r, i) => (
-                                <span key={i} className="text-[10px] text-emerald-400/80 flex items-center gap-1 font-medium">
-                                  ✓ {r.label || r.type} (+{r.exp} EXP)
-                                </span>
-                              ))}
-                            </div>
-                          ) : row.isToday && mdInProgress ? (
-                            <div className="flex flex-col gap-1">
-                              <span className="text-[10px] font-black px-2 py-0.5 rounded bg-amber-950/70 border border-amber-500/60 text-amber-300 flex items-center gap-1 w-fit shadow-sm">
-                                ⏳ In Progress ({todayRuns.length}/{row.runs} Runs)
-                              </span>
-                              {todayRuns.map((r, i) => (
-                                <span key={i} className="text-[10px] text-emerald-400/80 flex items-center gap-1 font-medium">
-                                  ✓ {r.label || r.type} (+{r.exp} EXP)
-                                </span>
-                              ))}
-                              <div className="text-[10px] text-amber-400/90 font-bold mt-0.5">Remaining:</div>
-                              {row.runsList.map((run, i) => (
-                                <span key={i} className={`text-[10px] font-bold px-1.5 py-0.5 rounded w-fit ${
-                                  run.type === 'Hard Bonus' 
-                                    ? 'bg-[#ef4444]/20 text-[#ef4444] border border-[#ef4444]/30' 
-                                    : run.type === 'Normal Bonus' 
-                                      ? 'bg-[#c9a84c]/20 text-[#eab308] border border-[#c9a84c]/30' 
-                                      : 'bg-[#333] text-gray-300'
-                                }`}>
-                                  1x {run.type}
-                                </span>
-                              ))}
-                            </div>
-                          ) : row.runs > 0 ? (
-                            <div className="flex flex-col gap-1">
-                              {row.runsList.map((run, i) => (
-                                <span key={i} className={`text-[10px] font-bold px-1.5 py-0.5 rounded w-fit ${
-                                  run.type === 'Hard Bonus' 
-                                    ? 'bg-[#ef4444]/20 text-[#ef4444] border border-[#ef4444]/30' 
-                                    : run.type === 'Normal Bonus' 
-                                      ? 'bg-[#c9a84c]/20 text-[#eab308] border border-[#c9a84c]/30' 
-                                      : 'bg-[#333] text-gray-300'
-                                }`}>
-                                  1x {run.type}
-                                </span>
-                              ))}
-                            </div>
-                          ) : (
-                            <span className="text-gray-500 text-xs">Rest (No MD Required)</span>
-                          )}
-                        </div>
+                   return roadmap.map((row, idx) => {
+                     const isGoal = idx === goalIdx;
+                     const hasMilestone = row.milestonesReachedToday && row.milestonesReachedToday.length > 0;
+                     const totalRequiredMd = row.runs || 0;
+                     const mdDoneToday = row.isToday && (totalRequiredMd > 0 ? todayRuns.length >= totalRequiredMd : (scheduleState.mdTodayDone || todayRuns.length > 0));
+                     const mdInProgress = row.isToday && (totalRequiredMd > 0 && todayRuns.length > 0 && todayRuns.length < totalRequiredMd);
+                     const isRowCompleted = row.isToday && mdDoneToday && dailiesDone;
 
-                        {/* EXP Gained */}
-                        <div className="font-mono text-sm flex flex-col justify-center">
-                          {row.isToday ? (
-                            <>
-                              {todayRuns.length > 0 ? (
-                                <div className={`${mdDoneToday ? 'text-emerald-400' : 'text-amber-400'} font-bold flex items-center gap-1`}>
-                                  {mdDoneToday ? <Check size={12} /> : <span>⏳</span>} +{todayRuns.reduce((acc, r) => acc + r.exp, 0)} <span className="text-[10px] opacity-80 font-normal">MD Logged</span>
-                                </div>
-                              ) : row.runs > 0 ? (
-                                <div className="text-green-400 font-bold">+{row.gainedExpFromRuns} <span className="text-[10px] text-gray-400 font-normal">MD</span></div>
-                              ) : (
-                                <div className="text-gray-500 text-xs">0 MD</div>
-                              )}
-                              {dailiesDone ? (
-                                <div className="text-[11px] text-emerald-400 flex items-center gap-1">
-                                  <Check size={10} /> +10 Dailies (Done)
-                                </div>
-                              ) : (
-                                <div className="text-[11px] text-[#c9a84c]">
-                                  +{dailiesProgress * 2} / +10 Dailies
-                                </div>
-                              )}
-                              {weekliesDone && (
-                                <div className="text-[11px] text-emerald-400 flex items-center gap-1">
-                                  <Check size={10} /> +20 Weeklies (Done)
-                                </div>
-                              )}
-                              {!weekliesDone && canClaimWeeklies && (
-                                <div className="text-[11px] text-amber-400 font-bold">
-                                  🎁 +20 Weeklies (Claimable)
-                                </div>
-                              )}
-                            </>
-                          ) : (
-                            <>
-                              {row.runs > 0 ? (
-                                <div className="text-green-400 font-bold">+{row.gainedExpFromRuns} <span className="text-[10px] text-gray-400 font-normal">MD</span></div>
-                              ) : (
-                                <div className="text-gray-500 text-xs">0 MD</div>
-                              )}
-                              {row.isWeeklyReset ? (
-                                <div className="text-[11px] text-amber-400 font-medium">
-                                  +20 Weeklies + 10 Dailies
-                                </div>
-                              ) : row.passiveGained > 0 ? (
-                                <div className="text-[11px] text-[#c9a84c]">
-                                  +{row.passiveGained} Dailies
-                                </div>
-                              ) : null}
-                            </>
-                          )}
-                        </div>
+                     const hasBonusPlanned = row.runsList?.some(r => 
+                       r.type?.toLowerCase().includes('bonus') || r.runKey?.toLowerCase().includes('bonus')
+                     );
+                     const hasBonusLogged = todayRuns.some(r => 
+                       (r.bonusUsed && r.bonusUsed > 0) || r.type?.toLowerCase().includes('bonus') || r.label?.toLowerCase().includes('bonus')
+                     );
+                     const isBonusCategory = hasBonusPlanned || hasBonusLogged;
+                     const runDescriptor = isBonusCategory ? 'Bonus Runs' : 'Runs';
 
-                        {/* Modules Cost */}
-                        <div className="flex flex-col justify-center">
-                          {row.isToday && (todayRuns.length > 0 || dailiesDone) ? (
-                            <div className="flex flex-col gap-0.5">
-                              <span className="text-emerald-400 font-bold font-mono text-xs flex items-center gap-1">
-                                <Check size={12} /> {todayRuns.reduce((acc, r) => acc + r.modules, 0) + (dailiesDone ? 5 : 0)} <span className="text-[10px] text-emerald-300/80 font-normal">mod spent</span>
-                              </span>
-                              <div className="flex flex-col gap-0.5 text-[10px] text-gray-500">
-                                {dailiesDone && <span>✓ 5 Dailies</span>}
-                                {todayRuns.map((r, i) => (
-                                  <span key={i}>✓ {r.modules} {r.type}</span>
-                                ))}
-                              </div>
-                            </div>
-                          ) : row.modulesUsed > 0 ? (
-                            <div className="flex flex-col gap-0.5">
-                              <span className="text-[#60a5fa] font-bold font-mono text-xs">{row.modulesUsed} <span className="text-[10px] text-gray-400 font-normal">modules</span></span>
-                              <div className="flex flex-col gap-0.5 text-[10px] text-gray-500">
-                                <span>5 Dailies</span>
-                                {row.runsList.map((run, i) => (
-                                  <span key={i}>{run.modules} {run.type}</span>
-                                ))}
-                              </div>
-                            </div>
-                          ) : (
-                            <span className="text-gray-600 text-xs">0</span>
-                          )}
-                        </div>
+                     return (
+                       <div key={idx} className={`${tableGridClass} border-b border-[#333]/50 text-sm transition-colors ${
+                         hasMilestone 
+                           ? 'bg-[#c9a84c]/20 border-[#c9a84c]' 
+                           : isGoal 
+                             ? 'bg-[#22c55e]/20 border-[#22c55e]' 
+                             : isRowCompleted
+                               ? 'bg-emerald-950/20 border-emerald-500/40'
+                               : row.isToday && mdInProgress
+                                 ? 'bg-amber-950/15 border-amber-500/30'
+                                 : row.isToday 
+                                   ? 'bg-[#c9a84c]/10 border-[#c9a84c]/40' 
+                                   : row.isWeeklyReset 
+                                     ? 'bg-amber-950/15 border-amber-900/30' 
+                                     : ''
+                       }`}>
+                           <div className="p-3.5 border-r border-[#333]/60 font-bold text-white flex flex-col justify-center">
+                             <div className="flex items-center gap-1.5 flex-wrap">
+                               <span>Day {row.day}</span>
+                               {row.isToday && (
+                                 <span className="text-[9px] uppercase tracking-wider bg-[#c9a84c] text-black font-black px-1.5 py-0.5 rounded shadow-sm">
+                                   Today
+                                 </span>
+                               )}
+                               {row.isWeeklyReset && (
+                                 <span className="text-[9px] uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold px-1.5 py-0.5 rounded">
+                                   🔄 Weekly Reset
+                                 </span>
+                               )}
+                               {isGoal && !hasMilestone && (
+                                 <span className="text-[9px] uppercase tracking-wider bg-[#22c55e] text-black px-1.5 py-0.5 rounded font-black shadow-[0_0_8px_rgba(34,197,94,0.6)]">
+                                   Goal Met
+                                 </span>
+                               )}
+                             </div>
+                             <span className="text-xs text-gray-400 font-normal mt-0.5">
+                               {row.weekday}, {row.date}
+                             </span>
+                           </div>
 
-                        {/* Total EXP Generated */}
-                        <div className="text-white font-mono font-bold flex flex-col justify-center">
-                          <div className="flex items-center gap-1.5">
-                            <span>{row.totalExp}</span>
-                            <span className="text-xs text-gray-500 font-normal">(+{row.gained})</span>
-                          </div>
-                          {isGoal && <span className="text-[#22c55e] text-xs font-bold mt-0.5">Goal ({calcResult.bpExpNeeded} EXP)</span>}
-                        </div>
+                           {/* Required MDs */}
+                           <div className="p-3.5 border-r border-[#333]/60 flex flex-col justify-center whitespace-normal break-words">
+                             {row.isToday && mdDoneToday ? (
+                               <div className="flex flex-col gap-1">
+                                 <span className="text-[10px] font-black px-2 py-0.5 rounded bg-emerald-950/70 border border-emerald-500/60 text-emerald-300 flex items-center gap-1 w-fit shadow-sm">
+                                   <Check size={12} className="text-emerald-400 shrink-0" /> Done ({todayRuns.length}/{Math.max(1, row.runs)} {runDescriptor})
+                                 </span>
+                                 {todayRuns.map((r, i) => (
+                                   <span key={i} className="text-[10px] text-emerald-400/90 flex items-center gap-1 font-medium break-words">
+                                     ✓ {formatRunType(r.label || r.type)} (+{r.exp} EXP)
+                                   </span>
+                                 ))}
+                               </div>
+                             ) : row.isToday && mdInProgress ? (
+                               <div className="flex flex-col gap-1">
+                                 <span className="text-[10px] font-black px-2 py-0.5 rounded bg-amber-950/70 border border-amber-500/60 text-amber-300 flex items-center gap-1 w-fit shadow-sm">
+                                   ⏳ In Progress ({todayRuns.length}/{row.runs} {runDescriptor})
+                                 </span>
+                                 {todayRuns.map((r, i) => (
+                                   <span key={i} className="text-[10px] text-emerald-400/90 flex items-center gap-1 font-medium break-words">
+                                     ✓ {formatRunType(r.label || r.type)} (+{r.exp} EXP)
+                                   </span>
+                                 ))}
+                                 <div className="text-[10px] text-amber-400/90 font-bold mt-0.5">Remaining:</div>
+                                 {row.runsList.map((run, i) => (
+                                   <span key={i} className={`text-[10px] font-bold px-1.5 py-0.5 rounded w-fit ${
+                                     run.type === 'Hard Bonus' 
+                                       ? 'bg-[#ef4444]/20 text-[#ef4444] border border-[#ef4444]/30' 
+                                       : run.type === 'Normal Bonus' 
+                                         ? 'bg-[#c9a84c]/20 text-[#eab308] border border-[#c9a84c]/30' 
+                                         : 'bg-[#333] text-gray-300'
+                                   }`}>
+                                     1x {formatRunType(run.type)}
+                                   </span>
+                                 ))}
+                               </div>
+                             ) : row.runs > 0 ? (
+                               <div className="flex flex-col gap-1">
+                                 {row.runsList.map((run, i) => (
+                                   <span key={i} className={`text-[10px] font-bold px-1.5 py-0.5 rounded w-fit ${
+                                     run.type === 'Hard Bonus' 
+                                       ? 'bg-[#ef4444]/20 text-[#ef4444] border border-[#ef4444]/30' 
+                                       : run.type === 'Normal Bonus' 
+                                         ? 'bg-[#c9a84c]/20 text-[#eab308] border border-[#c9a84c]/30' 
+                                         : 'bg-[#333] text-gray-300'
+                                   }`}>
+                                     1x {formatRunType(run.type)}
+                                   </span>
+                                 ))}
+                               </div>
+                             ) : (
+                               <span className="text-gray-500 text-xs">Rest (No MD Required)</span>
+                             )}
+                           </div>
 
-                        {/* Egoshard Target / Milestone Column */}
-                        <div className="flex flex-col justify-center text-xs">
-                          {hasMilestone ? (
-                            <div className="space-y-1">
-                              {row.milestonesReachedToday.map((m, mi) => (
-                                <div key={mi} className="bg-[#c9a84c] text-black font-black text-[10px] px-2 py-1 rounded shadow flex items-center gap-1 truncate" title={m.name}>
-                                  <span>🏆</span>
-                                  <span className="truncate">CRAFT: {m.name}</span>
-                                </div>
-                              ))}
-                            </div>
-                          ) : row.activeFarmingTarget ? (
-                            <div className="text-gray-300 flex flex-col">
-                              <span className="text-[10px] text-[#c9a84c] font-bold flex items-center gap-1 truncate">
-                                <span>🎯</span>
-                                <span className="truncate">{row.activeFarmingTarget.name}</span>
-                              </span>
-                              <span className="text-[10px] text-gray-500 font-mono">
-                                {row.activeFarmingTarget.currentShards} / {row.activeFarmingTarget.targetCost} Shards
-                              </span>
-                            </div>
-                          ) : (
-                            <span className="text-gray-600 text-[10px]">All Goals Reached</span>
-                          )}
-                        </div>
-                    </div>
-                  );
-                });
-              })()}
-           </div>
+                           {/* EXP Gained */}
+                           <div className="p-3.5 border-r border-[#333]/60 font-mono text-sm flex flex-col justify-center whitespace-normal break-words gap-1">
+                             {row.isToday ? (
+                               <>
+                                 {todayRuns.length > 0 ? (
+                                   <div className={`${mdDoneToday ? 'text-emerald-400' : 'text-amber-400'} font-bold flex items-start gap-1 text-xs break-words`}>
+                                     {mdDoneToday ? <Check size={12} className="shrink-0 mt-0.5" /> : <span className="shrink-0">⏳</span>}
+                                     <span>+{todayRuns.reduce((acc, r) => acc + r.exp, 0)} EXP gained from Mirror Dungeon -- [{mdDoneToday ? 'Logged' : 'In Progress'}]</span>
+                                   </div>
+                                 ) : row.runs > 0 ? (
+                                   <div className="text-green-400 font-bold text-xs break-words">+{row.gainedExpFromRuns} EXP from Mirror Dungeon</div>
+                                 ) : (
+                                   <div className="text-gray-500 text-xs">0 EXP (No MD)</div>
+                                 )}
+                                 {dailiesDone ? (
+                                   <div className="text-xs text-emerald-400 flex items-start gap-1 font-semibold break-words">
+                                     <Check size={10} className="shrink-0 mt-0.5" />
+                                     <span>+10 EXP from Dailies -- [Done]</span>
+                                   </div>
+                                 ) : (
+                                   <div className="text-xs text-[#c9a84c] font-medium break-words">
+                                     +{dailiesProgress * 2} / +10 EXP from Dailies ({dailiesProgress}/5)
+                                   </div>
+                                 )}
+                                 {weekliesDone && (
+                                   <div className="text-xs text-emerald-400 flex items-start gap-1 font-semibold break-words">
+                                     <Check size={10} className="shrink-0 mt-0.5" />
+                                     <span>+20 EXP from Weeklies -- [Done]</span>
+                                   </div>
+                                 )}
+                                 {!weekliesDone && canClaimWeeklies && (
+                                   <div className="text-xs text-amber-400 font-bold break-words">
+                                     🎁 +20 EXP from Weeklies -- [Claimable]
+                                   </div>
+                                 )}
+                               </>
+                             ) : (
+                               <>
+                                 {row.runs > 0 ? (
+                                   <div className="text-green-400 font-bold text-xs break-words">+{row.gainedExpFromRuns} EXP from Mirror Dungeon</div>
+                                 ) : (
+                                   <div className="text-gray-500 text-xs">0 EXP (Rest)</div>
+                                 )}
+                                 {row.isWeeklyReset ? (
+                                   <div className="text-xs text-amber-400 font-medium break-words">
+                                     +20 EXP from Weeklies & +10 EXP from Dailies
+                                   </div>
+                                 ) : row.passiveGained > 0 ? (
+                                   <div className="text-xs text-[#c9a84c] break-words">
+                                     +{row.passiveGained} EXP from Dailies
+                                   </div>
+                                 ) : null}
+                               </>
+                             )}
+                           </div>
+
+                           {/* Modules Cost */}
+                           <div className="p-3.5 border-r border-[#333]/60 flex flex-col justify-center whitespace-normal break-words">
+                             {row.isToday && (todayRuns.length > 0 || dailiesDone) ? (
+                               <div className="flex flex-col gap-1">
+                                 <span className="text-emerald-400 font-bold font-mono text-xs flex items-center gap-1">
+                                   <Check size={12} className="shrink-0" /> {todayRuns.reduce((acc, r) => acc + r.modules, 0) + (dailiesDone ? 5 : 0)} <span className="text-[10px] text-emerald-300/80 font-normal">mod spent</span>
+                                 </span>
+                                 <div className="flex flex-col gap-0.5 text-[10px] text-gray-400">
+                                   {dailiesDone && <span>✓ 5 Dailies</span>}
+                                   {todayRuns.map((r, i) => (
+                                     <span key={i} className="break-words">✓ {r.modules} mod ({formatRunType(r.label || r.type)})</span>
+                                   ))}
+                                 </div>
+                               </div>
+                             ) : row.modulesUsed > 0 ? (
+                               <div className="flex flex-col gap-1">
+                                 <span className="text-[#60a5fa] font-bold font-mono text-xs">{row.modulesUsed} <span className="text-[10px] text-gray-400 font-normal">modules</span></span>
+                                 <div className="flex flex-col gap-0.5 text-[10px] text-gray-400">
+                                   <span>5 Dailies</span>
+                                   {row.runsList.map((run, i) => (
+                                     <span key={i} className="break-words">{run.modules} mod ({formatRunType(run.type)})</span>
+                                   ))}
+                                 </div>
+                               </div>
+                             ) : (
+                               <span className="text-gray-600 text-xs">0</span>
+                             )}
+                           </div>
+
+                           {/* Total EXP Generated */}
+                           <div className="p-3.5 border-r border-[#333]/60 font-mono font-bold flex flex-col justify-center text-white whitespace-normal break-words">
+                             <div className="flex items-center gap-1.5 flex-wrap">
+                               <span>{row.totalExp}</span>
+                               <span className="text-xs text-gray-500 font-normal">(+{row.gained})</span>
+                             </div>
+                             {isGoal && <span className="text-[#22c55e] text-xs font-bold mt-0.5 break-words">Goal ({calcResult.bpExpNeeded} EXP)</span>}
+                           </div>
+
+                           {/* Egoshard Target / Milestone Column */}
+                           <div className="p-3.5 flex flex-col justify-center text-xs whitespace-normal break-words">
+                             {hasMilestone ? (
+                               <div className="space-y-1">
+                                 {row.milestonesReachedToday.map((m, mi) => (
+                                   <div key={mi} className="bg-[#c9a84c] text-black font-black text-[10px] px-2 py-1 rounded shadow flex items-center gap-1 break-words" title={m.name}>
+                                     <span className="shrink-0">🏆</span>
+                                     <span className="break-words">CRAFT: {m.name}</span>
+                                   </div>
+                                 ))}
+                               </div>
+                             ) : row.activeFarmingTarget ? (
+                               <div className="text-gray-300 flex flex-col gap-0.5">
+                                 <span className="text-[11px] text-[#c9a84c] font-bold flex items-center gap-1 break-words">
+                                   <span className="shrink-0">🎯</span>
+                                   <span className="break-words">{row.activeFarmingTarget.name}</span>
+                                 </span>
+                                 <span className="text-[10px] text-gray-400 font-mono">
+                                   {row.activeFarmingTarget.currentShards} / {row.activeFarmingTarget.targetCost} Shards
+                                 </span>
+                               </div>
+                             ) : (
+                               <span className="text-gray-600 text-[10px]">All Goals Reached</span>
+                             )}
+                           </div>
+                       </div>
+                     );
+                   });
+                 })()}
+              </div>
+             </>
+           );
+         })()}
       </div>
 
       {/* Targets */}
