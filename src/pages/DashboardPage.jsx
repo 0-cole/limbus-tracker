@@ -95,6 +95,9 @@ export default function DashboardPage() {
     window.electronAPI.getGameLaunchPreference().then(setShowWhenGameStarts).catch(() => {});
   }, []);
 
+  // Calculate missed days to suggest backup plans
+  const missedDaysCount = Object.values(weeklyProgress?.dailyStatus || {}).filter(v => v === 'missed').length;
+
   // Dante Clock Rewind Easter Egg
   const [clockSpinning, setClockSpinning] = useState(false);
   const [danteToast, setDanteToast] = useState(null);
