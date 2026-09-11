@@ -96,9 +96,9 @@ export default function DailyCycleTracker() {
   const bonusesAvailable = Math.max(0, 3 - bonusesClaimed);
   const todayRuns = scheduleState.todayLoggedRuns || [];
 
-  const totalRequiredMd = todayRoadmap?.runs || 0;
-  const isMdCompletedToday = totalRequiredMd > 0 ? todayRuns.length >= totalRequiredMd : (scheduleState.mdTodayDone || todayRuns.length > 0);
-  const isMdInProgress = totalRequiredMd > 0 && todayRuns.length > 0 && todayRuns.length < totalRequiredMd;
+  const totalRequiredMd = todayRoadmap?.plannedRuns !== undefined ? todayRoadmap.plannedRuns : (todayRoadmap?.runs || 0);
+  const isMdCompletedToday = scheduleState.mdTodayDone || (totalRequiredMd > 0 ? todayRuns.length >= totalRequiredMd : todayRuns.length > 0);
+  const isMdInProgress = !isMdCompletedToday && totalRequiredMd > 0 && todayRuns.length > 0 && todayRuns.length < totalRequiredMd;
 
   // Toggle today's required runs
   const handleToggleRequiredMd = () => {

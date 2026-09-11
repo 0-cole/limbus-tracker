@@ -566,9 +566,9 @@ export default function SchedulePage() {
                    return roadmap.map((row, idx) => {
                      const isGoal = idx === goalIdx;
                      const hasMilestone = row.milestonesReachedToday && row.milestonesReachedToday.length > 0;
-                     const totalRequiredMd = row.runs || 0;
-                     const mdDoneToday = row.isToday && (totalRequiredMd > 0 ? todayRuns.length >= totalRequiredMd : (scheduleState.mdTodayDone || todayRuns.length > 0));
-                     const mdInProgress = row.isToday && (totalRequiredMd > 0 && todayRuns.length > 0 && todayRuns.length < totalRequiredMd);
+                     const totalPlannedMd = row.plannedRuns !== undefined ? row.plannedRuns : (row.runs || 0);
+                     const mdDoneToday = row.isToday && (scheduleState.mdTodayDone || (totalPlannedMd > 0 ? todayRuns.length >= totalPlannedMd : todayRuns.length > 0));
+                     const mdInProgress = row.isToday && !mdDoneToday && (totalPlannedMd > 0 && todayRuns.length > 0 && todayRuns.length < totalPlannedMd);
                      const isRowCompleted = row.isToday && mdDoneToday && dailiesDone;
 
                      const hasBonusPlanned = row.runsList?.some(r => 
@@ -625,7 +625,7 @@ export default function SchedulePage() {
                              {row.isToday && mdDoneToday ? (
                                <div className="flex flex-col gap-1">
                                  <span className="text-[10px] font-black px-2 py-0.5 rounded bg-emerald-950/70 border border-emerald-500/60 text-emerald-300 flex items-center gap-1 w-fit shadow-sm">
-                                   <Check size={12} className="text-emerald-400 shrink-0" /> Done ({todayRuns.length}/{Math.max(1, row.runs)} {runDescriptor})
+                                   <Check size={12} className="text-emerald-400 shrink-0" /> Done ({todayRuns.length}/{Math.max(1, totalPlannedMd)} {runDescriptor})
                                  </span>
                                  {todayRuns.map((r, i) => (
                                    <span key={i} className="text-[10px] text-emerald-400/90 flex items-center gap-1 font-medium break-words">
@@ -636,7 +636,7 @@ export default function SchedulePage() {
                              ) : row.isToday && mdInProgress ? (
                                <div className="flex flex-col gap-1">
                                  <span className="text-[10px] font-black px-2 py-0.5 rounded bg-amber-950/70 border border-amber-500/60 text-amber-300 flex items-center gap-1 w-fit shadow-sm">
-                                   ⏳ In Progress ({todayRuns.length}/{row.runs} {runDescriptor})
+                                   ⏳ In Progress ({todayRuns.length}/{totalPlannedMd} {runDescriptor})
                                  </span>
                                  {todayRuns.map((r, i) => (
                                    <span key={i} className="text-[10px] text-emerald-400/90 flex items-center gap-1 font-medium break-words">

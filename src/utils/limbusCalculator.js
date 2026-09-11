@@ -301,10 +301,15 @@ export function generateRoadmap(
     // For today (day 0): only suggest runs that haven't been logged yet.
     // todayLoggedRuns are already in the store, so we subtract them from
     // what the roadmap would otherwise suggest, and pre-credit their EXP.
+    const plannedRunsToday = runsCountToday;
     let effectiveRunsCountToday = runsCountToday;
-    if (isToday && todayLoggedRuns.length > 0) {
-      // Clamp remaining runs to what's still needed after already-logged ones
-      effectiveRunsCountToday = Math.max(0, runsCountToday - todayLoggedRuns.length);
+    if (isToday) {
+      if (scheduleState?.mdTodayDone) {
+        effectiveRunsCountToday = 0;
+      } else if (todayLoggedRuns.length > 0) {
+        // Clamp remaining runs to what's still needed after already-logged ones
+        effectiveRunsCountToday = Math.max(0, runsCountToday - todayLoggedRuns.length);
+      }
     }
     const runsToDeductFromPool = isToday ? effectiveRunsCountToday : runsCountToday;
     remainingRunsPool = Math.max(0, remainingRunsPool - runsToDeductFromPool);
@@ -385,6 +390,8 @@ export function generateRoadmap(
       isToday,
       isWeeklyReset,
       runs: runsCountToday,
+      plannedRuns: plannedRunsToday,
+      remainingRuns: isToday ? effectiveRunsCountToday : runsCountToday,
       runsList: runsList,
       gainedExpFromRuns: gainedExpFromRuns,
       dailyExpGained,
