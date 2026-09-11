@@ -290,8 +290,8 @@ export default function SchedulePage() {
                 </p>
               ) : (
                 <p className="text-gray-400 text-sm">
-                  You will passively earn <strong className="text-white">{calcResult.passiveExp} EXP</strong> by doing your Dailies and Weeklies.
-                  This leaves <strong className="text-red-400">{calcResult.expToGrind} EXP</strong> left to grind.
+                  <strong className="text-white">{calcResult.passiveExp} EXP</strong> remaining from upcoming Dailies & Weeklies.
+                  This leaves <strong className="text-red-400">{calcResult.expToGrind} EXP</strong> left to grind via Mirror Dungeons ({calcResult.rawMdsNeeded} MDs).
                 </p>
               )}
             </div>

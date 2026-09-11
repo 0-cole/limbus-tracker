@@ -102,8 +102,8 @@ export function calculateLimbusGrind(
   const futureDailyExp = asapMode ? 0 : Math.max(0, daysLeft - 1) * 10;
   const futureWeeklyExp = asapMode ? 0 : Math.max(0, weeksLeft - 1) * 20;
 
-  const todayDailyExp = (scheduleState?.dailiesProgress || 0) >= 5 ? 0 : 10;
-  const todayWeeklyExp = scheduleState?.weekliesDone ? 0 : 20;
+  const todayDailyExp = asapMode ? 0 : Math.max(0, (5 - (scheduleState?.dailiesProgress || 0)) * 2);
+  const todayWeeklyExp = asapMode ? 0 : (scheduleState?.weekliesDone ? 0 : 20);
 
   const truePassiveExp = futureDailyExp + futureWeeklyExp + todayDailyExp + todayWeeklyExp;
 
@@ -340,8 +340,9 @@ export function generateRoadmap(
     }
 
     // 4. Passive EXP
-    let dailyExpGained = !currentDailiesDone ? 10 : 0;
-    let weeklyExpGained = (!currentWeekliesDone && (isToday || isWeeklyReset)) ? 20 : 0;
+    const todayDailyExpRemaining = Math.max(0, (5 - (scheduleState?.dailiesProgress || 0)) * 2);
+    let dailyExpGained = asapMode ? 0 : (isToday ? todayDailyExpRemaining : (!currentDailiesDone ? 10 : 0));
+    let weeklyExpGained = asapMode ? 0 : ((!currentWeekliesDone && (isToday || isWeeklyReset)) ? 20 : 0);
     let passiveGained = dailyExpGained + weeklyExpGained;
 
     // 5. Calculate Crates & Shard Allocation for Today

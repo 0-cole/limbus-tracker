@@ -360,18 +360,29 @@ export const useStore = create((set, get) => ({
       let newLevel = state.bpState.level;
       let newExp = state.bpState.currentExp + amount;
 
+      let levelsGained = 0;
       while (newExp >= 10) {
         newLevel++;
         newExp -= 10;
+        levelsGained++;
       }
       while (newExp < 0 && newLevel > 1) {
         newLevel--;
         newExp += 10;
+        levelsGained--;
       }
       if (newExp < 0) newExp = 0;
 
+      // In Limbus Company, gaining BP levels awards Nominable Egocrates
+      // (3 crates/level with Premium Pass, 1 crate/level without).
+      const cratesPerLevel = state.bpState.isPremium ? 3 : 1;
+      const cratesDelta = levelsGained * cratesPerLevel;
+      const currentCrates = state.inventory.nominableCrates || 0;
+      const newNominableCrates = Math.max(0, currentCrates + cratesDelta);
+
       return {
-        bpState: { ...state.bpState, level: newLevel, currentExp: newExp }
+        bpState: { ...state.bpState, level: newLevel, currentExp: newExp },
+        inventory: { ...state.inventory, nominableCrates: newNominableCrates }
       };
     });
     get().saveStore();
