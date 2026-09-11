@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Target, Flame, CalendarDays, CheckCircle, Swords, PackagePlus, Sparkles, Zap, X } from 'lucide-react';
 import { useStore } from '../stores/useStore';
-import { calculateLimbusGrind, generateRoadmap, normalizeSinnerId } from '../utils/limbusCalculator.js';
+import { calculateLimbusGrind, generateRoadmap, normalizeSinnerId, getOwnedShards } from '../utils/limbusCalculator.js';
 import { getNextResets } from '../utils/timeUtils.js';
 import { getSeasonEndDate } from '../utils/seasonUtils.js';
 import sinnersData from '../data/sinners.json';
@@ -11,11 +11,13 @@ export default function DailyCycleTracker() {
     scheduleState, 
     updateScheduleState, 
     bpState, 
+    updateBpState,
     injectBpExp, 
     logMdRun, 
     undoMdRun, 
     addShards,
     undoAddShards,
+    openCratesForSinner,
     addCrates,
     inventory, 
     updateInventory,
@@ -51,8 +53,25 @@ export default function DailyCycleTracker() {
   const [showManualLogger, setShowManualLogger] = useState(false);
   const [showShardLogger, setShowShardLogger] = useState(false);
 
-  const [selectedSinner, setSelectedSinner] = useState('sinclair');
+  const defaultTargetSinner = bpState.targetSinnerForCrates || (targetItems[0]?.sinner ? normalizeSinnerId(targetItems[0].sinner) : 'sinclair');
+
+  const [selectedSinner, setSelectedSinner] = useState(defaultTargetSinner);
   const [shardAmount, setShardAmount] = useState(20);
+
+  const [shardLoggerTab, setShardLoggerTab] = useState((inventory.nominableCrates || 0) > 0 ? 'open_crates' : 'direct_log');
+  const [cratesToOpen, setCratesToOpen] = useState(1);
+  const [cratesShardsResult, setCratesShardsResult] = useState(2);
+  const [cratesTargetSinner, setCratesTargetSinner] = useState(defaultTargetSinner);
+  const [manualShardsEdited, setManualShardsEdited] = useState(false);
+
+  const handleCratesCountChange = (count) => {
+    const clamped = Math.max(1, count);
+    setCratesToOpen(clamped);
+    if (!manualShardsEdited) {
+      const rate = bpState.safeMath ? 1.5 : 2.0;
+      setCratesShardsResult(Math.round(clamped * rate));
+    }
+  };
 
   const [showEnkephalinModal, setShowEnkephalinModal] = useState(false);
   const [enkephalinModalTrigger, setEnkephalinModalTrigger] = useState('md');
@@ -352,6 +371,36 @@ export default function DailyCycleTracker() {
                   +30 EXP <span className="text-[9px] text-gray-500">(0 bonus)</span>
                 </div>
               </button>
+
+              {/* Auto-Convert MD Crates to Shards Setting */}
+              <div className="sm:col-span-3 flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-lg bg-black/40 border border-[#333] mt-1 text-xs">
+                <label className="flex items-center gap-2 cursor-pointer text-gray-300 select-none">
+                  <input 
+                    type="checkbox"
+                    checked={bpState.autoConvertMdCrates !== false}
+                    onChange={(e) => updateBpState({ autoConvertMdCrates: e.target.checked })}
+                    className="accent-[#c9a84c] rounded w-4 h-4 cursor-pointer"
+                  />
+                  <span className="font-medium text-white flex items-center gap-1.5">
+                    <Sparkles size={14} className="text-[#eab308]" /> Auto-convert MD crates directly to shards
+                  </span>
+                </label>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[10px] text-gray-400 font-bold uppercase">Target:</span>
+                  <select
+                    value={bpState.targetSinnerForCrates || defaultTargetSinner}
+                    onChange={(e) => {
+                      updateBpState({ targetSinnerForCrates: e.target.value });
+                      setCratesTargetSinner(e.target.value);
+                    }}
+                    className="bg-[#111] border border-[#444] rounded px-2 py-1 text-xs text-white focus:border-[#c9a84c] outline-none"
+                  >
+                    {sinnersData.map(s => (
+                      <option key={s.id} value={s.id}>{s.name} ({getOwnedShards(inventory.shards, s.id)} owned)</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </div>
           )}
 
@@ -383,86 +432,220 @@ export default function DailyCycleTracker() {
           <div className="flex justify-between items-center mb-3">
             <div>
               <h4 className="font-bold text-sm text-white flex items-center gap-2">
-                <PackagePlus size={16} className="text-[#c9a84c]" /> Log Shards & Crates Gained Today
+                <PackagePlus size={16} className="text-[#c9a84c]" /> Egoshard Crates & Shard Manager
               </h4>
               <p className="text-[11px] text-gray-400">
-                Record extra Egoshards or Crates earned from extractions, events, or luxcavations.
+                Open owned Nominable Crates for Sinners, or record extra drops from events and extractions.
               </p>
             </div>
             <button 
               onClick={() => setShowShardLogger(!showShardLogger)} 
               className="text-xs text-[#c9a84c] hover:underline font-bold"
             >
-              {showShardLogger ? 'Hide Options' : '+ Log Shards'}
+              {showShardLogger ? 'Hide Options' : '+ Open Crates / Log Shards'}
             </button>
           </div>
 
           {showShardLogger && (
             <div className="pt-2 border-t border-[#222] space-y-3">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Target Sinner / Resource</label>
-                  <select 
-                    value={selectedSinner}
-                    onChange={(e) => setSelectedSinner(e.target.value)}
-                    className="w-full bg-black border border-[#444] rounded p-2 text-xs text-white focus:border-[#c9a84c] outline-none"
-                  >
-                    <optgroup label="Sinner Egoshards">
-                      {sinnersData.map(s => (
-                        <option key={s.id} value={s.id}>{s.name} ({inventory.shards?.[s.id] || 0} owned)</option>
-                      ))}
-                    </optgroup>
-                    <optgroup label="Egocrates">
-                      <option value="crate_nominable">Nominable Egocrates ({inventory.nominableCrates || 0} owned)</option>
-                      <option value="crate_random">Random Egocrates ({inventory.randomCrates || 0} owned)</option>
-                    </optgroup>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Amount Gained</label>
-                  <div className="flex gap-2">
-                    <input 
-                      type="number"
-                      min="1"
-                      max="999"
-                      value={shardAmount}
-                      onChange={(e) => setShardAmount(Math.max(1, parseInt(e.target.value) || 1))}
-                      className="w-20 bg-black border border-[#444] rounded p-1.5 text-sm text-white font-mono text-center focus:border-[#c9a84c] outline-none"
-                    />
-                    <div className="flex gap-1">
-                      {[10, 20, 50].map(val => (
-                        <button 
-                          key={val}
-                          type="button"
-                          onClick={() => setShardAmount(val)}
-                          className="px-2 py-1 text-xs bg-black/50 border border-[#333] hover:border-gray-500 rounded text-gray-300 font-mono"
-                        >
-                          +{val}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex justify-end pt-1">
-                <button 
-                  onClick={() => {
-                    if (selectedSinner === 'crate_nominable') {
-                      addCrates('nominable', shardAmount);
-                    } else if (selectedSinner === 'crate_random') {
-                      addCrates('random', shardAmount);
-                    } else {
-                      const sinnerObj = sinnersData.find(s => s.id === selectedSinner);
-                      addShards(selectedSinner, shardAmount, `+${shardAmount} ${sinnerObj?.name || selectedSinner} Shards`);
-                    }
-                  }}
-                  className="px-4 py-1.5 bg-[#c9a84c] text-black font-bold text-xs rounded hover:bg-[#d4b96a] transition-colors flex items-center gap-1.5"
+              {/* Tab Navigation: Open Crates vs Direct Log */}
+              <div className="flex border-b border-[#222] gap-1">
+                <button
+                  type="button"
+                  onClick={() => setShardLoggerTab('open_crates')}
+                  className={`pb-2 px-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 ${
+                    shardLoggerTab === 'open_crates'
+                      ? 'border-[#c9a84c] text-[#c9a84c]'
+                      : 'border-transparent text-gray-400 hover:text-gray-200'
+                  }`}
                 >
-                  <PackagePlus size={14} /> Add to Inventory
+                  <PackagePlus size={14} /> Open / Crack Crates
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono font-bold">
+                    {inventory.nominableCrates || 0} owned
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShardLoggerTab('direct_log')}
+                  className={`pb-2 px-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 ${
+                    shardLoggerTab === 'direct_log'
+                      ? 'border-[#c9a84c] text-[#c9a84c]'
+                      : 'border-transparent text-gray-400 hover:text-gray-200'
+                  }`}
+                >
+                  ➕ Direct Log (Drops / Gacha)
                 </button>
               </div>
+
+              {/* TAB 1: OPEN CRATES INTO SHARDS */}
+              {shardLoggerTab === 'open_crates' ? (
+                <div className="space-y-3 pt-1">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+                    <div>
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Target Sinner</label>
+                      <select 
+                        value={cratesTargetSinner}
+                        onChange={(e) => setCratesTargetSinner(e.target.value)}
+                        className="w-full bg-black border border-[#444] rounded p-2 text-xs text-white focus:border-[#c9a84c] outline-none"
+                      >
+                        {sinnersData.map(s => (
+                          <option key={s.id} value={s.id}>{s.name} ({getOwnedShards(inventory.shards, s.id)} owned)</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Crates to Use</label>
+                        <span className="text-[10px] text-amber-400 font-mono font-bold">
+                          {inventory.nominableCrates || 0} in box
+                        </span>
+                      </div>
+                      <div className="flex gap-1.5">
+                        <input 
+                          type="number"
+                          min="1"
+                          max={inventory.nominableCrates || 1}
+                          value={cratesToOpen}
+                          onChange={(e) => handleCratesCountChange(parseInt(e.target.value) || 1)}
+                          className="w-20 bg-black border border-[#444] rounded p-1.5 text-sm text-white font-mono text-center focus:border-[#c9a84c] outline-none"
+                        />
+                        <div className="flex gap-1 flex-wrap">
+                          {(inventory.nominableCrates || 0) > 0 && (
+                            <button 
+                              type="button"
+                              onClick={() => handleCratesCountChange(inventory.nominableCrates)}
+                              className="px-2 py-1 text-[11px] bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 rounded text-amber-300 font-bold cursor-pointer"
+                            >
+                              All ({inventory.nominableCrates})
+                            </button>
+                          )}
+                          {[5, 10, 20].map(val => (
+                            <button 
+                              key={val}
+                              type="button"
+                              disabled={(inventory.nominableCrates || 0) < val}
+                              onClick={() => handleCratesCountChange(val)}
+                              className="px-2 py-1 text-xs bg-black/50 border border-[#333] hover:border-gray-500 disabled:opacity-30 disabled:cursor-not-allowed rounded text-gray-300 font-mono cursor-pointer"
+                            >
+                              +{val}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Shards Gained</label>
+                        <span className="text-[9px] text-gray-500 italic">avg ~2/crate</span>
+                      </div>
+                      <input 
+                        type="number"
+                        min="1"
+                        value={cratesShardsResult}
+                        onChange={(e) => {
+                          setCratesShardsResult(Math.max(1, parseInt(e.target.value) || 1));
+                          setManualShardsEdited(true);
+                        }}
+                        className="w-full bg-black border border-[#444] rounded p-1.5 text-sm text-green-400 font-mono font-bold text-center focus:border-[#c9a84c] outline-none"
+                        title="Defaults to 2 shards/crate. Adjust if your in-game roll differed!"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center pt-1 flex-wrap gap-2">
+                    <span className="text-[11px] text-gray-400 italic">
+                      {(inventory.nominableCrates || 0) <= 0 
+                        ? "You have 0 Nominable Crates. Run Mirror Dungeons or complete weeklies to earn more!" 
+                        : `Opening ${cratesToOpen} crate(s) will deduct them from your box and add ${cratesShardsResult} shards.`}
+                    </span>
+                    <button 
+                      type="button"
+                      disabled={(inventory.nominableCrates || 0) < 1 || cratesToOpen > (inventory.nominableCrates || 0)}
+                      onClick={() => {
+                        const sinnerObj = sinnersData.find(s => s.id === cratesTargetSinner) || { id: cratesTargetSinner, name: cratesTargetSinner };
+                        openCratesForSinner(cratesTargetSinner, cratesToOpen, cratesShardsResult);
+                        setCratesToOpen(1);
+                        setManualShardsEdited(false);
+                        const rate = bpState.safeMath ? 1.5 : 2.0;
+                        setCratesShardsResult(Math.round(1 * rate));
+                      }}
+                      className="px-4 py-2 bg-[#c9a84c] hover:bg-[#d4b96a] disabled:bg-[#333] disabled:text-gray-500 disabled:cursor-not-allowed text-black font-bold text-xs rounded transition-colors flex items-center gap-1.5 cursor-pointer shadow-[0_0_12px_rgba(201,168,76,0.3)]"
+                    >
+                      <PackagePlus size={14} /> Open {cratesToOpen} Crates ➔ +{cratesShardsResult} Shards
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                /* TAB 2: DIRECT LOG */
+                <div className="space-y-3 pt-1">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Target Sinner / Resource</label>
+                      <select 
+                        value={selectedSinner}
+                        onChange={(e) => setSelectedSinner(e.target.value)}
+                        className="w-full bg-black border border-[#444] rounded p-2 text-xs text-white focus:border-[#c9a84c] outline-none"
+                      >
+                        <optgroup label="Sinner Egoshards">
+                          {sinnersData.map(s => (
+                            <option key={s.id} value={s.id}>{s.name} ({getOwnedShards(inventory.shards, s.id)} owned)</option>
+                          ))}
+                        </optgroup>
+                        <optgroup label="Egocrates">
+                          <option value="crate_nominable">Nominable Egocrates ({inventory.nominableCrates || 0} owned)</option>
+                          <option value="crate_random">Random Egocrates ({inventory.randomCrates || 0} owned)</option>
+                        </optgroup>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Amount Gained</label>
+                      <div className="flex gap-2">
+                        <input 
+                          type="number"
+                          min="1"
+                          max="999"
+                          value={shardAmount}
+                          onChange={(e) => setShardAmount(Math.max(1, parseInt(e.target.value) || 1))}
+                          className="w-20 bg-black border border-[#444] rounded p-1.5 text-sm text-white font-mono text-center focus:border-[#c9a84c] outline-none"
+                        />
+                        <div className="flex gap-1">
+                          {[10, 20, 50].map(val => (
+                            <button 
+                              key={val}
+                              type="button"
+                              onClick={() => setShardAmount(val)}
+                              className="px-2 py-1 text-xs bg-black/50 border border-[#333] hover:border-gray-500 rounded text-gray-300 font-mono cursor-pointer"
+                            >
+                              +{val}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end pt-1">
+                    <button 
+                      onClick={() => {
+                        if (selectedSinner === 'crate_nominable') {
+                          addCrates('nominable', shardAmount);
+                        } else if (selectedSinner === 'crate_random') {
+                          addCrates('random', shardAmount);
+                        } else {
+                          const sinnerObj = sinnersData.find(s => s.id === selectedSinner);
+                          addShards(selectedSinner, shardAmount, `+${shardAmount} ${sinnerObj?.name || selectedSinner} Shards`);
+                        }
+                      }}
+                      className="px-4 py-1.5 bg-[#c9a84c] text-black font-bold text-xs rounded hover:bg-[#d4b96a] transition-colors flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <PackagePlus size={14} /> Add to Inventory
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

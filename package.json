@@ -1,6 +1,6 @@
 {
   "name": "limbus-tracker",
-  "version": "1.0.47",
+  "version": "1.0.48",
   "description": "Limbus Company Companion App — Track IDs, EGOs, Schedules, Shards & Weeklies",
   "type": "module",
   "main": "electron/main.cjs",

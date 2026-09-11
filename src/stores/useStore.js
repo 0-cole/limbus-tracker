@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import baseIdentities from '../data/identities.json';
 import baseEgos from '../data/egos.json';
 import personalPreset from '../data/personalPreset.json';
+import sinnersData from '../data/sinners.json';
+import { getOwnedShards, normalizeSinnerId } from '../utils/limbusCalculator.js';
 import { checkResets } from '../utils/timeUtils.js';
 import { syncEngine } from '../services/syncEngine.js';
 
@@ -35,6 +37,8 @@ const defaultState = {
     preferHardMd: true,
     hasMdHard: true,
     safeMath: false, // 1.5 shards/crate vs 2.0
+    autoConvertMdCrates: true, // Auto-convert crates gained from MD runs directly to target Sinner shards
+    targetSinnerForCrates: '', // Preferred sinner for auto-conversion (defaults to first wantList sinner or Sinclair)
     asapMode: false, // Rely on MDs directly to reach goals ASAP instead of waiting on future passive dailies/weeklies
     paceMode: 'relaxed', // 'relaxed' | 'rush'
     customDailyRuns: 3, // custom MD runs per day when in 'rush' mode
@@ -356,6 +360,7 @@ export const useStore = create((set, get) => ({
   },
 
   injectBpExp: (amount) => {
+    let result = { levelsGained: 0, cratesDelta: 0 };
     set((state) => {
       let newLevel = state.bpState.level;
       let newExp = state.bpState.currentExp + amount;
@@ -380,12 +385,15 @@ export const useStore = create((set, get) => ({
       const currentCrates = state.inventory.nominableCrates || 0;
       const newNominableCrates = Math.max(0, currentCrates + cratesDelta);
 
+      result = { levelsGained, cratesDelta };
+
       return {
         bpState: { ...state.bpState, level: newLevel, currentExp: newExp },
         inventory: { ...state.inventory, nominableCrates: newNominableCrates }
       };
     });
     get().saveStore();
+    return result;
   },
 
   resetAllData: async () => {
@@ -458,7 +466,41 @@ export const useStore = create((set, get) => ({
       }
     }));
 
-    get().injectBpExp(exp);
+    const expResult = get().injectBpExp(exp);
+    const cratesDelta = expResult?.cratesDelta || 0;
+    runRecord.cratesEarned = cratesDelta;
+
+    // Auto-convert crates to target Sinner shards if enabled
+    const bpState = get().bpState;
+    if (bpState.autoConvertMdCrates && cratesDelta > 0) {
+      let targetSinner = bpState.targetSinnerForCrates;
+      if (!targetSinner) {
+        const wantList = Array.from(get().wantList || []);
+        if (wantList.length > 0) {
+          const item = (get().identitiesData || []).find(id => id.name === wantList[0]) || 
+                       (get().egosData || []).find(ego => ego.name === wantList[0]);
+          if (item?.sinner) targetSinner = item.sinner;
+        }
+      }
+      if (!targetSinner) targetSinner = 'sinclair';
+
+      const sinnerObj = sinnersData.find(s => 
+        s.id.toLowerCase() === String(targetSinner).toLowerCase() ||
+        s.name.toLowerCase() === String(targetSinner).toLowerCase() ||
+        normalizeSinnerId(s.id) === normalizeSinnerId(targetSinner)
+      ) || { id: targetSinner, name: targetSinner };
+
+      const rate = bpState.safeMath ? 1.5 : 2.0;
+      const shardsGained = Math.round(cratesDelta * rate);
+      get().openCratesForSinner(
+        sinnerObj.id,
+        cratesDelta,
+        shardsGained,
+        `Auto-Converted ${cratesDelta} MD Crates ➔ +${shardsGained} ${sinnerObj.name} Shards`,
+        runRecord.id
+      );
+    }
+
     get().saveStore();
     return runRecord;
   },
@@ -468,9 +510,15 @@ export const useStore = create((set, get) => ({
     const run = (state.scheduleState.todayLoggedRuns || []).find(r => r.id === runId);
     if (!run) return;
 
-    const newLogged = (state.scheduleState.todayLoggedRuns || []).filter(r => r.id !== runId);
-    const newBonuses = Math.max(0, (state.scheduleState.mdBonusesClaimed || 0) - run.bonusUsed);
-    const newModules = (state.inventory.modules || 0) + run.modules;
+    // Also undo any auto-converted shards linked to this run
+    const linkedShard = (state.scheduleState.todayLoggedShards || []).find(s => s.linkedRunId === runId);
+    if (linkedShard) {
+      get().undoAddShards(linkedShard.id);
+    }
+
+    const newLogged = (get().scheduleState.todayLoggedRuns || []).filter(r => r.id !== runId);
+    const newBonuses = Math.max(0, (get().scheduleState.mdBonusesClaimed || 0) - run.bonusUsed);
+    const newModules = (get().inventory.modules || 0) + run.modules;
 
     set((s) => ({
       inventory: { ...s.inventory, modules: newModules },
@@ -486,24 +534,71 @@ export const useStore = create((set, get) => ({
     get().saveStore();
   },
 
+  openCratesForSinner: (sinnerId, cratesUsed, shardsGained, customLabel, linkedRunId) => {
+    const state = get();
+    const available = state.inventory.nominableCrates || 0;
+    const actualCrates = Math.min(available, Math.max(0, cratesUsed));
+    if (actualCrates <= 0 && cratesUsed > 0) return null;
+
+    const sinnerObj = sinnersData.find(s => 
+      s.id.toLowerCase() === String(sinnerId).toLowerCase() ||
+      s.name.toLowerCase() === String(sinnerId).toLowerCase() ||
+      normalizeSinnerId(s.id) === normalizeSinnerId(sinnerId)
+    ) || { id: sinnerId, name: sinnerId };
+
+    const currentOwned = getOwnedShards(state.inventory.shards, sinnerObj.id);
+    const newShards = Math.max(0, currentOwned + shardsGained);
+
+    const record = {
+      id: `${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+      isConversion: true,
+      sinnerId: sinnerObj.id,
+      sinnerName: sinnerObj.name,
+      cratesUsed: actualCrates,
+      amount: shardsGained,
+      linkedRunId: linkedRunId || null,
+      label: customLabel || `Opened ${actualCrates} Crates ➔ +${shardsGained} ${sinnerObj.name} Shards`,
+      timestamp: Date.now()
+    };
+
+    const newLogged = [...(state.scheduleState.todayLoggedShards || []), record];
+
+    set((s) => ({
+      inventory: {
+        ...s.inventory,
+        nominableCrates: Math.max(0, (s.inventory.nominableCrates || 0) - actualCrates),
+        shards: {
+          ...s.inventory.shards,
+          [sinnerObj.name]: newShards,
+          [sinnerObj.id]: newShards
+        }
+      },
+      scheduleState: {
+        ...s.scheduleState,
+        todayLoggedShards: newLogged
+      }
+    }));
+    get().saveStore();
+    return record;
+  },
+
   addShards: (sinnerId, amount, label) => {
     const state = get();
-    const shards = state.inventory.shards || {};
-    let targetKey = sinnerId;
-    for (const key of Object.keys(shards)) {
-      if (key.toLowerCase().replace(/[^a-z]/g, '') === String(sinnerId).toLowerCase().replace(/[^a-z]/g, '')) {
-        targetKey = key;
-        break;
-      }
-    }
-    const currentOwned = Number(shards[targetKey]) || 0;
+    const sinnerObj = sinnersData.find(s => 
+      s.id.toLowerCase() === String(sinnerId).toLowerCase() ||
+      s.name.toLowerCase() === String(sinnerId).toLowerCase() ||
+      normalizeSinnerId(s.id) === normalizeSinnerId(sinnerId)
+    ) || { id: sinnerId, name: sinnerId };
+
+    const currentOwned = getOwnedShards(state.inventory.shards, sinnerObj.id);
     const newCount = Math.max(0, currentOwned + amount);
 
     const record = {
       id: `${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-      sinnerId: targetKey,
+      sinnerId: sinnerObj.id,
+      sinnerName: sinnerObj.name,
       amount,
-      label: label || `${amount > 0 ? '+' : ''}${amount} ${targetKey} Shards`,
+      label: label || `${amount > 0 ? '+' : ''}${amount} ${sinnerObj.name} Shards`,
       timestamp: Date.now()
     };
 
@@ -514,7 +609,8 @@ export const useStore = create((set, get) => ({
         ...s.inventory,
         shards: {
           ...s.inventory.shards,
-          [targetKey]: newCount
+          [sinnerObj.name]: newCount,
+          [sinnerObj.id]: newCount
         }
       },
       scheduleState: {
@@ -531,31 +627,49 @@ export const useStore = create((set, get) => ({
     const rec = (state.scheduleState.todayLoggedShards || []).find(r => r.id === recordId);
     if (!rec) return;
 
-    const shards = state.inventory.shards || {};
-    let targetKey = rec.sinnerId;
-    for (const key of Object.keys(shards)) {
-      if (key.toLowerCase().replace(/[^a-z]/g, '') === String(rec.sinnerId).toLowerCase().replace(/[^a-z]/g, '')) {
-        targetKey = key;
-        break;
-      }
-    }
-    const currentOwned = Number(shards[targetKey]) || 0;
-    const newCount = Math.max(0, currentOwned - rec.amount);
     const newLogged = (state.scheduleState.todayLoggedShards || []).filter(r => r.id !== recordId);
 
-    set((s) => ({
-      inventory: {
-        ...s.inventory,
-        shards: {
-          ...s.inventory.shards,
-          [targetKey]: newCount
+    if (rec.isConversion) {
+      // Revert conversion: restore crates, remove shards
+      const currentOwned = getOwnedShards(state.inventory.shards, rec.sinnerId);
+      const newShards = Math.max(0, currentOwned - rec.amount);
+      const restoredCrates = (state.inventory.nominableCrates || 0) + (rec.cratesUsed || 0);
+
+      set((s) => ({
+        inventory: {
+          ...s.inventory,
+          nominableCrates: restoredCrates,
+          shards: {
+            ...s.inventory.shards,
+            [rec.sinnerName || rec.sinnerId]: newShards,
+            [rec.sinnerId]: newShards
+          }
+        },
+        scheduleState: {
+          ...s.scheduleState,
+          todayLoggedShards: newLogged
         }
-      },
-      scheduleState: {
-        ...s.scheduleState,
-        todayLoggedShards: newLogged
-      }
-    }));
+      }));
+    } else {
+      // Normal shard record
+      const currentOwned = getOwnedShards(state.inventory.shards, rec.sinnerId);
+      const newCount = Math.max(0, currentOwned - rec.amount);
+
+      set((s) => ({
+        inventory: {
+          ...s.inventory,
+          shards: {
+            ...s.inventory.shards,
+            [rec.sinnerName || rec.sinnerId]: newCount,
+            [rec.sinnerId]: newCount
+          }
+        },
+        scheduleState: {
+          ...s.scheduleState,
+          todayLoggedShards: newLogged
+        }
+      }));
+    }
     get().saveStore();
   },
 

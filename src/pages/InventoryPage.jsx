@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useStore } from '../stores/useStore';
 import sinnersData from '../data/sinners.json';
 import { Settings, Battery, Box, Wallet } from 'lucide-react';
-import { calculateLimbusGrind, generateRoadmap } from '../utils/limbusCalculator.js';
+import { calculateLimbusGrind, generateRoadmap, getOwnedShards } from '../utils/limbusCalculator.js';
 import enkephalinCaps from '../data/enkephalinCap.json';
 
 export default function InventoryPage() {
@@ -199,9 +199,16 @@ export default function InventoryPage() {
             <span className="font-bold text-sm" style={{ color: sinner.color }}>{sinner.name}</span>
             <input 
               type="number"
-              value={inventory.shards[sinner.name] || 0}
+              value={getOwnedShards(inventory.shards, sinner.name)}
               onChange={e => { 
-                updateInventory({ shards: { ...inventory.shards, [sinner.name]: parseInt(e.target.value)||0 } }); 
+                const val = parseInt(e.target.value) || 0;
+                updateInventory({ 
+                  shards: { 
+                    ...inventory.shards, 
+                    [sinner.name]: val,
+                    [sinner.id]: val 
+                  } 
+                }); 
                 saveStore(); 
               }}
               className="bg-black/50 border border-[#444] rounded text-center w-full py-2 text-xl font-bold text-white focus:border-white focus:outline-none transition-colors"
