@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Siren, AlertOctagon, X, ShieldAlert, Radio } from 'lucide-react';
+import GasterCrackScene from './components/GasterCrackScene.jsx';
 import Sidebar from './components/Sidebar';
 import DashboardPage from './pages/DashboardPage';
 import IdentitiesPage from './pages/IdentitiesPage';
@@ -151,10 +152,31 @@ const pageTransition = {
 
 export default function App() {
   const location = useLocation();
+  const navigate = useNavigate();
   const initStore = useStore((s) => s.initStore);
   const isLoaded = useStore((s) => s.isLoaded);
   const [showTrumpetAlert, setShowTrumpetAlert] = useState(false);
   const konamiIndexRef = useRef(0);
+
+  // If this window was spawned as the transparent Gaster crack overlay
+  const searchParams = new URLSearchParams(window.location.search);
+  const isCrackMode = searchParams.get('mode') === 'gaster_crack';
+
+  useEffect(() => {
+    if (window.electronAPI?.onGasterComplete) {
+      window.electronAPI.onGasterComplete(() => {
+        sessionStorage.setItem('limbus_gaster_apology_pending', 'true');
+        navigate('/?incident=gaster_anomaly');
+      });
+      return () => {
+        window.electronAPI.removeGasterComplete?.();
+      };
+    }
+  }, [navigate]);
+
+  if (isCrackMode) {
+    return <GasterCrackScene />;
+  }
 
   useEffect(() => {
     initStore();

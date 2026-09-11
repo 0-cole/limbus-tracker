@@ -39,7 +39,11 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    if (params.get('incident') === 'gaster_anomaly') {
+    const hasParam = params.get('incident') === 'gaster_anomaly';
+    const hasPendingSession = sessionStorage.getItem('limbus_gaster_apology_pending') === 'true';
+
+    if (hasParam || hasPendingSession) {
+      sessionStorage.removeItem('limbus_gaster_apology_pending');
       setShowGasterApology(true);
       navigate('/', { replace: true });
     }

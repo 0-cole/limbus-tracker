@@ -206,6 +206,72 @@ ipcMain.handle('get-data-path', () => {
   return DATA_PATH;
 });
 
+let savedBoundsBeforeGaster = null;
+let crackWindow = null;
+
+ipcMain.handle('start-gaster-fullscreen', () => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    savedBoundsBeforeGaster = mainWindow.getBounds();
+    mainWindow.setFullScreen(true);
+    return true;
+  }
+  return false;
+});
+
+ipcMain.handle('trigger-gaster-window-crack', async () => {
+  if (!mainWindow || mainWindow.isDestroyed()) return;
+
+  if (!savedBoundsBeforeGaster) {
+    savedBoundsBeforeGaster = mainWindow.getBounds();
+  }
+
+  const isDev = !app.isPackaged;
+
+  // Create transparent borderless overlay window
+  crackWindow = new BrowserWindow({
+    fullscreen: true,
+    frame: false,
+    transparent: true,
+    alwaysOnTop: true,
+    skipTaskbar: true,
+    hasShadow: false,
+    backgroundColor: '#00000000',
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.cjs'),
+    }
+  });
+
+  const crackUrl = isDev 
+    ? 'http://localhost:5173/?mode=gaster_crack' 
+    : `file://${path.join(__dirname, '..', 'dist', 'index.html')}?mode=gaster_crack`;
+
+  await crackWindow.loadURL(crackUrl);
+  
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.hide();
+  }
+  crackWindow.show();
+});
+
+ipcMain.handle('finish-gaster-window-crack', () => {
+  if (crackWindow && !crackWindow.isDestroyed()) {
+    crackWindow.close();
+    crackWindow = null;
+  }
+
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.setFullScreen(false);
+    if (savedBoundsBeforeGaster) {
+      mainWindow.setBounds(savedBoundsBeforeGaster);
+    }
+    mainWindow.show();
+    mainWindow.focus();
+    mainWindow.webContents.send('gaster-sequence-complete');
+  }
+});
+
 ipcMain.handle('get-system-username', () => {
   try {
     return os.userInfo().username || process.env.USERNAME || 'DANTE';

@@ -15,4 +15,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   downloadUpdate: (url, filename) => ipcRenderer.invoke('download-update', url, filename),
   onUpdateProgress: (cb) => ipcRenderer.on('update-progress', (_, pct) => cb(pct)),
   removeUpdateProgress: () => ipcRenderer.removeAllListeners('update-progress'),
+  startGasterFullscreen: () => ipcRenderer.invoke('start-gaster-fullscreen'),
+  triggerGasterWindowCrack: () => ipcRenderer.invoke('trigger-gaster-window-crack'),
+  finishGasterWindowCrack: () => ipcRenderer.invoke('finish-gaster-window-crack'),
+  onGasterComplete: (cb) => ipcRenderer.on('gaster-sequence-complete', cb),
+  removeGasterComplete: () => ipcRenderer.removeAllListeners('gaster-sequence-complete'),
 });
