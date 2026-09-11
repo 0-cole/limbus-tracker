@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Bug, Skull, AlertCircle, ShieldAlert, Sparkles } from 'lucide-react';
+import { X, Bug, Skull, AlertCircle, ShieldAlert, Sparkles, CheckCircle2 } from 'lucide-react';
 
 const ROACH_SKILLS = [
   {
@@ -67,9 +67,26 @@ const UNIQUE_STATUS = {
   ],
 };
 
-export default function RoachEmperorModal({ onClose }) {
+export default function RoachEmperorModal({ onClose, onRevert }) {
   const [activeTab, setActiveTab] = useState('skills'); // 'skills' | 'status'
   const [crawlClicks, setCrawlClicks] = useState(0);
+  const [isReverting, setIsReverting] = useState(false);
+
+  const handleBrush = () => {
+    const nextClicks = crawlClicks + 1;
+    setCrawlClicks(nextClicks);
+    if (nextClicks >= 3) {
+      setIsReverting(true);
+    }
+  };
+
+  const executeRevert = () => {
+    if (onRevert) {
+      onRevert();
+    } else {
+      onClose();
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50 p-4" onClick={onClose}>
@@ -80,6 +97,62 @@ export default function RoachEmperorModal({ onClose }) {
         className="max-w-2xl w-full relative bg-[#061206] border-2 border-green-600/80 shadow-[0_0_60px_rgba(34,197,94,0.35)] overflow-hidden max-h-[90vh] flex flex-col rounded-xl"
         onClick={e => e.stopPropagation()}
       >
+        {/* Reversion Sequence Overlay */}
+        <AnimatePresence>
+          {isReverting && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 z-30 bg-[#071307]/95 backdrop-blur-lg flex flex-col items-center justify-center p-6 text-center"
+            >
+              <motion.div
+                initial={{ scale: 0.8, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                transition={{ type: 'spring', damping: 15 }}
+                className="max-w-md w-full bg-black/80 border-2 border-green-500 rounded-2xl p-6 shadow-[0_0_40px_rgba(34,197,94,0.6)] flex flex-col items-center"
+              >
+                {/* Scattering bug animation */}
+                <div className="relative mb-4">
+                  <div className="w-24 h-24 rounded-full border-2 border-[#fca5a5] overflow-hidden shadow-[0_0_20px_rgba(252,165,165,0.6)] bg-black">
+                    <img
+                      src="https://assets.limbusdeck.com/identities/full/lcb-sinner-gregor.webp"
+                      alt="LCB Sinner Gregor"
+                      className="w-full h-full object-cover object-top"
+                    />
+                  </div>
+                  <motion.div
+                    animate={{ rotate: 360, scale: [1, 1.2, 1] }}
+                    transition={{ repeat: Infinity, duration: 3 }}
+                    className="absolute -top-2 -right-2 text-2xl"
+                  >
+                    ✨
+                  </motion.div>
+                </div>
+
+                <span className="text-[10px] uppercase font-mono tracking-widest text-green-400 bg-green-950/80 border border-green-700/60 px-2.5 py-0.5 rounded-full mb-2">
+                  ✓ Infestation Cleared • Sinner Restored
+                </span>
+
+                <h3 className="text-xl font-black text-white mb-2" style={{ color: '#fca5a5' }}>
+                  LCB Sinner Gregor
+                </h3>
+
+                <p className="text-xs text-gray-300 italic font-serif leading-relaxed mb-5 bg-green-950/30 p-3 rounded-xl border border-green-800/40">
+                  "*puff*... Whew. Thanks a bunch, Manager. Thought I was losing my damn head to the swarm for a minute there. The buzzing's finally gone quiet. Let's get back on the bus before Faust docks our rations."
+                </p>
+
+                <button
+                  onClick={executeRevert}
+                  className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-green-600 via-emerald-500 to-green-600 text-black font-black text-sm hover:brightness-110 transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(34,197,94,0.5)]"
+                >
+                  <CheckCircle2 size={16} /> Return to Bus (Restore Base Gregor)
+                </button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Top accent line */}
         <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-green-950 via-green-500 to-green-950" />
         <div className="absolute -top-24 -right-24 w-64 h-64 bg-green-600/10 rounded-full blur-3xl pointer-events-none" />
@@ -95,8 +168,15 @@ export default function RoachEmperorModal({ onClose }) {
         {/* ── HEADER ── */}
         <div className="flex gap-4 items-start p-5 border-b border-green-900/40 bg-black/40">
           {/* Avatar */}
-          <div className="relative w-24 h-24 rounded-lg overflow-hidden border-2 border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.4)] flex-shrink-0 bg-black flex items-center justify-center text-5xl">
-            🪲
+          <div className="relative w-24 h-24 rounded-lg overflow-hidden border-2 border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.4)] flex-shrink-0 bg-black">
+            <img
+              src="https://assets.limbusdeck.com/identities/full-uptied/g-corp-manager-corporal-gregor.webp"
+              alt="The Roach Emperor"
+              className="w-full h-full object-cover object-top"
+              onError={(e) => {
+                e.target.src = 'https://assets.limbusdeck.com/identities/full/lcb-sinner-gregor.webp';
+              }}
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
             <div className="absolute bottom-1 left-0 right-0 text-center">
               <span className="text-[8px] bg-green-900/90 text-green-200 font-black px-1 py-0.5 rounded border border-green-500/50 uppercase tracking-wider">
@@ -255,10 +335,11 @@ export default function RoachEmperorModal({ onClose }) {
         {/* ── FOOTER ── */}
         <div className="flex justify-between items-center px-5 py-3 border-t border-green-900/40 bg-black/30">
           <button
-            onClick={() => setCrawlClicks(c => c + 1)}
-            className="px-3 py-1.5 rounded text-xs font-mono text-green-400 bg-green-950/40 border border-green-800/50 hover:bg-green-900/40 transition-colors"
+            onClick={handleBrush}
+            className="px-3.5 py-1.5 rounded text-xs font-mono text-green-300 bg-green-950/80 border border-green-700/60 hover:bg-green-900/60 transition-colors flex items-center gap-1.5 shadow-[0_0_10px_rgba(34,197,94,0.2)]"
+            title="Brush roaches off Gregor to snap him back"
           >
-            🪲 Brush off roaches ({crawlClicks})
+            🪲 Brush off roaches ({crawlClicks < 3 ? `${crawlClicks}/3` : 'Ready!'})
           </button>
           <button
             onClick={onClose}

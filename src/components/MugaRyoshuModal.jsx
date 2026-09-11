@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Swords, Flame, EyeOff, ShieldAlert, Sparkles } from 'lucide-react';
+import { X, Swords, Flame, EyeOff, ShieldAlert, Sparkles, Heart, CheckCircle2 } from 'lucide-react';
 
 const MUGA_SKILLS = [
   {
@@ -63,9 +63,18 @@ const MUGA_SKILLS = [
   },
 ];
 
-export default function MugaRyoshuModal({ onClose }) {
+export default function MugaRyoshuModal({ onClose, onRevert }) {
   const [activeTab, setActiveTab] = useState('skills'); // 'skills' | 'muga'
   const [slashCount, setSlashCount] = useState(0);
+  const [isReverting, setIsReverting] = useState(false);
+
+  const executeRevert = () => {
+    if (onRevert) {
+      onRevert();
+    } else {
+      onClose();
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50 p-4" onClick={onClose}>
@@ -73,9 +82,64 @@ export default function MugaRyoshuModal({ onClose }) {
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        className="max-w-2xl w-full relative bg-[#0a0a0d] border-2 border-gray-600/80 shadow-[0_0_60px_rgba(200,200,220,0.2)] overflow-hidden max-h-[90vh] flex flex-col rounded-xl"
+        className="max-w-2xl w-full relative bg-[#0a0a0d] border-2 border-red-700/80 shadow-[0_0_60px_rgba(220,38,38,0.35)] overflow-hidden max-h-[90vh] flex flex-col rounded-xl"
         onClick={e => e.stopPropagation()}
       >
+        {/* Reversion Sequence Overlay */}
+        <AnimatePresence>
+          {isReverting && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 z-30 bg-[#160608]/95 backdrop-blur-lg flex flex-col items-center justify-center p-6 text-center"
+            >
+              <motion.div
+                initial={{ scale: 0.8, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                transition={{ type: 'spring', damping: 15 }}
+                className="max-w-md w-full bg-black/80 border-2 border-red-600 rounded-2xl p-6 shadow-[0_0_40px_rgba(239,68,68,0.6)] flex flex-col items-center"
+              >
+                <div className="relative mb-4">
+                  <div className="w-24 h-24 rounded-full border-2 border-[#f87171] overflow-hidden shadow-[0_0_20px_rgba(248,113,113,0.6)] bg-black">
+                    <img
+                      src="https://assets.limbusdeck.com/identities/full/lcb-sinner-ryoshu.webp"
+                      alt="LCB Sinner Ryōshū"
+                      className="w-full h-full object-cover object-top"
+                    />
+                  </div>
+                  <motion.div
+                    animate={{ scale: [1, 1.3, 1] }}
+                    transition={{ repeat: Infinity, duration: 2 }}
+                    className="absolute -top-2 -right-2 text-2xl"
+                  >
+                    ❤️
+                  </motion.div>
+                </div>
+
+                <span className="text-[10px] uppercase font-mono tracking-widest text-red-400 bg-red-950/80 border border-red-700/60 px-2.5 py-0.5 rounded-full mb-2">
+                  ✓ Crimson Fog Dissolved • Composure Regained
+                </span>
+
+                <h3 className="text-xl font-black text-white mb-2" style={{ color: '#f87171' }}>
+                  LCB Sinner Ryōshū
+                </h3>
+
+                <p className="text-xs text-gray-300 italic font-serif leading-relaxed mb-5 bg-red-950/30 p-3 rounded-xl border border-red-800/40">
+                  "...T.T.M. (Thanks To Manager). ...Hmph. Wipe that ridiculous ticking look off your face, Dante. Wipe your hands, and don't speak a single syllable about this to the other Sinners. Let's move."
+                </p>
+
+                <button
+                  onClick={executeRevert}
+                  className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-red-600 via-rose-500 to-red-600 text-white font-black text-sm hover:brightness-110 transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.5)]"
+                >
+                  <CheckCircle2 size={16} /> Return to Bus (Restore Base Ryōshū)
+                </button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Top accent line */}
         <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-red-600 to-transparent" />
         <div className="absolute -top-24 -right-24 w-64 h-64 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
@@ -91,8 +155,15 @@ export default function MugaRyoshuModal({ onClose }) {
         {/* ── HEADER ── */}
         <div className="flex gap-4 items-start p-5 border-b border-gray-800 bg-black/50">
           {/* Avatar */}
-          <div className="relative w-24 h-24 rounded-lg overflow-hidden border-2 border-gray-400 shadow-[0_0_20px_rgba(255,255,255,0.2)] flex-shrink-0 bg-black flex items-center justify-center text-5xl">
-            ⚔️
+          <div className="relative w-24 h-24 rounded-lg overflow-hidden border-2 border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.3)] flex-shrink-0 bg-black">
+            <img
+              src="https://assets.limbusdeck.com/identities/full-uptied/blade-of-the-house-of-spiders-ryoshu.webp"
+              alt="Muga Ryōshū"
+              className="w-full h-full object-cover object-top"
+              onError={(e) => {
+                e.target.src = 'https://assets.limbusdeck.com/identities/full/lcb-sinner-ryoshu.webp';
+              }}
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
             <div className="absolute bottom-1 left-0 right-0 text-center">
               <span className="text-[8px] bg-red-950/90 text-red-200 font-black px-1 py-0.5 rounded border border-red-700/50 uppercase tracking-wider">
@@ -258,12 +329,21 @@ export default function MugaRyoshuModal({ onClose }) {
 
         {/* ── FOOTER ── */}
         <div className="flex justify-between items-center px-5 py-3 border-t border-gray-800 bg-black/40">
-          <button
-            onClick={() => setSlashCount(c => c + 1)}
-            className="px-3 py-1.5 rounded text-xs font-mono text-gray-300 bg-gray-900 border border-gray-700 hover:bg-gray-800 transition-colors"
-          >
-            ⚔️ Draw sheath ({slashCount})
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setSlashCount(c => c + 1)}
+              className="px-3 py-1.5 rounded text-xs font-mono text-gray-300 bg-gray-900 border border-gray-700 hover:bg-gray-800 transition-colors"
+            >
+              ⚔️ Draw sheath ({slashCount})
+            </button>
+            <button
+              onClick={() => setIsReverting(true)}
+              className="px-3 py-1.5 rounded text-xs font-bold text-rose-300 bg-rose-950/80 border border-rose-700/60 hover:bg-rose-900/80 transition-colors flex items-center gap-1.5 shadow-[0_0_10px_rgba(244,63,94,0.3)]"
+              title="Reach out and snap Ryōshū out of Muga"
+            >
+              <Heart size={13} className="text-rose-400" /> Hold her hands / Snap her out
+            </button>
+          </div>
           <button
             onClick={onClose}
             className="px-4 py-1.5 rounded text-xs font-black bg-gray-200 text-black hover:bg-white transition-colors shadow-[0_0_15px_rgba(255,255,255,0.3)]"

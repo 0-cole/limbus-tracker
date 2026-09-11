@@ -33,7 +33,7 @@ export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [lastClickTime, setLastClickTime] = useState(0);
-  const [showDonBanner, setShowDonBanner] = useState(false);
+  const [easterEgg, setEasterEgg] = useState(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [syncStatus, setSyncStatus] = useState(syncEngine.getSyncStatus());
@@ -54,18 +54,75 @@ export default function Sidebar() {
 
   const handleLogoClick = () => {
     const now = Date.now();
-    if (now - lastClickTime > 2500) {
-      setClickCount(1);
-    } else {
-      const next = clickCount + 1;
-      setClickCount(next);
-      if (next >= 5) {
-        setShowDonBanner(true);
-        setClickCount(0);
-        setTimeout(() => setShowDonBanner(false), 4500);
-      }
+    let next = 1;
+    if (now - lastClickTime <= 2500) {
+      next = clickCount + 1;
     }
+    setClickCount(next);
     setLastClickTime(now);
+
+    if (next === 5) {
+      setEasterEgg({
+        icon: '🎠',
+        title: 'Don Quixote Intervention',
+        msg: '"HALT, EVILDOER! JUSTICE SHALL PREVAIL! ROCHINANTE, CHARGE!!!"',
+        bg: 'from-amber-600 via-yellow-500 to-amber-600',
+        border: 'border-yellow-300',
+        shadow: 'shadow-[0_0_30px_rgba(234,179,8,0.8)]',
+        textColor: 'text-black',
+        subColor: 'text-amber-950',
+      });
+      setTimeout(() => setEasterEgg(null), 4500);
+    } else if (next === 9) {
+      setEasterEgg({
+        icon: '🚌',
+        title: 'Mephistopheles Passenger Log',
+        msg: '"Vroom vroom. Engine purrs happily. Charon wants star candies. Dante drive? No. Dante is bad driver. Charon drives."',
+        bg: 'from-cyan-900 via-cyan-600 to-cyan-900',
+        border: 'border-cyan-300',
+        shadow: 'shadow-[0_0_30px_rgba(6,182,212,0.8)]',
+        textColor: 'text-white',
+        subColor: 'text-cyan-200',
+      });
+      setTimeout(() => setEasterEgg(null), 5000);
+    } else if (next === 13) {
+      setEasterEgg({
+        icon: '🔴',
+        title: 'Senior Guide Vergilius',
+        msg: '"Dante... Why are you repeatedly hammering on the console? If you break the dashboard, the repair bill comes directly out of your paycheck."',
+        bg: 'from-red-950 via-red-700 to-red-950',
+        border: 'border-red-500',
+        shadow: 'shadow-[0_0_30px_rgba(239,68,68,0.8)]',
+        textColor: 'text-white',
+        subColor: 'text-red-300',
+      });
+      setTimeout(() => setEasterEgg(null), 5000);
+    } else if (next === 17) {
+      setEasterEgg({
+        icon: '🥪',
+        title: 'The Black Silence — Roland',
+        msg: '"That\'s that, and this is this. ...Say clockhead, all that frantic clicking is making me hungry. Know any good sandwich spots in this District?"',
+        bg: 'from-slate-900 via-slate-700 to-slate-900',
+        border: 'border-slate-400',
+        shadow: 'shadow-[0_0_30px_rgba(148,163,184,0.8)]',
+        textColor: 'text-white',
+        subColor: 'text-slate-300',
+      });
+      setTimeout(() => setEasterEgg(null), 5000);
+    } else if (next >= 21) {
+      setEasterEgg({
+        icon: '📖',
+        title: 'Head Librarian — Angela',
+        msg: '"Welcome to the Library of Ruina, Manager Dante. May you find your book in this place. Please do not disturb the patrons."',
+        bg: 'from-teal-950 via-cyan-800 to-teal-950',
+        border: 'border-cyan-400',
+        shadow: 'shadow-[0_0_30px_rgba(45,212,191,0.8)]',
+        textColor: 'text-white',
+        subColor: 'text-cyan-200',
+      });
+      setClickCount(0);
+      setTimeout(() => setEasterEgg(null), 5000);
+    }
   };
 
   return (
@@ -74,18 +131,18 @@ export default function Sidebar() {
       animate={{ width: collapsed ? 72 : 240 }}
       transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
     >
-      {/* Don Quixote Easter Egg Floating Banner */}
-      {showDonBanner && (
+      {/* Easter Egg Floating Banner */}
+      {easterEgg && (
         <motion.div
           initial={{ opacity: 0, scale: 0.8, y: -20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: -20 }}
-          className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 text-black font-black px-6 py-3 rounded-xl border-2 border-yellow-300 shadow-[0_0_30px_rgba(234,179,8,0.8)] flex items-center gap-3"
+          className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r ${easterEgg.bg} ${easterEgg.textColor} font-black px-6 py-3 rounded-xl border-2 ${easterEgg.border} ${easterEgg.shadow} flex items-center gap-3 max-w-lg`}
         >
-          <span className="text-2xl animate-bounce">🎠</span>
+          <span className="text-2xl animate-bounce flex-shrink-0">{easterEgg.icon}</span>
           <div>
-            <div className="text-[10px] uppercase tracking-widest text-amber-950 font-mono">Don Quixote Intervention</div>
-            <div className="text-sm font-limbus">"HALT, EVILDOER! JUSTICE SHALL PREVAIL! ROCHINANTE, CHARGE!!!"</div>
+            <div className={`text-[10px] uppercase tracking-widest ${easterEgg.subColor} font-mono`}>{easterEgg.title}</div>
+            <div className="text-xs md:text-sm font-limbus leading-snug">{easterEgg.msg}</div>
           </div>
         </motion.div>
       )}

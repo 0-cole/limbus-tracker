@@ -2,10 +2,12 @@ import IdDetailsModal from '../components/IdDetailsModal.jsx';
 import VergiliusModal from '../components/VergiliusModal.jsx';
 import RoachEmperorModal from '../components/RoachEmperorModal.jsx';
 import MugaRyoshuModal from '../components/MugaRyoshuModal.jsx';
+import RolandModal from '../components/RolandModal.jsx';
+import AngelaModal from '../components/AngelaModal.jsx';
 import vergiliusImg from '../assets/vergilius.png';
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Star, Edit3, CheckCircle, Info, Clock, Compass, Sparkles } from 'lucide-react';
+import { Search, Star, Edit3, CheckCircle, Info, Clock, Compass, Sparkles, X, Heart } from 'lucide-react';
 import { useStore } from '../stores/useStore.js';
 import sinnersData from '../data/sinners.json';
 import { normalizeText, normalizeSinnerId, getSinnerInfo, getSinnerSortIndex, parseSeasonNumber, getCardImageUrl } from '../utils/textUtils.js';
@@ -102,6 +104,35 @@ export default function IdentitiesPage() {
   const [showVergiliusModal, setShowVergiliusModal] = useState(false);
   const [showRoachModal, setShowRoachModal] = useState(false);
   const [showMugaModal, setShowMugaModal] = useState(false);
+  const [showRolandModal, setShowRolandModal] = useState(false);
+  const [showAngelaModal, setShowAngelaModal] = useState(false);
+  const [reversionToast, setReversionToast] = useState(null);
+
+  const handleGregorRevert = () => {
+    setSearch('');
+    setShowRoachModal(false);
+    setReversionToast({
+      sinner: 'Gregor',
+      name: 'LCB Sinner Gregor',
+      color: '#fca5a5',
+      image: 'https://assets.limbusdeck.com/identities/full/lcb-sinner-gregor.webp',
+      message: '"*puff*... Whew. Thanks a lot, Manager. Got all those creepy crawlies brushed off. Let\'s get back on the bus."',
+    });
+    setTimeout(() => setReversionToast(null), 6000);
+  };
+
+  const handleRyoshuRevert = () => {
+    setSearch('');
+    setShowMugaModal(false);
+    setReversionToast({
+      sinner: 'Ryōshū',
+      name: 'LCB Sinner Ryōshū',
+      color: '#f87171',
+      image: 'https://assets.limbusdeck.com/identities/full/lcb-sinner-ryoshu.webp',
+      message: '"...T.T.M. (Thanks To Manager). Don\'t speak another syllable of this to the other Sinners, Dante."',
+    });
+    setTimeout(() => setReversionToast(null), 6000);
+  };
 
   const toggleFilter = (category, value) => {
     setFilters(prev => {
@@ -269,16 +300,88 @@ export default function IdentitiesPage() {
         const isVergilius = cleanSearch === 'vergilius';
         const isDante = cleanSearch === 'dante' || cleanSearch === 'clock';
         const isCharon = cleanSearch === 'charon' || cleanSearch === 'vroom';
-        const isRoachEmperor = cleanSearch === 'roach emperor' || cleanSearch === 'roachking' || cleanSearch === 'roach king' || (cleanSearch.includes('roach') && cleanSearch.includes('gregor'));
-        const isMuga = cleanSearch === 'muga' || cleanSearch === 'muga ryoshu' || cleanSearch === 'muga ryōshū';
+        const isRoachEmperor = 
+          cleanSearch === 'roach emperor' || 
+          cleanSearch === 'the roach emperor' || 
+          cleanSearch === 'roach king' || 
+          cleanSearch === 'the roach king' || 
+          cleanSearch === 'roachking' || 
+          cleanSearch.includes('roach emperor') || 
+          cleanSearch.includes('roach king') || 
+          (cleanSearch.includes('roach') && cleanSearch.includes('gregor'));
+        const isMuga = 
+          cleanSearch === 'muga' || 
+          cleanSearch === 'muga ryoshu' || 
+          cleanSearch === 'muga ryōshū' || 
+          (cleanSearch.includes('muga') && cleanSearch.includes('ryoshu'));
+        const isRoland = 
+          cleanSearch === 'roland' || 
+          cleanSearch === 'black silence' || 
+          cleanSearch === 'the black silence' || 
+          cleanSearch === 'hamhampangpang' || 
+          cleanSearch === 'popcorn' || 
+          cleanSearch === 'boohoo' || 
+          cleanSearch === 'thats that';
+        const isAngela = 
+          cleanSearch === 'angela' || 
+          cleanSearch === 'library' || 
+          cleanSearch === 'the library' || 
+          cleanSearch === 'librarian';
+        const isGebura = 
+          cleanSearch === 'gebura' || 
+          cleanSearch === 'red mist' || 
+          cleanSearch === 'the red mist' || 
+          cleanSearch === 'kali';
         const isErlkonig = cleanSearch === 'erlkonig' || cleanSearch === 'erlkönig' || cleanSearch === 'wild hunt' || cleanSearch === 'every heathcliff';
         const isSancho = cleanSearch === 'sancho' || cleanSearch === 'bloodfiend' || cleanSearch === 'second kindred';
         const isCarmen = cleanSearch === 'carmen' || cleanSearch === 'distortion' || cleanSearch === 'the light' || cleanSearch === 'the voice';
 
-        const totalResultsCount = filteredIdentities.length + (isVergilius ? 1 : 0) + (isDante ? 1 : 0) + (isCharon ? 1 : 0) + (isRoachEmperor ? 1 : 0) + (isMuga ? 1 : 0) + (isErlkonig ? 1 : 0) + (isSancho ? 1 : 0) + (isCarmen ? 1 : 0);
+        const totalResultsCount = filteredIdentities.length + 
+          (isVergilius ? 1 : 0) + (isDante ? 1 : 0) + (isCharon ? 1 : 0) + 
+          (isRoachEmperor ? 1 : 0) + (isMuga ? 1 : 0) + (isRoland ? 1 : 0) + 
+          (isAngela ? 1 : 0) + (isGebura ? 1 : 0) + (isErlkonig ? 1 : 0) + 
+          (isSancho ? 1 : 0) + (isCarmen ? 1 : 0);
 
         return (
           <>
+            {/* Reversion Feedback Toast / Banner */}
+            <AnimatePresence>
+              {reversionToast && (
+                <motion.div
+                  initial={{ opacity: 0, y: -20, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.96 }}
+                  className="mb-6 p-4 rounded-xl border-2 shadow-2xl flex items-center gap-4 bg-gradient-to-r from-[#0c0c0e] via-[#16161c] to-[#0c0c0e] relative overflow-hidden"
+                  style={{ borderColor: reversionToast.color }}
+                >
+                  <div 
+                    className="w-14 h-14 rounded-xl border-2 overflow-hidden flex-shrink-0 bg-black shadow-lg"
+                    style={{ borderColor: reversionToast.color }}
+                  >
+                    <img
+                      src={reversionToast.image}
+                      alt={reversionToast.name}
+                      className="w-full h-full object-cover object-top"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-xs font-black uppercase tracking-wider block mb-0.5" style={{ color: reversionToast.color }}>
+                      ✓ Sinner Restored to Bus: {reversionToast.name}
+                    </span>
+                    <p className="text-xs italic text-gray-200 font-serif leading-relaxed">
+                      {reversionToast.message}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setReversionToast(null)}
+                    className="text-gray-400 hover:text-white p-1 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+                  >
+                    <X size={16} />
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <p className="text-xs text-[#737373] mb-4">
               {totalResultsCount} results {isVergilius && <span className="text-red-500 font-bold ml-2 animate-pulse">⚠️ [RESTRICTED PERSONNEL RECORD]</span>}
             </p>
@@ -418,30 +521,64 @@ export default function IdentitiesPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowRoachModal(true)}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-green-700 shadow-[0_0_25px_rgba(34,197,94,0.3)] hover:shadow-[0_0_40px_rgba(34,197,94,0.6)] hover:border-green-500 transition-all h-64 bg-gradient-to-b from-[#071a07] to-black p-4 cursor-pointer"
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-green-600 shadow-[0_0_25px_rgba(34,197,94,0.4)] hover:shadow-[0_0_45px_rgba(34,197,94,0.7)] hover:border-green-400 transition-all cursor-pointer h-64 bg-black"
                   >
-                    {/* Creepy crawl overlay */}
-                    <div className="absolute inset-0 opacity-5 pointer-events-none" style={{
-                      backgroundImage: 'radial-gradient(circle, #16a34a 1px, transparent 1px)',
-                      backgroundSize: '18px 18px'
-                    }} />
-                    <div className="flex justify-between items-start relative z-10">
-                      <div className="w-10 h-10 rounded-full bg-green-900/60 border border-green-600 flex items-center justify-center text-2xl animate-pulse">
-                        🪲
+                    {/* Background Art */}
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110"
+                      style={{ backgroundImage: `url("https://assets.limbusdeck.com/identities/full-uptied/g-corp-manager-corporal-gregor.webp")` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-green-950/40" />
+
+                    {/* Top Badge */}
+                    <div className="relative flex justify-between items-start p-3 z-10">
+                      <div className="flex gap-0.5 text-green-400 drop-shadow-[0_0_8px_rgba(34,197,94,0.8)]">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star key={i} size={15} fill="currentColor" />
+                        ))}
                       </div>
-                      <span className="text-[10px] bg-green-900/50 text-green-300 font-mono px-2 py-0.5 rounded border border-green-700/50 group-hover:bg-green-700 group-hover:text-black transition-colors">
-                        Inspect Boss Dossier ›
+                      <span className="text-xs font-black text-green-300 bg-green-950/90 px-2 py-0.5 rounded border border-green-700/60 uppercase tracking-wider">
+                        Boss Dossier
                       </span>
                     </div>
-                    <div className="mt-auto relative z-10">
-                      <h3 className="font-bold text-lg text-green-300 drop-shadow-[0_0_8px_rgba(34,197,94,0.6)]">The Roach Emperor</h3>
-                      <p className="text-[10px] text-gray-400 mt-0.5 font-mono">Former Molar Office Head — Gregor</p>
-                      <p className="text-[11px] text-green-200/70 mt-1.5 italic leading-snug font-serif">
-                        "The roaches obey. He does not remember giving any orders. He stopped giving orders a long time ago."
+
+                    {/* Sinner name tag */}
+                    <div className="relative px-3 z-10 -mt-1">
+                      <p className="text-xs font-bold drop-shadow-md" style={{ color: '#fca5a5' }}>
+                        Gregor
                       </p>
-                      <div className="mt-2 flex gap-1">
-                        <span className="text-[9px] bg-green-950 text-green-300 px-1.5 py-0.5 rounded border border-green-700/50">● Gluttony (Green Coins)</span>
-                        <span className="text-[9px] bg-black text-gray-500 px-1.5 py-0.5 rounded border border-[#222]">Classified Enemy</span>
+                    </div>
+
+                    {/* Bottom Info */}
+                    <div className="relative mt-auto p-3 z-10">
+                      <h3 className="font-black text-[16px] leading-tight text-white drop-shadow-[0_0_10px_rgba(34,197,94,0.9)] mb-1">
+                        The Roach Emperor
+                      </h3>
+                      
+                      <div className="flex flex-wrap gap-1 mb-2">
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-green-200 font-bold bg-green-950/80 border border-green-600/50 shadow-sm">
+                          ● Gluttony
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-yellow-300 font-medium bg-black/60 border border-yellow-500/30 shadow-sm">
+                          ● Tremor
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-emerald-300 font-medium bg-black/60 border border-emerald-500/30 shadow-sm">
+                          ● Hurting Pests
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-orange-400 font-medium bg-black/60 border border-orange-500/30 shadow-sm">
+                          ● Unbreakable
+                        </span>
+                      </div>
+
+                      <p className="text-[11px] italic text-gray-300 line-clamp-2 mb-2 font-serif leading-snug">
+                        "Why are they bowing to me..? Stop clicking your legs together... <strong className="text-green-400 font-bold underline decoration-green-500">I am not your Emperor!</strong>"
+                      </p>
+
+                      <div className="flex justify-between items-center pt-2 border-t border-green-900/60 text-[10px]">
+                        <span className="text-green-400 font-bold">Threat: Swarm Hazard</span>
+                        <span className="text-gray-300 group-hover:text-white transition-colors flex items-center gap-1 font-bold">
+                          Inspect Dossier &rarr;
+                        </span>
                       </div>
                     </div>
                   </motion.div>
@@ -456,28 +593,256 @@ export default function IdentitiesPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowMugaModal(true)}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-gray-400/60 shadow-[0_0_25px_rgba(200,200,220,0.2)] hover:shadow-[0_0_40px_rgba(200,200,220,0.45)] hover:border-gray-300 transition-all h-64 bg-gradient-to-b from-[#101015] to-black p-4 cursor-pointer"
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-red-700 shadow-[0_0_25px_rgba(220,38,38,0.4)] hover:shadow-[0_0_45px_rgba(220,38,38,0.7)] hover:border-red-500 transition-all cursor-pointer h-64 bg-black"
                   >
-                    {/* Blood drip effect */}
-                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-red-800/40 to-transparent" />
-                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(100,0,0,0.08)_0%,transparent_60%)] pointer-events-none" />
-                    <div className="flex justify-between items-start relative z-10">
-                      <div className="w-10 h-10 rounded-full bg-gray-900 border border-gray-500/50 flex items-center justify-center text-xl">
-                        ⚔️
+                    {/* Background Art */}
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110"
+                      style={{ backgroundImage: `url("https://assets.limbusdeck.com/identities/full-uptied/blade-of-the-house-of-spiders-ryoshu.webp")` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-red-950/40" />
+
+                    {/* Top Badge */}
+                    <div className="relative flex justify-between items-start p-3 z-10">
+                      <div className="flex gap-0.5 text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star key={i} size={15} fill="currentColor" />
+                        ))}
                       </div>
-                      <span className="text-[10px] bg-gray-900/80 text-gray-400 font-mono px-2 py-0.5 rounded border border-gray-600/40 group-hover:bg-gray-300 group-hover:text-black transition-colors">
-                        Inspect Assist Dossier ›
+                      <span className="text-xs font-black text-red-300 bg-red-950/90 px-2 py-0.5 rounded border border-red-700/60 uppercase tracking-wider">
+                        Assist Unit
                       </span>
                     </div>
-                    <div className="mt-auto relative z-10">
-                      <h3 className="font-bold text-lg text-gray-200">Muga — Ryōshū</h3>
-                      <p className="text-[10px] text-gray-500 mt-0.5 font-mono">No-Self State / Assist Unit — ⚠ NOT ACQUIRABLE</p>
-                      <p className="text-[11px] text-gray-400/80 mt-1.5 italic leading-snug font-serif">
-                        "The sword moves on its own now. Do not approach. There is nothing left inside to reason with."
+
+                    {/* Sinner name tag */}
+                    <div className="relative px-3 z-10 -mt-1">
+                      <p className="text-xs font-bold drop-shadow-md" style={{ color: '#f87171' }}>
+                        Ryōshū
                       </p>
-                      <div className="mt-2 flex gap-1">
-                        <span className="text-[9px] bg-gray-900 text-gray-400 px-1.5 py-0.5 rounded border border-gray-600/40">● No Sanity</span>
-                        <span className="text-[9px] bg-black text-red-600 px-1.5 py-0.5 rounded border border-red-900/40">● No Mercy</span>
+                    </div>
+
+                    {/* Bottom Info */}
+                    <div className="relative mt-auto p-3 z-10">
+                      <h3 className="font-black text-[16px] leading-tight text-white drop-shadow-[0_0_10px_rgba(239,68,68,0.9)] mb-1">
+                        Muga [無我] — Ryōshū
+                      </h3>
+                      
+                      <div className="flex flex-wrap gap-1 mb-2">
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-sky-300 font-medium bg-black/60 border border-sky-500/30 shadow-sm">
+                          ● Slash
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-red-200 font-bold bg-red-950/80 border border-red-600/50 shadow-sm">
+                          ● Bleed
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-purple-300 font-medium bg-black/60 border border-purple-500/30 shadow-sm">
+                          ● Muga [無我]
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-fuchsia-300 font-medium bg-black/60 border border-fuchsia-500/30 shadow-sm">
+                          ● Purple Coin
+                        </span>
+                      </div>
+
+                      <p className="text-[11px] italic text-gray-300 line-clamp-2 mb-2 font-serif leading-snug">
+                        "So I must hold back on using the blade... <strong className="text-red-400 font-bold underline decoration-red-500">without a trace of self remaining.</strong>"
+                      </p>
+
+                      <div className="flex justify-between items-center pt-2 border-t border-red-900/60 text-[10px]">
+                        <span className="text-red-400 font-bold">Threat: Absolute Execution</span>
+                        <span className="text-gray-300 group-hover:text-white transition-colors flex items-center gap-1 font-bold">
+                          Inspect Assist Dossier &rarr;
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* 🥪 The Black Silence (Roland) Easter Egg Card */}
+                {isRoland && (
+                  <motion.div
+                    key="roland-easter-egg"
+                    layout
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    onClick={() => setShowRolandModal(true)}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-slate-500 shadow-[0_0_25px_rgba(148,163,184,0.4)] hover:shadow-[0_0_45px_rgba(148,163,184,0.7)] hover:border-slate-300 transition-all cursor-pointer h-64 bg-black"
+                  >
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110"
+                      style={{ backgroundImage: `url("https://libraryofruina.wiki.gg/images/RolandFullBody.png")` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-slate-950/40" />
+
+                    <div className="relative flex justify-between items-start p-3 z-10">
+                      <div className="flex gap-0.5 text-slate-300 drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star key={i} size={15} fill="currentColor" />
+                        ))}
+                      </div>
+                      <span className="text-xs font-black text-slate-200 bg-slate-900/90 px-2 py-0.5 rounded border border-slate-600/60 uppercase tracking-wider">
+                        Color Fixer
+                      </span>
+                    </div>
+
+                    <div className="relative px-3 z-10 -mt-1">
+                      <p className="text-xs font-bold drop-shadow-md text-slate-300">
+                        Roland
+                      </p>
+                    </div>
+
+                    <div className="relative mt-auto p-3 z-10">
+                      <h3 className="font-black text-[16px] leading-tight text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.9)] mb-1">
+                        The Black Silence — Roland
+                      </h3>
+                      
+                      <div className="flex flex-wrap gap-1 mb-2">
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-slate-200 font-bold bg-slate-900/80 border border-slate-600/50 shadow-sm">
+                          ● 9 Workshops
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-amber-300 font-medium bg-black/60 border border-amber-500/30 shadow-sm">
+                          ● HamHamPangPang
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-sky-300 font-medium bg-black/60 border border-sky-500/30 shadow-sm">
+                          ● Furioso
+                        </span>
+                      </div>
+
+                      <p className="text-[11px] italic text-gray-300 line-clamp-2 mb-2 font-serif leading-snug">
+                        "That's that, and this is this. ...Say Dante, you got any <strong className="text-slate-200 font-bold underline decoration-slate-400">HamHamPangPang</strong> in that bus fridge?"
+                      </p>
+
+                      <div className="flex justify-between items-center pt-2 border-t border-slate-800 text-[10px]">
+                        <span className="text-slate-400 font-bold">Grade: 1 / Special Patron</span>
+                        <span className="text-gray-300 group-hover:text-white transition-colors flex items-center gap-1 font-bold">
+                          Inspect Dossier &rarr;
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* 📖 Head Librarian Angela Easter Egg Card */}
+                {isAngela && (
+                  <motion.div
+                    key="angela-easter-egg"
+                    layout
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    onClick={() => setShowAngelaModal(true)}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-cyan-500 shadow-[0_0_25px_rgba(6,182,212,0.4)] hover:shadow-[0_0_45px_rgba(6,182,212,0.7)] hover:border-cyan-300 transition-all cursor-pointer h-64 bg-black"
+                  >
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110"
+                      style={{ backgroundImage: `url("https://libraryofruina.wiki.gg/images/AngelaFullBody.png")` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-cyan-950/40" />
+
+                    <div className="relative flex justify-between items-start p-3 z-10">
+                      <div className="flex gap-0.5 text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star key={i} size={15} fill="currentColor" />
+                        ))}
+                      </div>
+                      <span className="text-xs font-black text-cyan-300 bg-cyan-950/90 px-2 py-0.5 rounded border border-cyan-600/60 uppercase tracking-wider">
+                        Head Librarian
+                      </span>
+                    </div>
+
+                    <div className="relative px-3 z-10 -mt-1">
+                      <p className="text-xs font-bold drop-shadow-md text-cyan-300">
+                        Angela
+                      </p>
+                    </div>
+
+                    <div className="relative mt-auto p-3 z-10">
+                      <h3 className="font-black text-[16px] leading-tight text-white drop-shadow-[0_0_10px_rgba(6,182,212,0.9)] mb-1">
+                        Head Librarian — Angela
+                      </h3>
+                      
+                      <div className="flex flex-wrap gap-1 mb-2">
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-cyan-200 font-bold bg-cyan-950/80 border border-cyan-600/50 shadow-sm">
+                          ● Pale Light
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-white font-medium bg-black/60 border border-white/20 shadow-sm">
+                          ● 10 Floors
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-teal-300 font-medium bg-black/60 border border-teal-500/30 shadow-sm">
+                          ● Book of the City
+                        </span>
+                      </div>
+
+                      <p className="text-[11px] italic text-gray-300 line-clamp-2 mb-2 font-serif leading-snug">
+                        "May you find your book in this place. A warm welcome to you, <strong className="text-cyan-300 font-bold underline decoration-cyan-500">Manager Dante.</strong>"
+                      </p>
+
+                      <div className="flex justify-between items-center pt-2 border-t border-cyan-900/60 text-[10px]">
+                        <span className="text-cyan-400 font-bold">Threat: The Library</span>
+                        <span className="text-gray-300 group-hover:text-white transition-colors flex items-center gap-1 font-bold">
+                          Inspect Dossier &rarr;
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* ⚔️ The Red Mist (Gebura) Easter Egg Card */}
+                {isGebura && (
+                  <motion.div
+                    key="gebura-easter-egg"
+                    layout
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-red-600 shadow-[0_0_25px_rgba(239,68,68,0.4)] hover:shadow-[0_0_45px_rgba(239,68,68,0.7)] hover:border-red-400 transition-all h-64 bg-black cursor-default"
+                  >
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110"
+                      style={{ backgroundImage: `url("https://libraryofruina.wiki.gg/images/GeburaFullBody.png")` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-red-950/40" />
+
+                    <div className="relative flex justify-between items-start p-3 z-10">
+                      <div className="flex gap-0.5 text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star key={i} size={15} fill="currentColor" />
+                        ))}
+                      </div>
+                      <span className="text-xs font-black text-red-300 bg-red-950/90 px-2 py-0.5 rounded border border-red-700/60 uppercase tracking-wider">
+                        The Red Mist
+                      </span>
+                    </div>
+
+                    <div className="relative px-3 z-10 -mt-1">
+                      <p className="text-xs font-bold drop-shadow-md text-red-400">
+                        Kali
+                      </p>
+                    </div>
+
+                    <div className="relative mt-auto p-3 z-10">
+                      <h3 className="font-black text-[16px] leading-tight text-white drop-shadow-[0_0_10px_rgba(239,68,68,0.9)] mb-1">
+                        The Red Mist — Gebura
+                      </h3>
+                      
+                      <div className="flex flex-wrap gap-1 mb-2">
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-red-200 font-bold bg-red-950/80 border border-red-600/50 shadow-sm">
+                          ● Strongest Color
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-amber-300 font-medium bg-black/60 border border-amber-500/30 shadow-sm">
+                          ● Mimicry Greatsword
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded text-red-400 font-medium bg-black/60 border border-red-500/30 shadow-sm">
+                          ● Greater Split
+                        </span>
+                      </div>
+
+                      <p className="text-[11px] italic text-gray-300 line-clamp-2 mb-2 font-serif leading-snug">
+                        "Hmph. What are you staring at, clockhead? If you want to protect your Sinners, you better start swinging with conviction."
+                      </p>
+
+                      <div className="flex justify-between items-center pt-2 border-t border-red-900/60 text-[10px]">
+                        <span className="text-red-400 font-bold">Threat: Supreme</span>
+                        <span className="text-gray-400 font-mono">Legend of the City</span>
                       </div>
                     </div>
                   </motion.div>
@@ -623,11 +988,25 @@ export default function IdentitiesPage() {
       )}
 
       {showRoachModal && (
-        <RoachEmperorModal onClose={() => setShowRoachModal(false)} />
+        <RoachEmperorModal 
+          onClose={() => setShowRoachModal(false)} 
+          onRevert={handleGregorRevert}
+        />
       )}
 
       {showMugaModal && (
-        <MugaRyoshuModal onClose={() => setShowMugaModal(false)} />
+        <MugaRyoshuModal 
+          onClose={() => setShowMugaModal(false)} 
+          onRevert={handleRyoshuRevert}
+        />
+      )}
+
+      {showRolandModal && (
+        <RolandModal onClose={() => setShowRolandModal(false)} />
+      )}
+
+      {showAngelaModal && (
+        <AngelaModal onClose={() => setShowAngelaModal(false)} />
       )}
     </motion.div>
   );

@@ -24,6 +24,7 @@ function formatNotes(body) {
 // Overworked, powerless, stressed Records Keeper Kenneth (OC) memos
 // Keyed specifically to notable updates, bugs fixed, or features added
 const KENNETH_SPECIFIC_MEMOS = {
+  'v1.0.40': "Someone filed an unregistered personnel dossier for a bug monarch, and then someone else left greasy HamHamPangPang wrappers and mysterious book catalog cards on the terminal keyboard. Also, thank you for brushing Gregor's coat and pulling Ryōshū out of her trance—the bus upholstery was starting to look like a crime scene. I'm going to take two aspirin and lie down under my desk.",
   'v1.0.39': "Dante ran an extra Mirror Dungeon before the 5 PM server reset, and the schedule tried to force another run tonight. I personally amended the roadmap ledger so you don't have to step foot into the dungeon twice in one day if you've already hit your quota. Please, go rest. I wish I could.",
   'v1.0.38': "Twenty seconds. Now the update radar scans GitHub every twenty seconds. If Corporate releases a patch while I'm eating my lukewarm noodles, the siren goes off. Please have mercy on my ears.",
   'v1.0.37': "I'm begging you, Dante... I set up an error alarm that flashes red whenever the cloud packet drops. Please don't throw your clock at the screen if it fails. I can't afford to requisition another monitor.",
