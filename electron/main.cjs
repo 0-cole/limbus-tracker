@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 const { exec } = require('child_process');
 
 let mainWindow = null;
@@ -203,6 +204,14 @@ ipcMain.handle('download-update', async (event, url, filename) => {
 
 ipcMain.handle('get-data-path', () => {
   return DATA_PATH;
+});
+
+ipcMain.handle('get-system-username', () => {
+  try {
+    return os.userInfo().username || process.env.USERNAME || 'DANTE';
+  } catch (e) {
+    return process.env.USERNAME || 'DANTE';
+  }
 });
 
 ipcMain.handle('log-error', (_, msg) => {

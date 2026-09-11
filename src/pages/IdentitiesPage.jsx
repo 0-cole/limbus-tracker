@@ -15,6 +15,8 @@ import NetzachModal from '../components/NetzachModal.jsx';
 import HodModal from '../components/HodModal.jsx';
 import ArtfulModal from '../components/ArtfulModal.jsx';
 import HacklordModal from '../components/HacklordModal.jsx';
+import GasterSequenceModal from '../components/GasterSequenceModal.jsx';
+import { syncEngine } from '../services/syncEngine.js';
 import vergiliusImg from '../assets/vergilius.png';
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -130,15 +132,16 @@ export default function IdentitiesPage() {
   const [showHodModal, setShowHodModal] = useState(false);
   const [showArtfulModal, setShowArtfulModal] = useState(false);
   const [showHacklordModal, setShowHacklordModal] = useState(false);
-  const [isGasterGlitching, setIsGasterGlitching] = useState(false);
+  const [showGasterSequence, setShowGasterSequence] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
   const [reversionToast, setReversionToast] = useState(null);
 
+  React.useEffect(() => {
+    syncEngine.getUser().then(setCurrentUser).catch(() => {});
+  }, []);
+
   const handleGasterClick = () => {
-    setIsGasterGlitching(true);
-    setTimeout(() => {
-      navigate('/');
-      window.location.reload();
-    }, 2400);
+    setShowGasterSequence(true);
   };
 
   const handleGregorRevert = () => {
@@ -373,7 +376,10 @@ export default function IdentitiesPage() {
         const isHod = cleanSearch === 'hod' || cleanSearch === 'counseling' || cleanSearch === 'training team' || cleanSearch === 'a better person';
         const isArtful = cleanSearch === 'artful' || cleanSearch === 'die of death' || cleanSearch === 'dieofdeath';
         const isHacklord = cleanSearch === 'hacklord' || cleanSearch === 'hack lord';
-        const isGaster = cleanSearch === 'gaster' || cleanSearch === 'wd gaster' || cleanSearch === 'w.d. gaster' || cleanSearch === 'entry number seventeen';
+        const isGasterTriggered = localStorage.getItem('limbus_gaster_triggered') === 'true';
+        const isUserWhitelisted = currentUser?.email === 'cdblair418@gmail.com';
+        const canShowGaster = !isGasterTriggered || isUserWhitelisted;
+        const isGaster = (cleanSearch === 'gaster' || cleanSearch === 'wd gaster' || cleanSearch === 'w.d. gaster' || cleanSearch === 'entry number seventeen') && canShowGaster;
 
         const totalResultsCount = filteredIdentities.length + 
           (isVergilius ? 1 : 0) + (isDante ? 1 : 0) + (isCharon ? 1 : 0) + 
@@ -1243,17 +1249,16 @@ export default function IdentitiesPage() {
                         👁️
                       </div>
                       <span className="text-[10px] bg-black text-gray-400 font-mono px-2 py-0.5 rounded border border-gray-700">
-                        ENTRY NUMBER SEVENTEEN
+                        [REDACTED // VOID]
                       </span>
                     </div>
                     <div className="mt-auto relative z-10">
-                      <h3 className="font-mono font-black text-lg text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]">??? — W.D. GASTER</h3>
-                      <p className="text-[10px] text-gray-500 mt-0.5 font-mono">SCATTERED ACROSS TIME AND SPACE</p>
-                      <p className="text-[11px] text-gray-400 mt-1.5 font-mono italic leading-snug">
-                        "DARK DARKER YET DARKER... THE SHADOWS CUTTING DEEPER... PHOTON READINGS NEGATIVE..."
+                      <h3 className="font-mono font-black text-lg text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]">(Unknown Dossier)</h3>
+                      <p className="text-[11px] text-gray-400 mt-1 font-mono italic leading-snug">
+                        (Parse Error: NaN -- No Data Found)
                       </p>
                       <div className="mt-2 flex gap-1 mb-2">
-                        <span className="text-[9px] bg-black text-gray-400 px-1.5 py-0.5 rounded border border-gray-800 font-mono">● VOID / ???</span>
+                        <span className="text-[9px] bg-black text-gray-400 px-1.5 py-0.5 rounded border border-gray-800 font-mono">● UNINDEXED RECORD</span>
                         <span className="text-[9px] bg-black text-gray-500 px-1.5 py-0.5 rounded border border-gray-900 font-mono">🕈 ☼ ☠ ✁</span>
                       </div>
                       <div className="flex justify-between items-center pt-2 border-t border-gray-800 text-[10px]">
@@ -1358,74 +1363,12 @@ export default function IdentitiesPage() {
       <ArtfulModal isOpen={showArtfulModal} onClose={() => setShowArtfulModal(false)} />
       <HacklordModal isOpen={showHacklordModal} onClose={() => setShowHacklordModal(false)} />
 
-      {/* 🕳️ W.D. Gaster Reality Glitch Overlay */}
-      {isGasterGlitching && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center overflow-hidden font-mono select-none"
-        >
-          {/* Chromatic aberration & noise layers */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle,transparent_20%,black_90%)] pointer-events-none z-20" />
-          <div className="absolute inset-0 opacity-20 pointer-events-none bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,#fff_2px,#fff_4px)] animate-pulse" />
-          
-          <motion.div 
-            animate={{ 
-              x: [-15, 18, -25, 20, -8, 12, -4, 0], 
-              y: [10, -15, 12, -8, 16, -10, 4, 0],
-              filter: [
-                'invert(0%) hue-rotate(0deg)',
-                'invert(100%) hue-rotate(180deg)',
-                'invert(0%) hue-rotate(90deg)',
-                'invert(80%) hue-rotate(270deg)',
-                'invert(0%)'
-              ]
-            }}
-            transition={{ duration: 0.15, repeat: Infinity }}
-            className="flex flex-col items-center text-center p-8 space-y-4 max-w-xl z-10"
-          >
-            <div className="text-7xl mb-4 font-serif text-white tracking-widest animate-ping">
-              ⚐︎🕆︎☠︎👎︎
-            </div>
-            
-            <div className="text-4xl text-white font-bold tracking-[0.3em] uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.9)]">
-              ENTRY NUMBER SEVENTEEN
-            </div>
-
-            <p className="text-xl text-gray-300 tracking-widest font-mono">
-              DARK DARKER YET DARKER
-            </p>
-            <p className="text-sm text-gray-400 font-mono tracking-widest">
-              THE DARKNESS KEEPS GROWING
-            </p>
-            <p className="text-xs text-gray-500 font-mono tracking-widest">
-              THE SHADOWS CUTTING DEEPER
-            </p>
-            <p className="text-xs text-red-500 font-mono font-bold tracking-widest mt-2 animate-bounce">
-              PHOTON READINGS NEGATIVE
-            </p>
-
-            <div className="h-0.5 w-64 bg-white/60 my-4" />
-
-            <p className="text-sm text-yellow-400 font-mono tracking-widest italic">
-              THIS NEXT EXPERIMENT SEEMS VERY VERY INTERESTING
-            </p>
-            <p className="text-xs text-white/70 font-mono tracking-widest">
-              WHAT DO YOU TWO THINK?
-            </p>
-
-            <div className="text-[10px] text-cyan-400/80 font-mono mt-6 tracking-widest uppercase">
-              [CRITICAL CORRUPTION: FAILING REALITY MATRIX • PURGING MEMORY]
-            </div>
-          </motion.div>
-
-          {/* Glitch block artifacts */}
-          <div className="absolute top-1/4 left-10 w-96 h-12 bg-red-600/30 mix-blend-difference animate-pulse" />
-          <div className="absolute bottom-1/3 right-10 w-80 h-16 bg-cyan-600/30 mix-blend-difference animate-ping" />
-          <div className="absolute inset-x-0 top-1/2 h-1 bg-white mix-blend-difference animate-bounce" />
-        </motion.div>
-      )}
+      {/* 🕳️ W.D. Gaster Atmospheric Sequence Modal */}
+      <AnimatePresence>
+        {showGasterSequence && (
+          <GasterSequenceModal onClose={() => setShowGasterSequence(false)} />
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

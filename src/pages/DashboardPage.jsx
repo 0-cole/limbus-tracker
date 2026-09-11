@@ -6,7 +6,9 @@ import { calculateLimbusGrind, generateRoadmap } from '../utils/limbusCalculator
 import { getNextResets, getLimbusCycleInfo } from '../utils/timeUtils.js';
 import { getSeasonEndDate } from '../utils/seasonUtils.js';
 
+import { useLocation, useNavigate } from 'react-router-dom';
 import DailyCycleTracker from '../components/DailyCycleTracker.jsx';
+import GasterApologyModal from '../components/GasterApologyModal.jsx';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -31,6 +33,17 @@ export default function DashboardPage() {
     activeBanner, weeklyArchive = [], archiveCurrentWeek, deleteWeeklyArchive 
   } = useStore();
   const [showWhenGameStarts, setShowWhenGameStarts] = useState(true);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [showGasterApology, setShowGasterApology] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('incident') === 'gaster_anomaly') {
+      setShowGasterApology(true);
+      navigate('/', { replace: true });
+    }
+  }, [location.search, navigate]);
 
   const cantoUnlockedHard = (bpState.canto === undefined || bpState.canto >= 8);
   const preferHardMd = bpState.preferHardMd !== false;
@@ -603,6 +616,15 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {showGasterApology && (
+          <GasterApologyModal
+            isOpen={showGasterApology}
+            onClose={() => setShowGasterApology(false)}
+          />
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

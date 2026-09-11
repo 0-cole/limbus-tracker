@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   setGameLaunchPreference: (enabled) => ipcRenderer.invoke('set-game-launch-preference', enabled),
   openExternalUrl: (url) => ipcRenderer.invoke('open-external-url', url),
   getAppVersion: () => ipcRenderer.invoke('get-app-version'),
+  getSystemUsername: () => ipcRenderer.invoke('get-system-username'),
   downloadUpdate: (url, filename) => ipcRenderer.invoke('download-update', url, filename),
   onUpdateProgress: (cb) => ipcRenderer.on('update-progress', (_, pct) => cb(pct)),
   removeUpdateProgress: () => ipcRenderer.removeAllListeners('update-progress'),
