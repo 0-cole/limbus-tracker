@@ -1,9 +1,223 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Edit3, CheckCircle, Info } from 'lucide-react';
+import { Search, Edit3, CheckCircle, Info, Sparkles, AlertTriangle, X, ShieldAlert, Star, Flame, Eye, Skull, Radio } from 'lucide-react';
 import { useStore } from '../stores/useStore.js';
 import sinnersData from '../data/sinners.json';
 import { parseEffectsIntoTriggerGroups, getSkillTriggerColor, extractKeywordsFromEffects } from '../utils/skillParser';
+
+const ALEPH_EGOS = [
+  {
+    id: 'whitenight',
+    name: 'Paradise Lost',
+    abnormality: 'WhiteNight (T-03-46)',
+    sinner: 'Faust',
+    grade: 'ALEPH',
+    color: '#fef08a',
+    accent: '#eab308',
+    bgGradient: 'from-amber-950/90 via-[#181308] to-black',
+    borderGlow: 'border-yellow-300 shadow-[0_0_30px_rgba(234,179,8,0.5)]',
+    badge: '👑 SUPREME ALEPH',
+    quote: "Faust: 'The wings of salvation do not bend to mere chance. When the twelve apostles kneel, all sins of this City are redeemed.'",
+    awakenedSkill: {
+      name: 'Adoration & Baptism',
+      cost: ['Lust x4', 'Gloom x4', 'Pride x6'],
+      sanity: '-45 SP',
+      damage: 'Pure / Pierce',
+      effect: '[Awakened] Targets all enemies. On Hit: Inflict 12 Rupture and 8 Sinking. Grant all Sinners 5 Protection and recover 30 SP. If a Sinner falls in combat, instantly resurrect them at 50% HP.'
+    },
+    corrosionSkill: {
+      name: 'Doomsday Apostles',
+      sanity: 'Uncontrollable Panic',
+      damage: 'Absolute Wrath',
+      effect: '[Corrosion] Indiscriminate attack. Inflicts 99 Sinking Count. All allies and enemies hear the toll of the twelfth bell. Those lacking faith are consumed.'
+    },
+    triggers: ['whitenight', 'paradise lost', 'white night', 'paradise']
+  },
+  {
+    id: 'apocalypse-bird',
+    name: 'Twilight',
+    abnormality: 'Apocalypse Bird (O-02-40)',
+    sinner: 'Outis',
+    grade: 'ALEPH',
+    color: '#f97316',
+    accent: '#ea580c',
+    bgGradient: 'from-orange-950/90 via-[#150a04] to-black',
+    borderGlow: 'border-orange-500 shadow-[0_0_30px_rgba(249,115,22,0.5)]',
+    badge: '🌑 CATACLYSM ALEPH',
+    quote: "Outis: 'Long ago, three birds guarded the Black Forest. To protect the peace, they merged their eyes, beak, and scales into one monster. Executive Manager Dante, behold total defense.'",
+    awakenedSkill: {
+      name: 'Peace of the Forest',
+      cost: ['Wrath x4', 'Sloth x4', 'Gluttony x4', 'Pride x4'],
+      sanity: '-40 SP',
+      damage: 'Slash / Blunt / Pierce',
+      effect: '[Awakened] Unleashes 3-hit combo carrying the eyes of Big Bird, the beak of Punishing Bird, and the scale of Judgement Bird. Inflicts 15 Bleed, 15 Burn, and 15 Rupture.'
+    },
+    corrosionSkill: {
+      name: 'Eternal Darkness',
+      sanity: 'Corrosion Override',
+      damage: 'Chaos Slash',
+      effect: '[Corrosion] Swallows the screen in darkness. Destroys all opposing skill slots for the next turn and deals damage equal to 40% of target max HP.'
+    },
+    triggers: ['apocalypse bird', 'twilight', 'apocalypse', 'black forest']
+  },
+  {
+    id: 'nothing-there',
+    name: 'Mimicry',
+    abnormality: 'Nothing There (O-06-20)',
+    sinner: 'Heathcliff',
+    grade: 'ALEPH',
+    color: '#ef4444',
+    accent: '#dc2626',
+    bgGradient: 'from-red-950/90 via-[#1a0505] to-black',
+    borderGlow: 'border-red-600 shadow-[0_0_30px_rgba(239,68,68,0.5)]',
+    badge: '🩸 BIO-HAZARD ALEPH',
+    quote: "Heathcliff: 'Bloody hell! This greatsword is made out of twitching muscle and red shells! It just said \"Goodbye\" into me ear! Get this thing off me!'",
+    awakenedSkill: {
+      name: 'Goodbye / Hello?',
+      cost: ['Wrath x6', 'Envy x5', 'Lust x3'],
+      sanity: '-35 SP',
+      damage: 'Slash / Flesh Cleave',
+      effect: '[Awakened] Slams down a heavy carapace scythe. On Kill: Completely restores the user\'s HP and grants +5 Attack Power Up for 3 turns. Deals +100% damage against bleeding targets.'
+    },
+    corrosionSkill: {
+      name: 'I Love You',
+      sanity: 'Identity Liquefaction',
+      damage: 'Carnage Cleave',
+      effect: '[Corrosion] Heathcliff\'s form liquefies into red meat and carapace. Indiscriminate 5-coin rampage. Speaks distorted human greetings that inflict Panic.'
+    },
+    triggers: ['nothing there', 'mimicry', 'goodbye', 'hello?']
+  },
+  {
+    id: 'blue-star',
+    name: 'Sound of a Star',
+    abnormality: 'Blue Star (O-03-93)',
+    sinner: 'Yi Sang',
+    grade: 'ALEPH',
+    color: '#38bdf8',
+    accent: '#0284c7',
+    bgGradient: 'from-sky-950/90 via-[#031522] to-black',
+    borderGlow: 'border-sky-400 shadow-[0_0_30px_rgba(56,189,248,0.5)]',
+    badge: '🌌 COSMIC VOID ALEPH',
+    quote: "Yi Sang: 'An azure gravity pulls at the seams of our worldly vessel. Let us all be embraced by the infinite cosmos, beyond the weight of our sins.'",
+    awakenedSkill: {
+      name: 'Celestial Absorption',
+      cost: ['Gloom x7', 'Pride x5', 'Envy x2'],
+      sanity: '-45 SP',
+      damage: 'Blunt / Cosmic Resonance',
+      effect: '[Awakened] Forms a glowing gravitational vortex. Absorbs all enemy buffs and converts them into Sinking Deluge. Stuns all targets who have below 0 SP.'
+    },
+    corrosionSkill: {
+      name: 'Into the Great Void',
+      sanity: 'Transcendence Failure',
+      damage: 'Pure Gravity',
+      effect: '[Corrosion] Pulls every entity on the battlefield toward the center. Deals massive True Damage proportional to current Sinking count on all targets.'
+    },
+    triggers: ['blue star', 'sound of a star', 'sound of star', 'azure star']
+  }
+];
+
+function EasterEggEgoModal({ ego, onClose }) {
+  if (!ego) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
+      <div 
+        className="glass-card w-full max-w-2xl bg-[#0c0c0e] border-2 rounded-2xl overflow-hidden shadow-2xl relative flex flex-col max-h-[90vh]"
+        style={{ borderColor: ego.accent }}
+      >
+        {/* Header */}
+        <div className={`p-5 bg-gradient-to-r ${ego.bgGradient} border-b border-white/10 flex justify-between items-start`}>
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs font-black px-2.5 py-0.5 rounded uppercase tracking-wider bg-black/60 border border-white/20" style={{ color: ego.color }}>
+                {ego.badge}
+              </span>
+              <span className="text-xs text-red-400 font-mono font-bold animate-pulse">
+                ⚠️ [PROHIBITED EXTRACTION ARCHIVE]
+              </span>
+            </div>
+            <h2 className="text-2xl font-black font-limbus text-white tracking-wide drop-shadow-md">
+              {ego.name}
+            </h2>
+            <p className="text-xs text-gray-400 font-mono mt-0.5">
+              Extracted Abnormality: <span className="text-white font-bold">{ego.abnormality}</span> | Sinner Synchronization: <span className="font-bold" style={{ color: ego.color }}>{ego.sinner}</span>
+            </p>
+          </div>
+          <button 
+            onClick={onClose}
+            className="p-1.5 rounded-lg bg-black/40 hover:bg-white/10 text-gray-400 hover:text-white transition-colors cursor-pointer"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Scrollable Body */}
+        <div className="p-6 overflow-y-auto space-y-5 text-sm">
+          {/* Sinner Quote */}
+          <div className="p-3.5 rounded-xl bg-black/50 border border-white/10 italic text-gray-300 font-serif leading-relaxed text-xs">
+            "{ego.quote}"
+          </div>
+
+          {/* Awakened Skill */}
+          <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10">
+            <div className="flex justify-between items-center mb-2">
+              <span className="font-black text-sm uppercase tracking-wider text-yellow-400 flex items-center gap-1.5">
+                <Sparkles size={16} /> Awakened: {ego.awakenedSkill.name}
+              </span>
+              <span className="text-xs font-mono text-gray-400">
+                Sanity: <span className="text-yellow-400 font-bold">{ego.awakenedSkill.sanity}</span> | {ego.awakenedSkill.damage}
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-1.5 mb-2.5">
+              {ego.awakenedSkill.cost.map((c, i) => (
+                <span key={i} className="text-[10px] px-2 py-0.5 rounded bg-black border border-white/15 text-gray-300 font-mono">
+                  {c}
+                </span>
+              ))}
+            </div>
+            <p className="text-xs text-gray-300 leading-relaxed">
+              {ego.awakenedSkill.effect}
+            </p>
+          </div>
+
+          {/* Corrosion Skill */}
+          <div className="p-4 rounded-xl bg-red-950/20 border border-red-800/40">
+            <div className="flex justify-between items-center mb-2">
+              <span className="font-black text-sm uppercase tracking-wider text-red-400 flex items-center gap-1.5">
+                <AlertTriangle size={16} /> Corrosion: {ego.corrosionSkill.name}
+              </span>
+              <span className="text-xs font-mono text-red-400 font-bold">
+                {ego.corrosionSkill.sanity}
+              </span>
+            </div>
+            <p className="text-xs text-gray-300 leading-relaxed">
+              {ego.corrosionSkill.effect}
+            </p>
+          </div>
+
+          {/* Kenneth Memo */}
+          <div className="p-3.5 rounded-xl bg-amber-950/20 border border-amber-800/30 text-xs">
+            <span className="text-[10px] font-black uppercase tracking-wider text-amber-400 block mb-1">
+              📋 Records Keeper Kenneth — Immediate Cease & Desist
+            </span>
+            <p className="text-gray-300 italic font-mono leading-relaxed">
+              "Dante, where in the name of the Head did you dig up this Lobotomy Corporation archive data?! CORPORATE DID NOT AUTHORIZE ALEPH-GRADE EQUIPMENT FOR THIS BUS. Vergilius is already sharpening his gladius and Faust is pretending she has no idea what's happening. Delete this entry before our bus gets targeted by an Arbiter!"
+            </p>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="p-4 bg-black/60 border-t border-white/10 flex justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors cursor-pointer"
+          >
+            Close Archive
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 import { normalizeText, normalizeSinnerId, getSinnerInfo, getSinnerSortIndex, parseSeasonNumber, getCardImageUrl } from '../utils/textUtils.js';
 
 const KEYWORD_COLORS = { Burn: '#ef4444', Bleed: '#dc2626', Tremor: '#eab308', Poise: '#22c55e', Charge: '#a855f7', Rupture: '#0ea5e9', Sinking: '#3b82f6' };
@@ -80,6 +294,19 @@ export default function EgoPage() {
   
   const [editingId, setEditingId] = useState(null);
   const [detailsId, setDetailsId] = useState(null);
+  const [eggModal, setEggModal] = useState(null);
+  const [acquiredAlephs, setAcquiredAlephs] = useState(() => new Set());
+
+  const matchedAlephs = useMemo(() => {
+    const norm = normalizeText(search);
+    if (!norm) return [];
+    return ALEPH_EGOS.filter(egg => {
+      const matchTrigger = egg.triggers.some(t => norm.includes(t) || t.includes(norm));
+      const matchName = normalizeText(egg.name).includes(norm);
+      const matchAbnormality = normalizeText(egg.abnormality).includes(norm);
+      return matchTrigger || matchName || matchAbnormality;
+    });
+  }, [search]);
 
   const toggleFilter = (category, value) => {
     setFilters(prev => {
@@ -224,10 +451,85 @@ export default function EgoPage() {
         </div>
       </div>
 
-      <p className="text-xs text-[#737373] mb-4">{filteredEgos.length} results</p>
+      <p className="text-xs text-[#737373] mb-4">
+        {filteredEgos.length + matchedAlephs.length} results {matchedAlephs.length > 0 && <span className="text-yellow-400 font-bold ml-2 animate-pulse">⚠️ [RESTRICTED ALEPH ARCHIVE UNLOCKED]</span>}
+      </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 pb-12">
         <AnimatePresence>
+          {/* 👑 Restricted ALEPH Easter Egg Cards */}
+          {matchedAlephs.map(egg => {
+            const isAcquired = acquiredAlephs.has(egg.id);
+            return (
+              <motion.div
+                key={egg.id}
+                layout
+                initial={{ opacity: 0, scale: 0.88 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.88 }}
+                onClick={() => setEggModal(egg)}
+                className={`relative flex flex-col group overflow-hidden rounded-xl border-2 transition-all cursor-pointer h-64 bg-gradient-to-b ${egg.bgGradient} ${egg.borderGlow}`}
+              >
+                {/* Radiant Glow Effect */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
+                <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full blur-2xl opacity-20 pointer-events-none" style={{ backgroundColor: egg.accent }} />
+
+                {/* Top Badges */}
+                <div className="relative flex justify-between items-start p-3 z-10">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-black px-2 py-0.5 rounded shadow-lg uppercase tracking-wider bg-black/80 border border-yellow-500/50 text-yellow-300 flex items-center gap-1">
+                      <Sparkles size={12} className="animate-spin" style={{ animationDuration: '4s' }} /> ALEPH
+                    </span>
+                  </div>
+                  <p className="text-sm font-black drop-shadow-md tracking-wide" style={{ color: egg.color }}>
+                    {egg.sinner}
+                  </p>
+                </div>
+
+                {/* Center Abnormality Codename */}
+                <div className="relative z-10 px-3 py-1 my-auto text-center">
+                  <div className="inline-block px-2.5 py-1 rounded-full bg-black/60 border border-white/15 text-[11px] font-mono text-gray-300">
+                    ☣️ {egg.abnormality}
+                  </div>
+                </div>
+
+                {/* Bottom Section */}
+                <div className="relative mt-auto p-3 z-10">
+                  <h3 className="font-black text-[17px] leading-tight text-white drop-shadow-lg mb-1 flex items-center gap-1.5">
+                    {egg.name}
+                  </h3>
+                  <p className="text-[11px] italic text-gray-300 line-clamp-1 font-serif mb-2">
+                    "{egg.quote}"
+                  </p>
+                  <div className="flex justify-between items-center pt-2 border-t border-white/15">
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); setEggModal(egg); }} 
+                      className="text-xs flex items-center gap-1 text-yellow-300 hover:text-white transition-colors bg-black/50 px-2 py-1 rounded border border-yellow-500/30 font-bold cursor-pointer"
+                    >
+                      <ShieldAlert size={12}/> Inspect Lore
+                    </button>
+                    <button 
+                      onClick={(e) => { 
+                        e.stopPropagation(); 
+                        setAcquiredAlephs(prev => {
+                          const next = new Set(prev);
+                          if (next.has(egg.id)) next.delete(egg.id);
+                          else next.add(egg.id);
+                          return next;
+                        });
+                      }} 
+                      className={`text-xs px-2 py-1 rounded font-bold transition-colors flex items-center gap-1 backdrop-blur-sm cursor-pointer ${
+                        isAcquired ? 'bg-yellow-400 text-black shadow-[0_0_10px_rgba(250,204,21,0.6)]' : 'bg-black/60 text-white border border-white/20 hover:bg-white/20'
+                      }`}
+                    >
+                      {isAcquired ? <><CheckCircle size={12}/> Synchronized</> : 'Synchronize'}
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+
           {filteredEgos.map(ego => (
             <EgoCard 
               key={ego.name} 
@@ -256,6 +558,13 @@ export default function EgoPage() {
           egoData={detailsId} 
           meta={getMetadata(detailsId)} 
           onClose={() => setDetailsId(null)} 
+        />
+      )}
+
+      {eggModal && (
+        <EasterEggEgoModal 
+          ego={eggModal} 
+          onClose={() => setEggModal(null)} 
         />
       )}
     </motion.div>

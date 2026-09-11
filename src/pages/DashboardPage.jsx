@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../stores/useStore.js';
-import { CheckCircle, XCircle, AlertCircle, Calendar, Target, Flame, CalendarDays, Battery, Archive, Award, Trash2, Clock, Check } from 'lucide-react';
+import { CheckCircle, XCircle, AlertCircle, Calendar, Target, Flame, CalendarDays, Battery, Archive, Award, Trash2, Clock, Check, Sparkles, X } from 'lucide-react';
 import { calculateLimbusGrind, generateRoadmap } from '../utils/limbusCalculator.js';
 import { getNextResets } from '../utils/timeUtils.js';
 import { getSeasonEndDate } from '../utils/seasonUtils.js';
@@ -9,6 +9,20 @@ import { getSeasonEndDate } from '../utils/seasonUtils.js';
 import DailyCycleTracker from '../components/DailyCycleTracker.jsx';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+const DANTE_CLOCK_REACTIONS = [
+  { sinner: 'Dante', quote: '< Tick-tock-tick-tock! > (The hands of your clock head revolve furiously in reverse, spewing bright red embers!)', color: '#ef4444' },
+  { sinner: 'Faust', quote: '< Tick-tock... > Dante, Faust reminds you that winding the executive chronometer will not accelerate tomorrow\'s 05:00 server reset.', color: '#c084fc' },
+  { sinner: 'Heathcliff', quote: 'Oi clockhead! Stop cranking your neck like a wind-up toy! You\'re making the whole bus rattle!', color: '#fb923c' },
+  { sinner: 'Don Quixote', quote: 'HARK! MANAGER DANTE CRANKS THE SACRED CHRONOMETER OF DESTINY! TO BATTLE, VALIANT STEED!', color: '#fbbf24' },
+  { sinner: 'Sinclair', quote: 'W-wait, did someone get wiped out in the mirror dungeon?! Why are you winding the clock right now, Dante?!', color: '#a78bfa' },
+  { sinner: 'Ryōshū', quote: 'T.T. (Time-wasting Toddler). Spin that flame one more time and I\'ll carve off both hands.', color: '#f87171' },
+  { sinner: 'Meursault', quote: 'Manager. Winding the clock without casualties expends Enkephalin with zero tactical return.', color: '#a3a3a3' },
+  { sinner: 'Charon', quote: 'Tick tock. Dante sounds like metal cicada. Charon wants star candies, not ticking noises.', color: '#06b6d4' },
+  { sinner: 'Vergilius', quote: 'Dante... If you break that clock handle off, you will be paying for the technician with your own liver.', color: '#ef4444' },
+  { sinner: 'Hong Lu', quote: 'My, what a lovely ticking melody! It reminds me of the antique clockwork music boxes in my family manor~', color: '#34d399' },
+  { sinner: 'Ishmael', quote: 'Dante, please stop playing with your head. We have real mirror dungeon routes to calculate.', color: '#38bdf8' }
+];
 
 export default function DashboardPage() {
   const { 
@@ -81,14 +95,80 @@ export default function DashboardPage() {
     window.electronAPI.getGameLaunchPreference().then(setShowWhenGameStarts).catch(() => {});
   }, []);
 
-  // Calculate missed days to suggest backup plans
-  const missedDaysCount = Object.values(weeklyProgress.dailyStatus || {}).filter(v => v === 'missed').length;
+  // Dante Clock Rewind Easter Egg
+  const [clockSpinning, setClockSpinning] = useState(false);
+  const [danteToast, setDanteToast] = useState(null);
+  const danteTimeoutRef = useRef(null);
+
+  const handleRewindClock = () => {
+    setClockSpinning(true);
+    setTimeout(() => setClockSpinning(false), 900);
+
+    const randomReaction = DANTE_CLOCK_REACTIONS[Math.floor(Math.random() * DANTE_CLOCK_REACTIONS.length)];
+    setDanteToast(randomReaction);
+
+    if (danteTimeoutRef.current) clearTimeout(danteTimeoutRef.current);
+    danteTimeoutRef.current = setTimeout(() => {
+      setDanteToast(null);
+    }, 6000);
+  };
 
   return (
     <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="p-6 text-[#e5e5e5] h-full overflow-y-auto">
+      {/* Dante Clock Rewind Toast */}
+      <AnimatePresence>
+        {danteToast && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            className="mb-6 p-4 rounded-xl border-2 shadow-[0_0_30px_rgba(239,68,68,0.35)] flex items-center justify-between gap-4 bg-gradient-to-r from-[#0e0a0a] via-[#1a0f0f] to-[#0e0a0a] relative overflow-hidden"
+            style={{ borderColor: danteToast.color }}
+          >
+            <div className="flex items-center gap-3 min-w-0">
+              <div 
+                className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-black text-lg shrink-0 shadow-lg"
+                style={{ backgroundColor: danteToast.color }}
+              >
+                ⏰
+              </div>
+              <div>
+                <span className="text-xs font-black uppercase tracking-wider block" style={{ color: danteToast.color }}>
+                  {danteToast.sinner} — Chrono Response
+                </span>
+                <p className="text-xs italic text-gray-200 font-serif leading-relaxed mt-0.5">
+                  "{danteToast.quote}"
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setDanteToast(null)}
+              className="text-gray-400 hover:text-white p-1 rounded-lg bg-white/5 hover:bg-white/10 transition-colors shrink-0 cursor-pointer"
+            >
+              <X size={16} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-4xl font-bold font-limbus text-[#c9a84c]">Command Dashboard</h1>
+          <div className="flex items-center gap-3">
+            <h1 
+              onClick={handleRewindClock}
+              className="text-4xl font-bold font-limbus text-[#c9a84c] cursor-pointer select-none hover:text-[#eab308] transition-colors flex items-center gap-2 group"
+              title="Click to wind Dante's clock head!"
+            >
+              Command Dashboard
+              <span 
+                className={`text-2xl transition-transform duration-700 inline-block ${
+                  clockSpinning ? '-rotate-[720deg] scale-125' : 'group-hover:rotate-45'
+                }`}
+              >
+                ⏱️
+              </span>
+            </h1>
+          </div>
           <p className="text-[#737373] mt-1 flex items-center gap-2">
             <Calendar size={16} /> {DAYS[currentDayIndex]}, {currentDayStr}
           </p>
