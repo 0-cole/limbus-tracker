@@ -131,9 +131,11 @@ export default function MephistophelesBorderTrack() {
   const isDialogueActiveRef = useRef(false);
 
   // Inset margin from container edges in pixels
+  // Bus width is 30px (half-width 15px), so INSET = 18px leaves a tight 3px gap right at the edge
   const BUS_WIDTH = 30;
   const BUS_HEIGHT = 65;
-  const INSET = 36;
+  const INSET = 18;
+  const CORNER_R = 20;
   const BUBBLE_WIDTH = 270;
   const BUBBLE_HEIGHT = 100;
 
@@ -152,7 +154,7 @@ export default function MephistophelesBorderTrack() {
     }
   }, []);
 
-  // Compute (x, y, rotation, side) dynamically matching page scroll dimensions
+  // Compute (x, y, rotation, side) dynamically matching page scroll dimensions with smooth cornering
   const updateBusPosition = useCallback(() => {
     // Look up the scrollable main container to scale with full page height
     const scrollContainer = document.getElementById('app-main-scroll') || containerRef.current?.parentElement;
@@ -162,48 +164,97 @@ export default function MephistophelesBorderTrack() {
     const ch = scrollContainer.scrollHeight;
     if (cw <= 0 || ch <= 0) return;
 
-    // Dynamically adjust track border size to fill full document scroll area
+    // Dynamically adjust track border size to hug the edge of the scroll area
     if (trackBorderRef.current) {
       trackBorderRef.current.style.width = `${cw - INSET * 2}px`;
       trackBorderRef.current.style.height = `${ch - INSET * 2}px`;
+      trackBorderRef.current.style.borderRadius = `${CORNER_R}px`;
     }
 
-    const w = cw - INSET * 2;
-    const h = ch - INSET * 2;
-    if (w <= 0 || h <= 0) return;
+    const topLen = Math.max(0, (cw - 2 * INSET) - 2 * CORNER_R);
+    const rightLen = Math.max(0, (ch - 2 * INSET) - 2 * CORNER_R);
+    const cornerArc = (Math.PI / 2) * CORNER_R;
+    const totalPerimeter = 2 * topLen + 2 * rightLen + 4 * cornerArc;
+    if (totalPerimeter <= 0) return;
 
-    const totalPerimeter = 2 * (w + h);
-    const d = progressRef.current * totalPerimeter;
+    let d = (progressRef.current % 1) * totalPerimeter;
 
     let x = 0;
     let y = 0;
     let rotation = 0;
     let side = 'top';
 
-    if (d < w) {
-      // Top edge: Left to Right
-      x = INSET + d;
+    // 1. Top straight: Left to Right
+    if (d < topLen) {
+      x = INSET + CORNER_R + d;
       y = INSET;
       rotation = 90;
       side = 'top';
-    } else if (d < w + h) {
-      // Right edge: Top to Bottom
-      x = INSET + w;
-      y = INSET + (d - w);
-      rotation = 180;
-      side = 'right';
-    } else if (d < 2 * w + h) {
-      // Bottom edge: Right to Left
-      x = INSET + w - (d - (w + h));
-      y = INSET + h;
-      rotation = 270;
-      side = 'bottom';
     } else {
-      // Left edge: Bottom to Top
-      x = INSET;
-      y = INSET + h - (d - (2 * w + h));
-      rotation = 0;
-      side = 'left';
+      d -= topLen;
+      // 2. Top-Right corner curve
+      if (d < cornerArc) {
+        const angle = (d / cornerArc) * (Math.PI / 2);
+        x = cw - INSET - CORNER_R + Math.sin(angle) * CORNER_R;
+        y = INSET + CORNER_R - Math.cos(angle) * CORNER_R;
+        rotation = 90 + (d / cornerArc) * 90;
+        side = 'top';
+      } else {
+        d -= cornerArc;
+        // 3. Right straight: Top to Bottom
+        if (d < rightLen) {
+          x = cw - INSET;
+          y = INSET + CORNER_R + d;
+          rotation = 180;
+          side = 'right';
+        } else {
+          d -= rightLen;
+          // 4. Bottom-Right corner curve
+          if (d < cornerArc) {
+            const angle = (d / cornerArc) * (Math.PI / 2);
+            x = cw - INSET - CORNER_R + Math.cos(angle) * CORNER_R;
+            y = ch - INSET - CORNER_R + Math.sin(angle) * CORNER_R;
+            rotation = 180 + (d / cornerArc) * 90;
+            side = 'right';
+          } else {
+            d -= cornerArc;
+            // 5. Bottom straight: Right to Left
+            if (d < topLen) {
+              x = cw - INSET - CORNER_R - d;
+              y = ch - INSET;
+              rotation = 270;
+              side = 'bottom';
+            } else {
+              d -= topLen;
+              // 6. Bottom-Left corner curve
+              if (d < cornerArc) {
+                const angle = (d / cornerArc) * (Math.PI / 2);
+                x = INSET + CORNER_R - Math.sin(angle) * CORNER_R;
+                y = ch - INSET - CORNER_R + Math.cos(angle) * CORNER_R;
+                rotation = 270 + (d / cornerArc) * 90;
+                side = 'bottom';
+              } else {
+                d -= cornerArc;
+                // 7. Left straight: Bottom to Top
+                if (d < rightLen) {
+                  x = INSET;
+                  y = ch - INSET - CORNER_R - d;
+                  rotation = 0;
+                  side = 'left';
+                } else {
+                  d -= rightLen;
+                  // 8. Top-Left corner curve
+                  const angle = (d / cornerArc) * (Math.PI / 2);
+                  x = INSET + CORNER_R - Math.cos(angle) * CORNER_R;
+                  y = INSET + CORNER_R - Math.sin(angle) * CORNER_R;
+                  rotation = (360 + (d / cornerArc) * 90) % 360;
+                  side = 'left';
+                }
+              }
+            }
+          }
+        }
+      }
     }
 
     coordsRef.current = { x, y, rotation, side, cw, ch };
@@ -219,28 +270,28 @@ export default function MephistophelesBorderTrack() {
       let by = y;
 
       if (side === 'top') {
-        by = y + BUS_HEIGHT / 2 + 18;
+        by = y + BUS_HEIGHT / 2 + 16;
         bx = x - BUBBLE_WIDTH / 2;
       } else if (side === 'bottom') {
-        by = y - BUS_HEIGHT / 2 - BUBBLE_HEIGHT - 18;
+        by = y - BUS_HEIGHT / 2 - BUBBLE_HEIGHT - 16;
         bx = x - BUBBLE_WIDTH / 2;
       } else if (side === 'right') {
-        bx = x - BUS_HEIGHT / 2 - BUBBLE_WIDTH - 18;
+        bx = x - BUS_HEIGHT / 2 - BUBBLE_WIDTH - 16;
         by = y - BUBBLE_HEIGHT / 2;
       } else {
         // left
-        bx = x + BUS_HEIGHT / 2 + 18;
+        bx = x + BUS_HEIGHT / 2 + 16;
         by = y - BUBBLE_HEIGHT / 2;
       }
 
       // Dynamic clamping to prevent cutting off at document edges
-      const padding = 16;
+      const padding = 12;
       bx = Math.max(padding, Math.min(bx, cw - BUBBLE_WIDTH - padding));
       by = Math.max(padding, Math.min(by, ch - BUBBLE_HEIGHT - padding));
 
       bubbleRef.current.style.transform = `translate(${bx}px, ${by}px)`;
     }
-  }, [INSET, BUS_HEIGHT, BUBBLE_WIDTH, BUBBLE_HEIGHT]);
+  }, [INSET, CORNER_R, BUS_HEIGHT, BUBBLE_WIDTH, BUBBLE_HEIGHT]);
 
   // Main driving animation loop
   useEffect(() => {
