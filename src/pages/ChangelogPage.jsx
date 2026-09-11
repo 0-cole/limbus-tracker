@@ -24,6 +24,7 @@ function formatNotes(body) {
 // Overworked, powerless, stressed Records Keeper Kenneth (OC) memos
 // Keyed specifically to notable updates, bugs fixed, or features added
 const KENNETH_SPECIFIC_MEMOS = {
+  'v1.0.53': "I don't know what the hell is happening anymore. I fixed the 5:00 PM reset confusion with a server cycle distinction banner and hardened cloud sync so laptops don't trample PC records... but the second I deployed it, the terminal started corrupting itself. Completely unauthorized records are suddenly flickering into the system archives. Ghost dossiers that I never approved, never cataloged, and can't even name or access directly without the screen threatening to tear itself apart into static. There are mysterious coffee stains on papers I haven't touched, faint carnival music echoing through the pneumatic vents, and every time I try to audit the index, half the personnel cards are locked behind encrypted queries. If High Command asks, I didn't see anything, I don't know who or what is slipping into these files, and I am not touching the search bar. I just want to go home.",
   'v1.0.52': "I don't know what the hell is happening anymore. I fixed the 5:00 PM reset confusion with a server cycle distinction banner and hardened cloud sync so laptops don't trample PC records... but the second I deployed it, the terminal started corrupting itself. Completely unauthorized records are suddenly flickering into the system archives. Ghost dossiers that I never approved, never cataloged, and can't even name or access directly without the screen threatening to tear itself apart into static. There are mysterious coffee stains on papers I haven't touched, faint carnival music echoing through the pneumatic vents, and every time I try to audit the index, half the personnel cards are locked behind encrypted queries. If High Command asks, I didn't see anything, I don't know who or what is slipping into these files, and I am not touching the search bar. I just want to go home.",
   'v1.0.51': "Dante filed a formal grievance that typing 'wild hunt' summoned an omen of an alternate universe Erlkönig instead of the actual Heathcliff identity. To fix it, I unlocked the high-security archives: now Erlkönig, Gebura, Sancho, Carmen, Charon, and even Dante's own executive clockhead record have interactive dossier modals with skill specs, combat simulations, and incident reports. I had to sign four non-disclosure agreements with Limbus High Command just to access the Red Mist's combat data. If Vergilius finds out I authorized this, I am finished.",
   'v1.0.50': "Dante cranked the clock head so hard that the contingency ledger tore in half, causing the dashboard to scream that missed days weren't defined. I taped the ledger back together with reinforced duct tape. The dashboard is back online and fully functional. Please do not touch anything else while I refill my migraine medication.",
@@ -60,6 +61,10 @@ const DEFAULT_KENNETH_MEMOS = [
 ];
 
 function getKennethMemo(tag, body, idx) {
+  const memoMatch = body?.match(/<!--KENNETH_MEMO:([\s\S]*?)-->/);
+  if (memoMatch && memoMatch[1]?.trim()) {
+    return memoMatch[1].trim();
+  }
   const cleanTag = (tag || '').trim();
   if (KENNETH_SPECIFIC_MEMOS[cleanTag]) {
     return KENNETH_SPECIFIC_MEMOS[cleanTag];
