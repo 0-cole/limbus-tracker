@@ -10,8 +10,14 @@ import SanchoModal from '../components/SanchoModal.jsx';
 import CarmenModal from '../components/CarmenModal.jsx';
 import DanteModal from '../components/DanteModal.jsx';
 import CharonModal from '../components/CharonModal.jsx';
+import ChesedModal from '../components/ChesedModal.jsx';
+import NetzachModal from '../components/NetzachModal.jsx';
+import HodModal from '../components/HodModal.jsx';
+import ArtfulModal from '../components/ArtfulModal.jsx';
+import HacklordModal from '../components/HacklordModal.jsx';
 import vergiliusImg from '../assets/vergilius.png';
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Star, Edit3, CheckCircle, Info, Clock, Compass, Sparkles, X, Heart } from 'lucide-react';
 import { useStore } from '../stores/useStore.js';
@@ -99,6 +105,7 @@ function IdCard({ id, meta, acquired, onToggleAcquired, onEdit, onClickDetails }
 }
 
 export default function IdentitiesPage() {
+  const navigate = useNavigate();
   const { identitiesData, acquiredIds, toggleAcquiredId, customMetadata, updateCustomMetadata } = useStore();
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState({ sinners: new Set(), rarity: new Set(), sins: new Set(), attackTypes: new Set(), keywords: new Set() });
@@ -118,7 +125,21 @@ export default function IdentitiesPage() {
   const [showCarmenModal, setShowCarmenModal] = useState(false);
   const [showDanteModal, setShowDanteModal] = useState(false);
   const [showCharonModal, setShowCharonModal] = useState(false);
+  const [showChesedModal, setShowChesedModal] = useState(false);
+  const [showNetzachModal, setShowNetzachModal] = useState(false);
+  const [showHodModal, setShowHodModal] = useState(false);
+  const [showArtfulModal, setShowArtfulModal] = useState(false);
+  const [showHacklordModal, setShowHacklordModal] = useState(false);
+  const [isGasterGlitching, setIsGasterGlitching] = useState(false);
   const [reversionToast, setReversionToast] = useState(null);
+
+  const handleGasterClick = () => {
+    setIsGasterGlitching(true);
+    setTimeout(() => {
+      navigate('/');
+      window.location.reload();
+    }, 2400);
+  };
 
   const handleGregorRevert = () => {
     setSearch('');
@@ -347,12 +368,20 @@ export default function IdentitiesPage() {
         const isErlkonig = cleanSearch === 'erlkonig' || cleanSearch === 'erlkönig' || cleanSearch === 'erlking' || cleanSearch === 'every heathcliff';
         const isSancho = cleanSearch === 'sancho' || cleanSearch === 'bloodfiend' || cleanSearch === 'second kindred';
         const isCarmen = cleanSearch === 'carmen' || cleanSearch === 'distortion' || cleanSearch === 'the light' || cleanSearch === 'the voice';
+        const isChesed = cleanSearch === 'chesed' || cleanSearch === 'coffee' || cleanSearch === 'welfare';
+        const isNetzach = cleanSearch === 'netzach' || cleanSearch === 'beer' || cleanSearch === 'floor of art' || cleanSearch === 'sloth';
+        const isHod = cleanSearch === 'hod' || cleanSearch === 'counseling' || cleanSearch === 'training team' || cleanSearch === 'a better person';
+        const isArtful = cleanSearch === 'artful' || cleanSearch === 'die of death' || cleanSearch === 'dieofdeath';
+        const isHacklord = cleanSearch === 'hacklord' || cleanSearch === 'hack lord';
+        const isGaster = cleanSearch === 'gaster' || cleanSearch === 'wd gaster' || cleanSearch === 'w.d. gaster' || cleanSearch === 'entry number seventeen';
 
         const totalResultsCount = filteredIdentities.length + 
           (isVergilius ? 1 : 0) + (isDante ? 1 : 0) + (isCharon ? 1 : 0) + 
           (isRoachEmperor ? 1 : 0) + (isMuga ? 1 : 0) + (isRoland ? 1 : 0) + 
           (isAngela ? 1 : 0) + (isGebura ? 1 : 0) + (isErlkonig ? 1 : 0) + 
-          (isSancho ? 1 : 0) + (isCarmen ? 1 : 0);
+          (isSancho ? 1 : 0) + (isCarmen ? 1 : 0) + (isChesed ? 1 : 0) +
+          (isNetzach ? 1 : 0) + (isHod ? 1 : 0) + (isArtful ? 1 : 0) +
+          (isHacklord ? 1 : 0) + (isGaster ? 1 : 0);
 
         return (
           <>
@@ -997,6 +1026,246 @@ export default function IdentitiesPage() {
                   </motion.div>
                 )}
 
+                {/* ☕ Chesed Easter Egg Card */}
+                {isChesed && (
+                  <motion.div
+                    key="chesed-easter-egg"
+                    layout
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    onClick={() => setShowChesedModal(true)}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-sky-600 shadow-[0_0_35px_rgba(56,189,248,0.35)] hover:shadow-[0_0_50px_rgba(56,189,248,0.55)] hover:border-sky-400 transition-all h-64 bg-gradient-to-b from-[#0c1829] via-[#0f2438] to-black p-4 cursor-pointer"
+                  >
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(56,189,248,0.15)_0%,transparent_60%)] pointer-events-none" />
+                    <div className="flex justify-between items-start relative z-10">
+                      <div className="w-10 h-10 rounded-full bg-sky-950 border border-sky-500 flex items-center justify-center text-xl shadow-[0_0_12px_rgba(56,189,248,0.5)]">
+                        ☕
+                      </div>
+                      <span className="text-[10px] bg-sky-950 text-sky-300 font-mono px-2 py-0.5 rounded border border-sky-700/60">
+                        PATRON LIBRARIAN
+                      </span>
+                    </div>
+                    <div className="mt-auto relative z-10">
+                      <h3 className="font-bold text-lg text-sky-300 drop-shadow-[0_0_10px_rgba(56,189,248,0.7)]">Chesed — Floor of Social Sciences</h3>
+                      <p className="text-[10px] text-sky-400/80 mt-0.5 font-mono">Former Head of Welfare Team — ⚠ NON-ACQUIRABLE</p>
+                      <p className="text-[11px] text-sky-200/80 mt-1.5 italic leading-snug font-serif">
+                        "Would you care for a cup of warm coffee? Good coffee soothes even the heaviest mind."
+                      </p>
+                      <div className="mt-2 flex gap-1 mb-2">
+                        <span className="text-[9px] bg-sky-950 text-sky-300 px-1.5 py-0.5 rounded border border-sky-800/60">● Sloth / Blunt</span>
+                        <span className="text-[9px] bg-black text-sky-400 px-1.5 py-0.5 rounded border border-sky-900/40">Warm Beverage</span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 border-t border-sky-900/60 text-[10px]">
+                        <span className="text-sky-400 font-bold">Welfare Patron</span>
+                        <span className="text-gray-300 group-hover:text-white transition-colors flex items-center gap-1 font-bold">
+                          Inspect Dossier &rarr;
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* 🍺 Netzach Easter Egg Card */}
+                {isNetzach && (
+                  <motion.div
+                    key="netzach-easter-egg"
+                    layout
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    onClick={() => setShowNetzachModal(true)}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-emerald-600 shadow-[0_0_35px_rgba(16,185,129,0.35)] hover:shadow-[0_0_50px_rgba(16,185,129,0.55)] hover:border-emerald-400 transition-all h-64 bg-gradient-to-b from-[#091a12] via-[#0d2a1d] to-black p-4 cursor-pointer"
+                  >
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.15)_0%,transparent_60%)] pointer-events-none" />
+                    <div className="flex justify-between items-start relative z-10">
+                      <div className="w-10 h-10 rounded-full bg-emerald-950 border border-emerald-500 flex items-center justify-center text-xl shadow-[0_0_12px_rgba(16,185,129,0.5)]">
+                        🍺
+                      </div>
+                      <span className="text-[10px] bg-emerald-950 text-emerald-300 font-mono px-2 py-0.5 rounded border border-emerald-700/60">
+                        PATRON LIBRARIAN
+                      </span>
+                    </div>
+                    <div className="mt-auto relative z-10">
+                      <h3 className="font-bold text-lg text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.7)]">Netzach — Floor of Art</h3>
+                      <p className="text-[10px] text-emerald-400/80 mt-0.5 font-mono">Former Head of Security Team — ⚠ NON-ACQUIRABLE</p>
+                      <p className="text-[11px] text-emerald-200/80 mt-1.5 italic leading-snug font-serif">
+                        "Why does everyone work so hard? Just rest a bit... the world won't end today."
+                      </p>
+                      <div className="mt-2 flex gap-1 mb-2">
+                        <span className="text-[9px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-800/60">● Sloth / Stagger Guard</span>
+                        <span className="text-[9px] bg-black text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-900/40">Nap Protocol</span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 border-t border-emerald-900/60 text-[10px]">
+                        <span className="text-emerald-400 font-bold">Art Patron</span>
+                        <span className="text-gray-300 group-hover:text-white transition-colors flex items-center gap-1 font-bold">
+                          Inspect Dossier &rarr;
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* 📖 Hod Easter Egg Card */}
+                {isHod && (
+                  <motion.div
+                    key="hod-easter-egg"
+                    layout
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    onClick={() => setShowHodModal(true)}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-amber-600 shadow-[0_0_35px_rgba(245,158,11,0.35)] hover:shadow-[0_0_50px_rgba(245,158,11,0.55)] hover:border-amber-400 transition-all h-64 bg-gradient-to-b from-[#211508] via-[#332009] to-black p-4 cursor-pointer"
+                  >
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(245,158,11,0.15)_0%,transparent_60%)] pointer-events-none" />
+                    <div className="flex justify-between items-start relative z-10">
+                      <div className="w-10 h-10 rounded-full bg-amber-950 border border-amber-500 flex items-center justify-center text-xl shadow-[0_0_12px_rgba(245,158,11,0.5)]">
+                        📖
+                      </div>
+                      <span className="text-[10px] bg-amber-950 text-amber-300 font-mono px-2 py-0.5 rounded border border-amber-700/60">
+                        PATRON LIBRARIAN
+                      </span>
+                    </div>
+                    <div className="mt-auto relative z-10">
+                      <h3 className="font-bold text-lg text-amber-300 drop-shadow-[0_0_10px_rgba(245,158,11,0.7)]">Hod — Floor of Literature</h3>
+                      <p className="text-[10px] text-amber-400/80 mt-0.5 font-mono">Former Head of Training Team — ⚠ NON-ACQUIRABLE</p>
+                      <p className="text-[11px] text-amber-200/80 mt-1.5 italic leading-snug font-serif">
+                        "I want to become a good person... even one small step forward counts as courage."
+                      </p>
+                      <div className="mt-2 flex gap-1 mb-2">
+                        <span className="text-[9px] bg-amber-950 text-amber-300 px-1.5 py-0.5 rounded border border-amber-800/60">● Lust / Pierce</span>
+                        <span className="text-[9px] bg-black text-amber-400 px-1.5 py-0.5 rounded border border-amber-900/40">Hope Counseling</span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 border-t border-amber-900/60 text-[10px]">
+                        <span className="text-amber-400 font-bold">Literature Patron</span>
+                        <span className="text-gray-300 group-hover:text-white transition-colors flex items-center gap-1 font-bold">
+                          Inspect Dossier &rarr;
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* 🎨 Artful from Die of Death (Roblox) Easter Egg Card */}
+                {isArtful && (
+                  <motion.div
+                    key="artful-easter-egg"
+                    layout
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    onClick={() => setShowArtfulModal(true)}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-pink-500 shadow-[0_0_35px_rgba(236,72,153,0.35)] hover:shadow-[0_0_55px_rgba(236,72,153,0.6)] hover:border-pink-300 transition-all h-64 bg-gradient-to-b from-[#200b1a] via-[#330f28] to-black p-4 cursor-pointer"
+                  >
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(236,72,153,0.2)_0%,transparent_60%)] pointer-events-none" />
+                    <div className="flex justify-between items-start relative z-10">
+                      <div className="w-10 h-10 rounded-full bg-pink-950 border border-pink-500 flex items-center justify-center text-xl shadow-[0_0_12px_rgba(236,72,153,0.6)] animate-bounce">
+                        🎩
+                      </div>
+                      <span className="text-[10px] bg-pink-950 text-pink-300 font-mono px-2 py-0.5 rounded border border-pink-700/60">
+                        DIE OF DEATH (500P)
+                      </span>
+                    </div>
+                    <div className="mt-auto relative z-10">
+                      <h3 className="font-bold text-lg text-pink-300 drop-shadow-[0_0_10px_rgba(236,72,153,0.8)]">Artful — French Magician</h3>
+                      <p className="text-[10px] text-pink-400/80 mt-0.5 font-mono">Trapper Killer / Infestent — ⚠ NON-ACQUIRABLE</p>
+                      <p className="text-[11px] text-pink-200/80 mt-1.5 italic leading-snug font-serif">
+                        "Can success even be worth its story? With a flick of my wand—I bring your wildest dreams into reality!"
+                      </p>
+                      <div className="mt-2 flex gap-1 mb-2">
+                        <span className="text-[9px] bg-pink-950 text-pink-300 px-1.5 py-0.5 rounded border border-pink-800/60">● Implement Wall</span>
+                        <span className="text-[9px] bg-black text-pink-400 px-1.5 py-0.5 rounded border border-pink-900/40">Music Box Trap</span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 border-t border-pink-900/60 text-[10px]">
+                        <span className="text-pink-400 font-bold">500P Trapper</span>
+                        <span className="text-gray-300 group-hover:text-white transition-colors flex items-center gap-1 font-bold">
+                          Inspect Magician &rarr;
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* 🚨 Hacklord LARPER Easter Egg Card */}
+                {isHacklord && (
+                  <motion.div
+                    key="hacklord-easter-egg"
+                    layout
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    onClick={() => setShowHacklordModal(true)}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-red-600 shadow-[0_0_40px_rgba(239,68,68,0.5)] hover:shadow-[0_0_60px_rgba(239,68,68,0.8)] hover:border-red-400 transition-all h-64 bg-gradient-to-b from-[#33070b] via-[#4d0b10] to-black p-4 cursor-pointer animate-pulse"
+                  >
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,68,68,0.3)_0%,transparent_60%)] pointer-events-none" />
+                    <div className="flex justify-between items-start relative z-10">
+                      <div className="w-10 h-10 rounded-full bg-red-950 border-2 border-red-500 flex items-center justify-center text-xl shadow-[0_0_15px_rgba(239,68,68,0.8)]">
+                        🚨
+                      </div>
+                      <span className="text-[10px] bg-red-950 text-red-300 font-mono font-black px-2 py-0.5 rounded border border-red-600">
+                        ⚠ LARPER DETECTED
+                      </span>
+                    </div>
+                    <div className="mt-auto relative z-10">
+                      <h3 className="font-black text-lg text-red-300 drop-shadow-[0_0_12px_rgba(239,68,68,0.9)]">HACKLORD — CERTIFIED LARPER</h3>
+                      <p className="text-[10px] text-red-400 mt-0.5 font-mono font-bold">ERLKING SHEDLETSKY (FORSAKEN 1x1x1x1)</p>
+                      <p className="text-[11px] text-red-100 mt-1.5 font-mono leading-snug">
+                        "A LARPER is someone who fakes being a fan to fit in! Caught trying to flex multiversal Shedletsky lore in Limbus!"
+                      </p>
+                      <div className="mt-2 flex gap-1 mb-2">
+                        <span className="text-[9px] bg-red-950 text-red-300 px-1.5 py-0.5 rounded border border-red-700 font-bold">● Zero Clears</span>
+                        <span className="text-[9px] bg-black text-red-400 px-1.5 py-0.5 rounded border border-red-900/60 font-bold">Erlking Impostor</span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 border-t border-red-900/80 text-[10px]">
+                        <span className="text-red-400 font-bold">Fraud Citation</span>
+                        <span className="text-yellow-300 group-hover:text-white transition-colors flex items-center gap-1 font-bold">
+                          Read Citation &rarr;
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* 🕈 W.D. Gaster / Mystery Man Easter Egg Card */}
+                {isGaster && (
+                  <motion.div
+                    key="gaster-easter-egg"
+                    layout
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    onClick={handleGasterClick}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-gray-700 shadow-[0_0_35px_rgba(255,255,255,0.15)] hover:shadow-[0_0_55px_rgba(255,255,255,0.4)] hover:border-white transition-all h-64 bg-gradient-to-b from-[#0a0a0a] via-black to-[#050505] p-4 cursor-pointer"
+                  >
+                    <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,rgba(255,255,255,0.03)_0px,rgba(255,255,255,0.03)_1px,transparent_1px,transparent_3px)] pointer-events-none" />
+                    <div className="flex justify-between items-start relative z-10">
+                      <div className="w-10 h-10 rounded-full bg-black border border-gray-600 flex items-center justify-center text-xl shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                        👁️
+                      </div>
+                      <span className="text-[10px] bg-black text-gray-400 font-mono px-2 py-0.5 rounded border border-gray-700">
+                        ENTRY NUMBER SEVENTEEN
+                      </span>
+                    </div>
+                    <div className="mt-auto relative z-10">
+                      <h3 className="font-mono font-black text-lg text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]">??? — W.D. GASTER</h3>
+                      <p className="text-[10px] text-gray-500 mt-0.5 font-mono">SCATTERED ACROSS TIME AND SPACE</p>
+                      <p className="text-[11px] text-gray-400 mt-1.5 font-mono italic leading-snug">
+                        "DARK DARKER YET DARKER... THE SHADOWS CUTTING DEEPER... PHOTON READINGS NEGATIVE..."
+                      </p>
+                      <div className="mt-2 flex gap-1 mb-2">
+                        <span className="text-[9px] bg-black text-gray-400 px-1.5 py-0.5 rounded border border-gray-800 font-mono">● VOID / ???</span>
+                        <span className="text-[9px] bg-black text-gray-500 px-1.5 py-0.5 rounded border border-gray-900 font-mono">🕈 ☼ ☠ ✁</span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 border-t border-gray-800 text-[10px]">
+                        <span className="text-gray-500 font-mono">CORRUPTED DATA</span>
+                        <span className="text-red-400 group-hover:text-white transition-colors flex items-center gap-1 font-mono font-bold animate-pulse">
+                          ⚠ ACCESS FILE ⚠
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
                 {filteredIdentities.map(id => (
                   <IdCard
                     key={id.name}
@@ -1081,6 +1350,81 @@ export default function IdentitiesPage() {
 
       {showCharonModal && (
         <CharonModal onClose={() => setShowCharonModal(false)} />
+      )}
+
+      <ChesedModal isOpen={showChesedModal} onClose={() => setShowChesedModal(false)} />
+      <NetzachModal isOpen={showNetzachModal} onClose={() => setShowNetzachModal(false)} />
+      <HodModal isOpen={showHodModal} onClose={() => setShowHodModal(false)} />
+      <ArtfulModal isOpen={showArtfulModal} onClose={() => setShowArtfulModal(false)} />
+      <HacklordModal isOpen={showHacklordModal} onClose={() => setShowHacklordModal(false)} />
+
+      {/* 🕳️ W.D. Gaster Reality Glitch Overlay */}
+      {isGasterGlitching && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center overflow-hidden font-mono select-none"
+        >
+          {/* Chromatic aberration & noise layers */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle,transparent_20%,black_90%)] pointer-events-none z-20" />
+          <div className="absolute inset-0 opacity-20 pointer-events-none bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,#fff_2px,#fff_4px)] animate-pulse" />
+          
+          <motion.div 
+            animate={{ 
+              x: [-15, 18, -25, 20, -8, 12, -4, 0], 
+              y: [10, -15, 12, -8, 16, -10, 4, 0],
+              filter: [
+                'invert(0%) hue-rotate(0deg)',
+                'invert(100%) hue-rotate(180deg)',
+                'invert(0%) hue-rotate(90deg)',
+                'invert(80%) hue-rotate(270deg)',
+                'invert(0%)'
+              ]
+            }}
+            transition={{ duration: 0.15, repeat: Infinity }}
+            className="flex flex-col items-center text-center p-8 space-y-4 max-w-xl z-10"
+          >
+            <div className="text-7xl mb-4 font-serif text-white tracking-widest animate-ping">
+              ⚐︎🕆︎☠︎👎︎
+            </div>
+            
+            <div className="text-4xl text-white font-bold tracking-[0.3em] uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.9)]">
+              ENTRY NUMBER SEVENTEEN
+            </div>
+
+            <p className="text-xl text-gray-300 tracking-widest font-mono">
+              DARK DARKER YET DARKER
+            </p>
+            <p className="text-sm text-gray-400 font-mono tracking-widest">
+              THE DARKNESS KEEPS GROWING
+            </p>
+            <p className="text-xs text-gray-500 font-mono tracking-widest">
+              THE SHADOWS CUTTING DEEPER
+            </p>
+            <p className="text-xs text-red-500 font-mono font-bold tracking-widest mt-2 animate-bounce">
+              PHOTON READINGS NEGATIVE
+            </p>
+
+            <div className="h-0.5 w-64 bg-white/60 my-4" />
+
+            <p className="text-sm text-yellow-400 font-mono tracking-widest italic">
+              THIS NEXT EXPERIMENT SEEMS VERY VERY INTERESTING
+            </p>
+            <p className="text-xs text-white/70 font-mono tracking-widest">
+              WHAT DO YOU TWO THINK?
+            </p>
+
+            <div className="text-[10px] text-cyan-400/80 font-mono mt-6 tracking-widest uppercase">
+              [CRITICAL CORRUPTION: FAILING REALITY MATRIX • PURGING MEMORY]
+            </div>
+          </motion.div>
+
+          {/* Glitch block artifacts */}
+          <div className="absolute top-1/4 left-10 w-96 h-12 bg-red-600/30 mix-blend-difference animate-pulse" />
+          <div className="absolute bottom-1/3 right-10 w-80 h-16 bg-cyan-600/30 mix-blend-difference animate-ping" />
+          <div className="absolute inset-x-0 top-1/2 h-1 bg-white mix-blend-difference animate-bounce" />
+        </motion.div>
       )}
     </motion.div>
   );

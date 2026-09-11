@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../stores/useStore.js';
 import { CheckCircle, XCircle, AlertCircle, Calendar, Target, Flame, CalendarDays, Battery, Archive, Award, Trash2, Clock, Check, Sparkles, X } from 'lucide-react';
 import { calculateLimbusGrind, generateRoadmap } from '../utils/limbusCalculator.js';
-import { getNextResets } from '../utils/timeUtils.js';
+import { getNextResets, getLimbusCycleInfo } from '../utils/timeUtils.js';
 import { getSeasonEndDate } from '../utils/seasonUtils.js';
 
 import DailyCycleTracker from '../components/DailyCycleTracker.jsx';
@@ -63,32 +63,47 @@ export default function DashboardPage() {
   const totalRequiredMd = todayRoadmap.runs || 0;
 
   useEffect(() => {
-    // Determine today
+    const cycleInfo = getLimbusCycleInfo();
+    const currentCycleKey = cycleInfo.cycleKey;
     const now = new Date();
-    const todayStr = now.toISOString().split('T')[0];
-    const todayIndex = now.getDay();
-    setCurrentDayStr(todayStr);
-    setCurrentDayIndex(todayIndex);
+    setCurrentDayStr(currentCycleKey);
+    setCurrentDayIndex(now.getDay());
 
-    const updated = { ...weeklyProgress };
-    
-    if (updated.lastCheckedDate !== todayStr) {
-      if (!updated.dailyStatus) updated.dailyStatus = {};
-      
-      if (updated.lastCheckedDate) {
-        const last = new Date(updated.lastCheckedDate);
-        const diffDays = Math.floor((now - last) / (1000 * 60 * 60 * 24));
-        if (diffDays === 1 && updated.dailyStatus[updated.lastCheckedDate] !== 'done') {
-          updated.dailyStatus[updated.lastCheckedDate] = 'missed';
+    const updated = { ...(weeklyProgress || {}) };
+    if (!updated.dailyStatus) updated.dailyStatus = {};
+
+    let needsUpdate = false;
+
+    // Check if a cycle rollover occurred
+    if (updated.lastCheckedCycle && updated.lastCheckedCycle !== currentCycleKey) {
+      // If previous cycle wasn't marked done, check if dailies were done
+      if (updated.dailyStatus[updated.lastCheckedCycle] !== 'done') {
+        if (scheduleState.dailiesDone || (scheduleState.dailiesProgress || 0) >= 5) {
+          updated.dailyStatus[updated.lastCheckedCycle] = 'done';
+        } else {
+          updated.dailyStatus[updated.lastCheckedCycle] = 'missed';
         }
       }
-      updated.lastCheckedDate = todayStr;
-      if (!updated.dailyStatus[todayStr]) {
-        updated.dailyStatus[todayStr] = scheduleState.dailiesDone ? 'done' : 'pending';
-      }
+      updated.lastCheckedCycle = currentCycleKey;
+      needsUpdate = true;
+    } else if (!updated.lastCheckedCycle) {
+      updated.lastCheckedCycle = currentCycleKey;
+      needsUpdate = true;
+    }
+
+    // Ensure active cycle has an entry
+    if (!updated.dailyStatus[currentCycleKey]) {
+      updated.dailyStatus[currentCycleKey] = (scheduleState.dailiesDone || (scheduleState.dailiesProgress || 0) >= 5) ? 'done' : 'pending';
+      needsUpdate = true;
+    } else if ((scheduleState.dailiesDone || (scheduleState.dailiesProgress || 0) >= 5) && updated.dailyStatus[currentCycleKey] !== 'done') {
+      updated.dailyStatus[currentCycleKey] = 'done';
+      needsUpdate = true;
+    }
+
+    if (needsUpdate) {
       updateWeekly(updated);
     }
-  }, [weeklyProgress, updateWeekly, scheduleState.dailiesDone]);
+  }, [updateWeekly, scheduleState.dailiesDone, scheduleState.dailiesProgress]);
 
   useEffect(() => {
     if (!window.electronAPI?.getGameLaunchPreference) return;
@@ -246,7 +261,22 @@ export default function DashboardPage() {
               <p className="text-[#737373] text-xs">You are currently on schedule. No contingencies required.</p>
             ) : (
               <div className="space-y-3">
-                <p className="text-xs text-[#e5e5e5]">You missed <span className="font-bold text-red-400">{missedDaysCount}</span> daily login(s) recently.</p>
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <p className="text-xs text-[#e5e5e5]">You missed <span className="font-bold text-red-400">{missedDaysCount}</span> daily login(s) recently.</p>
+                  <button 
+                    onClick={() => {
+                      const updated = { ...(weeklyProgress || {}) };
+                      const newStatus = { ...(updated.dailyStatus || {}) };
+                      Object.keys(newStatus).forEach(k => {
+                        if (newStatus[k] === 'missed') newStatus[k] = 'done';
+                      });
+                      updateWeekly({ ...updated, dailyStatus: newStatus });
+                    }}
+                    className="text-[11px] px-2.5 py-1 rounded bg-emerald-950/50 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-900/60 font-bold transition-all cursor-pointer shadow-[0_0_10px_rgba(16,185,129,0.2)]"
+                  >
+                    ✓ Mark as Done / Clear Missed
+                  </button>
+                </div>
                 <div className="p-3 bg-red-950/30 border border-red-900 rounded">
                   <p className="font-bold text-xs text-red-300 mb-1">Schedule Adjusted:</p>
                   <p className="text-[11px] text-[#ccc]">The grind roadmap has automatically redistributed your missed EXP over the remaining days of the season.</p>
@@ -265,11 +295,22 @@ export default function DashboardPage() {
         const resetDayName = DAYS[resetDayIndex];
         const resetTimeStr = resetDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 
+        const activeCycle = getLimbusCycleInfo();
+        const activeDateObj = new Date(activeCycle.cycleStartMs + 12 * 3600 * 1000);
+        const activeDayIndex = activeDateObj.getUTCDay();
+
         return (
           <div className="glass-card p-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
                 <h2 className="text-xl font-bold font-limbus text-white">Weekly Calendar Overview</h2>
+                <span className={`text-[10px] px-2 py-0.5 rounded font-black border ${
+                  activeCycle.isAfterResetToday 
+                    ? 'bg-purple-950/40 text-purple-300 border-purple-500/40' 
+                    : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                }`}>
+                  ⚡ Active Cycle: {activeCycle.cycleDayName} ({activeCycle.cycleDateLabel})
+                </span>
                 {bpState.asapMode && (
                   <span className="text-[10px] px-2 py-0.5 rounded font-black bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
                     🚀 ASAP Mode Active
@@ -282,17 +323,16 @@ export default function DashboardPage() {
             </div>
             <div className="grid grid-cols-7 gap-2">
               {DAYS.map((day, idx) => {
-                // Determine date for this day of the week based on today
-                const diff = idx - currentDayIndex;
-                const date = new Date();
-                date.setDate(date.getDate() + diff);
-                const dateStr = date.toISOString().split('T')[0];
-                const status = weeklyProgress.dailyStatus?.[dateStr];
+                const diffFromActive = idx - activeDayIndex;
+                const colMs = activeCycle.cycleStartMs + (diffFromActive * 86400000) + (12 * 3600 * 1000);
+                const colInfo = getLimbusCycleInfo(colMs);
+                const dateStr = colInfo.cycleKey;
+                const status = weeklyProgress?.dailyStatus?.[dateStr];
                 const isResetDay = idx === resetDayIndex;
-                const isToday = diff === 0;
+                const isCurrentCycle = (diffFromActive === 0);
                 const todayRuns = scheduleState.todayLoggedRuns || [];
-                const mdDoneToday = isToday && (totalRequiredMd > 0 ? todayRuns.length >= totalRequiredMd : (scheduleState.mdTodayDone || todayRuns.length > 0));
-                const mdInProgressToday = isToday && (totalRequiredMd > 0 && todayRuns.length > 0 && todayRuns.length < totalRequiredMd);
+                const mdDoneToday = isCurrentCycle && (totalRequiredMd > 0 ? todayRuns.length >= totalRequiredMd : (scheduleState.mdTodayDone || todayRuns.length > 0));
+                const mdInProgressToday = isCurrentCycle && (totalRequiredMd > 0 && todayRuns.length > 0 && todayRuns.length < totalRequiredMd);
 
                 let bgClass = "bg-[#111] border-[#333]";
                 let icon = null;
@@ -302,25 +342,45 @@ export default function DashboardPage() {
                   icon = <CheckCircle className="text-[#c9a84c] mx-auto mt-2" size={20} />;
                 } else if (status === 'missed') {
                   bgClass = "bg-red-950/30 border-red-900";
-                  icon = <XCircle className="text-red-500 mx-auto mt-2" size={20} />;
-                } else if (diff < 0) {
-                  // Past day without explicit missed flag - keep clean/neutral
+                  icon = (
+                    <div className="flex flex-col items-center">
+                      <XCircle className="text-red-500 mx-auto mt-2" size={20} />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const updated = { ...(weeklyProgress || {}) };
+                          const newStatus = { ...(updated.dailyStatus || {}) };
+                          newStatus[dateStr] = 'done';
+                          updateWeekly({ ...updated, dailyStatus: newStatus });
+                        }}
+                        className="text-[9px] text-emerald-400 hover:underline mt-1 cursor-pointer font-bold"
+                      >
+                        ✓ Mark Done
+                      </button>
+                    </div>
+                  );
+                } else if (diffFromActive < 0) {
                   bgClass = "bg-black/30 border-[#222] opacity-60";
-                } else if (isToday) {
+                } else if (isCurrentCycle) {
                   bgClass = mdDoneToday 
                     ? "bg-emerald-950/30 border-emerald-500/50" 
                     : mdInProgressToday 
                       ? "bg-amber-950/30 border-amber-500/50" 
-                      : "bg-[#222] border-white";
+                      : "bg-[#222] border-amber-400/80 shadow-[0_0_10px_rgba(234,179,8,0.2)]";
                 }
+
+                const colDateObj = new Date(colMs);
 
                 return (
                   <div key={day} className={`p-3 rounded-lg border text-center transition-all ${bgClass}`}>
                     <div className="flex items-center justify-center gap-1">
-                      <p className={`text-xs font-bold ${isToday ? 'text-white' : 'text-[#737373]'}`}>{day.slice(0,3)}</p>
+                      <p className={`text-xs font-bold ${isCurrentCycle ? 'text-amber-400' : 'text-[#737373]'}`}>{day.slice(0,3)}</p>
                       {isResetDay && <span className="text-[8px] bg-amber-500/30 text-amber-300 font-black px-1 rounded">Reset</span>}
                     </div>
-                    <p className="text-[10px] text-[#555]">{date.getDate()}</p>
+                    <p className="text-[10px] text-[#555]">{colDateObj.getUTCDate()}</p>
+                    {isCurrentCycle && (
+                      <span className="text-[8px] bg-amber-500/20 text-amber-300 font-black px-1 rounded block mt-0.5 uppercase">Active</span>
+                    )}
                     {icon}
                     {mdDoneToday && (
                       <div className="mt-1.5 text-[9px] bg-emerald-500/20 text-emerald-300 font-bold px-1 py-0.5 rounded border border-emerald-500/30">
@@ -333,8 +393,8 @@ export default function DashboardPage() {
                       </div>
                     )}
                     {isResetDay && scheduleState.weekliesDone && (
-                      <div className="mt-1 text-[9px] bg-yellow-500/20 text-yellow-300 font-bold px-1 py-0.5 rounded border border-yellow-500/30">
-                        👑 Weeklies
+                      <div className="mt-1.5 text-[9px] bg-amber-500/20 text-amber-300 font-bold px-1 py-0.5 rounded border border-amber-500/30">
+                        📜 Weeklies
                       </div>
                     )}
                   </div>

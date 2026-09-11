@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Target, Flame, CalendarDays, CheckCircle, Swords, PackagePlus, Sparkles, Zap, X } from 'lucide-react';
 import { useStore } from '../stores/useStore';
 import { calculateLimbusGrind, generateRoadmap, normalizeSinnerId, getOwnedShards } from '../utils/limbusCalculator.js';
-import { getNextResets } from '../utils/timeUtils.js';
+import { getNextResets, getLimbusCycleInfo } from '../utils/timeUtils.js';
 import { getSeasonEndDate } from '../utils/seasonUtils.js';
 import sinnersData from '../data/sinners.json';
 
@@ -10,6 +10,8 @@ export default function DailyCycleTracker() {
   const { 
     scheduleState, 
     updateScheduleState, 
+    weeklyProgress,
+    updateWeekly,
     bpState, 
     updateBpState,
     injectBpExp, 
@@ -83,9 +85,14 @@ export default function DailyCycleTracker() {
     setShowEnkephalinModal(true);
   };
 
+  const [cycleInfo, setCycleInfo] = useState(getLimbusCycleInfo());
+
   React.useEffect(() => {
     const updateTimers = () => {
       const now = Date.now();
+      const info = getLimbusCycleInfo(now);
+      setCycleInfo(info);
+
       const { nextDaily, nextMdWeekly } = getNextResets(now);
       const nextDailyDate = new Date(nextDaily);
       const nextMdDate = new Date(nextMdWeekly);
@@ -169,6 +176,42 @@ export default function DailyCycleTracker() {
           </button>
           <div className="text-xs text-gray-400">Daily: <span className="text-white font-mono">{timeUntilDaily}</span></div>
           <div className="text-xs text-gray-400">MD Reset: <span className="text-[#eab308] font-mono">{timeUntilMd}</span></div>
+        </div>
+      </div>
+
+      {/* ACTIVE CYCLE DISTINCTION BANNER */}
+      <div className="bg-[#141414] px-4 py-2.5 border-b border-[#2a2a2a] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className={`px-2 py-0.5 rounded font-black uppercase tracking-wider text-[10px] border ${
+            cycleInfo.isAfterResetToday 
+              ? 'bg-purple-950/40 text-purple-300 border-purple-500/40' 
+              : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+          }`}>
+            {cycleInfo.isAfterResetToday ? "⚡ Tomorrow's Cycle Active" : "⚡ Today's Cycle Active"}
+          </span>
+          <span className="text-white font-bold">
+            Cycle: <span className="text-[#c9a84c]">{cycleInfo.cycleDateLabel}</span>
+          </span>
+          <span className="text-gray-400 text-[11px]">
+            ({cycleInfo.isAfterResetToday 
+              ? `Rolled over at ${cycleInfo.startLocalTime} local / 06:00 KST` 
+              : `Active until ${cycleInfo.resetLocalTime} local / 06:00 KST`})
+          </span>
+        </div>
+        <div className="flex items-center gap-2 text-[11px] text-gray-300">
+          <span className="text-gray-400">Resets In:</span>
+          <span className="font-mono font-bold text-amber-400">{cycleInfo.remainingStr}</span>
+          <div className="relative group cursor-pointer text-gray-400 hover:text-white">
+            <span className="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-600 hover:border-amber-400 text-[10px] font-bold">?</span>
+            <div className="absolute right-0 top-6 z-50 w-80 p-3 rounded-lg bg-[#1a1a1a] border border-[#444] shadow-2xl text-[11px] text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none leading-relaxed">
+              <p className="font-bold text-[#c9a84c] mb-1">Server Day vs. Local Time (5:00 PM Reset)</p>
+              <p className="mb-1.5">Limbus Company operates on <strong>Korea Standard Time (06:00 KST)</strong>, which corresponds to <strong>{cycleInfo.resetLocalTime} Local Time</strong>.</p>
+              <p className="mb-1.5">{cycleInfo.isAfterResetToday 
+                ? `Since ${cycleInfo.startLocalTime} has passed, the server has already rolled over into tomorrow's cycle (${cycleInfo.cycleDayName}). Any missions you complete from now until ${cycleInfo.resetLocalTime} tomorrow count towards this cycle!` 
+                : `You are currently in ${cycleInfo.cycleDayName}'s cycle. It will reset today at ${cycleInfo.resetLocalTime} into tomorrow's cycle.`}</p>
+              <p className="text-gray-400 text-[10px]">Your daily missions and mirror dungeon logs are tied directly to this official cycle so you never lose progress across resets.</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -701,8 +744,21 @@ export default function DailyCycleTracker() {
                 onClick={() => {
                   const newProgress = scheduleState.dailiesProgress === step ? step - 1 : step;
                   const diff = newProgress - scheduleState.dailiesProgress;
-                  updateScheduleState({ dailiesProgress: newProgress });
+                  const isDone = newProgress >= 5;
+                  updateScheduleState({ 
+                    dailiesProgress: newProgress,
+                    dailiesDone: isDone 
+                  });
                   injectBpExp(diff * 2);
+
+                  // Synchronize with weekly calendar dailyStatus for active cycle
+                  const updatedStatus = { ...(weeklyProgress?.dailyStatus || {}) };
+                  updatedStatus[cycleInfo.cycleKey] = isDone ? 'done' : 'pending';
+                  updateWeekly({
+                    ...(weeklyProgress || {}),
+                    dailyStatus: updatedStatus
+                  });
+
                   if (newProgress === 5) {
                     promptEnkephalinSync('dailies');
                   }

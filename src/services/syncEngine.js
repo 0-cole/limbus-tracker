@@ -1,9 +1,10 @@
-﻿import { supabase } from './supabaseClient';
+import { supabase } from './supabaseClient';
 import { useStore } from '../stores/useStore';
 
 let syncTimeout = null;
 let autoInterval = null;
 let isSyncing = false;
+let isHydrating = false;
 let lastLocalEdit = 0;
 let lastCloudSync = 0;
 let syncListeners = new Set();
@@ -21,6 +22,37 @@ function emitStatus(status, message = '', error = null) {
 
 export const syncEngine = {
   getSyncStatus: () => currentSyncStatus,
+
+  setHydrating: (val) => {
+    isHydrating = !!val;
+  },
+
+  isHydrating: () => isHydrating,
+
+  markSynced: (timestamp = Date.now()) => {
+    lastCloudSync = timestamp;
+    lastLocalEdit = timestamp;
+    emitStatus('synced', 'Cloud Synced');
+  },
+
+  fetchCloudSave: async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return null;
+
+      const { data, error } = await supabase
+        .from('user_saves')
+        .select('save_data, updated_at')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      if (error || !data) return null;
+      return data;
+    } catch (e) {
+      console.warn('Failed to fetch cloud save:', e);
+      return null;
+    }
+  },
 
   onSyncStatusChange: (callback) => {
     syncListeners.add(callback);
@@ -156,7 +188,8 @@ export const syncEngine = {
         const cloudLastUpdated = cloudData.lastUpdated || (data.updated_at ? new Date(data.updated_at).getTime() : 0);
 
         if (!forcePull) {
-          if (lastLocalEdit > cloudLastUpdated) {
+          // Only abort pull if the user made a real local edit AFTER the last cloud sync
+          if (lastLocalEdit > lastCloudSync && lastLocalEdit > cloudLastUpdated) {
             emitStatus('synced', 'Local data is up to date');
             return { success: false, reason: 'local_newer' };
           }
@@ -187,14 +220,16 @@ export const syncEngine = {
             ...cloudData,
             acquiredIds: cloudData.acquiredIds || [],
             acquiredEgos: cloudData.acquiredEgos || [],
-            wantList: cloudData.wantList || []
+            wantList: cloudData.wantList || [],
+            lastUpdated: cloudLastUpdated
           };
           await window.electronAPI.saveData(toSave);
         } else {
-          localStorage.setItem('limbus-tracker-data', JSON.stringify(cloudData));
+          localStorage.setItem('limbus-tracker-data', JSON.stringify({ ...cloudData, lastUpdated: cloudLastUpdated }));
         }
 
         lastCloudSync = cloudLastUpdated;
+        lastLocalEdit = cloudLastUpdated;
         emitStatus('synced', 'Cloud Synced');
         return { success: true, reason: 'pulled' };
       } else {
@@ -209,10 +244,13 @@ export const syncEngine = {
   },
 
   queuePush: () => {
+    if (isHydrating) return;
     syncEngine.notifyLocalEdit();
     if (syncTimeout) clearTimeout(syncTimeout);
     syncTimeout = setTimeout(() => {
-      syncEngine.pushSaveToCloud();
+      if (!isHydrating) {
+        syncEngine.pushSaveToCloud();
+      }
     }, 1500);
   },
 

@@ -79,6 +79,7 @@ export const useStore = create((set, get) => ({
 
   initStore: async () => {
     try {
+      syncEngine.setHydrating(true);
       let data;
       let dynamicData = { identities: [], egos: [] };
       
@@ -88,6 +89,25 @@ export const useStore = create((set, get) => ({
       } else {
         const local = localStorage.getItem('limbus-tracker-data');
         if (local) data = JSON.parse(local);
+      }
+
+      // Check cloud save first: if cloud save is newer than local, adopt cloud save
+      let resolvedTimestamp = data?.lastUpdated || 0;
+      try {
+        const user = await syncEngine.getUser();
+        if (user) {
+          const cloudResult = await syncEngine.fetchCloudSave();
+          if (cloudResult && cloudResult.save_data) {
+            const cloudUpdated = cloudResult.save_data.lastUpdated || (cloudResult.updated_at ? new Date(cloudResult.updated_at).getTime() : 0);
+            const localUpdated = data?.lastUpdated || 0;
+            if (cloudUpdated >= localUpdated) {
+              data = cloudResult.save_data;
+              resolvedTimestamp = cloudUpdated;
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Startup cloud check skipped:', err);
       }
 
       function canonicalKey(name) {
@@ -121,6 +141,8 @@ export const useStore = create((set, get) => ({
 
       if (data && Object.keys(data).length > 0) {
         let loadedSchedule = { ...defaultState.scheduleState, ...(data.scheduleState || {}) };
+        let loadedWeeklyProgress = { ...defaultState.weeklyProgress, ...(data.weeklyProgress || {}) };
+        if (!loadedWeeklyProgress.dailyStatus) loadedWeeklyProgress.dailyStatus = {};
         
         // Check for daily/weekly resets
         const resets = checkResets(loadedSchedule.lastResetCheck);
@@ -128,6 +150,14 @@ export const useStore = create((set, get) => ({
             const oldRuns = loadedSchedule.todayLoggedRuns || [];
             const oldShards = loadedSchedule.todayLoggedShards || [];
             const curW = loadedSchedule.currentWeekStats || { mdRuns: 0, expEarned: 0, shardsEarned: 0, cratesEarned: 0, dailiesDoneCount: 0, runs: [] };
+            
+            // If user did dailies before reset, lock in 'done' for previous cycle
+            if (resets.prevCycleKey) {
+              if (loadedSchedule.dailiesProgress >= 5 || loadedSchedule.dailiesDone) {
+                loadedWeeklyProgress.dailyStatus[resets.prevCycleKey] = 'done';
+              }
+            }
+
             loadedSchedule.currentWeekStats = {
               mdRuns: (curW.mdRuns || 0) + oldRuns.length,
               expEarned: (curW.expEarned || 0) + oldRuns.reduce((s, r) => s + (r.exp || 0), 0),
@@ -197,7 +227,7 @@ export const useStore = create((set, get) => ({
           scheduleState: loadedSchedule,
           weeklyArchive: loadedWeeklyArchive,
           shardCounts: data.shardCounts || {},
-          weeklyProgress: data.weeklyProgress || defaultState.weeklyProgress,
+          weeklyProgress: loadedWeeklyProgress,
           customMetadata: data.customMetadata || {},
           identitiesData: mergedIds,
           egosData: mergedEgos,
@@ -213,9 +243,10 @@ export const useStore = create((set, get) => ({
         });
       }
 
-      // Start background timer to check resets while app is running
+      // Background timer to check resets while app is running
       setInterval(() => {
         const currentSchedule = get().scheduleState;
+        const currentWeekly = get().weeklyProgress;
         const intervalResets = checkResets(currentSchedule.lastResetCheck);
         if (intervalResets.hasDailyReset || intervalResets.hasWeeklyReset || intervalResets.hasMdWeeklyReset) {
           if (intervalResets.hasWeeklyReset || intervalResets.hasMdWeeklyReset) {
@@ -225,6 +256,14 @@ export const useStore = create((set, get) => ({
             const oldRuns = s.todayLoggedRuns || [];
             const oldShards = s.todayLoggedShards || [];
             const curW = s.currentWeekStats || { mdRuns: 0, expEarned: 0, shardsEarned: 0, cratesEarned: 0, dailiesDoneCount: 0, runs: [] };
+            
+            // Preserve 'done' for previous cycle if dailies were done
+            if (intervalResets.prevCycleKey && (s.dailiesProgress >= 5 || s.dailiesDone)) {
+              const updatedDailyStatus = { ...(currentWeekly.dailyStatus || {}) };
+              updatedDailyStatus[intervalResets.prevCycleKey] = 'done';
+              get().updateWeekly({ ...currentWeekly, dailyStatus: updatedDailyStatus });
+            }
+
             get().updateScheduleState({
               currentWeekStats: {
                 mdRuns: (curW.mdRuns || 0) + oldRuns.length,
@@ -250,27 +289,21 @@ export const useStore = create((set, get) => ({
             lastResetCheck: intervalResets.now
           });
         }
-      }, 60000); // Check every minute
+      }, 60000);
 
-      // Check if user is logged into cloud sync and pull latest
-      try {
-        const user = await syncEngine.getUser();
-        if (user) {
-          await syncEngine.pullSaveFromCloud();
-        }
-      } catch (err) {
-        console.warn('Cloud sync check on startup skipped or offline:', err);
-      }
+      syncEngine.setHydrating(false);
+      syncEngine.markSynced(resolvedTimestamp);
 
     } catch (e) {
       console.error("Store init error:", e);
       set({ isLoaded: true });
+      syncEngine.setHydrating(false);
     }
   },
 
   saveStore: async () => {
     if (!get().isLoaded) return;
-    const state = get();
+    const now = Date.now();
     const dataToSave = {
       onboardingCompleted: state.onboardingCompleted,
       tutorialCompleted: state.tutorialCompleted,
@@ -284,6 +317,7 @@ export const useStore = create((set, get) => ({
       inventory: state.inventory,
       bpState: state.bpState,
       scheduleState: state.scheduleState,
+      lastUpdated: now
     };
     if (window.electronAPI) {
       await window.electronAPI.saveData(dataToSave);
