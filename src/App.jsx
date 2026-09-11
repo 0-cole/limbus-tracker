@@ -73,8 +73,8 @@ export default function App() {
       <div className="flex h-screen bg-[#0a0a0a] overflow-hidden">
         <Sidebar />
         <div className="flex-1 relative overflow-hidden flex flex-col">
-          <MephistophelesBorderTrack />
-          <main className="flex-1 overflow-y-auto overflow-x-hidden">
+          <main id="app-main-scroll" className="flex-1 overflow-y-auto overflow-x-hidden relative">
+            <MephistophelesBorderTrack />
             <ErrorBoundary>
             <AnimatePresence mode="wait">
               <motion.div
