@@ -266,32 +266,50 @@ export default function MephistophelesBorderTrack() {
       busRef.current.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${rotation}deg)`;
     }
 
+    // Calculate speech bubble position
+    let bx = x;
+    let by = y;
+
+    if (side === 'top') {
+      by = y + BUS_HEIGHT / 2 + 16;
+      bx = x - BUBBLE_WIDTH / 2;
+    } else if (side === 'bottom') {
+      by = y - BUS_HEIGHT / 2 - BUBBLE_HEIGHT - 16;
+      bx = x - BUBBLE_WIDTH / 2;
+    } else if (side === 'right') {
+      bx = x - BUS_HEIGHT / 2 - BUBBLE_WIDTH - 16;
+      by = y - BUBBLE_HEIGHT / 2;
+    } else {
+      // left
+      bx = x + BUS_HEIGHT / 2 + 16;
+      by = y - BUBBLE_HEIGHT / 2;
+    }
+
+    // Viewport-aware clamping ("hanging"):
+    // Keep bubble inside visible viewport even if bus is scrolled off screen
+    const scrollTop = scrollContainer.scrollTop || 0;
+    const clientHeight = scrollContainer.clientHeight || window.innerHeight;
+    const padding = 12;
+
+    // Clamp X within visible container width
+    bx = Math.max(padding, Math.min(bx, cw - BUBBLE_WIDTH - padding));
+
+    // Clamp Y to visible viewport (between current scroll top and bottom of view)
+    const minViewportY = scrollTop + padding;
+    const maxViewportY = scrollTop + clientHeight - BUBBLE_HEIGHT - padding;
+    by = Math.max(minViewportY, Math.min(by, maxViewportY));
+
+    // Also ensure it doesn't exceed total document scroll bounds
+    by = Math.max(padding, Math.min(by, ch - BUBBLE_HEIGHT - padding));
+
+    coordsRef.current.bx = bx;
+    coordsRef.current.by = by;
+
     // Direct DOM update for speech bubble (synchronous 60fps tracking)
     if (bubbleRef.current) {
-      let bx = x;
-      let by = y;
-
-      if (side === 'top') {
-        by = y + BUS_HEIGHT / 2 + 16;
-        bx = x - BUBBLE_WIDTH / 2;
-      } else if (side === 'bottom') {
-        by = y - BUS_HEIGHT / 2 - BUBBLE_HEIGHT - 16;
-        bx = x - BUBBLE_WIDTH / 2;
-      } else if (side === 'right') {
-        bx = x - BUS_HEIGHT / 2 - BUBBLE_WIDTH - 16;
-        by = y - BUBBLE_HEIGHT / 2;
-      } else {
-        // left
-        bx = x + BUS_HEIGHT / 2 + 16;
-        by = y - BUBBLE_HEIGHT / 2;
-      }
-
-      // Dynamic clamping to prevent cutting off at document edges
-      const padding = 12;
-      bx = Math.max(padding, Math.min(bx, cw - BUBBLE_WIDTH - padding));
-      by = Math.max(padding, Math.min(by, ch - BUBBLE_HEIGHT - padding));
-
-      bubbleRef.current.style.transform = `translate(${bx}px, ${by}px)`;
+      // Use left / top so framer-motion's transform (scale & fade) won't conflict or reset to (0,0)
+      bubbleRef.current.style.left = `${bx}px`;
+      bubbleRef.current.style.top = `${by}px`;
     }
   }, [INSET, CORNER_R, BUS_HEIGHT, BUBBLE_WIDTH, BUBBLE_HEIGHT]);
 
@@ -344,10 +362,8 @@ export default function MephistophelesBorderTrack() {
     const randomItem = list[Math.floor(Math.random() * list.length)];
 
     isDialogueActiveRef.current = true;
+    updateBusPosition(); // Pre-calculate exact screen coordinates before React mounts the bubble
     setActiveDialogue(randomItem);
-
-    // Immediate positioning sync on next paint
-    requestAnimationFrame(() => updateBusPosition());
 
     // Clear any previous fade timeout
     if (fadeTimeoutRef.current) clearTimeout(fadeTimeoutRef.current);
@@ -463,8 +479,10 @@ export default function MephistophelesBorderTrack() {
             exit={{ opacity: 0, scale: 0.85 }}
             transition={{ type: 'spring', damping: 20, stiffness: 260 }}
             onClick={(e) => e.stopPropagation()}
-            className="absolute top-0 left-0 pointer-events-auto z-50 p-3.5 rounded-xl bg-[#0d0d12]/95 backdrop-blur-md border shadow-2xl will-change-transform"
+            className="absolute pointer-events-auto z-50 p-3.5 rounded-xl bg-[#0d0d12]/95 backdrop-blur-md border shadow-2xl will-change-transform"
             style={{
+              left: coordsRef.current.bx !== undefined ? `${coordsRef.current.bx}px` : undefined,
+              top: coordsRef.current.by !== undefined ? `${coordsRef.current.by}px` : undefined,
               width: `${BUBBLE_WIDTH}px`,
               borderColor: activeDialogue.color || '#c9a84c',
               boxShadow: `0 0 25px ${activeDialogue.color}33, 0 10px 36px rgba(0,0,0,0.85)`,
