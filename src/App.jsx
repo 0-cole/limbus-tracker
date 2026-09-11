@@ -12,6 +12,7 @@ import ChangelogPage from './pages/ChangelogPage';
 import OnboardingModal from './components/OnboardingModal';
 import TutorialTour from './components/TutorialTour';
 import UpdateNotification from './components/UpdateNotification';
+import MephistophelesBorderTrack from './components/MephistophelesBorderTrack';
 import { useStore } from './stores/useStore';
 
 class ErrorBoundary extends React.Component {
@@ -70,33 +71,36 @@ export default function App() {
       <OnboardingModal />
       <TutorialTour />
       <div className="flex h-screen bg-[#0a0a0a] overflow-hidden">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto overflow-x-hidden">
-        <ErrorBoundary>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={location.pathname}
-            variants={pageVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={pageTransition}
-            className="min-h-full"
-          >
-            <Routes location={location}>
-              <Route path="/" element={<DashboardPage />} />
-              <Route path="/schedule" element={<SchedulePage />} />
-              <Route path="/inventory" element={<InventoryPage />} />
-              <Route path="/identities" element={<IdentitiesPage />} />
-              <Route path="/ego" element={<EgoPage />} />
-              <Route path="/want-list" element={<WantListPage />} />
-              <Route path="/changelog" element={<ChangelogPage />} />
-            </Routes>
-          </motion.div>
-        </AnimatePresence>
-        </ErrorBoundary>
-      </main>
-    </div>
+        <Sidebar />
+        <div className="flex-1 relative overflow-hidden flex flex-col">
+          <MephistophelesBorderTrack />
+          <main className="flex-1 overflow-y-auto overflow-x-hidden">
+            <ErrorBoundary>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={location.pathname}
+                variants={pageVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={pageTransition}
+                className="min-h-full"
+              >
+                <Routes location={location}>
+                  <Route path="/" element={<DashboardPage />} />
+                  <Route path="/schedule" element={<SchedulePage />} />
+                  <Route path="/inventory" element={<InventoryPage />} />
+                  <Route path="/identities" element={<IdentitiesPage />} />
+                  <Route path="/ego" element={<EgoPage />} />
+                  <Route path="/want-list" element={<WantListPage />} />
+                  <Route path="/changelog" element={<ChangelogPage />} />
+                </Routes>
+              </motion.div>
+            </AnimatePresence>
+            </ErrorBoundary>
+          </main>
+        </div>
+      </div>
     </>
   );
 }
