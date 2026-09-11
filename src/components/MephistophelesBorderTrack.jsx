@@ -80,9 +80,11 @@ export default function MephistophelesBorderTrack() {
   const nextDialogueTimeoutRef = useRef(null);
 
   // Inset margin from container edges in pixels
-  const INSET = 6;
-  const BUS_WIDTH = 18;
-  const BUS_HEIGHT = 40;
+  // Bus is 32px wide x 70px long (facing up by default)
+  const BUS_WIDTH = 30;
+  const BUS_HEIGHT = 65;
+  // Use half the bus length so the entire bus body stays cleanly within the viewport
+  const INSET = 36;
 
   // Load saved progress from localStorage
   useEffect(() => {
@@ -141,7 +143,10 @@ export default function MephistophelesBorderTrack() {
       side = 'left';
     }
 
-    setBusCoords({ x, y, rotation, side });
+    let containerWidth = rect.width;
+    let containerHeight = rect.height;
+
+    setBusCoords({ x, y, rotation, side, containerWidth, containerHeight });
   }, [INSET]);
 
   // Main driving animation loop
@@ -234,6 +239,44 @@ export default function MephistophelesBorderTrack() {
     triggerDialogue();
   };
 
+  // Compute speech bubble absolute position inside the container,
+  // clamping it dynamically so it never overflows screen edges
+  const getBubbleStyle = () => {
+    const BUBBLE_WIDTH = 270;
+    const BUBBLE_HEIGHT = 100;
+    const cw = busCoords.containerWidth || 1200;
+    const ch = busCoords.containerHeight || 800;
+
+    let bx = busCoords.x;
+    let by = busCoords.y;
+
+    if (busCoords.side === 'top') {
+      by = busCoords.y + BUS_HEIGHT / 2 + 18;
+      bx = busCoords.x - BUBBLE_WIDTH / 2;
+    } else if (busCoords.side === 'bottom') {
+      by = busCoords.y - BUS_HEIGHT / 2 - BUBBLE_HEIGHT - 18;
+      bx = busCoords.x - BUBBLE_WIDTH / 2;
+    } else if (busCoords.side === 'right') {
+      bx = busCoords.x - BUS_HEIGHT / 2 - BUBBLE_WIDTH - 18;
+      by = busCoords.y - BUBBLE_HEIGHT / 2;
+    } else {
+      // left
+      bx = busCoords.x + BUS_HEIGHT / 2 + 18;
+      by = busCoords.y - BUBBLE_HEIGHT / 2;
+    }
+
+    // Dynamic clamping to prevent cutting off at any screen edge
+    const padding = 16;
+    bx = Math.max(padding, Math.min(bx, cw - BUBBLE_WIDTH - padding));
+    by = Math.max(padding, Math.min(by, ch - BUBBLE_HEIGHT - padding));
+
+    return {
+      left: `${bx}px`,
+      top: `${by}px`,
+      width: `${BUBBLE_WIDTH}px`,
+    };
+  };
+
   return (
     <div
       ref={containerRef}
@@ -242,13 +285,13 @@ export default function MephistophelesBorderTrack() {
     >
       {/* ── Thin Line Border Track ── */}
       <div
-        className="absolute rounded-xl transition-all duration-300"
+        className="absolute rounded-xl transition-all duration-300 pointer-events-none"
         style={{
           top: INSET,
           left: INSET,
           right: INSET,
           bottom: INSET,
-          border: '1px solid rgba(201, 168, 76, 0.22)',
+          border: '1.5px dashed rgba(201, 168, 76, 0.25)',
           boxShadow: '0 0 12px rgba(201, 168, 76, 0.06), inset 0 0 12px rgba(201, 168, 76, 0.04)',
         }}
       />
@@ -262,7 +305,7 @@ export default function MephistophelesBorderTrack() {
           left: busCoords.x,
           top: busCoords.y,
           transform: `translate(-50%, -50%) rotate(${busCoords.rotation}deg)`,
-          transition: 'transform 0.15s ease-out',
+          transition: 'transform 0.08s ease-out',
         }}
       >
         {/* Diesel Engine Rumble Wrapper */}
@@ -279,8 +322,8 @@ export default function MephistophelesBorderTrack() {
               width: `${BUS_WIDTH}px`,
               height: `${BUS_HEIGHT}px`,
               filter: honkEffect
-                ? 'drop-shadow(0 0 10px rgba(234,179,8,0.9))'
-                : 'drop-shadow(0 0 4px rgba(0,0,0,0.8)) drop-shadow(0 0 8px rgba(201,168,76,0.3))',
+                ? 'drop-shadow(0 0 12px rgba(234,179,8,1))'
+                : 'drop-shadow(0 0 5px rgba(0,0,0,0.9)) drop-shadow(0 0 10px rgba(201,168,76,0.4))',
             }}
             className="object-contain"
           />
@@ -291,66 +334,60 @@ export default function MephistophelesBorderTrack() {
               initial={{ scale: 0.5, opacity: 1 }}
               animate={{ scale: 2, opacity: 0 }}
               transition={{ duration: 0.6 }}
-              className="absolute inset-0 rounded-full border border-yellow-400 pointer-events-none"
+              className="absolute inset-0 rounded-full border-2 border-yellow-400 pointer-events-none"
             />
           )}
         </div>
-
-        {/* ── Speech Bubble Popover ── */}
-        <AnimatePresence>
-          {activeDialogue && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8, y: 5 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.8, y: 5 }}
-              transition={{ type: 'spring', damping: 18, stiffness: 220 }}
-              onClick={(e) => e.stopPropagation()}
-              className="absolute pointer-events-auto z-50 p-3 rounded-xl bg-[#0d0d12]/95 backdrop-blur-md border shadow-2xl min-w-[220px] max-w-[280px]"
-              style={{
-                // Counter-rotate the dialogue bubble so text is always upright regardless of bus orientation!
-                transform: `rotate(-${busCoords.rotation}deg)`,
-                borderColor: activeDialogue.color || '#c9a84c',
-                boxShadow: `0 0 25px ${activeDialogue.color}33, 0 8px 32px rgba(0,0,0,0.8)`,
-                // Position bubble intelligently based on current side
-                ...(busCoords.side === 'top' && { top: '35px', left: '-120px' }),
-                ...(busCoords.side === 'bottom' && { bottom: '35px', left: '-120px' }),
-                ...(busCoords.side === 'right' && { right: '35px', top: '-60px' }),
-                ...(busCoords.side === 'left' && { left: '35px', top: '-60px' }),
-              }}
-            >
-              {/* Speaker Header */}
-              <div className="flex items-center gap-1.5 mb-1">
-                <span
-                  className="w-2 h-2 rounded-full flex-shrink-0 animate-pulse"
-                  style={{ backgroundColor: activeDialogue.color }}
-                />
-                <span
-                  className="text-xs font-black uppercase tracking-wider"
-                  style={{ color: activeDialogue.color }}
-                >
-                  {activeDialogue.sinner}
-                </span>
-                <span className="text-[9px] text-gray-500 font-mono ml-auto">
-                  Mephistopheles Comms
-                </span>
-              </div>
-
-              {/* Quote text */}
-              <p className="text-xs text-gray-200 font-serif leading-snug italic">
-                "{activeDialogue.quote}"
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
+
+      {/* ── Independent Speech Bubble Popover (Directly tracks bus and clamps to container) ── */}
+      <AnimatePresence>
+        {activeDialogue && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.85 }}
+            transition={{ type: 'spring', damping: 20, stiffness: 260 }}
+            onClick={(e) => e.stopPropagation()}
+            className="absolute pointer-events-auto z-50 p-3.5 rounded-xl bg-[#0d0d12]/95 backdrop-blur-md border shadow-2xl transition-[left,top] duration-150 ease-out"
+            style={{
+              ...getBubbleStyle(),
+              borderColor: activeDialogue.color || '#c9a84c',
+              boxShadow: `0 0 25px ${activeDialogue.color}33, 0 10px 36px rgba(0,0,0,0.85)`,
+            }}
+          >
+            {/* Speaker Header */}
+            <div className="flex items-center gap-2 mb-1.5">
+              <span
+                className="w-2.5 h-2.5 rounded-full flex-shrink-0 animate-pulse"
+                style={{ backgroundColor: activeDialogue.color }}
+              />
+              <span
+                className="text-xs font-black uppercase tracking-wider"
+                style={{ color: activeDialogue.color }}
+              >
+                {activeDialogue.sinner}
+              </span>
+              <span className="text-[10px] text-gray-400 font-mono ml-auto">
+                Mephi Comms
+              </span>
+            </div>
+
+            {/* Quote text */}
+            <p className="text-xs text-gray-100 font-serif leading-relaxed italic">
+              "{activeDialogue.quote}"
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Global CSS for mechanical engine vibration */}
       <style>{`
         @keyframes mephi-rumble {
           0% { transform: translate(0px, 0px) rotate(0deg); }
-          25% { transform: translate(0.4px, -0.4px) rotate(0.3deg); }
-          50% { transform: translate(-0.4px, 0.3px) rotate(-0.3deg); }
-          75% { transform: translate(0.3px, 0.4px) rotate(0.2deg); }
+          25% { transform: translate(0.5px, -0.5px) rotate(0.4deg); }
+          50% { transform: translate(-0.5px, 0.4px) rotate(-0.4deg); }
+          75% { transform: translate(0.4px, 0.5px) rotate(0.3deg); }
           100% { transform: translate(0px, 0px) rotate(0deg); }
         }
       `}</style>
