@@ -160,11 +160,13 @@ export default function MephistophelesBorderTrack() {
     const scrollContainer = document.getElementById('app-main-scroll') || containerRef.current?.parentElement;
     if (!scrollContainer) return;
 
-    const cw = scrollContainer.scrollWidth;
-    const ch = scrollContainer.scrollHeight;
+    // Use clientWidth to hug the visible viewport width (prevents overflow on smaller laptop screens),
+    // and use max(clientHeight, scrollHeight) to scale with vertical page scroll
+    const cw = scrollContainer.clientWidth;
+    const ch = Math.max(scrollContainer.clientHeight, scrollContainer.scrollHeight);
     if (cw <= 0 || ch <= 0) return;
 
-    // Dynamically adjust track border size to hug the edge of the scroll area
+    // Dynamically adjust track border size to hug the edge of the visible scroll area
     if (trackBorderRef.current) {
       trackBorderRef.current.style.width = `${cw - INSET * 2}px`;
       trackBorderRef.current.style.height = `${ch - INSET * 2}px`;
