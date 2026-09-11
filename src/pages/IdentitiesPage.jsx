@@ -4,6 +4,12 @@ import RoachEmperorModal from '../components/RoachEmperorModal.jsx';
 import MugaRyoshuModal from '../components/MugaRyoshuModal.jsx';
 import RolandModal from '../components/RolandModal.jsx';
 import AngelaModal from '../components/AngelaModal.jsx';
+import GeburaModal from '../components/GeburaModal.jsx';
+import ErlkonigModal from '../components/ErlkonigModal.jsx';
+import SanchoModal from '../components/SanchoModal.jsx';
+import CarmenModal from '../components/CarmenModal.jsx';
+import DanteModal from '../components/DanteModal.jsx';
+import CharonModal from '../components/CharonModal.jsx';
 import vergiliusImg from '../assets/vergilius.png';
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -106,6 +112,12 @@ export default function IdentitiesPage() {
   const [showMugaModal, setShowMugaModal] = useState(false);
   const [showRolandModal, setShowRolandModal] = useState(false);
   const [showAngelaModal, setShowAngelaModal] = useState(false);
+  const [showGeburaModal, setShowGeburaModal] = useState(false);
+  const [showErlkonigModal, setShowErlkonigModal] = useState(false);
+  const [showSanchoModal, setShowSanchoModal] = useState(false);
+  const [showCarmenModal, setShowCarmenModal] = useState(false);
+  const [showDanteModal, setShowDanteModal] = useState(false);
+  const [showCharonModal, setShowCharonModal] = useState(false);
   const [reversionToast, setReversionToast] = useState(null);
 
   const handleGregorRevert = () => {
@@ -332,7 +344,7 @@ export default function IdentitiesPage() {
           cleanSearch === 'red mist' || 
           cleanSearch === 'the red mist' || 
           cleanSearch === 'kali';
-        const isErlkonig = cleanSearch === 'erlkonig' || cleanSearch === 'erlkönig' || cleanSearch === 'wild hunt' || cleanSearch === 'every heathcliff';
+        const isErlkonig = cleanSearch === 'erlkonig' || cleanSearch === 'erlkönig' || cleanSearch === 'erlking' || cleanSearch === 'every heathcliff';
         const isSancho = cleanSearch === 'sancho' || cleanSearch === 'bloodfiend' || cleanSearch === 'second kindred';
         const isCarmen = cleanSearch === 'carmen' || cleanSearch === 'distortion' || cleanSearch === 'the light' || cleanSearch === 'the voice';
 
@@ -458,7 +470,8 @@ export default function IdentitiesPage() {
                     initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.3)] h-64 bg-gradient-to-b from-[#1a1205] to-black p-4"
+                    onClick={() => setShowDanteModal(true)}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:border-amber-400 hover:shadow-[0_0_35px_rgba(245,158,11,0.5)] transition-all cursor-pointer h-64 bg-gradient-to-b from-[#1a1205] to-black p-4"
                   >
                     <div className="flex justify-between items-start">
                       <div className="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-500 flex items-center justify-center text-amber-400">
@@ -473,9 +486,15 @@ export default function IdentitiesPage() {
                       <p className="text-[11px] text-gray-300 mt-1 font-mono italic leading-snug">
                         &lt;Tick tock, tick tock...!&gt; (Dante is furiously gesturing and frantically winding their clock head. Faust translates: "The Manager requests that you stop searching for them.")
                       </p>
-                      <div className="mt-2 flex gap-1">
+                      <div className="mt-2 flex gap-1 mb-2">
                         <span className="text-[9px] bg-amber-950 text-amber-300 px-1.5 py-0.5 rounded border border-amber-700/50">Clockhead</span>
                         <span className="text-[9px] bg-black text-gray-400 px-1.5 py-0.5 rounded border border-[#333]">Revival Device</span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 border-t border-amber-900/50 text-[10px]">
+                        <span className="text-amber-400 font-bold">Executive Authority</span>
+                        <span className="text-gray-300 group-hover:text-white transition-colors flex items-center gap-1 font-bold">
+                          Inspect Manager &rarr;
+                        </span>
                       </div>
                     </div>
                   </motion.div>
@@ -489,7 +508,8 @@ export default function IdentitiesPage() {
                     initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-cyan-500 shadow-[0_0_20px_rgba(6,182,212,0.3)] h-64 bg-gradient-to-b from-[#05151a] to-black p-4"
+                    onClick={() => setShowCharonModal(true)}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-cyan-500 shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:border-cyan-400 hover:shadow-[0_0_35px_rgba(6,182,212,0.5)] transition-all cursor-pointer h-64 bg-gradient-to-b from-[#05151a] to-black p-4"
                   >
                     <div className="flex justify-between items-start">
                       <div className="w-10 h-10 rounded-full bg-cyan-500/20 border border-cyan-500 flex items-center justify-center text-cyan-400 font-bold text-lg">
@@ -504,9 +524,15 @@ export default function IdentitiesPage() {
                       <p className="text-[11px] text-gray-300 mt-1 font-mono leading-snug">
                         "Vroom vroom. Mephistopheles is hungry. Charon wants star candies. Dante drive? No. Dante is bad driver. Charon drives."
                       </p>
-                      <div className="mt-2 flex gap-1">
+                      <div className="mt-2 flex gap-1 mb-2">
                         <span className="text-[9px] bg-cyan-950 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-700/50">Vroom Vroom</span>
                         <span className="text-[9px] bg-black text-gray-400 px-1.5 py-0.5 rounded border border-[#333]">Star Candy Lover</span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 border-t border-cyan-900/50 text-[10px]">
+                        <span className="text-cyan-400 font-bold">Driver Cabin</span>
+                        <span className="text-gray-300 group-hover:text-white transition-colors flex items-center gap-1 font-bold">
+                          Inspect Chauffeur &rarr;
+                        </span>
                       </div>
                     </div>
                   </motion.div>
@@ -794,7 +820,8 @@ export default function IdentitiesPage() {
                     initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-red-600 shadow-[0_0_25px_rgba(239,68,68,0.4)] hover:shadow-[0_0_45px_rgba(239,68,68,0.7)] hover:border-red-400 transition-all h-64 bg-black cursor-default"
+                    onClick={() => setShowGeburaModal(true)}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-red-600 shadow-[0_0_25px_rgba(239,68,68,0.4)] hover:shadow-[0_0_45px_rgba(239,68,68,0.7)] hover:border-red-400 transition-all h-64 bg-black cursor-pointer"
                   >
                     <div 
                       className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110"
@@ -842,7 +869,9 @@ export default function IdentitiesPage() {
 
                       <div className="flex justify-between items-center pt-2 border-t border-red-900/60 text-[10px]">
                         <span className="text-red-400 font-bold">Threat: Supreme</span>
-                        <span className="text-gray-400 font-mono">Legend of the City</span>
+                        <span className="text-gray-300 group-hover:text-white transition-colors flex items-center gap-1 font-bold">
+                          Inspect Red Mist &rarr;
+                        </span>
                       </div>
                     </div>
                   </motion.div>
@@ -856,7 +885,8 @@ export default function IdentitiesPage() {
                     initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-purple-800 shadow-[0_0_30px_rgba(147,51,234,0.35)] hover:shadow-[0_0_45px_rgba(168,85,247,0.5)] transition-all h-64 bg-gradient-to-b from-[#180826] via-[#0e0416] to-black p-4 cursor-default"
+                    onClick={() => setShowErlkonigModal(true)}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-purple-800 shadow-[0_0_30px_rgba(147,51,234,0.35)] hover:shadow-[0_0_45px_rgba(168,85,247,0.5)] hover:border-purple-500 transition-all h-64 bg-gradient-to-b from-[#180826] via-[#0e0416] to-black p-4 cursor-pointer"
                   >
                     <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(168,85,247,0.15)_0%,transparent_70%)] pointer-events-none" />
                     <div className="flex justify-between items-start relative z-10">
@@ -873,9 +903,15 @@ export default function IdentitiesPage() {
                       <p className="text-[11px] text-purple-200/80 mt-1.5 italic leading-snug font-serif">
                         "Every Heathcliff in every reflection of this rotting City... must be wiped from existence."
                       </p>
-                      <div className="mt-2 flex gap-1">
+                      <div className="mt-2 flex gap-1 mb-2">
                         <span className="text-[9px] bg-purple-950 text-purple-300 px-1.5 py-0.5 rounded border border-purple-800/60">● Envy / Sinking</span>
                         <span className="text-[9px] bg-black text-purple-400 px-1.5 py-0.5 rounded border border-purple-900/40">Grief Unleashed</span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 border-t border-purple-900/60 text-[10px]">
+                        <span className="text-purple-400 font-bold">Catastrophic Threat</span>
+                        <span className="text-gray-300 group-hover:text-white transition-colors flex items-center gap-1 font-bold">
+                          Inspect Distortion &rarr;
+                        </span>
                       </div>
                     </div>
                   </motion.div>
@@ -889,7 +925,8 @@ export default function IdentitiesPage() {
                     initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-red-800 shadow-[0_0_30px_rgba(220,38,38,0.4)] hover:shadow-[0_0_50px_rgba(239,68,68,0.6)] transition-all h-64 bg-gradient-to-b from-[#240406] via-[#140203] to-black p-4 cursor-default"
+                    onClick={() => setShowSanchoModal(true)}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-red-800 shadow-[0_0_30px_rgba(220,38,38,0.4)] hover:shadow-[0_0_50px_rgba(239,68,68,0.6)] hover:border-red-500 transition-all h-64 bg-gradient-to-b from-[#240406] via-[#140203] to-black p-4 cursor-pointer"
                   >
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(220,38,38,0.2)_0%,transparent_60%)] pointer-events-none" />
                     <div className="flex justify-between items-start relative z-10">
@@ -906,9 +943,15 @@ export default function IdentitiesPage() {
                       <p className="text-[11px] text-red-200/80 mt-1.5 italic leading-snug font-serif">
                         "Awaken, my dream-clad child... Cast aside the lance, and let the carnival of blood begin anew."
                       </p>
-                      <div className="mt-2 flex gap-1">
+                      <div className="mt-2 flex gap-1 mb-2">
                         <span className="text-[9px] bg-red-950 text-red-300 px-1.5 py-0.5 rounded border border-red-800/60">● Lust / Bleed</span>
                         <span className="text-[9px] bg-black text-red-400 px-1.5 py-0.5 rounded border border-red-900/40">Unending Thirst</span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 border-t border-red-900/60 text-[10px]">
+                        <span className="text-red-400 font-bold">Second Kindred</span>
+                        <span className="text-gray-300 group-hover:text-white transition-colors flex items-center gap-1 font-bold">
+                          Inspect Bloodline &rarr;
+                        </span>
                       </div>
                     </div>
                   </motion.div>
@@ -922,7 +965,8 @@ export default function IdentitiesPage() {
                     initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-amber-400/70 shadow-[0_0_35px_rgba(251,191,36,0.35)] hover:shadow-[0_0_55px_rgba(251,191,36,0.55)] transition-all h-64 bg-gradient-to-b from-[#221c08] via-[#141004] to-black p-4 cursor-default"
+                    onClick={() => setShowCarmenModal(true)}
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-amber-400/70 shadow-[0_0_35px_rgba(251,191,36,0.35)] hover:shadow-[0_0_55px_rgba(251,191,36,0.55)] hover:border-amber-300 transition-all h-64 bg-gradient-to-b from-[#221c08] via-[#141004] to-black p-4 cursor-pointer"
                   >
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(251,191,36,0.15)_0%,transparent_70%)] pointer-events-none" />
                     <div className="flex justify-between items-start relative z-10">
@@ -939,9 +983,15 @@ export default function IdentitiesPage() {
                       <p className="text-[11px] text-amber-100/80 mt-1.5 italic leading-snug font-serif">
                         "Why must you suppress what you truly feel? Listen closely to the beating in your chest... Let it bloom."
                       </p>
-                      <div className="mt-2 flex gap-1">
+                      <div className="mt-2 flex gap-1 mb-2">
                         <span className="text-[9px] bg-amber-950 text-amber-300 px-1.5 py-0.5 rounded border border-amber-700/50">● Whispers of Truth</span>
                         <span className="text-[9px] bg-black text-amber-400 px-1.5 py-0.5 rounded border border-amber-900/40">Ego Dissolution</span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 border-t border-amber-900/60 text-[10px]">
+                        <span className="text-amber-400 font-bold">Source of Light</span>
+                        <span className="text-gray-300 group-hover:text-white transition-colors flex items-center gap-1 font-bold">
+                          Listen to Voice &rarr;
+                        </span>
                       </div>
                     </div>
                   </motion.div>
@@ -1007,6 +1057,30 @@ export default function IdentitiesPage() {
 
       {showAngelaModal && (
         <AngelaModal onClose={() => setShowAngelaModal(false)} />
+      )}
+
+      {showGeburaModal && (
+        <GeburaModal onClose={() => setShowGeburaModal(false)} />
+      )}
+
+      {showErlkonigModal && (
+        <ErlkonigModal onClose={() => setShowErlkonigModal(false)} />
+      )}
+
+      {showSanchoModal && (
+        <SanchoModal onClose={() => setShowSanchoModal(false)} />
+      )}
+
+      {showCarmenModal && (
+        <CarmenModal onClose={() => setShowCarmenModal(false)} />
+      )}
+
+      {showDanteModal && (
+        <DanteModal onClose={() => setShowDanteModal(false)} />
+      )}
+
+      {showCharonModal && (
+        <CharonModal onClose={() => setShowCharonModal(false)} />
       )}
     </motion.div>
   );
