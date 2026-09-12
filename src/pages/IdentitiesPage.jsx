@@ -16,6 +16,7 @@ import HodModal from '../components/HodModal.jsx';
 import ArtfulModal from '../components/ArtfulModal.jsx';
 import HacklordModal from '../components/HacklordModal.jsx';
 import SpecialDossierModal from '../components/SpecialDossierModal.jsx';
+import GasterCorruptedModal from '../components/GasterCorruptedModal.jsx';
 import GasterSequenceModal from '../components/GasterSequenceModal.jsx';
 import EASTER_EGG_IMAGES from '../assets/easter_eggs/index.js';
 import SPECIAL_EASTER_EGGS from '../data/specialEasterEggs.js';
@@ -136,6 +137,7 @@ export default function IdentitiesPage() {
   const [showArtfulModal, setShowArtfulModal] = useState(false);
   const [showHacklordModal, setShowHacklordModal] = useState(false);
   const [selectedSpecialDossier, setSelectedSpecialDossier] = useState(null);
+  const [showGasterCorruptedModal, setShowGasterCorruptedModal] = useState(false);
   const [showGasterSequence, setShowGasterSequence] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [reversionToast, setReversionToast] = useState(null);
@@ -145,7 +147,7 @@ export default function IdentitiesPage() {
   }, []);
 
   const handleGasterClick = () => {
-    setShowGasterSequence(true);
+    setShowGasterCorruptedModal(true);
   };
 
   const handleGregorRevert = () => {
@@ -1292,7 +1294,7 @@ export default function IdentitiesPage() {
                   </motion.div>
                 )}
 
-                {/* 🕈 W.D. Gaster / Mystery Man Easter Egg Card */}
+                {/* 🕈 W.D. Gaster / Corrupted Unparsed ID Easter Egg Card */}
                 {isGaster && (
                   <motion.div
                     key="gaster-easter-egg"
@@ -1301,30 +1303,29 @@ export default function IdentitiesPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={handleGasterClick}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-gray-700 shadow-[0_0_35px_rgba(255,255,255,0.15)] hover:shadow-[0_0_55px_rgba(255,255,255,0.4)] hover:border-white transition-all h-64 bg-gradient-to-b from-[#0a0a0a] via-black to-[#050505] p-4 cursor-pointer"
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-[#333] hover:border-[#666] transition-all h-64 bg-[#080808] p-4 cursor-pointer select-none"
                   >
-                    <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,rgba(255,255,255,0.03)_0px,rgba(255,255,255,0.03)_1px,transparent_1px,transparent_3px)] pointer-events-none" />
+                    {/* Subtle horizontal scanlines / slight grey lines (NO eye emoji, NO status effects, NaN stars) */}
+                    <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,rgba(255,255,255,0.03)_0px,rgba(255,255,255,0.03)_1px,transparent_1px,transparent_4px)] pointer-events-none" />
+                    
                     <div className="flex justify-between items-start relative z-10">
-                      <div className="w-10 h-10 rounded-full bg-black border border-gray-600 flex items-center justify-center text-xl shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-                        👁️
-                      </div>
-                      <span className="text-[10px] bg-black text-gray-400 font-mono px-2 py-0.5 rounded border border-gray-700">
-                        [REDACTED // VOID]
+                      <span className="text-[9px] bg-[#1a1a1a] text-gray-400 font-mono px-2 py-0.5 rounded border border-[#333] uppercase font-bold tracking-wider">
+                        Identity
+                      </span>
+                      <span className="text-xs bg-[#111] text-gray-500 font-mono px-2 py-0.5 rounded border border-[#262626] font-bold">
+                        NaN
                       </span>
                     </div>
-                    <div className="mt-auto relative z-10">
-                      <h3 className="font-mono font-black text-lg text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]">(Unknown Dossier)</h3>
-                      <p className="text-[11px] text-gray-400 mt-1 font-mono italic leading-snug">
-                        (Parse Error: NaN -- No Data Found)
+
+                    <div className="mt-auto relative z-10 font-mono">
+                      <h3 className="font-bold text-lg text-gray-300">NaN</h3>
+                      <p className="text-[11px] text-gray-500 mt-0.5">
+                        Season: NaN
                       </p>
-                      <div className="mt-2 flex gap-1 mb-2">
-                        <span className="text-[9px] bg-black text-gray-400 px-1.5 py-0.5 rounded border border-gray-800 font-mono">● UNINDEXED RECORD</span>
-                        <span className="text-[9px] bg-black text-gray-500 px-1.5 py-0.5 rounded border border-gray-900 font-mono">🕈 ☼ ☠ ✁</span>
-                      </div>
-                      <div className="flex justify-between items-center pt-2 border-t border-gray-800 text-[10px]">
-                        <span className="text-gray-500 font-mono">CORRUPTED DATA</span>
-                        <span className="text-red-400 group-hover:text-white transition-colors flex items-center gap-1 font-mono font-bold animate-pulse">
-                          ⚠ ACCESS FILE ⚠
+                      <div className="flex justify-between items-center pt-2.5 mt-3 border-t border-[#222] text-[10px] text-gray-600">
+                        <span>ERR_PARSE_FAILED</span>
+                        <span className="group-hover:text-gray-400 transition-colors">
+                          [Click to Inspect]
                         </span>
                       </div>
                     </div>
@@ -1504,7 +1505,16 @@ export default function IdentitiesPage() {
         )}
       </AnimatePresence>
 
-      {/* 🕳️ W.D. Gaster Atmospheric Sequence Modal */}
+      {/* 🕳️ W.D. Gaster Corrupted ID Modal & Atmospheric Sequence Modal */}
+      <AnimatePresence>
+        {showGasterCorruptedModal && (
+          <GasterCorruptedModal
+            onClose={() => setShowGasterCorruptedModal(false)}
+            onTriggerSequence={() => setShowGasterSequence(true)}
+          />
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {showGasterSequence && (
           <GasterSequenceModal onClose={() => setShowGasterSequence(false)} />

@@ -418,17 +418,17 @@ export default function GasterSequenceModal({ onClose }) {
     }, 280);
   };
 
-  // Phase: Gaster Watching & CapCut-style Static Ramping
+  // Phase: Gaster Watching & CapCut-style Creeping Static Ramping
   useEffect(() => {
     if (phase === 'watching') {
-      // Slower reveal: 3.5s smooth window shift + 2.5s chilling silent stare = 6.0s before static ramps
+      // Static starts ramping slowly as he is appearing (1.0s into the 4.5s slide)
       const staticTimer = setTimeout(() => {
         setPhase('static');
         playStaticNoise();
 
-        // Ramp static opacity smoothly like turning up the grain slider on CapCut (0 -> 1 over 2.5s)
+        // Slow, chilling creeping crawl over 5.2 seconds (gradual CapCut grain rise)
         const startTime = Date.now();
-        const duration = 2500;
+        const duration = 5200;
         const rampInterval = setInterval(() => {
           const elapsed = Date.now() - startTime;
           const progress = Math.min(elapsed / duration, 1);
@@ -438,7 +438,7 @@ export default function GasterSequenceModal({ onClose }) {
           }
         }, 30);
 
-        // Climax: Screen cracks in half!
+        // Climax: Screen cracks in half once static reaches peak!
         const crackTimer = setTimeout(() => {
           clearInterval(rampInterval);
           setPhase('crack');
@@ -455,13 +455,13 @@ export default function GasterSequenceModal({ onClose }) {
               if (onClose) onClose();
             }, 3500);
           }
-        }, 2600);
+        }, 5300);
 
         return () => {
           clearInterval(rampInterval);
           clearTimeout(crackTimer);
         };
-      }, 6000);
+      }, 1200);
 
       return () => clearTimeout(staticTimer);
     }
@@ -504,14 +504,14 @@ export default function GasterSequenceModal({ onClose }) {
       onClick={handleAdvance}
       className="fixed inset-0 z-[99999] bg-black overflow-hidden select-none font-mono cursor-pointer"
     >
-      {/* 1. Behind the screen on the right: Life-Sized Unlit Gaster (Shipwrecked 64 style) */}
+      {/* 1. Behind the screen on the right: Life-Sized Unlit Gaster (Shipwrecked 64 style) - Narrow 25% Screen Margin */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{
           opacity: phase === 'watching' || phase === 'static' ? 1 : 0
         }}
         transition={{ duration: 3.5, ease: 'easeInOut' }}
-        className="absolute right-0 top-0 bottom-0 w-[46vw] h-full flex items-center justify-center overflow-hidden pointer-events-none z-10 bg-black"
+        className="absolute right-0 top-0 bottom-0 w-[25vw] h-full flex items-center justify-center overflow-hidden pointer-events-none z-10 bg-black"
       >
         <img
           src={gasterImage}
@@ -528,7 +528,7 @@ export default function GasterSequenceModal({ onClose }) {
       <motion.div
         initial={{ x: '0vw' }}
         animate={{
-          x: phase === 'watching' || phase === 'static' ? '-46vw' : '0vw'
+          x: phase === 'watching' || phase === 'static' ? '-25vw' : '0vw'
         }}
         transition={{ duration: 3.5, ease: 'easeInOut' }}
         className="absolute inset-0 z-20 flex items-center justify-center overflow-hidden bg-black shadow-[30px_0_90px_rgba(0,0,0,0.95)]"

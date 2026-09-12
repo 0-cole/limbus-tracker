@@ -4,6 +4,7 @@ import { useStore } from '../stores/useStore';
 import { calculateLimbusGrind, generateRoadmap, normalizeSinnerId, getOwnedShards } from '../utils/limbusCalculator.js';
 import { getNextResets, getLimbusCycleInfo } from '../utils/timeUtils.js';
 import { getSeasonEndDate } from '../utils/seasonUtils.js';
+import { getEnkephalinCapForLevel, getEnkephalinCountdown } from '../utils/enkephalinLevels.js';
 import sinnersData from '../data/sinners.json';
 
 export default function DailyCycleTracker() {
@@ -23,6 +24,8 @@ export default function DailyCycleTracker() {
     addCrates,
     inventory, 
     updateInventory,
+    toggleDailyMissionStep,
+    setAllDailyMissions,
     saveStore,
     wantList, 
     identitiesData, 
@@ -77,11 +80,23 @@ export default function DailyCycleTracker() {
 
   const [showEnkephalinModal, setShowEnkephalinModal] = useState(false);
   const [enkephalinModalTrigger, setEnkephalinModalTrigger] = useState('md');
-  const [enkephalinInputVal, setEnkephalinInputVal] = useState(inventory.enkephalin || 0);
+  const [enkephalinInputVal, setEnkephalinInputVal] = useState(inventory.enkephalin !== undefined ? inventory.enkephalin : (inventory.maxEnkephalin || 119));
+  const [companyLevelInputVal, setCompanyLevelInputVal] = useState(inventory.companyLevel || 35);
+  const [enkephalinCountdown, setEnkephalinCountdown] = useState(() => getEnkephalinCountdown(inventory));
+
+  React.useEffect(() => {
+    const updateCountdown = () => {
+      setEnkephalinCountdown(getEnkephalinCountdown(inventory));
+    };
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, [inventory]);
 
   const promptEnkephalinSync = (trigger = 'md') => {
     setEnkephalinModalTrigger(trigger);
-    setEnkephalinInputVal(inventory.enkephalin || 0);
+    setEnkephalinInputVal(inventory.enkephalin !== undefined ? inventory.enkephalin : (inventory.maxEnkephalin || 119));
+    setCompanyLevelInputVal(inventory.companyLevel || 35);
     setShowEnkephalinModal(true);
   };
 
@@ -162,16 +177,27 @@ export default function DailyCycleTracker() {
         <div className="text-right flex items-center gap-3 flex-wrap">
           <button 
             onClick={() => promptEnkephalinSync('manual')}
-            className="text-xs bg-black/40 hover:bg-black/70 border border-[#333] hover:border-[#c9a84c] px-2.5 py-1 rounded flex items-center gap-1.5 transition-all text-gray-300 cursor-pointer"
-            title="Account for level-up overfill or sync current Enkephalin"
+            className="text-xs bg-black/50 hover:bg-black/80 border border-[#444] hover:border-[#c9a84c] px-3 py-1.5 rounded-lg flex items-center gap-2 transition-all text-gray-200 cursor-pointer shadow-sm group"
+            title={`Manager Lv. ${inventory.companyLevel || 35} • Cap: ${inventory.maxEnkephalin || 119} • Click to adjust level or Enkephalin`}
           >
-            <Zap size={13} className="text-[#eab308]" />
-            <span>Enk:</span>
-            <span className="font-mono font-bold text-white">{inventory.enkephalin || 0}</span>
-            {inventory.enkephalin > (inventory.maxEnkephalin || 120) ? (
-              <span className="text-[9px] bg-amber-500/30 text-amber-300 font-bold px-1 rounded">OVER</span>
-            ) : (
-              <span className="text-[10px] text-gray-500 font-mono">/{inventory.maxEnkephalin || 120}</span>
+            <span className="text-[10px] font-bold text-[#c9a84c] bg-[#c9a84c]/10 border border-[#c9a84c]/30 px-1.5 py-0.5 rounded">
+              Lv. {inventory.companyLevel || 35}
+            </span>
+            <div className="flex items-center gap-1">
+              <Zap size={13} className="text-[#eab308]" />
+              <span className="font-mono font-bold text-white text-xs">
+                {inventory.enkephalin !== undefined ? inventory.enkephalin : (inventory.maxEnkephalin || 119)}
+              </span>
+              {(inventory.enkephalin || 0) > (inventory.maxEnkephalin || 119) ? (
+                <span className="text-[9px] bg-amber-500/30 text-amber-300 font-bold px-1 rounded">OVER</span>
+              ) : (
+                <span className="text-[11px] text-gray-400 font-mono">/{inventory.maxEnkephalin || 119}</span>
+              )}
+            </div>
+            {!enkephalinCountdown.isFull && (
+              <span className="text-[10px] text-emerald-400/90 font-mono pl-1.5 border-l border-[#333]">
+                +{enkephalinCountdown.nextPointStr}
+              </span>
             )}
           </button>
           <div className="text-xs text-gray-400">Daily: <span className="text-white font-mono">{timeUntilDaily}</span></div>
@@ -726,52 +752,90 @@ export default function DailyCycleTracker() {
 
         {/* DAILY MISSIONS (5 STEPS) */}
         <div className={`p-4 rounded-xl border transition-all ${scheduleState.dailiesProgress >= 5 ? 'bg-[#c9a84c]/10 border-[#c9a84c]/50' : 'bg-[#111] border-[#333]'}`}>
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
             <div>
               <h3 className="font-bold text-lg text-white flex items-center gap-2">
                 <Target size={18} className="text-[#c9a84c]" /> Daily Missions
               </h3>
-              <p className="text-xs text-gray-400 mt-0.5">10 Pass EXP total (+2 EXP per mission step). Login, thread, EXP, and luxcavations.</p>
+              <p className="text-xs text-gray-400 mt-0.5">
+                10 Pass EXP total (+2 EXP per mission). Steps 4 & 5 auto-deduct 2 Modules (or 40 Enkephalin) for Luxcavations.
+              </p>
             </div>
-            <div className="text-2xl font-black text-[#c9a84c]">
-              {scheduleState.dailiesProgress} <span className="text-lg text-gray-500">/ 5</span>
-            </div>
-          </div>
-          <div className="flex gap-2">
-            {[1, 2, 3, 4, 5].map(step => (
-              <div 
-                key={step} 
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
                 onClick={() => {
-                  const newProgress = scheduleState.dailiesProgress === step ? step - 1 : step;
-                  const diff = newProgress - scheduleState.dailiesProgress;
-                  const isDone = newProgress >= 5;
-                  updateScheduleState({ 
-                    dailiesProgress: newProgress,
-                    dailiesDone: isDone 
-                  });
-                  injectBpExp(diff * 2);
-
-                  // Synchronize with weekly calendar dailyStatus for active cycle
-                  const updatedStatus = { ...(weeklyProgress?.dailyStatus || {}) };
-                  updatedStatus[cycleInfo.cycleKey] = isDone ? 'done' : 'pending';
-                  updateWeekly({
-                    ...(weeklyProgress || {}),
-                    dailyStatus: updatedStatus
-                  });
-
-                  if (newProgress === 5) {
-                    promptEnkephalinSync('dailies');
-                  }
+                  const allDone = scheduleState.dailiesProgress >= 5;
+                  useStore.getState().setAllDailyMissions(!allDone);
+                  if (!allDone) promptEnkephalinSync('dailies');
                 }}
-                className={`h-10 flex-1 rounded cursor-pointer transition-all flex items-center justify-center font-bold text-xs ${
-                  scheduleState.dailiesProgress >= step 
-                    ? 'bg-[#c9a84c] text-black shadow-[0_0_10px_rgba(201,168,76,0.3)]' 
-                    : 'bg-[#222] text-gray-600 hover:bg-[#333]'
+                className={`px-2.5 py-1 text-xs font-bold rounded border transition-all cursor-pointer ${
+                  scheduleState.dailiesProgress >= 5
+                    ? 'bg-red-950/30 border-red-800/60 text-red-400 hover:bg-red-900/40'
+                    : 'bg-[#c9a84c]/20 border-[#c9a84c]/40 text-[#eab308] hover:bg-[#c9a84c]/30'
                 }`}
               >
-                +2
+                {scheduleState.dailiesProgress >= 5 ? 'Reset All Dailies' : 'Complete All 5 (+10 EXP)'}
+              </button>
+              <div className="text-2xl font-black text-[#c9a84c]">
+                {scheduleState.dailiesProgress} <span className="text-lg text-gray-500">/ 5</span>
               </div>
-            ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
+            {[
+              { step: 1, name: 'Daily Login', desc: 'Log into game', cost: 'Free', icon: '🏢' },
+              { step: 2, name: 'Stage 1x', desc: 'Clear 1 battle', cost: 'Free', icon: '⚔️' },
+              { step: 3, name: 'Stage 3x', desc: 'Clear 3 battles', cost: 'Free', icon: '⚔️' },
+              { step: 4, name: 'EXP Luxcavation', desc: 'Clear EXP Lux', cost: '2 Mod (40 Enk)', icon: '🧪' },
+              { step: 5, name: 'Thread Luxcavation', desc: 'Clear Thread Lux', cost: '2 Mod (40 Enk)', icon: '🧵' }
+            ].map(m => {
+              const isDone = !!(scheduleState.dailyMissionSteps?.[m.step] ?? (scheduleState.dailiesProgress >= m.step));
+              const deduction = scheduleState.dailyMissionDeductions?.[m.step];
+              return (
+                <button
+                  key={m.step}
+                  type="button"
+                  onClick={() => {
+                    const res = toggleDailyMissionStep(m.step);
+                    if (res?.isAllDone) {
+                      promptEnkephalinSync('dailies');
+                    }
+                  }}
+                  className={`p-2.5 rounded-lg border text-left flex flex-col justify-between transition-all cursor-pointer select-none ${
+                    isDone
+                      ? 'bg-[#c9a84c]/15 border-[#c9a84c] text-white shadow-[0_0_12px_rgba(201,168,76,0.25)]'
+                      : 'bg-[#181818] border-[#333] hover:border-gray-500 text-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-base">{m.icon}</span>
+                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                      isDone 
+                        ? 'bg-[#c9a84c] text-black' 
+                        : 'bg-black/50 text-gray-400 border border-[#333]'
+                    }`}>
+                      {isDone ? '✓ DONE' : '+2 EXP'}
+                    </span>
+                  </div>
+                  <div>
+                    <div className="font-bold text-xs text-white leading-tight">{m.name}</div>
+                    <div className="text-[10px] text-gray-400 mt-0.5">{m.desc}</div>
+                  </div>
+                  <div className="mt-2 pt-1.5 border-t border-white/5 flex items-center justify-between text-[10px]">
+                    <span className={`font-mono ${isDone ? 'text-amber-300 font-bold' : 'text-gray-500'}`}>
+                      {m.cost}
+                    </span>
+                    {deduction && (
+                      <span className="text-[9px] text-red-400 font-mono">
+                        -{deduction.modules > 0 ? `${deduction.modules}m` : ''}{deduction.enkephalin > 0 ? `${deduction.enkephalin}e` : ''}
+                      </span>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -827,36 +891,83 @@ export default function DailyCycleTracker() {
 
       </div>
 
-      {/* ENKEPHALIN LEVEL UP / OVERFILL PROMPT MODAL */}
+      {/* ENKEPHALIN & COMPANY LEVEL PROMPT MODAL */}
       {showEnkephalinModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
           <div className="bg-[#141414] border border-[#c9a84c]/50 rounded-2xl max-w-md w-full p-6 shadow-[0_0_35px_rgba(201,168,76,0.25)] flex flex-col space-y-4">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-2 text-[#c9a84c]">
                 <Zap size={22} className="text-[#eab308]" />
-                <h3 className="font-bold text-lg font-limbus text-white">Manager Level-Up & Enkephalin</h3>
+                <h3 className="font-bold text-lg font-limbus text-white">Manager Level & Enkephalin</h3>
               </div>
               <button 
                 onClick={() => setShowEnkephalinModal(false)}
-                className="text-gray-500 hover:text-white p-1 rounded transition-colors"
+                className="text-gray-500 hover:text-white p-1 rounded transition-colors cursor-pointer"
               >
                 <X size={18} />
               </button>
             </div>
 
             <p className="text-xs text-gray-300 leading-relaxed">
-              {enkephalinModalTrigger === 'dailies'
-                ? "You just completed your Daily Missions! Did your Manager Level increase or did your Enkephalin overfill?"
-                : enkephalinModalTrigger === 'md'
-                ? "You just logged a Mirror Dungeon run! If your Manager Level increased or Enkephalin overfilled, update your current count below:"
-                : "Log or adjust your current Enkephalin (including overfilled energy from level-ups):"}
+              Set your Company Level to auto-balance your official Enkephalin cap, and update your current Enkephalin (including overfilled energy from level-ups or boxes).
             </p>
 
-            <div className="bg-black/60 border border-[#333] rounded-xl p-4 space-y-3">
+            {/* SECTION 1: COMPANY LEVEL INPUT & AUTO-BALANCED CAP */}
+            <div className="bg-black/60 border border-[#333] rounded-xl p-3.5 space-y-2.5">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Current Enkephalin</label>
-                <span className="text-xs text-gray-500 font-mono">
-                  Natural Cap: <strong className="text-gray-300">{inventory.maxEnkephalin || 120}</strong>
+                <label className="text-xs font-bold text-gray-300 uppercase tracking-wider">Company (Manager) Level</label>
+                <span className="text-xs font-mono font-bold text-amber-400">
+                  Auto Cap: <span className="text-white text-sm underline">{getEnkephalinCapForLevel(companyLevelInputVal)}</span>
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input 
+                  type="number"
+                  min="1"
+                  max="300"
+                  value={companyLevelInputVal}
+                  onChange={(e) => setCompanyLevelInputVal(Math.max(1, Math.min(300, parseInt(e.target.value) || 1)))}
+                  className="w-24 bg-[#111] border border-[#444] rounded-lg p-2 text-xl font-bold font-mono text-center text-white focus:border-[#c9a84c] focus:outline-none"
+                />
+                <div className="flex gap-1 flex-1 flex-wrap">
+                  <button
+                    type="button"
+                    onClick={() => setCompanyLevelInputVal(prev => Math.max(1, prev - 1))}
+                    className="px-2.5 py-1 text-xs bg-[#222] hover:bg-[#333] border border-[#444] rounded text-gray-300 font-mono cursor-pointer"
+                  >
+                    -1
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCompanyLevelInputVal(prev => Math.min(300, prev + 1))}
+                    className="px-2.5 py-1 text-xs bg-[#222] hover:bg-[#333] border border-[#444] rounded text-gray-300 font-mono cursor-pointer"
+                  >
+                    +1
+                  </button>
+                  {[35, 50, 70, 100].map(lvl => (
+                    <button
+                      key={lvl}
+                      type="button"
+                      onClick={() => setCompanyLevelInputVal(lvl)}
+                      className="px-2 py-1 text-[11px] bg-black/40 hover:bg-black/70 border border-[#333] rounded text-gray-400 hover:text-white font-mono cursor-pointer"
+                    >
+                      Lv.{lvl}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <p className="text-[11px] text-gray-400">
+                Official Limbus table: Level 1 = 60 cap • Level 35 = 119 cap • Level 300 = 216 cap.
+              </p>
+            </div>
+
+            {/* SECTION 2: CURRENT ENKEPHALIN INPUT */}
+            <div className="bg-black/60 border border-[#333] rounded-xl p-3.5 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold text-gray-300 uppercase tracking-wider">Current Enkephalin</label>
+                <span className="text-xs text-gray-400 font-mono">
+                  Cap: <strong className="text-white">{getEnkephalinCapForLevel(companyLevelInputVal)}</strong>
                 </span>
               </div>
 
@@ -871,14 +982,14 @@ export default function DailyCycleTracker() {
                 />
               </div>
 
-              {enkephalinInputVal > (inventory.maxEnkephalin || 120) && (
+              {enkephalinInputVal > getEnkephalinCapForLevel(companyLevelInputVal) && (
                 <div className="p-2.5 rounded-lg bg-amber-950/40 border border-amber-500/40 text-xs text-amber-300 flex items-start gap-2">
                   <Zap size={16} className="shrink-0 text-amber-400 mt-0.5" />
                   <div>
                     <span className="font-bold">Overfilled Energy: </span>
-                    +{enkephalinInputVal - (inventory.maxEnkephalin || 120)} above cap. 
+                    +{enkephalinInputVal - getEnkephalinCapForLevel(companyLevelInputVal)} above cap. 
                     <span className="block text-[11px] text-amber-400/80 mt-0.5">
-                      Natural regeneration will pause until energy drops below cap.
+                      Natural regeneration will pause until energy drops below {getEnkephalinCapForLevel(companyLevelInputVal)}.
                     </span>
                   </div>
                 </div>
@@ -888,17 +999,17 @@ export default function DailyCycleTracker() {
               <div className="flex flex-wrap gap-1.5 pt-1">
                 <button 
                   type="button"
-                  onClick={() => setEnkephalinInputVal(prev => prev + (inventory.maxEnkephalin || 120))}
+                  onClick={() => setEnkephalinInputVal(getEnkephalinCapForLevel(companyLevelInputVal))}
                   className="px-2.5 py-1 text-xs bg-[#c9a84c]/20 hover:bg-[#c9a84c]/30 border border-[#c9a84c]/40 text-[#eab308] rounded font-bold transition-colors cursor-pointer"
                 >
-                  +{inventory.maxEnkephalin || 120} (Level Up)
+                  Set to Cap ({getEnkephalinCapForLevel(companyLevelInputVal)})
                 </button>
                 <button 
                   type="button"
-                  onClick={() => setEnkephalinInputVal(inventory.maxEnkephalin || 120)}
+                  onClick={() => setEnkephalinInputVal(prev => prev + getEnkephalinCapForLevel(companyLevelInputVal))}
                   className="px-2.5 py-1 text-xs bg-[#222] hover:bg-[#333] border border-[#444] text-gray-300 rounded transition-colors cursor-pointer"
                 >
-                  Cap ({inventory.maxEnkephalin || 120})
+                  +{getEnkephalinCapForLevel(companyLevelInputVal)} (Level Up)
                 </button>
                 <button 
                   type="button"
@@ -923,18 +1034,23 @@ export default function DailyCycleTracker() {
                 onClick={() => setShowEnkephalinModal(false)}
                 className="px-4 py-2 text-xs text-gray-400 hover:text-white rounded transition-colors cursor-pointer"
               >
-                No Level Up / Skip
+                Cancel
               </button>
               <button 
                 type="button"
                 onClick={() => {
-                  updateInventory({ enkephalin: enkephalinInputVal });
+                  const targetCap = getEnkephalinCapForLevel(companyLevelInputVal);
+                  updateInventory({
+                    companyLevel: companyLevelInputVal,
+                    maxEnkephalin: targetCap,
+                    enkephalin: enkephalinInputVal
+                  });
                   saveStore();
                   setShowEnkephalinModal(false);
                 }}
                 className="px-5 py-2 text-xs font-bold bg-[#c9a84c] hover:bg-[#d4b96a] text-black rounded-lg transition-colors flex items-center gap-1.5 shadow-md cursor-pointer"
               >
-                <CheckCircle size={15} /> Save & Sync
+                <CheckCircle size={15} /> Save & Auto-Balance Cap
               </button>
             </div>
           </div>

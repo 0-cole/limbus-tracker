@@ -2,13 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useStore } from '../stores/useStore';
 import sinnersData from '../data/sinners.json';
-import { Settings, Battery, Box, Wallet } from 'lucide-react';
+import { Settings, Battery, Box, Wallet, Zap } from 'lucide-react';
 import { calculateLimbusGrind, generateRoadmap, getOwnedShards } from '../utils/limbusCalculator.js';
-import enkephalinCaps from '../data/enkephalinCap.json';
+import { getEnkephalinCapForLevel, getEnkephalinCountdown } from '../utils/enkephalinLevels.js';
 
 export default function InventoryPage() {
   const { inventory, updateInventory, saveStore, wantList, bpState, scheduleState, activeBanner, identitiesData, egosData } = useStore();
-  const [currentEnkephalin, setCurrentEnkephalin] = useState(inventory.enkephalin);
+  const [currentEnkephalin, setCurrentEnkephalin] = useState(inventory.enkephalin !== undefined ? inventory.enkephalin : (inventory.maxEnkephalin || 119));
+  const [countdown, setCountdown] = useState(() => getEnkephalinCountdown(inventory));
+
+  useEffect(() => {
+    setCurrentEnkephalin(inventory.enkephalin !== undefined ? inventory.enkephalin : (inventory.maxEnkephalin || 119));
+  }, [inventory.enkephalin, inventory.maxEnkephalin]);
+
+  useEffect(() => {
+    const ticker = () => {
+      setCountdown(getEnkephalinCountdown(inventory));
+    };
+    ticker();
+    const interval = setInterval(ticker, 1000);
+    return () => clearInterval(interval);
+  }, [inventory]);
   
   // Calculate Roadmap Modules Needed
   const modulesNeeded = React.useMemo(() => {
@@ -29,48 +43,18 @@ export default function InventoryPage() {
     const { totalModulesNeeded } = generateRoadmap(calcResult.daysLeft, calcResult.plannedRuns, scheduleState, bpState);
     return totalModulesNeeded;
   }, [wantList, identitiesData, egosData, inventory, bpState, scheduleState, activeBanner]);
-  
-  // Real-time enkephalin predictor
-  useEffect(() => {
-    const updatePredictor = () => {
-      const now = Date.now();
-      const lastSynced = inventory.enkephalinLastSynced || now;
-      const diff = now - lastSynced;
-      const generated = Math.floor(diff / (6 * 60 * 1000));
-      if (inventory.enkephalin >= inventory.maxEnkephalin) {
-        setCurrentEnkephalin(inventory.enkephalin);
-      } else {
-        setCurrentEnkephalin(Math.min(inventory.enkephalin + generated, inventory.maxEnkephalin));
-      }
-    };
-    
-    updatePredictor();
-    const interval = setInterval(updatePredictor, 60000); // Check every minute
-    return () => clearInterval(interval);
-  }, [inventory.enkephalin, inventory.enkephalinLastSynced, inventory.maxEnkephalin]);
 
   const handleManualSync = (e) => {
     const val = parseInt(e.target.value) || 0;
+    setCurrentEnkephalin(val);
     updateInventory({ enkephalin: val });
     saveStore();
   };
 
-  const timeUntilFull = () => {
-    if (currentEnkephalin >= inventory.maxEnkephalin) return "Full";
-    const missing = inventory.maxEnkephalin - currentEnkephalin;
-    const minutesNeeded = missing * 6;
-    
-    // Calculate exact time based on last sync + generated
-    const now = Date.now();
-    const lastSynced = inventory.enkephalinLastSynced || now;
-    const diff = now - lastSynced;
-    const msIntoCurrentCycle = diff % (6 * 60 * 1000);
-    const msUntilNextPoint = (6 * 60 * 1000) - msIntoCurrentCycle;
-    
-    const totalMsNeeded = msUntilNextPoint + ((missing - 1) * 6 * 60 * 1000);
-    
-    const targetTime = new Date(now + totalMsNeeded);
-    return targetTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const handleLevelChange = (lvl) => {
+    const validLevel = Math.max(1, Math.min(300, parseInt(lvl) || 1));
+    updateInventory({ companyLevel: validLevel });
+    saveStore();
   };
 
   return (
@@ -93,19 +77,31 @@ export default function InventoryPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 relative z-10">
             {/* Enkephalin Box */}
             <div className="bg-black/50 p-4 border border-[#333] rounded-lg">
-              <span className="text-xs text-gray-400 font-bold uppercase tracking-wider block mb-1">Current Enkephalin</span>
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-xs text-gray-400 font-bold uppercase tracking-wider block">Current Enkephalin</span>
+                {currentEnkephalin > (inventory.maxEnkephalin || 119) && (
+                  <span className="text-[9px] bg-amber-500/30 text-amber-300 font-bold px-1.5 py-0.5 rounded">OVERFILLED</span>
+                )}
+              </div>
               <div className="flex items-end gap-2">
                 <input 
                   type="number" 
                   value={currentEnkephalin}
                   onChange={handleManualSync}
-                  className="text-4xl font-black bg-transparent w-24 border-b-2 border-[#22c55e] text-[#22c55e] focus:outline-none"
+                  className="text-4xl font-black bg-transparent w-24 border-b-2 border-[#22c55e] text-[#22c55e] focus:outline-none font-mono"
                 />
-                <span className="text-xl text-gray-500 font-bold mb-1">/ {inventory.maxEnkephalin}</span>
+                <span className="text-xl text-gray-500 font-bold mb-1 font-mono">/ {inventory.maxEnkephalin || 119}</span>
               </div>
-              <div className="text-xs text-gray-400 font-mono mt-2">
-                <p>1 point every 6m</p>
-                <p>Full Capacity at: <span className="text-white font-bold">{timeUntilFull()}</span></p>
+              <div className="text-xs text-gray-400 font-mono mt-2 space-y-0.5">
+                <p>Regen: 1 point every 6m</p>
+                {countdown.isFull ? (
+                  <p className="text-emerald-400 font-bold">At Max Capacity</p>
+                ) : (
+                  <>
+                    <p>Next point: <span className="text-emerald-400 font-bold">+{countdown.nextPointStr}</span></p>
+                    <p>Full Cap at: <span className="text-white font-bold">{countdown.fullTimeStr}</span></p>
+                  </>
+                )}
               </div>
             </div>
 
@@ -121,12 +117,12 @@ export default function InventoryPage() {
                     updateInventory({ modules: Math.max(0, parseInt(e.target.value) || 0) });
                     saveStore();
                   }}
-                  className="text-4xl font-black bg-transparent w-24 border-b-2 border-[#c9a84c] text-[#eab308] focus:outline-none"
+                  className="text-4xl font-black bg-transparent w-24 border-b-2 border-[#c9a84c] text-[#eab308] focus:outline-none font-mono"
                 />
                 <div className="flex gap-1 mb-1">
-                  <button onClick={() => { updateInventory({ modules: Math.max(0, (inventory.modules||0) + 1) }); saveStore(); }} className="px-2 py-0.5 bg-[#222] hover:bg-[#333] border border-[#444] text-xs font-bold rounded text-white">+1</button>
-                  <button onClick={() => { updateInventory({ modules: Math.max(0, (inventory.modules||0) + 5) }); saveStore(); }} className="px-2 py-0.5 bg-[#222] hover:bg-[#333] border border-[#444] text-xs font-bold rounded text-white">+5</button>
-                  <button onClick={() => { updateInventory({ modules: Math.max(0, (inventory.modules||0) - 1) }); saveStore(); }} className="px-2 py-0.5 bg-[#222] hover:bg-[#333] border border-[#444] text-xs font-bold rounded text-gray-400">-1</button>
+                  <button onClick={() => { updateInventory({ modules: Math.max(0, (inventory.modules||0) + 1) }); saveStore(); }} className="px-2 py-0.5 bg-[#222] hover:bg-[#333] border border-[#444] text-xs font-bold rounded text-white cursor-pointer">+1</button>
+                  <button onClick={() => { updateInventory({ modules: Math.max(0, (inventory.modules||0) + 5) }); saveStore(); }} className="px-2 py-0.5 bg-[#222] hover:bg-[#333] border border-[#444] text-xs font-bold rounded text-white cursor-pointer">+5</button>
+                  <button onClick={() => { updateInventory({ modules: Math.max(0, (inventory.modules||0) - 1) }); saveStore(); }} className="px-2 py-0.5 bg-[#222] hover:bg-[#333] border border-[#444] text-xs font-bold rounded text-gray-400 cursor-pointer">-1</button>
                 </div>
               </div>
               <div className="text-xs text-gray-400 font-mono mt-2">
@@ -146,17 +142,38 @@ export default function InventoryPage() {
             </div>
           </div>
           
-          <div className="text-gray-400 font-mono text-sm relative z-10 flex items-center justify-between pt-2 border-t border-[#222]">
-            <label className="flex items-center gap-2 text-xs">
-              Company Level: 
-              <input type="number" min="1" max="300" className="w-14 bg-transparent border-b border-[#333] text-white focus:outline-none text-center font-bold" value={Object.keys(enkephalinCaps).find(k => enkephalinCaps[k] === inventory.maxEnkephalin) || ''} onChange={e => {
-                const lvl = parseInt(e.target.value);
-                if (lvl >= 1 && lvl <= 300) {
-                  updateInventory({ maxEnkephalin: enkephalinCaps[lvl] });
-                  saveStore();
-                }
-              }} />
-            </label>
+          {/* Company Level Auto-Balance Controller */}
+          <div className="text-gray-300 font-mono text-xs relative z-10 flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-[#222]">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-gray-400 uppercase tracking-wider">Company Level:</span>
+              <div className="flex items-center gap-1">
+                <input 
+                  type="number" 
+                  min="1" 
+                  max="300" 
+                  value={inventory.companyLevel || 35} 
+                  onChange={e => handleLevelChange(e.target.value)}
+                  className="w-16 bg-[#1a1a1a] border border-[#444] rounded text-white focus:border-[#c9a84c] focus:outline-none text-center font-bold font-mono py-0.5" 
+                />
+                <button
+                  type="button"
+                  onClick={() => handleLevelChange((inventory.companyLevel || 35) - 1)}
+                  className="px-1.5 py-0.5 bg-[#222] hover:bg-[#333] border border-[#444] rounded text-[11px] text-gray-300 cursor-pointer"
+                >
+                  -1
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleLevelChange((inventory.companyLevel || 35) + 1)}
+                  className="px-1.5 py-0.5 bg-[#222] hover:bg-[#333] border border-[#444] rounded text-[11px] text-gray-300 cursor-pointer"
+                >
+                  +1
+                </button>
+              </div>
+            </div>
+            <div className="text-[11px] text-amber-400 font-bold">
+              Auto-Balanced Cap: <span className="text-white underline">{inventory.maxEnkephalin || 119}</span>
+            </div>
           </div>
         </motion.div>
 

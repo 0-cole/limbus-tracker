@@ -4,7 +4,8 @@ import baseEgos from '../data/egos.json';
 import personalPreset from '../data/personalPreset.json';
 import sinnersData from '../data/sinners.json';
 import { getOwnedShards, normalizeSinnerId } from '../utils/limbusCalculator.js';
-import { checkResets } from '../utils/timeUtils.js';
+import { checkResets, getLimbusCycleInfo } from '../utils/timeUtils.js';
+import { getEnkephalinCapForLevel, recalculateEnkephalin } from '../utils/enkephalinLevels.js';
 import { syncEngine } from '../services/syncEngine.js';
 
 // Initial state values
@@ -17,12 +18,13 @@ const defaultState = {
   
   // Economy & Inventory
   inventory: {
+    companyLevel: 35, // Manager Level (1 - 300)
     shards: {}, // { 'yi-sang': 120, 'faust': 400, ... }
     nominableCrates: 0,
     randomCrates: 0,
     modules: 0,
-    enkephalin: 0,
-    maxEnkephalin: 140, // Base default for max level
+    enkephalin: 119,
+    maxEnkephalin: 119, // Base default for level 35
     enkephalinLastSynced: Date.now(),
     extractionTickets: 0,
     lunacy: 0
@@ -50,6 +52,8 @@ const defaultState = {
     startDate: new Date().toISOString().split('T')[0], // Persistent schedule baseline anchor
     dailiesDone: false, // Legacy
     dailiesProgress: 0,
+    dailyMissionSteps: { 1: false, 2: false, 3: false, 4: false, 5: false },
+    dailyMissionDeductions: {},
     weekliesDone: false,
     canClaimWeeklies: false,
     mdTodayDone: false,
@@ -146,11 +150,18 @@ export const useStore = create((set, get) => ({
         
         // Check for daily/weekly resets
         const resets = checkResets(loadedSchedule.lastResetCheck);
+        const cycleInfo = getLimbusCycleInfo();
         if (resets.hasDailyReset && !resets.hasWeeklyReset && !resets.hasMdWeeklyReset) {
             const oldRuns = loadedSchedule.todayLoggedRuns || [];
             const oldShards = loadedSchedule.todayLoggedShards || [];
             const curW = loadedSchedule.currentWeekStats || { mdRuns: 0, expEarned: 0, shardsEarned: 0, cratesEarned: 0, dailiesDoneCount: 0, runs: [] };
             
+            // Runs from past cycle vs runs logged during current active cycle (e.g. from another device today)
+            const runsPast = oldRuns.filter(r => (r.timestamp || 0) < cycleInfo.cycleStartMs);
+            const runsToday = oldRuns.filter(r => (r.timestamp || 0) >= cycleInfo.cycleStartMs);
+            const shardsPast = oldShards.filter(s => (s.timestamp || 0) < cycleInfo.cycleStartMs);
+            const shardsToday = oldShards.filter(s => (s.timestamp || 0) >= cycleInfo.cycleStartMs);
+
             // If user did dailies before reset, lock in 'done' for previous cycle
             if (resets.prevCycleKey) {
               if (loadedSchedule.dailiesProgress >= 5 || loadedSchedule.dailiesDone) {
@@ -159,18 +170,34 @@ export const useStore = create((set, get) => ({
             }
 
             loadedSchedule.currentWeekStats = {
-              mdRuns: (curW.mdRuns || 0) + oldRuns.length,
-              expEarned: (curW.expEarned || 0) + oldRuns.reduce((s, r) => s + (r.exp || 0), 0),
-              shardsEarned: (curW.shardsEarned || 0) + oldShards.reduce((s, sh) => s + (sh.amount > 0 ? sh.amount : 0), 0),
-              cratesEarned: (curW.cratesEarned || 0) + oldShards.filter(s => s.crateType).reduce((s, c) => s + (c.amount > 0 ? c.amount : 0), 0),
+              mdRuns: (curW.mdRuns || 0) + runsPast.length,
+              expEarned: (curW.expEarned || 0) + runsPast.reduce((s, r) => s + (r.exp || 0), 0),
+              shardsEarned: (curW.shardsEarned || 0) + shardsPast.reduce((s, sh) => s + (sh.amount > 0 ? sh.amount : 0), 0),
+              cratesEarned: (curW.cratesEarned || 0) + shardsPast.filter(s => s.crateType).reduce((s, c) => s + (c.amount > 0 ? c.amount : 0), 0),
               dailiesDoneCount: (curW.dailiesDoneCount || 0) + (loadedSchedule.dailiesProgress >= 5 ? 1 : 0),
-              runs: [...(curW.runs || []), ...oldRuns]
+              runs: [...(curW.runs || []), ...runsPast]
             };
             loadedSchedule.dailiesDone = false;
             loadedSchedule.dailiesProgress = 0;
-            loadedSchedule.mdTodayDone = false;
-            loadedSchedule.todayLoggedRuns = [];
-            loadedSchedule.todayLoggedShards = [];
+            loadedSchedule.dailyMissionSteps = { 1: false, 2: false, 3: false, 4: false, 5: false };
+            loadedSchedule.dailyMissionDeductions = {};
+            loadedSchedule.mdTodayDone = runsToday.length > 0;
+            loadedSchedule.todayLoggedRuns = runsToday;
+            loadedSchedule.todayLoggedShards = shardsToday;
+        }
+
+        if (!loadedSchedule.dailyMissionSteps) {
+          const prog = loadedSchedule.dailiesProgress || 0;
+          loadedSchedule.dailyMissionSteps = {
+            1: prog >= 1,
+            2: prog >= 2,
+            3: prog >= 3,
+            4: prog >= 4,
+            5: prog >= 5
+          };
+        }
+        if (!loadedSchedule.dailyMissionDeductions) {
+          loadedSchedule.dailyMissionDeductions = {};
         }
         
         let loadedWeeklyArchive = data.weeklyArchive || [];
@@ -216,13 +243,20 @@ export const useStore = create((set, get) => ({
         }
         loadedSchedule.lastResetCheck = resets.now;
         
+        let rawInventory = { ...defaultState.inventory, ...(data.inventory || {}) };
+        const companyLevel = Math.max(1, Math.min(300, parseInt(rawInventory.companyLevel) || 35));
+        const maxCap = getEnkephalinCapForLevel(companyLevel);
+        rawInventory.companyLevel = companyLevel;
+        rawInventory.maxEnkephalin = maxCap;
+        const loadedInventory = recalculateEnkephalin(rawInventory);
+
         set({
           onboardingCompleted: data.onboardingCompleted || false,
           tutorialCompleted: data.tutorialCompleted || false,
           acquiredIds: new Set(data.acquiredIds || personalPreset.acquiredIds),
           acquiredEgos: new Set(data.acquiredEgos || []),
           wantList: new Set(data.wantList || []),
-          inventory: { ...defaultState.inventory, ...(data.inventory || {}) },
+          inventory: loadedInventory,
           bpState: { ...defaultState.bpState, ...(data.bpState || {}) },
           scheduleState: loadedSchedule,
           weeklyArchive: loadedWeeklyArchive,
@@ -236,6 +270,7 @@ export const useStore = create((set, get) => ({
         });
       } else {
         set({ 
+          inventory: defaultState.inventory,
           identitiesData: mergedIds, 
           egosData: mergedEgos, 
           activeBanner: dynamicData.activeBanner || null,
@@ -243,8 +278,19 @@ export const useStore = create((set, get) => ({
         });
       }
 
-      // Background timer to check resets while app is running
+      // Background timer to check resets and passive enkephalin regen while app is running
       setInterval(() => {
+        // 1. Passive Enkephalin Regeneration
+        const currentInv = get().inventory;
+        if (currentInv) {
+          const regenerated = recalculateEnkephalin(currentInv);
+          if (regenerated.enkephalin !== currentInv.enkephalin || regenerated.maxEnkephalin !== currentInv.maxEnkephalin) {
+            set((s) => ({ inventory: { ...s.inventory, ...regenerated } }));
+            get().saveStore();
+          }
+        }
+
+        // 2. Daily / Weekly Reset Checks
         const currentSchedule = get().scheduleState;
         const currentWeekly = get().weeklyProgress;
         const intervalResets = checkResets(currentSchedule.lastResetCheck);
@@ -256,6 +302,11 @@ export const useStore = create((set, get) => ({
             const oldRuns = s.todayLoggedRuns || [];
             const oldShards = s.todayLoggedShards || [];
             const curW = s.currentWeekStats || { mdRuns: 0, expEarned: 0, shardsEarned: 0, cratesEarned: 0, dailiesDoneCount: 0, runs: [] };
+            const cycleInfo = getLimbusCycleInfo();
+            const runsPast = oldRuns.filter(r => (r.timestamp || 0) < cycleInfo.cycleStartMs);
+            const runsToday = oldRuns.filter(r => (r.timestamp || 0) >= cycleInfo.cycleStartMs);
+            const shardsPast = oldShards.filter(s => (s.timestamp || 0) < cycleInfo.cycleStartMs);
+            const shardsToday = oldShards.filter(s => (s.timestamp || 0) >= cycleInfo.cycleStartMs);
             
             // Preserve 'done' for previous cycle if dailies were done
             if (intervalResets.prevCycleKey && (s.dailiesProgress >= 5 || s.dailiesDone)) {
@@ -266,24 +317,34 @@ export const useStore = create((set, get) => ({
 
             get().updateScheduleState({
               currentWeekStats: {
-                mdRuns: (curW.mdRuns || 0) + oldRuns.length,
-                expEarned: (curW.expEarned || 0) + oldRuns.reduce((sum, r) => sum + (r.exp || 0), 0),
-                shardsEarned: (curW.shardsEarned || 0) + oldShards.reduce((sum, sh) => sum + (sh.amount > 0 ? sh.amount : 0), 0),
-                cratesEarned: (curW.cratesEarned || 0) + oldShards.filter(sh => sh.crateType).reduce((sum, c) => sum + (c.amount > 0 ? c.amount : 0), 0),
+                mdRuns: (curW.mdRuns || 0) + runsPast.length,
+                expEarned: (curW.expEarned || 0) + runsPast.reduce((sum, r) => sum + (r.exp || 0), 0),
+                shardsEarned: (curW.shardsEarned || 0) + shardsPast.reduce((sum, sh) => sum + (sh.amount > 0 ? sh.amount : 0), 0),
+                cratesEarned: (curW.cratesEarned || 0) + shardsPast.filter(sh => sh.crateType).reduce((sum, c) => sum + (c.amount > 0 ? c.amount : 0), 0),
                 dailiesDoneCount: (curW.dailiesDoneCount || 0) + (s.dailiesProgress >= 5 ? 1 : 0),
-                runs: [...(curW.runs || []), ...oldRuns]
+                runs: [...(curW.runs || []), ...runsPast]
               },
               dailiesDone: false,
               dailiesProgress: 0,
-              mdTodayDone: false,
-              todayLoggedRuns: [],
-              todayLoggedShards: [],
+              dailyMissionSteps: { 1: false, 2: false, 3: false, 4: false, 5: false },
+              dailyMissionDeductions: {},
+              mdTodayDone: runsToday.length > 0,
+              todayLoggedRuns: runsToday,
+              todayLoggedShards: shardsToday,
               lastResetCheck: intervalResets.now
             });
             return;
           }
           get().updateScheduleState({
-            ...(intervalResets.hasDailyReset ? { dailiesDone: false, dailiesProgress: 0, mdTodayDone: false, todayLoggedRuns: [], todayLoggedShards: [] } : {}),
+            ...(intervalResets.hasDailyReset ? { 
+              dailiesDone: false, 
+              dailiesProgress: 0, 
+              dailyMissionSteps: { 1: false, 2: false, 3: false, 4: false, 5: false },
+              dailyMissionDeductions: {},
+              mdTodayDone: false, 
+              todayLoggedRuns: [], 
+              todayLoggedShards: [] 
+            } : {}),
             ...(intervalResets.hasWeeklyReset ? { weekliesDone: false, canClaimWeeklies: false } : {}),
             ...(intervalResets.hasMdWeeklyReset ? { mdBonusesClaimed: 0 } : {}),
             lastResetCheck: intervalResets.now
@@ -303,6 +364,7 @@ export const useStore = create((set, get) => ({
 
   saveStore: async () => {
     if (!get().isLoaded) return;
+    const state = get();
     const now = Date.now();
     const dataToSave = {
       onboardingCompleted: state.onboardingCompleted,
@@ -380,9 +442,21 @@ export const useStore = create((set, get) => ({
   },
 
   updateInventory: (updates) => {
-    set((state) => ({
-      inventory: { ...state.inventory, ...updates, enkephalinLastSynced: updates.enkephalin !== undefined ? Date.now() : state.inventory.enkephalinLastSynced }
-    }));
+    set((state) => {
+      let finalUpdates = { ...updates };
+      if (finalUpdates.companyLevel !== undefined) {
+        const lvl = Math.max(1, Math.min(300, parseInt(finalUpdates.companyLevel) || 1));
+        finalUpdates.companyLevel = lvl;
+        finalUpdates.maxEnkephalin = getEnkephalinCapForLevel(lvl);
+      }
+      return {
+        inventory: {
+          ...state.inventory,
+          ...finalUpdates,
+          enkephalinLastSynced: finalUpdates.enkephalin !== undefined ? Date.now() : state.inventory.enkephalinLastSynced
+        }
+      };
+    });
     get().saveStore();
   },
 
@@ -489,10 +563,34 @@ export const useStore = create((set, get) => ({
 
     const newBonuses = Math.min(3, (state.scheduleState.mdBonusesClaimed || 0) + bonusUsed);
     const newLogged = [...(state.scheduleState.todayLoggedRuns || []), runRecord];
-    const newModules = Math.max(0, (state.inventory.modules || 0) - modules);
+    
+    // Deduct modules; if short on modules, convert from enkephalin (1 module = 20 Enkephalin in Limbus)
+    const currentModules = state.inventory.modules || 0;
+    const currentEnk = state.inventory.enkephalin !== undefined ? state.inventory.enkephalin : (state.inventory.maxEnkephalin || 119);
+    let modulesDeducted = 0;
+    let enkephalinDeducted = 0;
+
+    if (currentModules >= modules) {
+      modulesDeducted = modules;
+    } else {
+      modulesDeducted = currentModules;
+      const remainingModulesNeeded = modules - currentModules;
+      enkephalinDeducted = Math.min(currentEnk, remainingModulesNeeded * 20);
+    }
+
+    const newModules = Math.max(0, currentModules - modulesDeducted);
+    const newEnkephalin = Math.max(0, currentEnk - enkephalinDeducted);
+
+    runRecord.modulesDeducted = modulesDeducted;
+    runRecord.enkephalinDeducted = enkephalinDeducted;
 
     set((s) => ({
-      inventory: { ...s.inventory, modules: newModules },
+      inventory: { 
+        ...s.inventory, 
+        modules: newModules,
+        enkephalin: newEnkephalin,
+        enkephalinLastSynced: enkephalinDeducted > 0 ? Date.now() : s.inventory.enkephalinLastSynced
+      },
       scheduleState: {
         ...s.scheduleState,
         mdBonusesClaimed: newBonuses,
@@ -552,10 +650,15 @@ export const useStore = create((set, get) => ({
 
     const newLogged = (get().scheduleState.todayLoggedRuns || []).filter(r => r.id !== runId);
     const newBonuses = Math.max(0, (get().scheduleState.mdBonusesClaimed || 0) - run.bonusUsed);
-    const newModules = (get().inventory.modules || 0) + run.modules;
+    const restoredModules = (get().inventory.modules || 0) + (run.modulesDeducted !== undefined ? run.modulesDeducted : run.modules);
+    const restoredEnkephalin = (get().inventory.enkephalin || 0) + (run.enkephalinDeducted || 0);
 
     set((s) => ({
-      inventory: { ...s.inventory, modules: newModules },
+      inventory: { 
+        ...s.inventory, 
+        modules: restoredModules,
+        enkephalin: restoredEnkephalin
+      },
       scheduleState: {
         ...s.scheduleState,
         mdBonusesClaimed: newBonuses,
@@ -794,5 +897,98 @@ export const useStore = create((set, get) => ({
       }
     }));
     get().saveStore();
+  },
+
+  toggleDailyMissionStep: (step) => {
+    const state = get();
+    const currentSteps = state.scheduleState.dailyMissionSteps || {
+      1: (state.scheduleState.dailiesProgress || 0) >= 1,
+      2: (state.scheduleState.dailiesProgress || 0) >= 2,
+      3: (state.scheduleState.dailiesProgress || 0) >= 3,
+      4: (state.scheduleState.dailiesProgress || 0) >= 4,
+      5: (state.scheduleState.dailiesProgress || 0) >= 5,
+    };
+    const currentDeductions = state.scheduleState.dailyMissionDeductions || {};
+    const isCurrentlyDone = !!currentSteps[step];
+    const willBeDone = !isCurrentlyDone;
+
+    const newSteps = { ...currentSteps, [step]: willBeDone };
+    const newProgress = Object.keys(newSteps).filter(k => newSteps[k]).length;
+    const isAllDone = newProgress >= 5;
+
+    let newInventory = { ...state.inventory };
+    let newDeductions = { ...currentDeductions };
+
+    // Steps 4 and 5 are EXP and Thread Luxcavations (each costs 2 Modules or 40 Enkephalin)
+    if (step === 4 || step === 5) {
+      if (willBeDone) {
+        const curModules = newInventory.modules || 0;
+        const curEnk = newInventory.enkephalin !== undefined ? newInventory.enkephalin : (newInventory.maxEnkephalin || 119);
+        let modDeducted = 0;
+        let enkDeducted = 0;
+
+        if (curModules >= 2) {
+          modDeducted = 2;
+        } else {
+          modDeducted = curModules;
+          const remainingMod = 2 - curModules;
+          enkDeducted = Math.min(curEnk, remainingMod * 20);
+        }
+
+        newInventory = {
+          ...newInventory,
+          modules: Math.max(0, curModules - modDeducted),
+          enkephalin: Math.max(0, curEnk - enkDeducted),
+          enkephalinLastSynced: enkDeducted > 0 ? Date.now() : newInventory.enkephalinLastSynced
+        };
+        newDeductions[step] = { modules: modDeducted, enkephalin: enkDeducted };
+      } else {
+        const prevDeduction = currentDeductions[step] || { modules: 2, enkephalin: 0 };
+        const curModules = newInventory.modules || 0;
+        const curEnk = newInventory.enkephalin !== undefined ? newInventory.enkephalin : (newInventory.maxEnkephalin || 119);
+
+        newInventory = {
+          ...newInventory,
+          modules: curModules + (prevDeduction.modules || 0),
+          enkephalin: curEnk + (prevDeduction.enkephalin || 0)
+        };
+        delete newDeductions[step];
+      }
+    }
+
+    set({
+      inventory: newInventory,
+      scheduleState: {
+        ...state.scheduleState,
+        dailyMissionSteps: newSteps,
+        dailyMissionDeductions: newDeductions,
+        dailiesProgress: newProgress,
+        dailiesDone: isAllDone
+      }
+    });
+
+    get().injectBpExp(willBeDone ? 2 : -2);
+
+    const cycleInfo = getLimbusCycleInfo();
+    const currentWeekly = get().weeklyProgress || {};
+    const updatedStatus = { ...(currentWeekly.dailyStatus || {}) };
+    updatedStatus[cycleInfo.cycleKey] = isAllDone ? 'done' : 'pending';
+    get().updateWeekly({ ...currentWeekly, dailyStatus: updatedStatus });
+
+    get().saveStore();
+    return { willBeDone, newProgress, isAllDone };
+  },
+
+  setAllDailyMissions: (completeAll = true) => {
+    const steps = [1, 2, 3, 4, 5];
+    steps.forEach(step => {
+      const currentSteps = get().scheduleState.dailyMissionSteps || {};
+      const isDone = !!currentSteps[step];
+      if (completeAll && !isDone) {
+        get().toggleDailyMissionStep(step);
+      } else if (!completeAll && isDone) {
+        get().toggleDailyMissionStep(step);
+      }
+    });
   }
 }));

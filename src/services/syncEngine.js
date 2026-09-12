@@ -200,6 +200,25 @@ export const syncEngine = {
         }
 
         const store = useStore.getState();
+        const localSched = store.scheduleState || {};
+        const cloudSched = cloudData.scheduleState || {};
+
+        // Merge today's logged runs & shards without duplicates so quick logs show cross-device for the day
+        const runsMap = new Map();
+        (localSched.todayLoggedRuns || []).forEach(r => runsMap.set(r.id, r));
+        (cloudSched.todayLoggedRuns || []).forEach(r => runsMap.set(r.id, r));
+
+        const shardsMap = new Map();
+        (localSched.todayLoggedShards || []).forEach(s => shardsMap.set(s.id, s));
+        (cloudSched.todayLoggedShards || []).forEach(s => shardsMap.set(s.id, s));
+
+        const mergedSchedule = {
+          ...localSched,
+          ...cloudSched,
+          todayLoggedRuns: Array.from(runsMap.values()),
+          todayLoggedShards: Array.from(shardsMap.values())
+        };
+
         useStore.setState({
           onboardingCompleted: cloudData.onboardingCompleted ?? store.onboardingCompleted,
           tutorialCompleted: cloudData.tutorialCompleted ?? store.tutorialCompleted,
@@ -212,7 +231,7 @@ export const syncEngine = {
           customMetadata: cloudData.customMetadata || store.customMetadata,
           inventory: { ...store.inventory, ...(cloudData.inventory || {}) },
           bpState: { ...store.bpState, ...(cloudData.bpState || {}) },
-          scheduleState: { ...store.scheduleState, ...(cloudData.scheduleState || {}) }
+          scheduleState: mergedSchedule
         });
 
         if (window.electronAPI) {
@@ -221,11 +240,12 @@ export const syncEngine = {
             acquiredIds: cloudData.acquiredIds || [],
             acquiredEgos: cloudData.acquiredEgos || [],
             wantList: cloudData.wantList || [],
+            scheduleState: mergedSchedule,
             lastUpdated: cloudLastUpdated
           };
           await window.electronAPI.saveData(toSave);
         } else {
-          localStorage.setItem('limbus-tracker-data', JSON.stringify({ ...cloudData, lastUpdated: cloudLastUpdated }));
+          localStorage.setItem('limbus-tracker-data', JSON.stringify({ ...cloudData, scheduleState: mergedSchedule, lastUpdated: cloudLastUpdated }));
         }
 
         lastCloudSync = cloudLastUpdated;
