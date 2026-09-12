@@ -15,7 +15,10 @@ import NetzachModal from '../components/NetzachModal.jsx';
 import HodModal from '../components/HodModal.jsx';
 import ArtfulModal from '../components/ArtfulModal.jsx';
 import HacklordModal from '../components/HacklordModal.jsx';
+import SpecialDossierModal from '../components/SpecialDossierModal.jsx';
 import GasterSequenceModal from '../components/GasterSequenceModal.jsx';
+import EASTER_EGG_IMAGES from '../assets/easter_eggs/index.js';
+import SPECIAL_EASTER_EGGS from '../data/specialEasterEggs.js';
 import { syncEngine } from '../services/syncEngine.js';
 import vergiliusImg from '../assets/vergilius.png';
 import React, { useState, useMemo } from 'react';
@@ -132,6 +135,7 @@ export default function IdentitiesPage() {
   const [showHodModal, setShowHodModal] = useState(false);
   const [showArtfulModal, setShowArtfulModal] = useState(false);
   const [showHacklordModal, setShowHacklordModal] = useState(false);
+  const [selectedSpecialDossier, setSelectedSpecialDossier] = useState(null);
   const [showGasterSequence, setShowGasterSequence] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [reversionToast, setReversionToast] = useState(null);
@@ -381,13 +385,31 @@ export default function IdentitiesPage() {
         const canShowGaster = !isGasterTriggered || isUserWhitelisted;
         const isGaster = (cleanSearch === 'gaster' || cleanSearch === 'wd gaster' || cleanSearch === 'w.d. gaster' || cleanSearch === 'entry number seventeen') && canShowGaster;
 
+        const matchedSpecialEasterEggs = !cleanSearch ? [] : SPECIAL_EASTER_EGGS.filter(egg => {
+          if (egg.id === cleanSearch) return true;
+          if (egg.name.toLowerCase().includes(cleanSearch)) return true;
+          if (egg.subtitle && egg.subtitle.toLowerCase().includes(cleanSearch)) return true;
+          if (egg.triggers && egg.triggers.some(t => cleanSearch === t || cleanSearch.includes(t) || (t.length > 3 && t.includes(cleanSearch)))) return true;
+          if (cleanSearch === 'library of ruina' || cleanSearch === 'ruina' || cleanSearch === 'library') {
+            return ['binah', 'malkuth', 'yesod', 'tiphereth', 'hokma', 'purple_tear', 'argalia', 'xiao'].includes(egg.id);
+          }
+          if (cleanSearch === 'lobotomy' || cleanSearch === 'lobotomy corp' || cleanSearch === 'abnormality' || cleanSearch === 'abnormalities' || cleanSearch === 'abno') {
+            return ['ayin', 'whitenight', 'apocalypse_bird', 'nothing_there', 'mountain_of_smiling_bodies', 'one_sin', 'censored', 'silent_orchestra', 'blue_star'].includes(egg.id);
+          }
+          if (cleanSearch === 'die of death' || cleanSearch === 'dieofdeath' || cleanSearch === 'dod' || cleanSearch === 'killer' || cleanSearch === 'killers') {
+            return ['badware', 'killdroid', 'pursuer', 'harken', 'pretence', 'paranoy'].includes(egg.id);
+          }
+          return false;
+        });
+
         const totalResultsCount = filteredIdentities.length + 
           (isVergilius ? 1 : 0) + (isDante ? 1 : 0) + (isCharon ? 1 : 0) + 
           (isRoachEmperor ? 1 : 0) + (isMuga ? 1 : 0) + (isRoland ? 1 : 0) + 
           (isAngela ? 1 : 0) + (isGebura ? 1 : 0) + (isErlkonig ? 1 : 0) + 
           (isSancho ? 1 : 0) + (isCarmen ? 1 : 0) + (isChesed ? 1 : 0) +
           (isNetzach ? 1 : 0) + (isHod ? 1 : 0) + (isArtful ? 1 : 0) +
-          (isHacklord ? 1 : 0) + (isGaster ? 1 : 0);
+          (isHacklord ? 1 : 0) + (isGaster ? 1 : 0) +
+          matchedSpecialEasterEggs.length;
 
         return (
           <>
@@ -506,9 +528,15 @@ export default function IdentitiesPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowDanteModal(true)}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:border-amber-400 hover:shadow-[0_0_35px_rgba(245,158,11,0.5)] transition-all cursor-pointer h-64 bg-gradient-to-b from-[#1a1205] to-black p-4"
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:border-amber-400 hover:shadow-[0_0_35px_rgba(245,158,11,0.5)] transition-all cursor-pointer h-64 bg-black p-4"
                   >
-                    <div className="flex justify-between items-start">
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-85"
+                      style={{ backgroundImage: `url("${EASTER_EGG_IMAGES.dante}")` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-amber-950/30" />
+
+                    <div className="relative flex justify-between items-start z-10">
                       <div className="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-500 flex items-center justify-center text-amber-400">
                         <Clock className="animate-spin" size={24} style={{ animationDuration: '6s' }} />
                       </div>
@@ -516,7 +544,7 @@ export default function IdentitiesPage() {
                         Rank: Manager
                       </span>
                     </div>
-                    <div className="mt-auto">
+                    <div className="relative mt-auto z-10">
                       <h3 className="font-bold text-lg text-amber-300">Executive Manager Dante</h3>
                       <p className="text-[11px] text-gray-300 mt-1 font-mono italic leading-snug">
                         &lt;Tick tock, tick tock...!&gt; (Dante is furiously gesturing and frantically winding their clock head. Faust translates: "The Manager requests that you stop searching for them.")
@@ -730,7 +758,7 @@ export default function IdentitiesPage() {
                   >
                     <div 
                       className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110"
-                      style={{ backgroundImage: `url("https://libraryofruina.wiki.gg/images/RolandFullBody.png")` }}
+                      style={{ backgroundImage: `url("${EASTER_EGG_IMAGES.roland}")` }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-slate-950/40" />
 
@@ -795,7 +823,7 @@ export default function IdentitiesPage() {
                   >
                     <div 
                       className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110"
-                      style={{ backgroundImage: `url("https://libraryofruina.wiki.gg/images/AngelaFullBody.png")` }}
+                      style={{ backgroundImage: `url("${EASTER_EGG_IMAGES.angela}")` }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-cyan-950/40" />
 
@@ -860,7 +888,7 @@ export default function IdentitiesPage() {
                   >
                     <div 
                       className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110"
-                      style={{ backgroundImage: `url("https://libraryofruina.wiki.gg/images/GeburaFullBody.png")` }}
+                      style={{ backgroundImage: `url("${EASTER_EGG_IMAGES.gebura}")` }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-red-950/40" />
 
@@ -921,9 +949,13 @@ export default function IdentitiesPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowErlkonigModal(true)}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-purple-800 shadow-[0_0_30px_rgba(147,51,234,0.35)] hover:shadow-[0_0_45px_rgba(168,85,247,0.5)] hover:border-purple-500 transition-all h-64 bg-gradient-to-b from-[#180826] via-[#0e0416] to-black p-4 cursor-pointer"
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-purple-800 shadow-[0_0_30px_rgba(147,51,234,0.35)] hover:shadow-[0_0_45px_rgba(168,85,247,0.5)] hover:border-purple-500 transition-all h-64 bg-black p-4 cursor-pointer"
                   >
-                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(168,85,247,0.15)_0%,transparent_70%)] pointer-events-none" />
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-90"
+                      style={{ backgroundImage: `url("${EASTER_EGG_IMAGES.erlkonig}")` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-purple-950/40" />
                     <div className="flex justify-between items-start relative z-10">
                       <div className="w-10 h-10 rounded-full bg-purple-950 border border-purple-600 flex items-center justify-center text-xl shadow-[0_0_12px_rgba(168,85,247,0.5)]">
                         💀
@@ -961,9 +993,13 @@ export default function IdentitiesPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowSanchoModal(true)}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-red-800 shadow-[0_0_30px_rgba(220,38,38,0.4)] hover:shadow-[0_0_50px_rgba(239,68,68,0.6)] hover:border-red-500 transition-all h-64 bg-gradient-to-b from-[#240406] via-[#140203] to-black p-4 cursor-pointer"
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-red-800 shadow-[0_0_30px_rgba(220,38,38,0.4)] hover:shadow-[0_0_50px_rgba(239,68,68,0.6)] hover:border-red-500 transition-all h-64 bg-black p-4 cursor-pointer"
                   >
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(220,38,38,0.2)_0%,transparent_60%)] pointer-events-none" />
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-90"
+                      style={{ backgroundImage: `url("${EASTER_EGG_IMAGES.sancho}")` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-red-950/40" />
                     <div className="flex justify-between items-start relative z-10">
                       <div className="w-10 h-10 rounded-full bg-red-950 border border-red-600 flex items-center justify-center text-xl shadow-[0_0_12px_rgba(220,38,38,0.6)] animate-pulse">
                         🦇
@@ -1001,9 +1037,13 @@ export default function IdentitiesPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowCarmenModal(true)}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-amber-400/70 shadow-[0_0_35px_rgba(251,191,36,0.35)] hover:shadow-[0_0_55px_rgba(251,191,36,0.55)] hover:border-amber-300 transition-all h-64 bg-gradient-to-b from-[#221c08] via-[#141004] to-black p-4 cursor-pointer"
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-amber-400/70 shadow-[0_0_35px_rgba(251,191,36,0.35)] hover:shadow-[0_0_55px_rgba(251,191,36,0.55)] hover:border-amber-300 transition-all h-64 bg-black p-4 cursor-pointer"
                   >
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(251,191,36,0.15)_0%,transparent_70%)] pointer-events-none" />
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-90"
+                      style={{ backgroundImage: `url("${EASTER_EGG_IMAGES.carmen}")` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-amber-950/40" />
                     <div className="flex justify-between items-start relative z-10">
                       <div className="w-10 h-10 rounded-full bg-amber-950/80 border border-amber-500/70 flex items-center justify-center text-xl shadow-[0_0_15px_rgba(251,191,36,0.5)] animate-spin-slow">
                         ✨
@@ -1041,9 +1081,13 @@ export default function IdentitiesPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowChesedModal(true)}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-sky-600 shadow-[0_0_35px_rgba(56,189,248,0.35)] hover:shadow-[0_0_50px_rgba(56,189,248,0.55)] hover:border-sky-400 transition-all h-64 bg-gradient-to-b from-[#0c1829] via-[#0f2438] to-black p-4 cursor-pointer"
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-sky-600 shadow-[0_0_35px_rgba(56,189,248,0.35)] hover:shadow-[0_0_50px_rgba(56,189,248,0.55)] hover:border-sky-400 transition-all h-64 bg-black p-4 cursor-pointer"
                   >
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(56,189,248,0.15)_0%,transparent_60%)] pointer-events-none" />
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-90"
+                      style={{ backgroundImage: `url("${EASTER_EGG_IMAGES.chesed}")` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-sky-950/40" />
                     <div className="flex justify-between items-start relative z-10">
                       <div className="w-10 h-10 rounded-full bg-sky-950 border border-sky-500 flex items-center justify-center text-xl shadow-[0_0_12px_rgba(56,189,248,0.5)]">
                         ☕
@@ -1081,9 +1125,13 @@ export default function IdentitiesPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowNetzachModal(true)}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-emerald-600 shadow-[0_0_35px_rgba(16,185,129,0.35)] hover:shadow-[0_0_50px_rgba(16,185,129,0.55)] hover:border-emerald-400 transition-all h-64 bg-gradient-to-b from-[#091a12] via-[#0d2a1d] to-black p-4 cursor-pointer"
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-emerald-600 shadow-[0_0_35px_rgba(16,185,129,0.35)] hover:shadow-[0_0_50px_rgba(16,185,129,0.55)] hover:border-emerald-400 transition-all h-64 bg-black p-4 cursor-pointer"
                   >
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.15)_0%,transparent_60%)] pointer-events-none" />
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-90"
+                      style={{ backgroundImage: `url("${EASTER_EGG_IMAGES.netzach}")` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-emerald-950/40" />
                     <div className="flex justify-between items-start relative z-10">
                       <div className="w-10 h-10 rounded-full bg-emerald-950 border border-emerald-500 flex items-center justify-center text-xl shadow-[0_0_12px_rgba(16,185,129,0.5)]">
                         🍺
@@ -1121,9 +1169,13 @@ export default function IdentitiesPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowHodModal(true)}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-amber-600 shadow-[0_0_35px_rgba(245,158,11,0.35)] hover:shadow-[0_0_50px_rgba(245,158,11,0.55)] hover:border-amber-400 transition-all h-64 bg-gradient-to-b from-[#211508] via-[#332009] to-black p-4 cursor-pointer"
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-amber-600 shadow-[0_0_35px_rgba(245,158,11,0.35)] hover:shadow-[0_0_50px_rgba(245,158,11,0.55)] hover:border-amber-400 transition-all h-64 bg-black p-4 cursor-pointer"
                   >
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(245,158,11,0.15)_0%,transparent_60%)] pointer-events-none" />
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-90"
+                      style={{ backgroundImage: `url("${EASTER_EGG_IMAGES.hod}")` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-amber-950/40" />
                     <div className="flex justify-between items-start relative z-10">
                       <div className="w-10 h-10 rounded-full bg-amber-950 border border-amber-500 flex items-center justify-center text-xl shadow-[0_0_12px_rgba(245,158,11,0.5)]">
                         📖
@@ -1161,9 +1213,13 @@ export default function IdentitiesPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowArtfulModal(true)}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-pink-500 shadow-[0_0_35px_rgba(236,72,153,0.35)] hover:shadow-[0_0_55px_rgba(236,72,153,0.6)] hover:border-pink-300 transition-all h-64 bg-gradient-to-b from-[#200b1a] via-[#330f28] to-black p-4 cursor-pointer"
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-pink-500 shadow-[0_0_35px_rgba(236,72,153,0.35)] hover:shadow-[0_0_55px_rgba(236,72,153,0.6)] hover:border-pink-300 transition-all h-64 bg-black p-4 cursor-pointer"
                   >
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(236,72,153,0.2)_0%,transparent_60%)] pointer-events-none" />
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-90"
+                      style={{ backgroundImage: `url("${EASTER_EGG_IMAGES.artful}")` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-pink-950/40" />
                     <div className="flex justify-between items-start relative z-10">
                       <div className="w-10 h-10 rounded-full bg-pink-950 border border-pink-500 flex items-center justify-center text-xl shadow-[0_0_12px_rgba(236,72,153,0.6)] animate-bounce">
                         🎩
@@ -1201,9 +1257,13 @@ export default function IdentitiesPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowHacklordModal(true)}
-                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-red-600 shadow-[0_0_40px_rgba(239,68,68,0.5)] hover:shadow-[0_0_60px_rgba(239,68,68,0.8)] hover:border-red-400 transition-all h-64 bg-gradient-to-b from-[#33070b] via-[#4d0b10] to-black p-4 cursor-pointer animate-pulse"
+                    className="relative flex flex-col group overflow-hidden rounded-xl border-2 border-red-600 shadow-[0_0_40px_rgba(239,68,68,0.5)] hover:shadow-[0_0_60px_rgba(239,68,68,0.8)] hover:border-red-400 transition-all h-64 bg-black p-4 cursor-pointer animate-pulse"
                   >
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,68,68,0.3)_0%,transparent_60%)] pointer-events-none" />
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-90"
+                      style={{ backgroundImage: `url("${EASTER_EGG_IMAGES.hacklord}")` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-red-950/40" />
                     <div className="flex justify-between items-start relative z-10">
                       <div className="w-10 h-10 rounded-full bg-red-950 border-2 border-red-500 flex items-center justify-center text-xl shadow-[0_0_15px_rgba(239,68,68,0.8)]">
                         🚨
@@ -1270,6 +1330,77 @@ export default function IdentitiesPage() {
                     </div>
                   </motion.div>
                 )}
+
+                {/* 🌟 Special Easter Egg Character Cards (Library of Ruina, Lobotomy Corp, Die of Death) */}
+                {matchedSpecialEasterEggs.map((egg) => {
+                  const theme = egg.themeColors || {
+                    border: 'border-[#c9a84c]',
+                    shadow: 'shadow-[0_0_25px_rgba(201,168,76,0.4)]',
+                    accent: 'text-[#c9a84c]',
+                    badgeBg: 'bg-black/60',
+                    badgeBorder: 'border-white/20'
+                  };
+                  return (
+                    <motion.div
+                      key={egg.id}
+                      layout
+                      initial={{ opacity: 0, scale: 0.85 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.85 }}
+                      onClick={() => setSelectedSpecialDossier(egg)}
+                      className={`relative flex flex-col group overflow-hidden rounded-xl border-2 ${theme.border} ${theme.shadow} hover:shadow-[0_0_45px_rgba(255,255,255,0.4)] transition-all cursor-pointer h-64 bg-black p-4`}
+                    >
+                      {/* Background Art */}
+                      <div 
+                        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-90"
+                        style={{ backgroundImage: `url("${egg.image}")` }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/30" />
+
+                      <div className="relative flex justify-between items-start z-10">
+                        <div className="flex gap-0.5 text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.8)]">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Star key={i} size={15} fill="currentColor" />
+                          ))}
+                        </div>
+                        <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded border ${theme.badgeBg} ${theme.accent} ${theme.badgeBorder}`}>
+                          {egg.categoryBadge || 'CLASSIFIED'}
+                        </span>
+                      </div>
+
+                      <div className="relative z-10 mt-1">
+                        <p className={`text-xs font-bold drop-shadow-md ${theme.accent}`}>
+                          {egg.role || 'Special Combatant'}
+                        </p>
+                      </div>
+
+                      <div className="relative mt-auto z-10">
+                        <h3 className="font-black text-[16px] leading-tight text-white drop-shadow-[0_0_10px_rgba(0,0,0,0.9)] mb-1">
+                          {egg.name}
+                        </h3>
+                        
+                        <div className="flex flex-wrap gap-1 mb-2">
+                          {(egg.keywords || []).slice(0, 3).map((kw, i) => (
+                            <span key={i} className="text-[9px] px-1.5 py-0.5 rounded text-gray-200 font-bold bg-black/80 border border-white/20 shadow-sm">
+                              ● {kw}
+                            </span>
+                          ))}
+                        </div>
+
+                        <p className="text-[11px] italic text-gray-300 line-clamp-2 mb-2 font-serif leading-snug">
+                          "{egg.quote}"
+                        </p>
+
+                        <div className="flex justify-between items-center pt-2 border-t border-white/10 text-[10px]">
+                          <span className={`font-bold ${theme.accent}`}>{egg.threat || 'Threat: Classified'}</span>
+                          <span className="text-gray-300 group-hover:text-white transition-colors flex items-center gap-1 font-bold">
+                            Inspect Dossier &rarr;
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
 
                 {filteredIdentities.map(id => (
                   <IdCard
@@ -1362,6 +1493,16 @@ export default function IdentitiesPage() {
       <HodModal isOpen={showHodModal} onClose={() => setShowHodModal(false)} />
       <ArtfulModal isOpen={showArtfulModal} onClose={() => setShowArtfulModal(false)} />
       <HacklordModal isOpen={showHacklordModal} onClose={() => setShowHacklordModal(false)} />
+
+      {/* 🌟 Special Dossier Modal (Patron Librarians, The Head, Abnormalities, Die of Death Killers) */}
+      <AnimatePresence>
+        {selectedSpecialDossier && (
+          <SpecialDossierModal
+            character={selectedSpecialDossier}
+            onClose={() => setSelectedSpecialDossier(null)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* 🕳️ W.D. Gaster Atmospheric Sequence Modal */}
       <AnimatePresence>

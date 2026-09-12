@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Clock, Flame, ShieldAlert, Award, Sparkles, RefreshCw } from 'lucide-react';
+import EASTER_EGG_IMAGES from '../assets/easter_eggs/index.js';
 
 const DANTE_REVIVAL_LOGS = [
   { sinner: 'Heathcliff', deaths: 142, reason: 'Charged into a blunt hammer attack head-first without looking.' },
@@ -44,8 +45,11 @@ export default function DanteModal({ onClose }) {
 
         {/* Header */}
         <div className="flex gap-4 items-start p-5 border-b border-amber-900/40 bg-black/60">
-          <div className="w-20 h-20 rounded-xl bg-amber-950/80 border-2 border-amber-500 flex items-center justify-center text-amber-400 text-4xl shadow-[0_0_20px_rgba(245,158,11,0.6)] shrink-0">
-            <Clock className={`transition-transform duration-700 ${isSpinning ? '-rotate-[720deg]' : 'animate-spin-slow'}`} size={42} />
+          <div className="w-20 h-20 rounded-xl bg-amber-950/80 border-2 border-amber-500 overflow-hidden relative flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.6)] shrink-0">
+            <img src={EASTER_EGG_IMAGES.dante} alt="Dante" className="w-full h-full object-cover object-top" />
+            <div className="absolute bottom-1 right-1 bg-black/80 rounded-full p-1 border border-amber-500/60 shadow">
+              <Clock className={`text-amber-400 ${isSpinning ? '-rotate-[720deg] transition-transform duration-700' : 'animate-spin-slow'}`} size={14} />
+            </div>
           </div>
 
           <div className="flex-1 min-w-0">

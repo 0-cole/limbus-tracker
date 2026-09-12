@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Sparkles, BookOpen, Smile, X, Award, Shield } from 'lucide-react';
+import EASTER_EGG_IMAGES from '../assets/easter_eggs/index.js';
 
 const HOD_COUNSELING_NOTES = [
   "You're doing your absolute best today, Manager. Even taking one small step forward counts as courage.",
@@ -36,8 +37,8 @@ export default function HodModal({ isOpen, onClose }) {
         <div className="relative p-6 border-b border-[#f59e0b]/30 bg-gradient-to-r from-[#211508] via-[#332009] to-[#211508]">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-[#f59e0b]/20 border border-[#f59e0b]/50 flex items-center justify-center shadow-lg">
-                <Heart size={24} className="text-[#f59e0b]" />
+              <div className="w-14 h-14 rounded-xl bg-amber-950 border-2 border-amber-400 overflow-hidden flex items-center justify-center shadow-lg shrink-0">
+                <img src={EASTER_EGG_IMAGES.hod} alt="Hod" className="w-full h-full object-cover object-top" />
               </div>
               <div>
                 <span className="text-[10px] font-black uppercase tracking-widest text-[#f59e0b] bg-[#f59e0b]/10 px-2 py-0.5 rounded border border-[#f59e0b]/30">

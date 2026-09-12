@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle, ShieldAlert, Stamp, X, Skull, Award, CheckCircle, Crosshair } from 'lucide-react';
+import EASTER_EGG_IMAGES from '../assets/easter_eggs/index.js';
 
 export default function HacklordModal({ isOpen, onClose }) {
   if (!isOpen) return null;
@@ -31,8 +32,8 @@ export default function HacklordModal({ isOpen, onClose }) {
         <div className="p-6 border-b-2 border-[#ef4444]/50 bg-gradient-to-r from-[#2b080c] via-[#450a0a] to-[#2b080c] relative overflow-hidden">
           <div className="flex justify-between items-start relative z-10">
             <div className="flex items-center gap-3.5">
-              <div className="w-14 h-14 rounded-2xl bg-red-600/30 border-2 border-red-500 flex items-center justify-center shadow-[0_0_20px_rgba(239,68,68,0.6)] animate-pulse">
-                <AlertTriangle size={32} className="text-red-400" />
+              <div className="w-16 h-16 rounded-2xl bg-red-950 border-2 border-red-500 overflow-hidden flex items-center justify-center shadow-[0_0_20px_rgba(239,68,68,0.6)] shrink-0">
+                <img src={EASTER_EGG_IMAGES.hacklord} alt="Hacklord" className="w-full h-full object-cover object-top" />
               </div>
               <div>
                 <div className="flex items-center gap-2">

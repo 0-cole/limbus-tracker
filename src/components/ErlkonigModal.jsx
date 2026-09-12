@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Skull, Ghost, AlertOctagon, Sparkles, Volume2 } from 'lucide-react';
+import { X, Ghost, Flame, ShieldAlert, Skull, Sparkles, Sword } from 'lucide-react';
+import EASTER_EGG_IMAGES from '../assets/easter_eggs/index.js';
 
 const ERLKONIG_SKILLS = [
   {
@@ -85,8 +86,8 @@ export default function ErlkonigModal({ onClose }) {
 
         {/* Header */}
         <div className="flex gap-4 items-start p-5 border-b border-purple-900/40 bg-black/60">
-          <div className="w-20 h-20 rounded-xl bg-purple-950 border-2 border-purple-500 flex items-center justify-center text-4xl shadow-[0_0_20px_rgba(168,85,247,0.5)] shrink-0">
-            💀
+          <div className="w-20 h-20 rounded-xl bg-purple-950 border-2 border-purple-500 overflow-hidden flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.5)] shrink-0">
+            <img src={EASTER_EGG_IMAGES.erlkonig} alt="Erlkönig Heathcliff" className="w-full h-full object-cover object-top" />
           </div>
 
           <div className="flex-1 min-w-0">

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Wand2, Sparkles, X, Shield, Swords, Music, Box, Eye, Layers } from 'lucide-react';
+import EASTER_EGG_IMAGES from '../assets/easter_eggs/index.js';
 
 const ARTFUL_QUOTES = [
   "Can success even be worth its story?",
@@ -49,8 +50,8 @@ export default function ArtfulModal({ isOpen, onClose }) {
         <div className="relative z-10 p-6 border-b border-pink-500/30 bg-gradient-to-r from-[#220d1c] via-[#35102a] to-[#220d1c]">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-3.5">
-              <div className="w-14 h-14 rounded-xl bg-pink-950 border-2 border-pink-500 flex items-center justify-center shadow-[0_0_20px_rgba(236,72,153,0.5)]">
-                <Wand2 size={28} className="text-pink-400" />
+              <div className="w-16 h-16 rounded-xl bg-pink-950 border-2 border-pink-500 overflow-hidden flex items-center justify-center shadow-[0_0_20px_rgba(236,72,153,0.5)] shrink-0">
+                <img src={EASTER_EGG_IMAGES.artful} alt="Artful" className="w-full h-full object-cover object-top" />
               </div>
               <div>
                 <div className="flex items-center gap-2">

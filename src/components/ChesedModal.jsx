@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Coffee, Shield, Sparkles, BookOpen, X, Heart, Award } from 'lucide-react';
+import EASTER_EGG_IMAGES from '../assets/easter_eggs/index.js';
 
 const CHESED_QUOTES = [
   "Would you care for a cup of warm coffee? Good coffee soothes even the heaviest mind.",
@@ -37,8 +38,8 @@ export default function ChesedModal({ isOpen, onClose }) {
         <div className="relative p-6 border-b border-[#38bdf8]/30 bg-gradient-to-r from-[#0c1829] via-[#0f2438] to-[#0c1829]">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-[#38bdf8]/20 border border-[#38bdf8]/50 flex items-center justify-center shadow-lg">
-                <Coffee size={24} className="text-[#38bdf8]" />
+              <div className="w-14 h-14 rounded-xl bg-sky-950 border-2 border-sky-400 overflow-hidden flex items-center justify-center shadow-lg shrink-0">
+                <img src={EASTER_EGG_IMAGES.chesed} alt="Chesed" className="w-full h-full object-cover object-top" />
               </div>
               <div>
                 <span className="text-[10px] font-black uppercase tracking-widest text-[#38bdf8] bg-[#38bdf8]/10 px-2 py-0.5 rounded border border-[#38bdf8]/30">

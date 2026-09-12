@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Flame, ShieldAlert, Heart, Sparkles, Moon, Sun } from 'lucide-react';
+import EASTER_EGG_IMAGES from '../assets/easter_eggs/index.js';
 
 const SANCHO_SKILLS = [
   {
@@ -74,8 +75,8 @@ export default function SanchoModal({ onClose }) {
 
         {/* Header */}
         <div className="flex gap-4 items-start p-5 border-b border-red-900/40 bg-black/60">
-          <div className="w-20 h-20 rounded-xl bg-red-950 border-2 border-red-500 flex items-center justify-center text-4xl shadow-[0_0_20px_rgba(239,68,68,0.6)] shrink-0 animate-pulse">
-            🦇
+          <div className="w-20 h-20 rounded-xl bg-red-950 border-2 border-red-500 overflow-hidden flex items-center justify-center shadow-[0_0_20px_rgba(239,68,68,0.6)] shrink-0">
+            <img src={EASTER_EGG_IMAGES.sancho} alt="Sancho" className="w-full h-full object-cover object-top" />
           </div>
 
           <div className="flex-1 min-w-0">

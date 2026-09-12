@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Moon, Wine, Sparkles, BookOpen, X, Volume2, Shield } from 'lucide-react';
+import EASTER_EGG_IMAGES from '../assets/easter_eggs/index.js';
 
 const NETZACH_QUOTES = [
   "Do we... really have to do this right now? I was just about to fall asleep.",
@@ -39,8 +40,8 @@ export default function NetzachModal({ isOpen, onClose }) {
         <div className="relative p-6 border-b border-[#10b981]/30 bg-gradient-to-r from-[#091a12] via-[#0d2a1d] to-[#091a12]">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-[#10b981]/20 border border-[#10b981]/50 flex items-center justify-center shadow-lg">
-                <Wine size={24} className="text-[#10b981]" />
+              <div className="w-14 h-14 rounded-xl bg-emerald-950 border-2 border-emerald-400 overflow-hidden flex items-center justify-center shadow-lg shrink-0">
+                <img src={EASTER_EGG_IMAGES.netzach} alt="Netzach" className="w-full h-full object-cover object-top" />
               </div>
               <div>
                 <span className="text-[10px] font-black uppercase tracking-widest text-[#10b981] bg-[#10b981]/10 px-2 py-0.5 rounded border border-[#10b981]/30">

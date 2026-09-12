@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles, Volume2, ShieldAlert, Heart, Sun, HelpCircle } from 'lucide-react';
 
+import EASTER_EGG_IMAGES from '../assets/easter_eggs/index.js';
+
 const CARMEN_WHISPERS = [
   "\"Why do you keep pressing forward through this torment, Dante? Is the Golden Bough worth the blood of those twelve children?\"",
   "\"You do not have to carry the weight of their deaths upon your shoulders. Let the tears flow freely. Let the sorrow become your armor.\"",
@@ -39,8 +41,8 @@ export default function CarmenModal({ onClose }) {
 
         {/* Header */}
         <div className="flex gap-4 items-start p-5 border-b border-amber-900/40 bg-black/60">
-          <div className="w-20 h-20 rounded-xl bg-amber-950/80 border-2 border-amber-400 flex items-center justify-center text-4xl shadow-[0_0_20px_rgba(251,191,36,0.6)] shrink-0 animate-spin-slow">
-            ✨
+          <div className="w-20 h-20 rounded-xl bg-amber-950/80 border-2 border-amber-400 overflow-hidden flex items-center justify-center shadow-[0_0_20px_rgba(251,191,36,0.6)] shrink-0">
+            <img src={EASTER_EGG_IMAGES.carmen} alt="Carmen" className="w-full h-full object-cover object-top" />
           </div>
 
           <div className="flex-1 min-w-0">
