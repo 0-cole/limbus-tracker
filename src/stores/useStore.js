@@ -54,6 +54,7 @@ const defaultState = {
     dailiesProgress: 0,
     dailyMissionSteps: { 1: false, 2: false, 3: false, 4: false, 5: false },
     dailyMissionDeductions: {},
+    expLuxModules: 3, // 2 or 3 Modules depending on Canto level (Canto 1-3 = 2, Canto 4+ = 3)
     weekliesDone: false,
     canClaimWeeklies: false,
     mdTodayDone: false,
@@ -198,6 +199,9 @@ export const useStore = create((set, get) => ({
         }
         if (!loadedSchedule.dailyMissionDeductions) {
           loadedSchedule.dailyMissionDeductions = {};
+        }
+        if (!loadedSchedule.expLuxModules) {
+          loadedSchedule.expLuxModules = (data?.bpState?.canto !== undefined && data.bpState.canto < 4) ? 2 : 3;
         }
         
         let loadedWeeklyArchive = data.weeklyArchive || [];
@@ -899,7 +903,7 @@ export const useStore = create((set, get) => ({
     get().saveStore();
   },
 
-  toggleDailyMissionStep: (step) => {
+  toggleDailyMissionStep: (step, customModuleCost = null) => {
     const state = get();
     const currentSteps = state.scheduleState.dailyMissionSteps || {
       1: (state.scheduleState.dailiesProgress || 0) >= 1,
@@ -919,19 +923,25 @@ export const useStore = create((set, get) => ({
     let newInventory = { ...state.inventory };
     let newDeductions = { ...currentDeductions };
 
-    // Steps 4 and 5 are EXP and Thread Luxcavations (each costs 2 Modules or 40 Enkephalin)
+    // Steps 4 and 5 are EXP and Thread Luxcavations.
+    // Thread Luxcavation (step 5) is always 2 Modules (40 Enk).
+    // EXP Luxcavation (step 4) is 2 or 3 Modules (40 or 60 Enk) depending on Canto tier.
     if (step === 4 || step === 5) {
+      const defaultExpCost = (state.bpState?.canto !== undefined && state.bpState.canto < 4) ? 2 : 3;
+      const configuredCost = step === 5 ? 2 : (customModuleCost || state.scheduleState.expLuxModules || defaultExpCost);
+      const requiredModules = Math.max(1, configuredCost);
+
       if (willBeDone) {
         const curModules = newInventory.modules || 0;
         const curEnk = newInventory.enkephalin !== undefined ? newInventory.enkephalin : (newInventory.maxEnkephalin || 119);
         let modDeducted = 0;
         let enkDeducted = 0;
 
-        if (curModules >= 2) {
-          modDeducted = 2;
+        if (curModules >= requiredModules) {
+          modDeducted = requiredModules;
         } else {
           modDeducted = curModules;
-          const remainingMod = 2 - curModules;
+          const remainingMod = requiredModules - curModules;
           enkDeducted = Math.min(curEnk, remainingMod * 20);
         }
 
@@ -941,9 +951,9 @@ export const useStore = create((set, get) => ({
           enkephalin: Math.max(0, curEnk - enkDeducted),
           enkephalinLastSynced: enkDeducted > 0 ? Date.now() : newInventory.enkephalinLastSynced
         };
-        newDeductions[step] = { modules: modDeducted, enkephalin: enkDeducted };
+        newDeductions[step] = { modules: modDeducted, enkephalin: enkDeducted, targetModules: requiredModules };
       } else {
-        const prevDeduction = currentDeductions[step] || { modules: 2, enkephalin: 0 };
+        const prevDeduction = currentDeductions[step] || { modules: requiredModules, enkephalin: 0 };
         const curModules = newInventory.modules || 0;
         const curEnk = newInventory.enkephalin !== undefined ? newInventory.enkephalin : (newInventory.maxEnkephalin || 119);
 

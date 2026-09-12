@@ -758,7 +758,7 @@ export default function DailyCycleTracker() {
                 <Target size={18} className="text-[#c9a84c]" /> Daily Missions
               </h3>
               <p className="text-xs text-gray-400 mt-0.5">
-                10 Pass EXP total (+2 EXP per mission). Steps 4 & 5 auto-deduct 2 Modules (or 40 Enkephalin) for Luxcavations.
+                10 Pass EXP total (+2 EXP per mission). Thread Lux is always 2 Modules (40 Enk); EXP Lux is 2–3 Modules (40–60 Enk depending on Canto level).
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -784,58 +784,103 @@ export default function DailyCycleTracker() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
-            {[
-              { step: 1, name: 'Daily Login', desc: 'Log into game', cost: 'Free', icon: '🏢' },
-              { step: 2, name: 'Stage 1x', desc: 'Clear 1 battle', cost: 'Free', icon: '⚔️' },
-              { step: 3, name: 'Stage 3x', desc: 'Clear 3 battles', cost: 'Free', icon: '⚔️' },
-              { step: 4, name: 'EXP Luxcavation', desc: 'Clear EXP Lux', cost: '2 Mod (40 Enk)', icon: '🧪' },
-              { step: 5, name: 'Thread Luxcavation', desc: 'Clear Thread Lux', cost: '2 Mod (40 Enk)', icon: '🧵' }
-            ].map(m => {
-              const isDone = !!(scheduleState.dailyMissionSteps?.[m.step] ?? (scheduleState.dailiesProgress >= m.step));
-              const deduction = scheduleState.dailyMissionDeductions?.[m.step];
-              return (
-                <button
-                  key={m.step}
-                  type="button"
-                  onClick={() => {
-                    const res = toggleDailyMissionStep(m.step);
-                    if (res?.isAllDone) {
-                      promptEnkephalinSync('dailies');
-                    }
-                  }}
-                  className={`p-2.5 rounded-lg border text-left flex flex-col justify-between transition-all cursor-pointer select-none ${
-                    isDone
-                      ? 'bg-[#c9a84c]/15 border-[#c9a84c] text-white shadow-[0_0_12px_rgba(201,168,76,0.25)]'
-                      : 'bg-[#181818] border-[#333] hover:border-gray-500 text-gray-300'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-base">{m.icon}</span>
-                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                      isDone 
-                        ? 'bg-[#c9a84c] text-black' 
-                        : 'bg-black/50 text-gray-400 border border-[#333]'
-                    }`}>
-                      {isDone ? '✓ DONE' : '+2 EXP'}
-                    </span>
-                  </div>
-                  <div>
-                    <div className="font-bold text-xs text-white leading-tight">{m.name}</div>
-                    <div className="text-[10px] text-gray-400 mt-0.5">{m.desc}</div>
-                  </div>
-                  <div className="mt-2 pt-1.5 border-t border-white/5 flex items-center justify-between text-[10px]">
-                    <span className={`font-mono ${isDone ? 'text-amber-300 font-bold' : 'text-gray-500'}`}>
-                      {m.cost}
-                    </span>
-                    {deduction && (
-                      <span className="text-[9px] text-red-400 font-mono">
-                        -{deduction.modules > 0 ? `${deduction.modules}m` : ''}{deduction.enkephalin > 0 ? `${deduction.enkephalin}e` : ''}
+            {(() => {
+              const expLuxCost = scheduleState.expLuxModules || ((bpState?.canto !== undefined && bpState.canto < 4) ? 2 : 3);
+              return [
+                { step: 1, name: 'Daily Login', desc: 'Log into game', cost: 'Free', icon: '🏢' },
+                { step: 2, name: 'Stage 1x', desc: 'Clear 1 battle', cost: 'Free', icon: '⚔️' },
+                { step: 3, name: 'Stage 3x', desc: 'Clear 3 battles', cost: 'Free', icon: '⚔️' },
+                { 
+                  step: 4, 
+                  name: 'EXP Luxcavation', 
+                  desc: expLuxCost === 3 ? 'Canto 4+ Stage' : 'Canto 1-3 Stage', 
+                  cost: `${expLuxCost} Mod (${expLuxCost * 20} Enk)`, 
+                  icon: '🧪',
+                  isExpLux: true 
+                },
+                { 
+                  step: 5, 
+                  name: 'Thread Luxcavation', 
+                  desc: 'Always 2 Modules', 
+                  cost: '2 Mod (40 Enk)', 
+                  icon: '🧵' 
+                }
+              ].map(m => {
+                const isDone = !!(scheduleState.dailyMissionSteps?.[m.step] ?? (scheduleState.dailiesProgress >= m.step));
+                const deduction = scheduleState.dailyMissionDeductions?.[m.step];
+                return (
+                  <button
+                    key={m.step}
+                    type="button"
+                    onClick={() => {
+                      const res = toggleDailyMissionStep(m.step);
+                      if (res?.isAllDone) {
+                        promptEnkephalinSync('dailies');
+                      }
+                    }}
+                    className={`p-2.5 rounded-lg border text-left flex flex-col justify-between transition-all cursor-pointer select-none ${
+                      isDone
+                        ? 'bg-[#c9a84c]/15 border-[#c9a84c] text-white shadow-[0_0_12px_rgba(201,168,76,0.25)]'
+                        : 'bg-[#181818] border-[#333] hover:border-gray-500 text-gray-300'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-base">{m.icon}</span>
+                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                        isDone 
+                          ? 'bg-[#c9a84c] text-black' 
+                          : 'bg-black/50 text-gray-400 border border-[#333]'
+                      }`}>
+                        {isDone ? '✓ DONE' : '+2 EXP'}
                       </span>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
+                    </div>
+                    <div>
+                      <div className="font-bold text-xs text-white leading-tight">{m.name}</div>
+                      <div className="text-[10px] text-gray-400 mt-0.5">{m.desc}</div>
+                      {m.isExpLux && !isDone && (
+                        <div className="flex items-center gap-1 mt-1.5" onClick={(e) => e.stopPropagation()}>
+                          <span className="text-[9px] text-gray-400 font-medium">Tier:</span>
+                          <button
+                            type="button"
+                            onClick={() => updateScheduleState({ expLuxModules: 2 })}
+                            className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-bold transition-all cursor-pointer ${
+                              expLuxCost === 2 
+                                ? 'bg-[#c9a84c] text-black shadow-sm' 
+                                : 'bg-black/60 text-gray-400 hover:text-white border border-[#333]'
+                            }`}
+                            title="Canto I-III EXP Lux (2 Modules / 40 Enk)"
+                          >
+                            2m
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => updateScheduleState({ expLuxModules: 3 })}
+                            className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-bold transition-all cursor-pointer ${
+                              expLuxCost === 3 
+                                ? 'bg-[#c9a84c] text-black shadow-sm' 
+                                : 'bg-black/60 text-gray-400 hover:text-white border border-[#333]'
+                            }`}
+                            title="Canto IV+ EXP Lux (3 Modules / 60 Enk)"
+                          >
+                            3m
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    <div className="mt-2 pt-1.5 border-t border-white/5 flex items-center justify-between text-[10px]">
+                      <span className={`font-mono ${isDone ? 'text-amber-300 font-bold' : 'text-gray-500'}`}>
+                        {m.cost}
+                      </span>
+                      {deduction && (
+                        <span className="text-[9px] text-red-400 font-mono">
+                          -{deduction.modules > 0 ? `${deduction.modules}m` : ''}{deduction.enkephalin > 0 ? `${deduction.enkephalin}e` : ''}
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                );
+              });
+            })()}
           </div>
         </div>
 
