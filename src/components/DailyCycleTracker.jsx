@@ -26,6 +26,8 @@ export default function DailyCycleTracker() {
     updateInventory,
     toggleDailyMissionStep,
     setAllDailyMissions,
+    toggleWeeklyMissionStep,
+    setAllWeeklyMissions,
     saveStore,
     wantList, 
     identitiesData, 
@@ -787,21 +789,39 @@ export default function DailyCycleTracker() {
             {(() => {
               const expLuxCost = scheduleState.expLuxModules || ((bpState?.canto !== undefined && bpState.canto < 4) ? 2 : 3);
               return [
-                { step: 1, name: 'Daily Login', desc: 'Log into game', cost: 'Free', icon: '🏢' },
-                { step: 2, name: 'Stage 1x', desc: 'Clear 1 battle', cost: 'Free', icon: '⚔️' },
-                { step: 3, name: 'Stage 3x', desc: 'Clear 3 battles', cost: 'Free', icon: '⚔️' },
+                { 
+                  step: 1, 
+                  name: 'Assemble 1 Module', 
+                  desc: 'Assemble 1 Enkephalin module', 
+                  cost: '20 Enk → +1 Mod', 
+                  icon: '🔋' 
+                },
+                { 
+                  step: 2, 
+                  name: 'Clear Any Stage 2x', 
+                  desc: 'Clear any stage 2 time(s)', 
+                  cost: 'Free', 
+                  icon: '⚔️' 
+                },
+                { 
+                  step: 3, 
+                  name: 'Defeat 10 Enemies', 
+                  desc: 'Defeat 10 enemies in combat', 
+                  cost: 'Free', 
+                  icon: '💀' 
+                },
                 { 
                   step: 4, 
-                  name: 'EXP Luxcavation', 
-                  desc: expLuxCost === 3 ? 'Canto 4+ Stage' : 'Canto 1-3 Stage', 
+                  name: 'EXP Luxcavation 1x', 
+                  desc: expLuxCost === 3 ? 'Clear EXP Lux (Canto 4+)' : 'Clear EXP Lux (Canto 1-3)', 
                   cost: `${expLuxCost} Mod (${expLuxCost * 20} Enk)`, 
                   icon: '🧪',
                   isExpLux: true 
                 },
                 { 
                   step: 5, 
-                  name: 'Thread Luxcavation', 
-                  desc: 'Always 2 Modules', 
+                  name: 'Thread Luxcavation 1x', 
+                  desc: 'Clear thread luxcavation 1x', 
                   cost: '2 Mod (40 Enk)', 
                   icon: '🧵' 
                 }
@@ -872,8 +892,10 @@ export default function DailyCycleTracker() {
                         {m.cost}
                       </span>
                       {deduction && (
-                        <span className="text-[9px] text-red-400 font-mono">
-                          -{deduction.modules > 0 ? `${deduction.modules}m` : ''}{deduction.enkephalin > 0 ? `${deduction.enkephalin}e` : ''}
+                        <span className={`text-[9px] font-mono ${deduction.modulesAdded ? 'text-amber-300' : 'text-red-400'}`}>
+                          {deduction.modulesAdded ? `+${deduction.modulesAdded}m ` : ''}
+                          {deduction.modules > 0 ? `-${deduction.modules}m ` : ''}
+                          {deduction.enkephalin > 0 ? `-${deduction.enkephalin}e` : ''}
                         </span>
                       )}
                     </div>
@@ -884,54 +906,83 @@ export default function DailyCycleTracker() {
           </div>
         </div>
 
-        {/* WEEKLIES SECTION */}
+        {/* WEEKLIES SECTION (5 MISSIONS, 4 EXP EACH = 20 EXP TOTAL) */}
         <div className={`p-4 rounded-xl border transition-all ${scheduleState.weekliesDone ? 'bg-[#c9a84c]/10 border-[#c9a84c]/50' : 'bg-[#111] border-[#333]'}`}>
-          {!scheduleState.canClaimWeeklies ? (
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-bold text-lg text-white">Can you claim your Weeklies yet?</h3>
-                <p className="text-xs text-gray-400 mt-0.5">Requires 1 Normal/Hard MD and minor weekly tasks.</p>
-              </div>
-              <button 
-                onClick={() => updateScheduleState({ canClaimWeeklies: true })} 
-                className="px-6 py-2 rounded bg-[#222] border border-[#444] hover:border-[#c9a84c] font-bold text-white transition-colors"
-              >
-                Yes
-              </button>
+          <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+            <div>
+              <h3 className="font-bold text-lg text-white flex items-center gap-2">
+                <Target size={18} className="text-[#c9a84c]" /> Weekly Missions
+              </h3>
+              <p className="text-xs text-gray-400 mt-0.5">
+                20 Pass EXP total (+4 EXP per mission). Resets every Thursday at 06:00 KST / 21:00 UTC.
+              </p>
             </div>
-          ) : (
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-bold text-lg text-white">Have you claimed them?</h3>
-                <p className="text-xs text-gray-400 mt-0.5">20 Pass EXP rewarded instantly.</p>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  const allDone = scheduleState.weekliesDone || (scheduleState.weekliesProgress >= 5);
+                  setAllWeeklyMissions(!allDone);
+                }}
+                className={`px-2.5 py-1 text-xs font-bold rounded border transition-all cursor-pointer ${
+                  scheduleState.weekliesDone || (scheduleState.weekliesProgress >= 5)
+                    ? 'bg-red-950/30 border-red-800/60 text-red-400 hover:bg-red-900/40'
+                    : 'bg-[#c9a84c]/20 border-[#c9a84c]/40 text-[#eab308] hover:bg-[#c9a84c]/30'
+                }`}
+              >
+                {scheduleState.weekliesDone || (scheduleState.weekliesProgress >= 5) ? 'Reset All Weeklies' : 'Complete All 5 (+20 EXP)'}
+              </button>
+              <div className="text-2xl font-black text-[#c9a84c]">
+                {scheduleState.weekliesProgress !== undefined ? scheduleState.weekliesProgress : (scheduleState.weekliesDone ? 5 : 0)} <span className="text-lg text-gray-500">/ 5</span>
               </div>
-              <div className="flex gap-2 items-center">
-                <button 
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
+            {[
+              { step: 1, name: 'Clear Any Stage 10x', desc: 'Clear any stage 10 time(s)', icon: '⚔️' },
+              { step: 2, name: 'Enter Mirror Dungeon 1x', desc: 'Enter mirror dungeon 1 time(s)', icon: '🪞' },
+              { step: 3, name: 'Defeat 100 Enemies', desc: 'Defeat 100 enemies in combat', icon: '💀' },
+              { step: 4, name: 'Thread Luxcavation 5x', desc: 'Clear thread luxcavation 5x', icon: '🧵' },
+              { step: 5, name: 'EXP Luxcavation 5x', desc: 'Clear exp luxcavation 5x', icon: '🧪' },
+            ].map(m => {
+              const isDone = !!(scheduleState.weeklyMissionSteps?.[m.step] ?? scheduleState.weekliesDone);
+              return (
+                <button
+                  key={m.step}
+                  type="button"
                   onClick={() => {
-                    if (scheduleState.weekliesDone) injectBpExp(-20);
-                    updateScheduleState({ canClaimWeeklies: false, weekliesDone: false });
-                  }} 
-                  className="px-4 py-2 text-sm text-gray-500 hover:text-white"
-                >
-                  Back
-                </button>
-                <button 
-                  onClick={() => {
-                    const newWeekliesDone = !scheduleState.weekliesDone;
-                    updateScheduleState({ weekliesDone: newWeekliesDone });
-                    injectBpExp(newWeekliesDone ? 20 : -20);
+                    toggleWeeklyMissionStep(m.step);
                   }}
-                  className={`px-6 py-2 rounded font-bold transition-colors ${
-                    scheduleState.weekliesDone 
-                      ? 'bg-[#c9a84c] text-black shadow-[0_0_10px_rgba(201,168,76,0.3)]' 
-                      : 'bg-[#222] text-white border border-[#444] hover:border-[#c9a84c]'
+                  className={`p-2.5 rounded-lg border text-left flex flex-col justify-between transition-all cursor-pointer select-none ${
+                    isDone
+                      ? 'bg-[#c9a84c]/15 border-[#c9a84c] text-white shadow-[0_0_12px_rgba(201,168,76,0.25)]'
+                      : 'bg-[#181818] border-[#333] hover:border-gray-500 text-gray-300'
                   }`}
                 >
-                  {scheduleState.weekliesDone ? 'Claimed (+20 EXP)' : 'Claim Now'}
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-base">{m.icon}</span>
+                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                      isDone 
+                        ? 'bg-[#c9a84c] text-black' 
+                        : 'bg-black/50 text-gray-400 border border-[#333]'
+                    }`}>
+                      {isDone ? '✓ DONE' : '+4 EXP'}
+                    </span>
+                  </div>
+                  <div>
+                    <div className="font-bold text-xs text-white leading-tight">{m.name}</div>
+                    <div className="text-[10px] text-gray-400 mt-0.5">{m.desc}</div>
+                  </div>
+                  <div className="mt-2 pt-1.5 border-t border-white/5 flex items-center justify-between text-[10px]">
+                    <span className={`font-mono ${isDone ? 'text-amber-300 font-bold' : 'text-gray-500'}`}>
+                      {isDone ? 'Claimed' : 'Weekly Rota'}
+                    </span>
+                  </div>
                 </button>
-              </div>
-            </div>
-          )}
+              );
+            })}
+          </div>
         </div>
 
       </div>

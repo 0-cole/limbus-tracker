@@ -56,6 +56,8 @@ const defaultState = {
     dailyMissionDeductions: {},
     expLuxModules: 3, // 2 or 3 Modules depending on Canto level (Canto 1-3 = 2, Canto 4+ = 3)
     weekliesDone: false,
+    weekliesProgress: 0,
+    weeklyMissionSteps: { 1: false, 2: false, 3: false, 4: false, 5: false },
     canClaimWeeklies: false,
     mdTodayDone: false,
     todayLoggedRuns: [], // [ { id, type, exp, modules, bonusUsed } ]
@@ -243,6 +245,17 @@ export const useStore = create((set, get) => ({
         if (!loadedSchedule.expLuxModules) {
           loadedSchedule.expLuxModules = (data?.bpState?.canto !== undefined && data.bpState.canto < 4) ? 2 : 3;
         }
+        if (!loadedSchedule.weeklyMissionSteps) {
+          const isDone = !!loadedSchedule.weekliesDone;
+          loadedSchedule.weeklyMissionSteps = {
+            1: isDone,
+            2: isDone,
+            3: isDone,
+            4: isDone,
+            5: isDone
+          };
+          loadedSchedule.weekliesProgress = isDone ? 5 : 0;
+        }
         
         let loadedWeeklyArchive = data.weeklyArchive || [];
         if ((resets.hasWeeklyReset || resets.hasMdWeeklyReset) && data.scheduleState) {
@@ -280,6 +293,8 @@ export const useStore = create((set, get) => ({
 
         if (resets.hasWeeklyReset) {
             loadedSchedule.weekliesDone = false;
+            loadedSchedule.weekliesProgress = 0;
+            loadedSchedule.weeklyMissionSteps = { 1: false, 2: false, 3: false, 4: false, 5: false };
             loadedSchedule.canClaimWeeklies = false;
         }
         if (resets.hasMdWeeklyReset) {
@@ -393,7 +408,12 @@ export const useStore = create((set, get) => ({
               todayLoggedRuns: [], 
               todayLoggedShards: [] 
             } : {}),
-            ...(intervalResets.hasWeeklyReset ? { weekliesDone: false, canClaimWeeklies: false } : {}),
+            ...(intervalResets.hasWeeklyReset ? { 
+              weekliesDone: false, 
+              weekliesProgress: 0, 
+              weeklyMissionSteps: { 1: false, 2: false, 3: false, 4: false, 5: false }, 
+              canClaimWeeklies: false 
+            } : {}),
             ...(intervalResets.hasMdWeeklyReset ? { mdBonusesClaimed: 0 } : {}),
             lastResetCheck: intervalResets.now
           });
@@ -969,6 +989,30 @@ export const useStore = create((set, get) => ({
     let newInventory = { ...state.inventory };
     let newDeductions = { ...currentDeductions };
 
+    // Step 1: Assemble 1 Enkephalin Module (20 Enk -> +1 Module)
+    if (step === 1) {
+      const curModules = newInventory.modules || 0;
+      const curEnk = newInventory.enkephalin !== undefined ? newInventory.enkephalin : (newInventory.maxEnkephalin || 119);
+      if (willBeDone) {
+        const enkDeducted = Math.min(curEnk, 20);
+        newInventory = {
+          ...newInventory,
+          modules: curModules + 1,
+          enkephalin: Math.max(0, curEnk - enkDeducted),
+          enkephalinLastSynced: enkDeducted > 0 ? Date.now() : newInventory.enkephalinLastSynced
+        };
+        newDeductions[step] = { modulesAdded: 1, enkephalin: enkDeducted };
+      } else {
+        const prevDeduction = currentDeductions[step] || { modulesAdded: 1, enkephalin: 20 };
+        newInventory = {
+          ...newInventory,
+          modules: Math.max(0, curModules - (prevDeduction.modulesAdded || 1)),
+          enkephalin: curEnk + (prevDeduction.enkephalin || 0)
+        };
+        delete newDeductions[step];
+      }
+    }
+
     // Steps 4 and 5 are EXP and Thread Luxcavations.
     // Thread Luxcavation (step 5) is always 2 Modules (40 Enk).
     // EXP Luxcavation (step 4) is 2 or 3 Modules (40 or 60 Enk) depending on Canto tier.
@@ -1048,6 +1092,46 @@ export const useStore = create((set, get) => ({
     });
   },
 
+  toggleWeeklyMissionStep: (step) => {
+    const state = get();
+    const currentSteps = state.scheduleState.weeklyMissionSteps || {
+      1: false, 2: false, 3: false, 4: false, 5: false
+    };
+    const isCurrentlyDone = !!currentSteps[step];
+    const willBeDone = !isCurrentlyDone;
+
+    const newSteps = { ...currentSteps, [step]: willBeDone };
+    const newProgress = Object.keys(newSteps).filter(k => newSteps[k]).length;
+    const isAllDone = newProgress >= 5;
+
+    set({
+      scheduleState: {
+        ...state.scheduleState,
+        weeklyMissionSteps: newSteps,
+        weekliesProgress: newProgress,
+        weekliesDone: isAllDone,
+        canClaimWeeklies: isAllDone
+      }
+    });
+
+    get().injectBpExp(willBeDone ? 4 : -4);
+    get().saveStore();
+    return { willBeDone, newProgress, isAllDone };
+  },
+
+  setAllWeeklyMissions: (completeAll = true) => {
+    const steps = [1, 2, 3, 4, 5];
+    steps.forEach(step => {
+      const currentSteps = get().scheduleState.weeklyMissionSteps || {};
+      const isDone = !!currentSteps[step];
+      if (completeAll && !isDone) {
+        get().toggleWeeklyMissionStep(step);
+      } else if (!completeAll && isDone) {
+        get().toggleWeeklyMissionStep(step);
+      }
+    });
+  },
+
   updateManagerProfile: (updates) => {
     set((state) => ({
       managerProfile: { ...state.managerProfile, ...updates }
@@ -1079,7 +1163,7 @@ export const useStore = create((set, get) => ({
   exportBackupJson: () => {
     const state = get();
     const backup = {
-      version: '1.0.62',
+      version: '1.0.63',
       exportedAt: new Date().toISOString(),
       onboardingCompleted: state.onboardingCompleted,
       tutorialCompleted: state.tutorialCompleted,

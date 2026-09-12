@@ -1,7 +1,7 @@
 # Limbus Tracker — Project Context & State Handoff
 
 > **Generated for AI Session Continuity**  
-> **Last Updated**: 2026-09-12 (v1.0.62 In-Progress/Verified)  
+> **Last Updated**: 2026-09-12 (v1.0.63 Released)  
 > **Workspace**: `C:\Users\cdbla\Documents\Antigravity Playground\limbus-tracker`
 
 ---
@@ -11,7 +11,7 @@
 
 Key features include:
 - Interactive **Identity & E.G.O Directory** with keyword filters, status effect matching, and damage-type classification.
-- **Daily Cycle Tracker & Farm Manager**: Real-time Enkephalin regeneration, mirror dungeon run logger, crate/shard planner, and daily mission trackers.
+- **Daily Cycle Tracker & Farm Manager**: Real-time Enkephalin regeneration, mirror dungeon run logger, crate/shard planner, and granular daily/weekly mission trackers.
 - **In-Universe Settings & Manager Customization Console**: Manager call-sign, interactive avatar cropping studio (zoom & Y-offset for full-body art like Roland), Project Moon theme presets, Web Audio air horn, Sinner radio filters, and desktop tray controls.
 - **Rich Easter Egg System**: Includes *Library of Ruina*, *Lobotomy Corporation*, *Die of Death* (Roblox) classified dossiers, and an immersive multi-stage *W.D. Gaster* ARG sequence.
 - **Auto-Updater & Release Pipeline**: Fully configured GitHub release packaging with auto-update detection for Windows (`.exe` NSIS installer).
@@ -35,9 +35,25 @@ Key features include:
 
 ---
 
-## 3. Recent Modifications & Verified State (Up through v1.0.62)
+## 3. Recent Modifications & Verified State (Up through v1.0.63)
 
 ### Verified Features & Fixes
+- **v1.0.63 Release (Daily & Weekly Missions Overhaul)**:
+  - **Individual Weekly Mission Tracking**:
+    - Replaced the single binary weeklies toggle with a 5-card interactive grid matching official in-game weekly missions:
+      1. `Clear Any Stage 10x` (+4 Pass EXP)
+      2. `Enter Mirror Dungeon 1x` (+4 Pass EXP)
+      3. `Defeat 100 Enemies` (+4 Pass EXP)
+      4. `Thread Luxcavation 5x` (+4 Pass EXP)
+      5. `EXP Luxcavation 5x` (+4 Pass EXP)
+    - Added `toggleWeeklyMissionStep(step)` to `useStore.js` awarding +4 EXP per completed step with clean rollback.
+    - Added `setAllWeeklyMissions(completeAll)` button ("Complete All 5 (+20 EXP)" or "Reset All Weeklies") with live `weekliesProgress / 5` counter.
+    - Preserved complete backward compatibility with `weekliesDone` boolean for downstream components and archive sync.
+    - Updated `limbusCalculator.js` to dynamically account for granular weekly progress (`(5 - weekliesProgress) * 4` EXP remaining).
+  - **Daily Missions Enkephalin Auto-Conversion**:
+    - Step 1 (`Assemble 1 Module`): Deducts 20 Enkephalin and grants +1 Module in inventory with amber badge indicators and rollback on uncheck.
+    - Preserved interactive 2m/3m tier buttons for EXP Luxcavation (Step 4) and constant 2-module deduction for Thread Luxcavation (Step 5).
+  - Packaged `release2/Limbus Tracker Setup 1.0.63.exe` (106 MB).
 - **v1.0.62 Release (Settings & Manager Customization Console)**:
   - Built comprehensive multi-tab **Settings & Manager Customization Console** (`SettingsPage.jsx`):
     1. **Manager Profile**: Custom Manager Call-Sign, Favorite Sinner co-pilot, and avatar roster selector with an interactive **Live Avatar Cropper & Alignment Studio** (Zoom 1.0x–2.5x, Y-offset -50% to +50% for framing full-body portraits like Roland, X-offset, and reset).
