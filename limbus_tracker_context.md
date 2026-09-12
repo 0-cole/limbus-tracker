@@ -1,7 +1,7 @@
 # Limbus Tracker — Project Context & State Handoff
 
 > **Generated for AI Session Continuity**  
-> **Last Updated**: 2026-09-12 (v1.0.66 Preparing Release)  
+> **Last Updated**: 2026-09-12 (v1.0.67 Releasing)  
 > **Workspace**: `C:\Users\cdbla\Documents\Antigravity Playground\limbus-tracker`
 
 ---
@@ -35,9 +35,17 @@ Key features include:
 
 ---
 
-## 3. Recent Modifications & Verified State (Up through v1.0.66)
+## 3. Recent Modifications & Verified State (Up through v1.0.67)
 
 ### Verified Features & Fixes
+- **v1.0.67 Release (Wide-Screen Cockpit Deck & Responsive Vertical Monitor Overhaul)**:
+  - **1440p / Ultrawide Cockpit Expansion**: Replaced the narrow `max-w-6xl` (1152px) bottleneck with `max-w-[1600px] w-full mx-auto` on both `SchedulePage.jsx` and `SettingsPage.jsx`.
+  - **Balanced Command Cockpit Deck**: Restructured the top section of `SchedulePage.jsx` into two equally balanced, matching cards (`Math Settings & Calibration` on the left, `Calculation Summary & Target Breakdown` on the right).
+  - **Full-Width Daily Cycle Tracker**: Extracted `<DailyCycleTracker />` from the cramped right-hand column into its own full-width command panel below the cockpit deck.
+  - **Responsive Mission Grids (Portrait & Vertical Monitors)**: Replaced rigid `sm:grid-cols-5` with `grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3` for both Daily and Weekly Missions in `DailyCycleTracker.jsx`. On vertical/portrait monitors, mission cards display in spacious 2–3 column layouts with zero text or badge clipping.
+  - **Burnout Meter Title Collision Fix**: Changed pacing header flex direction to `flex-col xl:flex-row xl:items-center` with `flex-1 min-w-0`, preventing the Burnout Meter title from breaking into single-word lines ("Daily / Pace: / 0.4 / MDs / Day") on portrait viewports.
+  - **Target Milestones & Settings Grid Scaling**: Added `xl:grid-cols-4` to Target Milestones and `2xl:grid-cols-4` to Project Moon theme selection for fluid wide-screen layouts.
+  - **Kenneth Memo**: Added official v1.0.67 memo in `ChangelogPage.jsx`.
 - **v1.0.66 Release (Theme Expansion to 12 Roster, Dynamic Icon Colors & Residual Yellow Cleanup)**:
   - **6 New Project Moon Aesthetic Themes**: Added `tcorp` (T Corp Time Bronze), `kcorp` (K Corp Ampoule Emerald), `liu` (Liu Association Blaze), `zwei` (Zwei Association Shield), `seven` (Seven Association Olive), and `blacksilence` (Black Silence Onyx) to `THEMES` in `src/styles/themes.js` and `globals.css`.
   - **Dynamic Icon & Header Color Theming**: Sidebar "LT" logo badge and Settings page header ⚙️ icon container now dynamically apply gradient stops and glow matching the active theme.

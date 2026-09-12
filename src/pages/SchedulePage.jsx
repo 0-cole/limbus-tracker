@@ -113,7 +113,7 @@ export default function SchedulePage() {
   }
 
   return (
-    <div className="p-8 pb-32 max-w-6xl mx-auto">
+    <div className="p-4 sm:p-6 md:p-8 pb-32 max-w-[1600px] w-full mx-auto">
       <div className="flex justify-between items-end mb-8 border-b-2 border-[#333] pb-4">
         <h1 className="text-4xl font-black uppercase tracking-wider text-[#c9a84c]">
           Mirror Dungeon Schedule
@@ -132,175 +132,209 @@ export default function SchedulePage() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 items-start">
+      {/* Top Cockpit Deck: Math Settings & Target Output side-by-side */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 items-stretch">
         {/* Settings Card */}
-        <div className="bg-[#111] border border-[#333] rounded-xl p-6 relative overflow-hidden">
-          <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-            <Settings size={20} className="text-gray-400" /> Math Settings
-          </h2>
-          <div className="space-y-4">
-            <label className="flex justify-between items-center bg-black/50 p-3 rounded">
-              <div>
-                <span className="text-gray-300 font-bold text-sm">Days Left in Season</span>
-                <span className="text-[10px] text-gray-500 ml-2">Calculated from the date below</span>
-              </div>
-              <span className="text-white font-mono text-lg font-bold bg-black/60 border border-[#c9a84c]/30 px-3 py-0.5 rounded">{calcResult.daysLeft}</span>
-            </label>
-
-            <div className="bg-black/50 p-3 rounded space-y-2">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="bg-[#111] border border-[#333] rounded-xl p-6 relative overflow-hidden flex flex-col justify-between">
+          <div>
+            <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+              <Settings size={20} className="text-[#c9a84c]" /> Math Settings & Calibration
+            </h2>
+            <div className="space-y-4">
+              <label className="flex justify-between items-center bg-black/50 p-3 rounded">
                 <div>
-                  <span className="text-gray-300 font-bold text-sm flex items-center gap-1.5">
-                    Season End ({userTzShort})
-                  </span>
-                  <span className="text-[10px] text-gray-500 block mt-0.5">
-                    Automatically matched to your local timezone ({userTzShort}).
-                  </span>
+                  <span className="text-gray-300 font-bold text-sm">Days Left in Season</span>
+                  <span className="text-[10px] text-gray-500 ml-2">Calculated from the date below</span>
                 </div>
-                <input
-                  type="datetime-local"
-                  value={toLocalInputString(seasonEndDate)}
-                  onChange={e => {
-                    if (!e.target.value) return;
-                    const localDt = new Date(e.target.value);
-                    if (!isNaN(localDt.getTime())) {
-                      updateBpState({ seasonEndDate: localDt.toISOString() });
-                    }
-                  }}
-                  className="bg-[#1a1a1a] border border-[#444] text-white text-sm rounded p-1.5 focus:border-[#c9a84c] outline-none"
-                />
-              </div>
-              <div className="pt-2 border-t border-[#333]/60 flex flex-wrap items-center justify-between text-[10px] text-gray-400 gap-2">
-                <span>🌐 Local: <strong className="text-gray-200">{formatLocalDateTime(seasonEndDate)}</strong></span>
-                <span>🇰🇷 KST Maintenance: <strong className="text-amber-400/90">{formatKstDateTime(seasonEndDate)}</strong></span>
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <label className="flex-1 flex justify-between items-center bg-black/50 p-3 rounded">
-                <div>
-                  <span className="text-gray-300 font-bold text-sm block">BP Level</span>
-                </div>
-                <input type="number" min="1" value={bpState.level} onChange={e => updateBpState({level: parseInt(e.target.value) || 1})} className="w-16 bg-[#1a1a1a] border border-[#444] text-white text-sm rounded p-1 text-right focus:border-[#c9a84c] outline-none" />
+                <span className="text-white font-mono text-lg font-bold bg-black/60 border border-[#c9a84c]/30 px-3 py-0.5 rounded">{calcResult.daysLeft}</span>
               </label>
+
+              <div className="bg-black/50 p-3 rounded space-y-2">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                  <div>
+                    <span className="text-gray-300 font-bold text-sm flex items-center gap-1.5">
+                      Season End ({userTzShort})
+                    </span>
+                    <span className="text-[10px] text-gray-500 block mt-0.5">
+                      Automatically matched to your local timezone ({userTzShort}).
+                    </span>
+                  </div>
+                  <input
+                    type="datetime-local"
+                    value={toLocalInputString(seasonEndDate)}
+                    onChange={e => {
+                      if (!e.target.value) return;
+                      const localDt = new Date(e.target.value);
+                      if (!isNaN(localDt.getTime())) {
+                        updateBpState({ seasonEndDate: localDt.toISOString() });
+                      }
+                    }}
+                    className="bg-[#1a1a1a] border border-[#444] text-white text-sm rounded p-1.5 focus:border-[#c9a84c] outline-none"
+                  />
+                </div>
+                <div className="pt-2 border-t border-[#333]/60 flex flex-wrap items-center justify-between text-[10px] text-gray-400 gap-2">
+                  <span>🌐 Local: <strong className="text-gray-200">{formatLocalDateTime(seasonEndDate)}</strong></span>
+                  <span>🇰🇷 KST Maintenance: <strong className="text-amber-400/90">{formatKstDateTime(seasonEndDate)}</strong></span>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <label className="flex-1 flex justify-between items-center bg-black/50 p-3 rounded">
+                  <div>
+                    <span className="text-gray-300 font-bold text-sm block">BP Level</span>
+                  </div>
+                  <input type="number" min="1" value={bpState.level} onChange={e => updateBpState({level: parseInt(e.target.value) || 1})} className="w-16 bg-[#1a1a1a] border border-[#444] text-white text-sm rounded p-1 text-right focus:border-[#c9a84c] outline-none" />
+                </label>
+                
+                <label className="flex-1 flex justify-between items-center bg-black/50 p-3 rounded">
+                  <div>
+                    <span className="text-gray-300 font-bold text-sm block">BP EXP</span>
+                    <span className="text-[10px] text-gray-500">Out of 10</span>
+                  </div>
+                  <input type="number" min="0" max="9" value={bpState.currentExp} onChange={e => updateBpState({currentExp: parseInt(e.target.value) || 0})} className="w-12 bg-[#1a1a1a] border border-[#444] text-white text-sm rounded p-1 text-right focus:border-[#c9a84c] outline-none" />
+                </label>
+              </div>
+
+              <label className="flex justify-between items-center bg-black/50 p-3 rounded">
+                  <div>
+                    <span className="text-gray-300 font-bold text-sm block">Bonuses Claimed This Week</span>
+                    <span className="text-[10px] text-gray-500">Auto-resets Wednesday at 5:00 PM local time</span>
+                  </div>
+                  <input type="number" min="0" max="3" value={scheduleState.mdBonusesClaimed || 0} onChange={e => updateScheduleState({mdBonusesClaimed: parseInt(e.target.value) || 0})} className="w-12 bg-[#1a1a1a] border border-[#444] text-white text-sm rounded p-1 text-right focus:border-[#c9a84c] outline-none" />
+                </label>
               
-              <label className="flex-1 flex justify-between items-center bg-black/50 p-3 rounded">
-                <div>
-                  <span className="text-gray-300 font-bold text-sm block">BP EXP</span>
-                  <span className="text-[10px] text-gray-500">Out of 10</span>
+              <div className="bg-black/50 p-3 rounded">
+                <span className="text-gray-300 font-bold text-sm block mb-2">Story Progress (Unlocks)</span>
+                <select 
+                  value={canto} 
+                  onChange={e => handleCantoChange(parseInt(e.target.value))}
+                  className="w-full bg-[#1a1a1a] border border-[#444] text-white text-sm rounded p-2 focus:border-[#c9a84c] outline-none"
+                >
+                  {CANTOS.map(c => (
+                     <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
+                <div className="mt-2 text-xs text-gray-500 flex justify-between items-center">
+                   <span>MD Hard Mode:</span>
+                   <span className={cantoUnlockedHard ? "text-green-400 font-bold" : "text-red-400 font-bold"}>
+                      {cantoUnlockedHard ? "Unlocked" : "Locked (Canto VIII required)"}
+                   </span>
                 </div>
-                <input type="number" min="0" max="9" value={bpState.currentExp} onChange={e => updateBpState({currentExp: parseInt(e.target.value) || 0})} className="w-12 bg-[#1a1a1a] border border-[#444] text-white text-sm rounded p-1 text-right focus:border-[#c9a84c] outline-none" />
-              </label>
-            </div>
-
-            <label className="flex justify-between items-center bg-black/50 p-3 rounded">
-                <div>
-                  <span className="text-gray-300 font-bold text-sm block">Bonuses Claimed This Week</span>
-                  <span className="text-[10px] text-gray-500">Auto-resets Wednesday at 5:00 PM local time</span>
-                </div>
-                <input type="number" min="0" max="3" value={scheduleState.mdBonusesClaimed || 0} onChange={e => updateScheduleState({mdBonusesClaimed: parseInt(e.target.value) || 0})} className="w-12 bg-[#1a1a1a] border border-[#444] text-white text-sm rounded p-1 text-right focus:border-[#c9a84c] outline-none" />
-              </label>
-            
-            <div className="bg-black/50 p-3 rounded">
-              <span className="text-gray-300 font-bold text-sm block mb-2">Story Progress (Unlocks)</span>
-              <select 
-                value={canto} 
-                onChange={e => handleCantoChange(parseInt(e.target.value))}
-                className="w-full bg-[#1a1a1a] border border-[#444] text-white text-sm rounded p-2 focus:border-[#c9a84c] outline-none"
-              >
-                {CANTOS.map(c => (
-                   <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
-              </select>
-              <div className="mt-2 text-xs text-gray-500 flex justify-between items-center">
-                 <span>MD Hard Mode:</span>
-                 <span className={cantoUnlockedHard ? "text-green-400 font-bold" : "text-red-400 font-bold"}>
-                    {cantoUnlockedHard ? "Unlocked" : "Locked (Canto VIII required)"}
-                 </span>
               </div>
-            </div>
 
-            {cantoUnlockedHard && (
+              {cantoUnlockedHard && (
+                <label className="flex justify-between items-center bg-black/50 p-3 rounded cursor-pointer group hover:border-[#c9a84c]/50 transition-colors border border-transparent">
+                  <div>
+                    <span className="text-white font-bold text-sm block group-hover:text-[#c9a84c] transition-colors">Plan Hard Mirror Dungeon</span>
+                    <span className="text-[10px] text-gray-400">18 modules for 225 EXP (uncheck for 3 Regular runs @ 5 mod each)</span>
+                  </div>
+                  <input 
+                    type="checkbox" 
+                    checked={preferHardMd} 
+                    onChange={e => updateBpState({ preferHardMd: e.target.checked, hasMdHard: e.target.checked })} 
+                    className="w-5 h-5 accent-[#c9a84c]" 
+                  />
+                </label>
+              )}
+
+              <label className="flex justify-between items-center bg-black/50 p-3 rounded cursor-pointer group">
+                <span className="text-[#eab308] font-bold text-sm group-hover:text-white">Premium Pass (3x Crates)</span>
+                <input type="checkbox" checked={bpState.isPremium} onChange={e => updateBpState({isPremium: e.target.checked})} className="w-5 h-5 accent-[#c9a84c]" />
+              </label>
+              <label className="flex justify-between items-center bg-black/50 p-3 rounded cursor-pointer group">
+                <div>
+                  <span className="text-gray-300 font-bold text-sm group-hover:text-white block">Safe Math (1.5 Shards/Crate)</span>
+                  <span className="text-[10px] text-gray-500">Uncheck for expected average (2.0 Shards/Crate)</span>
+                </div>
+                <input type="checkbox" checked={safeMath} onChange={e => updateBpState({safeMath: e.target.checked})} className="w-5 h-5 accent-[#c9a84c]" />
+              </label>
               <label className="flex justify-between items-center bg-black/50 p-3 rounded cursor-pointer group hover:border-[#c9a84c]/50 transition-colors border border-transparent">
                 <div>
-                  <span className="text-white font-bold text-sm block group-hover:text-[#c9a84c] transition-colors">Plan Hard Mirror Dungeon</span>
-                  <span className="text-[10px] text-gray-400">18 modules for 225 EXP (uncheck for 3 Regular runs @ 5 mod each)</span>
+                  <span className="text-white font-bold text-sm group-hover:text-[#c9a84c] transition-colors flex items-center gap-1.5">
+                    🚀 ASAP Mode (Rely on MDs over Dailies)
+                  </span>
+                  <span className="text-[10px] text-gray-400 block mt-0.5">
+                    Grind MDs to craft goals directly without waiting on future daily logins. Reaches targets days earlier.
+                  </span>
                 </div>
                 <input 
                   type="checkbox" 
-                  checked={preferHardMd} 
-                  onChange={e => updateBpState({ preferHardMd: e.target.checked, hasMdHard: e.target.checked })} 
+                  checked={bpState.asapMode || false} 
+                  onChange={e => updateBpState({ asapMode: e.target.checked })} 
                   className="w-5 h-5 accent-[#c9a84c]" 
                 />
               </label>
+            </div>
+          </div>
+        </div>
+
+        {/* Calculation Summary & Target Breakdown Card */}
+        <div className="bg-[#111] border border-[#333] rounded-xl p-6 relative overflow-hidden flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-6 pb-2 border-b border-[#222]">
+              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                <Target size={20} className="text-[#c9a84c]" /> Calculation Summary
+              </h2>
+              <span className="text-xs font-mono font-bold px-2.5 py-1 rounded bg-[#c9a84c]/10 text-[#c9a84c] border border-[#c9a84c]/30">
+                {bpState.isPremium ? '★ Premium Pass' : 'Standard Pass'}
+              </span>
+            </div>
+
+            {/* 3 Core Stats */}
+            <div className="grid grid-cols-3 gap-4 text-center divide-x divide-[#333] bg-black/40 p-4 rounded-xl border border-[#222] mb-6">
+              <div>
+                <div className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1.5">Shards Needed</div>
+                <div className="text-3xl sm:text-4xl font-black text-white font-mono">{calcResult.shardsNeeded}</div>
+                <div className="text-[10px] text-gray-500 mt-1">Across all goals</div>
+              </div>
+              <div>
+                <div className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1.5">Crates Needed</div>
+                <div className="text-3xl sm:text-4xl font-black text-[#eab308] font-mono">{calcResult.cratesNeeded}</div>
+                <div className="text-[10px] text-gray-500 mt-1">{safeMath ? '1.5 shards/box' : '2.0 shards/box'}</div>
+              </div>
+              <div>
+                <div className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1.5">BP EXP Needed</div>
+                <div className="text-3xl sm:text-4xl font-black text-[#22c55e] font-mono">{calcResult.bpExpNeeded}</div>
+                <div className="text-[10px] text-gray-500 mt-1">{calcResult.levelsNeeded || Math.ceil(calcResult.bpExpNeeded / 10)} Pass Levels</div>
+              </div>
+            </div>
+
+            {/* Grind Breakdown Quick Stats */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+              <div className="bg-black/50 p-3 rounded-lg border border-[#222]">
+                <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider block">Total MD Runs</span>
+                <span className="text-lg font-black text-white font-mono">{calcResult.rawMdsNeeded} <span className="text-xs text-gray-400 font-normal">MDs</span></span>
+              </div>
+              <div className="bg-black/50 p-3 rounded-lg border border-[#222]">
+                <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider block">Passive EXP Left</span>
+                <span className="text-lg font-black text-emerald-400 font-mono">+{calcResult.passiveExp} <span className="text-xs text-gray-400 font-normal">EXP</span></span>
+              </div>
+              <div className="bg-black/50 p-3 rounded-lg border border-[#222] col-span-2 sm:col-span-1">
+                <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider block">EXP to Grind</span>
+                <span className="text-lg font-black text-amber-400 font-mono">{calcResult.expToGrind} <span className="text-xs text-gray-400 font-normal">EXP</span></span>
+              </div>
+            </div>
+          </div>
+
+          {/* Strategy Context Footer */}
+          <div className="pt-4 border-t border-[#333] text-center bg-black/30 -mx-6 -mb-6 p-4">
+            {bpState.asapMode ? (
+              <p className="text-amber-400 text-xs sm:text-sm font-medium">
+                🚀 <strong>ASAP Mode Active:</strong> Grinding purely via Mirror Dungeons (<strong className="text-white">{calcResult.rawMdsNeeded} MDs</strong>) to hit your shard goals directly without waiting on future daily logins!
+              </p>
+            ) : (
+              <p className="text-gray-400 text-xs sm:text-sm">
+                <strong className="text-white">{calcResult.passiveExp} EXP</strong> remaining from upcoming Dailies & Weeklies.
+                This leaves <strong className="text-red-400">{calcResult.expToGrind} EXP</strong> left to grind via Mirror Dungeons ({calcResult.rawMdsNeeded} MDs).
+              </p>
             )}
-
-            <label className="flex justify-between items-center bg-black/50 p-3 rounded cursor-pointer group">
-              <span className="text-[#eab308] font-bold text-sm group-hover:text-white">Premium Pass (3x Crates)</span>
-              <input type="checkbox" checked={bpState.isPremium} onChange={e => updateBpState({isPremium: e.target.checked})} className="w-5 h-5 accent-[#c9a84c]" />
-            </label>
-            <label className="flex justify-between items-center bg-black/50 p-3 rounded cursor-pointer group">
-              <div>
-                <span className="text-gray-300 font-bold text-sm group-hover:text-white block">Safe Math (1.5 Shards/Crate)</span>
-                <span className="text-[10px] text-gray-500">Uncheck for expected average (2.0 Shards/Crate)</span>
-              </div>
-              <input type="checkbox" checked={safeMath} onChange={e => updateBpState({safeMath: e.target.checked})} className="w-5 h-5 accent-[#c9a84c]" />
-            </label>
-            <label className="flex justify-between items-center bg-black/50 p-3 rounded cursor-pointer group hover:border-[#c9a84c]/50 transition-colors border border-transparent">
-              <div>
-                <span className="text-white font-bold text-sm group-hover:text-[#c9a84c] transition-colors flex items-center gap-1.5">
-                  🚀 ASAP Mode (Rely on MDs over Dailies)
-                </span>
-                <span className="text-[10px] text-gray-400 block mt-0.5">
-                  Grind MDs to craft goals directly without waiting on future daily logins. Reaches targets days earlier.
-                </span>
-              </div>
-              <input 
-                type="checkbox" 
-                checked={bpState.asapMode || false} 
-                onChange={e => updateBpState({ asapMode: e.target.checked })} 
-                className="w-5 h-5 accent-[#c9a84c]" 
-              />
-            </label>
           </div>
         </div>
+      </div>
 
-        {/* Right Column */}
-        <div className="flex flex-col gap-6">
-          {/* Math Output Card */}
-          <div className="bg-[#111] border border-[#333] rounded-xl p-6 relative overflow-hidden flex flex-col justify-center">
-            <div className="grid grid-cols-3 gap-4 text-center divide-x divide-[#333]">
-              <div>
-                <div className="text-sm text-gray-500 font-bold uppercase mb-2">Shards Needed</div>
-                <div className="text-4xl font-black text-white">{calcResult.shardsNeeded}</div>
-              </div>
-              <div>
-                <div className="text-sm text-gray-500 font-bold uppercase mb-2">Crates Needed</div>
-                <div className="text-4xl font-black text-[#eab308]">{calcResult.cratesNeeded}</div>
-              </div>
-              <div>
-                <div className="text-sm text-gray-500 font-bold uppercase mb-2">BP EXP Needed</div>
-                <div className="text-4xl font-black text-[#22c55e]">{calcResult.bpExpNeeded}</div>
-              </div>
-            </div>
-            <div className="mt-8 pt-6 border-t border-[#333] text-center">
-              {bpState.asapMode ? (
-                <p className="text-amber-400 text-sm font-medium">
-                  🚀 <strong>ASAP Mode Active:</strong> Grinding purely via Mirror Dungeons (<strong className="text-white">{calcResult.rawMdsNeeded} MDs</strong>) to hit your shard goals directly without waiting on future daily logins!
-                </p>
-              ) : (
-                <p className="text-gray-400 text-sm">
-                  <strong className="text-white">{calcResult.passiveExp} EXP</strong> remaining from upcoming Dailies & Weeklies.
-                  This leaves <strong className="text-red-400">{calcResult.expToGrind} EXP</strong> left to grind via Mirror Dungeons ({calcResult.rawMdsNeeded} MDs).
-                </p>
-              )}
-            </div>
-          </div>
-          
-          <div className="h-auto">
-            <DailyCycleTracker />
-          </div>
-        </div>
+      {/* Daily Cycle Tracker: Full Width Container */}
+      <div className="w-full mb-8">
+        <DailyCycleTracker />
       </div>
 
       {/* Burnout Meter & Pacing Selector */}
@@ -309,13 +343,13 @@ export default function SchedulePage() {
         effectivePace > 3.0 ? 'border-red-900/60 bg-red-950/20' :
         effectivePace > 1.5 ? 'border-amber-900/50 bg-amber-950/10' : 'border-[#333]'
       }`}>
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#333]">
-          <div>
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 pb-6 border-b border-[#333]">
+          <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h2 className="text-2xl font-black text-white flex items-center gap-2">
+              <h2 className="text-2xl font-black text-white flex items-center gap-2 whitespace-normal sm:whitespace-nowrap">
                 <Flame className={burnoutColor} size={28} /> Daily Pace: {paceDisplay} MDs / Day
               </h2>
-              <span className={`text-xs uppercase font-black px-3 py-1 rounded-full border ${burnoutBg} ${burnoutColor}`}>
+              <span className={`text-xs uppercase font-black px-3 py-1 rounded-full border ${burnoutBg} ${burnoutColor} whitespace-nowrap`}>
                 {burnoutStatus}
               </span>
             </div>
@@ -336,7 +370,7 @@ export default function SchedulePage() {
           </div>
 
           {/* Mode Selector Tabs + ASAP Toggle */}
-          <div className="flex flex-wrap items-center gap-3 self-start md:self-auto shrink-0">
+          <div className="flex flex-wrap items-center gap-3 self-start xl:self-center shrink-0">
             <div className="flex bg-[#111] p-1.5 rounded-lg border border-[#333]">
               <button
                 onClick={() => updateBpState({ paceMode: 'relaxed' })}
@@ -457,7 +491,7 @@ export default function SchedulePage() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {targetMilestones.map((target, idx) => {
               const currentOwned = target.startingShards !== undefined ? target.startingShards : (target.ownedShards || 0);
               const pct = Math.min(100, Math.round((currentOwned / target.cost) * 100));

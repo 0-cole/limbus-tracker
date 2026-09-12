@@ -785,7 +785,7 @@ export default function DailyCycleTracker() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3">
             {(() => {
               const expLuxCost = scheduleState.expLuxModules || ((bpState?.canto !== undefined && bpState.canto < 4) ? 2 : 3);
               return [
@@ -938,7 +938,7 @@ export default function DailyCycleTracker() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3">
             {[
               { step: 1, name: 'Clear Any Stage 10x', desc: 'Clear any stage 10 time(s)', icon: '⚔️' },
               { step: 2, name: 'Enter Mirror Dungeon 1x', desc: 'Enter mirror dungeon 1 time(s)', icon: '🪞' },

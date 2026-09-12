@@ -256,7 +256,7 @@ export default function SettingsPage() {
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-6 text-[#e5e5e5] max-w-6xl mx-auto min-h-full pb-24"
+      className="p-4 sm:p-6 md:p-8 text-[#e5e5e5] max-w-[1600px] w-full mx-auto min-h-full pb-24"
     >
       {/* Toast Notification */}
       <AnimatePresence>
@@ -871,7 +871,7 @@ export default function SettingsPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
               {Object.values(THEMES).map((theme) => {
                 const isActive = (appSettings?.activeTheme || 'gold') === theme.id;
                 return (
