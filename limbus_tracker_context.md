@@ -33,13 +33,16 @@ Key features include:
 
 ---
 
-## 3. Recent Modifications & Verified State (Up through v1.0.60)
+## 3. Recent Modifications & Verified State (Up through v1.0.61)
 
 ### Verified Features & Fixes
-- **Luxcavation Dynamic Module Scaling & Clarification (v1.0.61)**:
+- **v1.0.61 Release Published**:
+  - Successfully packaged `release2/Limbus Tracker Setup 1.0.61.exe` (106 MB).
+  - Pushed git tag `v1.0.61` to `origin/master` and published [GitHub Release v1.0.61](https://github.com/0-cole/limbus-tracker/releases/tag/v1.0.61).
   - Fixed Daily Mission descriptions to clarify that **Thread Luxcavation is always 2 Modules (40 Enk)** across all levels (Lv 20–60), while **EXP Luxcavation is 2–3 Modules (40–60 Enk)** depending on Canto level (Cantos I–III = 2 Modules; Cantos IV+ = 3 Modules).
   - Added an interactive `[2m | 3m]` tier selector directly to the Daily Missions EXP Luxcavation card in `DailyCycleTracker.jsx`.
   - Updated `toggleDailyMissionStep` in `useStore.js` to dynamically deduct 2 or 3 modules (or equivalent Enkephalin) and preserve exact deduction amounts for clean rollback on uncheck.
+  - Added Records Keeper Kenneth's v1.0.61 patch memo to `ChangelogPage.jsx`.
 - **v1.0.60 Release Published**:
   - Successfully packaged `release2/Limbus Tracker Setup 1.0.60.exe` (106 MB).
   - Pushed git tag `v1.0.60` to `origin/master` and published [GitHub Release v1.0.60](https://github.com/0-cole/limbus-tracker/releases/tag/v1.0.60).
