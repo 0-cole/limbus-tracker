@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Shield, Swords, Sparkles, AlertTriangle, Flame, Eye, Skull, Crown, Star } from 'lucide-react';
+import { useStore } from '../stores/useStore.js';
 
 export default function SpecialDossierModal({ character, onClose }) {
   if (!character) return null;
 
   const [interactionCount, setInteractionCount] = useState(0);
   const [activeTab, setActiveTab] = useState('profile');
+
+  useEffect(() => {
+    if (character?.id) {
+      useStore.getState().markDossierDiscovered(character.id);
+    }
+  }, [character?.id]);
 
   const themeColors = character.themeColors || {
     border: 'border-[#c9a84c]',

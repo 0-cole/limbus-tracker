@@ -137,6 +137,8 @@ export const syncEngine = {
         inventory: store.inventory,
         bpState: store.bpState,
         scheduleState: store.scheduleState,
+        managerProfile: store.managerProfile,
+        appSettings: store.appSettings,
         lastUpdated: now
       };
 
@@ -231,7 +233,9 @@ export const syncEngine = {
           customMetadata: cloudData.customMetadata || store.customMetadata,
           inventory: { ...store.inventory, ...(cloudData.inventory || {}) },
           bpState: { ...store.bpState, ...(cloudData.bpState || {}) },
-          scheduleState: mergedSchedule
+          scheduleState: mergedSchedule,
+          managerProfile: { ...(store.managerProfile || {}), ...(cloudData.managerProfile || {}) },
+          appSettings: { ...(store.appSettings || {}), ...(cloudData.appSettings || {}) }
         });
 
         if (window.electronAPI) {
@@ -241,11 +245,19 @@ export const syncEngine = {
             acquiredEgos: cloudData.acquiredEgos || [],
             wantList: cloudData.wantList || [],
             scheduleState: mergedSchedule,
+            managerProfile: { ...(store.managerProfile || {}), ...(cloudData.managerProfile || {}) },
+            appSettings: { ...(store.appSettings || {}), ...(cloudData.appSettings || {}) },
             lastUpdated: cloudLastUpdated
           };
           await window.electronAPI.saveData(toSave);
         } else {
-          localStorage.setItem('limbus-tracker-data', JSON.stringify({ ...cloudData, scheduleState: mergedSchedule, lastUpdated: cloudLastUpdated }));
+          localStorage.setItem('limbus-tracker-data', JSON.stringify({ 
+            ...cloudData, 
+            scheduleState: mergedSchedule, 
+            managerProfile: { ...(store.managerProfile || {}), ...(cloudData.managerProfile || {}) },
+            appSettings: { ...(store.appSettings || {}), ...(cloudData.appSettings || {}) },
+            lastUpdated: cloudLastUpdated 
+          }));
         }
 
         lastCloudSync = cloudLastUpdated;
@@ -272,6 +284,26 @@ export const syncEngine = {
         syncEngine.pushSaveToCloud();
       }
     }, 1500);
+  },
+
+  pushLocalToCloud: async () => {
+    try {
+      await syncEngine.pushSaveToCloud();
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  },
+
+  pullCloudToLocal: async () => {
+    try {
+      const res = await syncEngine.pullSaveFromCloud(true);
+      return !!res?.success;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   },
 
   start15sInterval: () => {

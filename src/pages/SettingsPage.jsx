@@ -111,7 +111,7 @@ export default function SettingsPage() {
   };
 
   // Save profile changes
-  const handleSaveProfile = () => {
+  const handleSaveProfile = async () => {
     updateManagerProfile({
       callSign: callSign.trim() || 'Dante',
       favoriteSinner,
@@ -121,7 +121,9 @@ export default function SettingsPage() {
       avatarYOffset,
       avatarXOffset,
     });
-    triggerToast('Manager Profile updated successfully!');
+    // Immediately push profile to cloud save
+    syncEngine.pushSaveToCloud();
+    triggerToast('Manager Profile saved & synced to cloud!');
   };
 
   // Reset Avatar Cropping
@@ -230,7 +232,13 @@ export default function SettingsPage() {
   };
 
   // List of discovered dossiers for avatar selection
-  const discoveredKeys = managerProfile?.discoveredDossiers || ['roland', 'angela', 'gebura', 'binah', 'carmen', 'dante', 'vergilius'];
+  const userDossiers = managerProfile?.discoveredDossiers || [];
+  const discoveredKeys = [
+    ...new Set([
+      ...userDossiers,
+      ...(managerProfile?.avatarType === 'dossier' && managerProfile?.avatarId ? [managerProfile.avatarId] : [])
+    ])
+  ];
   const unlockedDossiers = SPECIAL_EASTER_EGGS.filter((egg) => discoveredKeys.includes(egg.id));
 
   // Current preview profile for interactive cropper
@@ -334,8 +342,8 @@ export default function SettingsPage() {
                 Containment Protocol Notice
               </span>
               Your custom Call-Sign and Portrait are displayed across your HUD, daily mission logs, and Mephistopheles radio dispatches.
-              <span className="text-amber-200 font-semibold block mt-1">
-                (Note: W.D. Gaster's sequence intentionally bypasses call-signs and directly references your Windows host username for true fourth-wall resonance.)
+              <span className="text-neutral-400 text-[11px] block mt-1 italic">
+                (Note: Certain anomalous telemetry or classified archive transmissions may operate outside standard executive protocol.)
               </span>
             </div>
           </div>
@@ -495,7 +503,7 @@ export default function SettingsPage() {
                       <div className="flex items-center gap-2">
                         <button
                           type="button"
-                          onClick={() => setAvatarYOffset((y) => Math.max(-50, y - 2))}
+                          onClick={() => setAvatarYOffset((y) => Math.max(-60, y - 2))}
                           className="p-1 rounded bg-neutral-800 hover:bg-neutral-700 text-xs text-neutral-300 cursor-pointer"
                           title="Shift Up"
                         >
@@ -503,8 +511,8 @@ export default function SettingsPage() {
                         </button>
                         <input
                           type="range"
-                          min="-50"
-                          max="50"
+                          min="-60"
+                          max="60"
                           step="1"
                           value={avatarYOffset}
                           onChange={(e) => setAvatarYOffset(parseInt(e.target.value, 10))}
@@ -512,7 +520,7 @@ export default function SettingsPage() {
                         />
                         <button
                           type="button"
-                          onClick={() => setAvatarYOffset((y) => Math.min(50, y + 2))}
+                          onClick={() => setAvatarYOffset((y) => Math.min(60, y + 2))}
                           className="p-1 rounded bg-neutral-800 hover:bg-neutral-700 text-xs text-neutral-300 cursor-pointer"
                           title="Shift Down"
                         >
@@ -520,7 +528,7 @@ export default function SettingsPage() {
                         </button>
                       </div>
                       <p className="text-[10px] text-neutral-400 mt-0.5">
-                        Tip: Drag down to frame full-body portraits (like Roland's fedora and suit) cleanly!
+                        Tip: Fine-tune vertical position to frame faces, fedoras, or emblems cleanly in your circular HUD.
                       </p>
                     </div>
 
@@ -638,34 +646,40 @@ export default function SettingsPage() {
                       </div>
                     </div>
 
-                    {/* Discovered Easter Egg Dossiers */}
+                      {/* Discovered Easter Egg Dossiers */}
                     <div>
                       <div className="text-[11px] font-mono text-amber-400 mb-2 flex items-center justify-between">
-                        <span>Discovered Patrons & Distortions ({unlockedDossiers.length}):</span>
+                        <span>Discovered Classified Dossiers ({unlockedDossiers.length}):</span>
                         <span className="text-[10px] text-neutral-400">Search identities to unlock more</span>
                       </div>
-                      <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-7 gap-2.5 max-h-52 overflow-y-auto pr-1">
-                        {unlockedDossiers.map((egg) => (
-                          <button
-                            key={egg.id}
-                            type="button"
-                            onClick={() => {
-                              setAvatarType('dossier');
-                              setAvatarId(egg.id);
-                            }}
-                            className={`flex flex-col items-center p-2 rounded-xl border transition-all cursor-pointer ${
-                              avatarType === 'dossier' && avatarId === egg.id
-                                ? 'bg-neutral-900 border-[#c9a84c] shadow-[0_0_12px_rgba(201,168,76,0.3)]'
-                                : 'bg-black/40 border-neutral-800 hover:border-neutral-700'
-                            }`}
-                          >
-                            <ManagerAvatar profile={{ avatarType: 'dossier', avatarId: egg.id }} size="sm" showBorder={false} />
-                            <span className="text-[10px] text-neutral-300 font-bold mt-1.5 truncate w-full text-center">
-                              {egg.name.split('—')[0].trim()}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
+                      {unlockedDossiers.length > 0 ? (
+                        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-7 gap-2.5 max-h-52 overflow-y-auto pr-1">
+                          {unlockedDossiers.map((egg) => (
+                            <button
+                              key={egg.id}
+                              type="button"
+                              onClick={() => {
+                                setAvatarType('dossier');
+                                setAvatarId(egg.id);
+                              }}
+                              className={`flex flex-col items-center p-2 rounded-xl border transition-all cursor-pointer ${
+                                avatarType === 'dossier' && avatarId === egg.id
+                                  ? 'bg-neutral-900 border-[#c9a84c] shadow-[0_0_12px_rgba(201,168,76,0.3)]'
+                                  : 'bg-black/40 border-neutral-800 hover:border-neutral-700'
+                              }`}
+                            >
+                              <ManagerAvatar profile={{ avatarType: 'dossier', avatarId: egg.id }} size="sm" showBorder={false} />
+                              <span className="text-[10px] text-neutral-300 font-bold mt-1.5 truncate w-full text-center">
+                                {egg.name.split('—')[0].trim()}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="p-3.5 rounded-xl bg-black/40 border border-dashed border-neutral-800 text-center text-xs text-neutral-500 font-mono">
+                          No classified dossiers uncovered yet. Query anomalous keywords in the Identity Archive to unlock special personnel portraits.
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

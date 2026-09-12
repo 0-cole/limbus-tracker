@@ -1,7 +1,7 @@
 # Limbus Tracker — Project Context & State Handoff
 
 > **Generated for AI Session Continuity**  
-> **Last Updated**: 2026-09-12 (v1.0.63 Released)  
+> **Last Updated**: 2026-09-12 (v1.0.64 Released)  
 > **Workspace**: `C:\Users\cdbla\Documents\Antigravity Playground\limbus-tracker`
 
 ---
@@ -35,10 +35,17 @@ Key features include:
 
 ---
 
-## 3. Recent Modifications & Verified State (Up through v1.0.63)
+## 3. Recent Modifications & Verified State (Up through v1.0.64)
 
 ### Verified Features & Fixes
-- **v1.0.63 Release (Daily & Weekly Missions Overhaul)**:
+- **v1.0.64 Release (Themes, Compact Mode, Avatar Head Centering & Cloud Sync Fixes)**:
+  - **Themes Engine**: Implemented full CSS variable and Tailwind class overrides for all 6 Project Moon theme presets (`gold`, `crimson`, `amber`, `cyan`, `violet`, `monochrome`) in `globals.css` driven by `data-theme` on `App.jsx`. Toggling themes instantly recolors text, backgrounds, glows, badges, and sidebar highlights.
+  - **Compact Density Mode**: Wired `data-compact` and `compact-density` class into `App.jsx` with responsive compact padding (`p-6` to `p-4`, tighter gaps, and reduced card heights) in `globals.css`.
+  - **Avatar Head Centering**: Added `object-top` and `origin-[center_18%]` in `ManagerAvatar.jsx`. Full-body character art (Binah, Zena, Roland, Gebura, etc.) now centers on their head and face by default rather than waist level.
+  - **Organized Dossier Discovery**: Initialized `discoveredDossiers: []` in store and hooked up `markDossierDiscovered()` in `SpecialDossierModal.jsx` so secret dossiers must be discovered via archival queries rather than appearing unearned in the avatar roster.
+  - **In-Universe Spoiler Removal**: Sanitized Gaster references from `SettingsPage.jsx` into atmospheric, in-universe containment protocols. Added Kenneth memos in `ChangelogPage.jsx` preserving mystery.
+  - **Cross-Device Cloud Sync Fix**: Added `managerProfile` and `appSettings` to `syncEngine.js` push/pull routines and wired `pushLocalToCloud()` / `pullCloudToLocal()` methods. Manager call-signs, avatars, and settings now persist seamlessly across the cloud.
+  - Packaged `release2/Limbus Tracker Setup 1.0.64.exe` (106 MB).
   - **Individual Weekly Mission Tracking**:
     - Replaced the single binary weeklies toggle with a 5-card interactive grid matching official in-game weekly missions:
       1. `Clear Any Stage 10x` (+4 Pass EXP)

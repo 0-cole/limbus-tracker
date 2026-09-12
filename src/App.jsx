@@ -213,7 +213,11 @@ export default function App() {
       <OnboardingModal />
       <TutorialTour />
       {showTrumpetAlert && <SecondTrumpetModal onClose={() => setShowTrumpetAlert(false)} />}
-      <div className="flex h-screen bg-[#0a0a0a] overflow-hidden">
+      <div 
+        data-theme={appSettings?.activeTheme || 'gold'}
+        data-compact={Boolean(appSettings?.compactMode)}
+        className={`flex h-screen bg-[#0a0a0a] overflow-hidden ${appSettings?.compactMode ? 'compact-density' : ''}`}
+      >
         <Sidebar />
         <div className="flex-1 relative overflow-hidden flex flex-col">
           <main id="app-main-scroll" className="flex-1 overflow-y-auto overflow-x-hidden relative">

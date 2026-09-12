@@ -69,7 +69,7 @@ export default function ManagerAvatar({
         <img
           src={imgSrc}
           alt={callSign || 'Manager'}
-          className="w-full h-full object-cover origin-center pointer-events-none transition-transform duration-100 ease-out"
+          className="w-full h-full object-cover object-top origin-[center_18%] pointer-events-none transition-transform duration-100 ease-out"
           style={{
             transform: `scale(${avatarZoom}) translate(${avatarXOffset}%, ${avatarYOffset}%)`,
           }}

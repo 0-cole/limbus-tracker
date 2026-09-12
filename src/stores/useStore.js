@@ -84,9 +84,10 @@ const defaultState = {
     favoriteSinner: 'yi-sang',
     avatarType: 'sinner', // 'sinner' | 'dossier'
     avatarId: 'yi-sang',
-    avatarZoom: 1.0, // 1.0 to 2.2
-    avatarYOffset: 0, // -40 to 40 (%)
-    discoveredDossiers: ['roland', 'angela', 'gebura', 'binah', 'carmen', 'dante', 'charon', 'vergilius']
+    avatarZoom: 1.0, // 1.0 to 2.5
+    avatarYOffset: 0, // -60 to 60 (%)
+    avatarXOffset: 0,
+    discoveredDossiers: []
   },
 
   appSettings: {
@@ -1163,7 +1164,7 @@ export const useStore = create((set, get) => ({
   exportBackupJson: () => {
     const state = get();
     const backup = {
-      version: '1.0.63',
+      version: '1.0.64',
       exportedAt: new Date().toISOString(),
       onboardingCompleted: state.onboardingCompleted,
       tutorialCompleted: state.tutorialCompleted,
