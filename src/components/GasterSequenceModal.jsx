@@ -29,36 +29,58 @@ function charToWingdings(char) {
 export default function GasterSequenceModal({ onClose }) {
   const navigate = useNavigate();
   const [username, setUsername] = useState('DANTE');
-  const [phase, setPhase] = useState('intro'); // 'intro' (5s) | 'text' | 'peek' | 'static' | 'crack'
+  const [phase, setPhase] = useState('intro'); // 'intro' (5s) | 'text' | 'watching' | 'static' | 'crack'
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
   const [renderedWords, setRenderedWords] = useState([]);
   const [textOpacity, setTextOpacity] = useState(1);
   const [isWaitingForClick, setIsWaitingForClick] = useState(false);
-  const [bgGradientOpacity, setBgGradientOpacity] = useState(0);
+  const [showGreyGradient, setShowGreyGradient] = useState(false);
+  const [staticOpacity, setStaticOpacity] = useState(0);
 
   const audioCtxRef = useRef(null);
   const clickBufferRef = useRef(null);
-  const bgMusicRef = useRef(null);
+  const bgMusicSourceRef = useRef(null);
   const skipCurrentStepRef = useRef(false);
+  const staticCanvasRef = useRef(null);
 
-  // Capitalize player username as requested
+  // Capitalize player username
   const cleanUsername = (username || 'DANTE').toUpperCase();
 
-  // Initialize Web Audio synth and background music
+  // 1. Initialize Web Audio, seamless music loop, and 5s intro prelude
   useEffect(() => {
+    let isCancelled = false;
+
     try {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (AudioCtx && !audioCtxRef.current) {
         const ctx = new AudioCtx();
         audioCtxRef.current = ctx;
 
-        // Pre-create instant click buffer (zero GC, zero CPU stutter)
+        // Pre-create instant typewriter click buffer
         const clickBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.025), ctx.sampleRate);
         const data = clickBuf.getChannelData(0);
         for (let i = 0; i < data.length; i++) {
           data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.005));
         }
         clickBufferRef.current = clickBuf;
+
+        // Fetch and decode Toby Fox Flashback Excerpt for 100% SEAMLESS, ZERO-GAP LOOPING!
+        fetch(gasterFlashbackAudio)
+          .then((res) => res.arrayBuffer())
+          .then((ab) => ctx.decodeAudioData(ab))
+          .then((audioBuf) => {
+            if (isCancelled || !audioCtxRef.current) return;
+            const srcNode = ctx.createBufferSource();
+            srcNode.buffer = audioBuf;
+            srcNode.loop = true; // Web Audio native seamless looping (no gap!)
+            const gainNode = ctx.createGain();
+            gainNode.gain.setValueAtTime(0.28, ctx.currentTime);
+            srcNode.connect(gainNode);
+            gainNode.connect(ctx.destination);
+            srcNode.start();
+            bgMusicSourceRef.current = srcNode;
+          })
+          .catch(() => {});
       }
     } catch (e) {}
 
@@ -67,26 +89,17 @@ export default function GasterSequenceModal({ onClose }) {
       window.electronAPI.startGasterFullscreen().catch(() => {});
     }
 
-    // Play Toby Fox Flashback Excerpt quietly on loop
-    try {
-      const music = new Audio(gasterFlashbackAudio);
-      music.loop = true;
-      music.volume = 0.28;
-      music.play().catch(() => {});
-      bgMusicRef.current = music;
-    } catch (e) {}
-
-    // Fade in subtle grey gradient from pitch black over 3 seconds
+    // Slow, gradual fade-in to the dark grey radial gradient
     const gradTimer = setTimeout(() => {
-      setBgGradientOpacity(1);
-    }, 400);
+      setShowGreyGradient(true);
+    }, 600);
 
-    // 5 seconds delay before the first text appears
+    // Exactly 5 seconds delay before the first text begins
     const introTimer = setTimeout(() => {
       setPhase('text');
     }, 5000);
 
-    // Listen for completion from Electron window crack
+    // Listen for sequence completion from Electron window crack
     if (window.electronAPI?.onGasterComplete) {
       window.electronAPI.onGasterComplete(() => {
         try {
@@ -99,11 +112,14 @@ export default function GasterSequenceModal({ onClose }) {
     }
 
     return () => {
+      isCancelled = true;
       clearTimeout(gradTimer);
       clearTimeout(introTimer);
-      if (bgMusicRef.current) {
-        bgMusicRef.current.pause();
-        bgMusicRef.current = null;
+      if (bgMusicSourceRef.current) {
+        try {
+          bgMusicSourceRef.current.stop();
+        } catch (e) {}
+        bgMusicSourceRef.current = null;
       }
       window.electronAPI?.removeGasterComplete?.();
     };
@@ -175,11 +191,11 @@ export default function GasterSequenceModal({ onClose }) {
       noise.buffer = buffer;
       const filter = ctx.createBiquadFilter();
       filter.type = 'bandpass';
-      filter.frequency.setValueAtTime(2400, now);
+      filter.frequency.setValueAtTime(2200, now);
       const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.05, now);
-      gain.gain.linearRampToValueAtTime(0.65, now + 2.4);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 2.8);
+      gain.gain.setValueAtTime(0.04, now);
+      gain.gain.linearRampToValueAtTime(0.7, now + 2.3);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 2.7);
       noise.connect(filter);
       filter.connect(gain);
       gain.connect(ctx.destination);
@@ -187,7 +203,7 @@ export default function GasterSequenceModal({ onClose }) {
     } catch (e) {}
   };
 
-  // 22 Dialogue Lines exactly as specified
+  // 22 Dialogue Lines with exact customizations
   const dialogueLines = [
     { text: "VERY.. VERY.. INTERESTING.", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
     { text: "A NEW WORLD.", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
@@ -207,10 +223,10 @@ export default function GasterSequenceModal({ onClose }) {
     { text: "YOU CLEARLY HAVE OTHER MATTERS.", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
     { text: `BUT, DONT FORGET, ${cleanUsername}`, slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
     { text: "THIS NEVER HAPPENED.", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
-    { text: "YOU NEVER OPENED THIS APP.", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
+    { text: "YOU NEVER OPENED THIS PROGRAM.", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
     { text: "NOBODY WILL BELIEVE YOU ANYWAY", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
     { text: "BECAUSE.. AS WE KNOW..", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
-    { text: "ITS RUDE TO TALK ABOUT SOMEONE WHO IS LISTENING.", alreadyEnglish: false, isBold: true, stopMusic: true }
+    { text: "ITS RUDE TO TALK ABOUT SOMEONE WHO'S LISTENING.", alreadyEnglish: true, isListening: true, isBold: true, stopMusic: true }
   ];
 
   // Helper to construct words structure to prevent awkward mid-word breaks
@@ -233,42 +249,42 @@ export default function GasterSequenceModal({ onClose }) {
     skipCurrentStepRef.current = false;
     const currentLine = dialogueLines[currentLineIndex];
     if (!currentLine) {
-      setPhase('peek');
+      setPhase('watching');
       return;
     }
 
-    // Music stops dead right when Line 22 begins
-    if (currentLine.stopMusic && bgMusicRef.current) {
-      bgMusicRef.current.pause();
-      bgMusicRef.current.currentTime = 0;
+    // Line 22: Music stops dead, background goes 100% black
+    if (currentLine.stopMusic) {
+      if (bgMusicSourceRef.current) {
+        try {
+          bgMusicSourceRef.current.stop();
+        } catch (e) {}
+        bgMusicSourceRef.current = null;
+      }
+      setShowGreyGradient(false);
     }
 
     setTextOpacity(1);
     setIsWaitingForClick(false);
 
-    // Initial words structure
     const wordsStruct = buildWordsStructure(currentLine.text, currentLine.alreadyEnglish);
-    
-    // We will progressively reveal the letters
-    const revealedWords = wordsStruct.map(w => ({
-      chars: []
-    }));
+    const revealedWords = wordsStruct.map(() => ({ chars: [] }));
     setRenderedWords([...revealedWords]);
 
     const runDialogue = async () => {
-      // Step 1: Type out in Wingdings (or English for Line 14)
+      // Step 1: Type out letter-by-letter
       for (let w = 0; w < wordsStruct.length; w++) {
         for (let c = 0; c < wordsStruct[w].chars.length; c++) {
           if (isCancelled) return;
           if (skipCurrentStepRef.current) break;
 
           revealedWords[w].chars.push({ ...wordsStruct[w].chars[c] });
-          setRenderedWords(revealedWords.map(rw => ({ chars: [...rw.chars] })));
+          setRenderedWords(revealedWords.map((rw) => ({ chars: [...rw.chars] })));
           playTypewriterClick();
 
           let delay = 70;
-          if (currentLine.isDeltarune) {
-            delay = 200; // Slower cadence for MY.. D E L T A R U N E.
+          if (currentLine.isDeltarune || currentLine.isListening) {
+            delay = 210; // Extra slow, heavy cadence
           } else if (wordsStruct[w].chars[c].orig === '.') {
             delay = 260;
           }
@@ -277,20 +293,18 @@ export default function GasterSequenceModal({ onClose }) {
         if (skipCurrentStepRef.current) break;
       }
 
-      // If skipped, ensure all characters are present in their Wingdings/initial state
       if (skipCurrentStepRef.current) {
         for (let w = 0; w < wordsStruct.length; w++) {
           revealedWords[w].chars = [...wordsStruct[w].chars];
         }
-        setRenderedWords(revealedWords.map(rw => ({ chars: [...rw.chars] })));
+        setRenderedWords(revealedWords.map((rw) => ({ chars: [...rw.chars] })));
       }
 
       if (isCancelled) return;
 
-      // Step 2: Translation to English (if not already in English)
+      // Step 2: Translation (only for lines starting in Wingdings)
       if (!currentLine.alreadyEnglish) {
-        // Short pause before translating
-        await new Promise((r) => setTimeout(r, 450));
+        await new Promise((r) => setTimeout(r, 400));
         if (isCancelled) return;
 
         let charGlobalIndex = 0;
@@ -301,13 +315,13 @@ export default function GasterSequenceModal({ onClose }) {
 
             revealedWords[w].chars[c].current = revealedWords[w].chars[c].orig;
             revealedWords[w].chars[c].isWingdings = false;
-            setRenderedWords(revealedWords.map(rw => ({ chars: [...rw.chars] })));
+            setRenderedWords(revealedWords.map((rw) => ({ chars: [...rw.chars] })));
             playTranslateSound();
 
             let translateDelay = 38;
             // Extra slow pacing on "OUR.." WHEN IT IS BEING TRANSLATED ONLY!
             if (currentLine.slowTranslatePrefix && charGlobalIndex < 5) {
-              translateDelay = 340;
+              translateDelay = 350;
             }
             charGlobalIndex++;
             await new Promise((r) => setTimeout(r, translateDelay));
@@ -315,7 +329,6 @@ export default function GasterSequenceModal({ onClose }) {
           if (skipCurrentStepRef.current) break;
         }
 
-        // If skipped, ensure all characters are fully translated
         if (skipCurrentStepRef.current) {
           for (let w = 0; w < revealedWords.length; w++) {
             for (let c = 0; c < revealedWords[w].chars.length; c++) {
@@ -323,13 +336,13 @@ export default function GasterSequenceModal({ onClose }) {
               revealedWords[w].chars[c].isWingdings = false;
             }
           }
-          setRenderedWords(revealedWords.map(rw => ({ chars: [...rw.chars] })));
+          setRenderedWords(revealedWords.map((rw) => ({ chars: [...rw.chars] })));
         }
       }
 
       if (isCancelled) return;
 
-      // Line is fully ready: Prompt user to click to proceed
+      // Line ready: wait for click
       setIsWaitingForClick(true);
     };
 
@@ -340,17 +353,16 @@ export default function GasterSequenceModal({ onClose }) {
     };
   }, [currentLineIndex, phase, cleanUsername]);
 
-  // Handle user click to advance dialogue or advance to peek phase
+  // Click to advance dialogue or advance to watching phase
   const handleAdvance = () => {
     if (phase !== 'text') return;
 
     if (!isWaitingForClick) {
-      // User clicked while still typing/translating: fast-forward to the end of this line
+      // Fast forward line
       skipCurrentStepRef.current = true;
       return;
     }
 
-    // Line finished: Fade out and move to next line or peek phase
     setTextOpacity(0);
     setIsWaitingForClick(false);
 
@@ -358,22 +370,35 @@ export default function GasterSequenceModal({ onClose }) {
       if (currentLineIndex < dialogueLines.length - 1) {
         setCurrentLineIndex((prev) => prev + 1);
       } else {
-        // All 22 lines finished: transition to peek phase!
-        setPhase('peek');
+        // Line 22 finished: advance to Gaster watching phase!
+        setPhase('watching');
       }
     }, 280);
   };
 
-  // Phase: Peek & Static Escalation
+  // Phase: Gaster Watching & CapCut-style Static Ramping
   useEffect(() => {
-    if (phase === 'peek') {
-      // Hold Gaster peeking from behind the margin for 2.4s
+    if (phase === 'watching') {
+      // Hold the eerie, silent stare with Gaster peeking from behind the window margin for 2.2 seconds
       const staticTimer = setTimeout(() => {
         setPhase('static');
         playStaticNoise();
 
-        // After 2.5s of violent static, trigger the screen fracture!
+        // Ramp static opacity smoothly like turning up the grain slider on CapCut (0 -> 1 over 2.4s)
+        const startTime = Date.now();
+        const duration = 2400;
+        const rampInterval = setInterval(() => {
+          const elapsed = Date.now() - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          setStaticOpacity(progress);
+          if (progress >= 1) {
+            clearInterval(rampInterval);
+          }
+        }, 30);
+
+        // Climax: Screen cracks in half!
         const crackTimer = setTimeout(() => {
+          clearInterval(rampInterval);
           setPhase('crack');
           if (window.electronAPI?.triggerGasterWindowCrack) {
             window.electronAPI.triggerGasterWindowCrack();
@@ -390,15 +415,46 @@ export default function GasterSequenceModal({ onClose }) {
           }
         }, 2500);
 
-        return () => clearTimeout(crackTimer);
-      }, 2400);
+        return () => {
+          clearInterval(rampInterval);
+          clearTimeout(crackTimer);
+        };
+      }, 2200);
 
       return () => clearTimeout(staticTimer);
     }
   }, [phase, navigate, onClose]);
 
+  // Procedural 60 FPS TV Static Noise Canvas
+  useEffect(() => {
+    if (phase !== 'static' || !staticCanvasRef.current) return;
+    let animId;
+    const canvas = staticCanvasRef.current;
+    const ctx = canvas.getContext('2d');
+    canvas.width = 320;
+    canvas.height = 180;
+    const imgData = ctx.createImageData(320, 180);
+
+    const renderNoise = () => {
+      const data = imgData.data;
+      for (let i = 0; i < data.length; i += 4) {
+        const val = (Math.random() * 255) | 0;
+        data[i] = val;
+        data[i + 1] = val;
+        data[i + 2] = val;
+        data[i + 3] = 255;
+      }
+      ctx.putImageData(imgData, 0, 0);
+      animId = requestAnimationFrame(renderNoise);
+    };
+
+    renderNoise();
+    return () => cancelAnimationFrame(animId);
+  }, [phase]);
+
   const currentLineConfig = dialogueLines[currentLineIndex];
   const isDeltarune = currentLineConfig?.isDeltarune;
+  const isListening = currentLineConfig?.isListening;
   const isBold = currentLineConfig?.isBold;
 
   return (
@@ -406,23 +462,46 @@ export default function GasterSequenceModal({ onClose }) {
       onClick={handleAdvance}
       className="fixed inset-0 z-[99999] bg-black overflow-hidden select-none flex items-center justify-center font-mono cursor-pointer"
     >
-      {/* Background Gradient (fades in from pure black) */}
-      <div
-        className="absolute inset-0 transition-opacity duration-[3000ms] pointer-events-none"
-        style={{
-          opacity: bgGradientOpacity,
-          background: 'radial-gradient(circle at center, #1a1a1c 0%, #0d0d0f 65%, #000000 100%)'
-        }}
-      />
+      {/* Depths of Deltarune: Ebbing & Flowing Dark Grey Radial Gradient */}
+      <AnimatePresence>
+        {showGreyGradient && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: [0, 0.45, 0.7, 0.5, 0.7],
+              scale: [1, 1.08, 1, 1.05, 1]
+            }}
+            exit={{ opacity: 0 }}
+            transition={{
+              opacity: { duration: 6, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' },
+              scale: { duration: 8, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }
+            }}
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'radial-gradient(circle at 50% 50%, #101014 0%, #08080a 55%, #000000 100%)'
+            }}
+          />
+        )}
+      </AnimatePresence>
 
       {/* PHASE 1: Dialogue Sequence */}
       {phase === 'text' && (
-        <div
-          className="relative z-20 flex flex-col items-center justify-center p-8 max-w-4xl text-center transition-opacity duration-300"
+        <motion.div
+          animate={
+            isListening
+              ? { x: 0 } // Center during listening typing
+              : { x: 0 }
+          }
+          className="relative z-20 flex flex-col items-center justify-center p-8 max-w-5xl text-center transition-opacity duration-300 w-full"
           style={{ opacity: textOpacity }}
         >
-          {/* Word-wrapped container: Words NEVER break mid-word */}
-          <div className="flex flex-wrap justify-center items-center gap-x-[0.38em] gap-y-3 max-w-4xl text-center px-4">
+          {/* Word-wrapped container: Words NEVER break mid-word, spacious word gaps */}
+          <div
+            className={`flex flex-wrap justify-center items-center gap-x-6 sm:gap-x-8 gap-y-4 max-w-5xl text-center px-4 ${
+              isListening ? 'whitespace-nowrap flex-nowrap' : ''
+            }`}
+          >
             {renderedWords.map((word, wIdx) => (
               <span key={wIdx} className="inline-flex whitespace-nowrap">
                 {word.chars.map((charItem, cIdx) => (
@@ -430,12 +509,14 @@ export default function GasterSequenceModal({ onClose }) {
                     key={cIdx}
                     className={`inline-block ${
                       charItem.isWingdings
-                        ? 'text-white'
+                        ? 'text-white text-3xl sm:text-5xl md:text-6xl scale-125 leading-none mx-[0.05em]'
+                        : isListening
+                        ? 'font-black text-xl sm:text-2xl md:text-3xl text-white tracking-[0.2em] whitespace-nowrap drop-shadow-[0_0_15px_rgba(255,255,255,0.9)]'
                         : isBold
-                        ? 'font-black text-2xl sm:text-4xl text-white tracking-widest drop-shadow-[0_0_20px_rgba(255,255,255,0.9)]'
+                        ? 'font-black text-2xl sm:text-4xl text-white tracking-widest drop-shadow-[0_0_15px_rgba(255,255,255,0.9)]'
                         : isDeltarune
-                        ? 'font-black text-3xl sm:text-5xl text-white tracking-[0.25em] drop-shadow-[0_0_20px_rgba(255,255,255,0.9)] drop-shadow-[0_0_40px_rgba(200,200,200,0.5)]'
-                        : 'text-2xl sm:text-4xl text-gray-100 tracking-[0.16em] drop-shadow-[0_0_12px_rgba(255,255,255,0.6)]'
+                        ? 'font-black text-3xl sm:text-5xl text-white tracking-[0.25em] drop-shadow-[0_0_20px_rgba(255,255,255,0.9)]'
+                        : 'text-2xl sm:text-4xl text-gray-100 tracking-[0.16em] drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]'
                     }`}
                     style={{
                       filter: charItem.isWingdings
@@ -457,61 +538,54 @@ export default function GasterSequenceModal({ onClose }) {
             <motion.div
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-10 flex items-center gap-2 text-xs font-mono text-gray-400 tracking-[0.3em] uppercase animate-pulse"
+              className="mt-12 flex items-center gap-2 text-xs font-mono text-gray-500 tracking-[0.3em] uppercase animate-pulse"
             >
               <span>▼ [CLICK TO ADVANCE]</span>
             </motion.div>
           )}
-        </div>
+        </motion.div>
       )}
 
-      {/* PHASE 2: Window Margin Pull & Gaster Peeking Image */}
-      {phase === 'peek' && (
-        <div className="absolute inset-0 z-30 flex items-center justify-center overflow-hidden bg-black">
-          {/* Peeking Gaster Image behind the pulled margin */}
-          <div className="absolute right-[12%] sm:right-[22%] w-64 h-80 flex items-center justify-center">
+      {/* PHASE 2: Shipwrecked 64-Style Window Margin Pull & Life-Sized Unlit Gaster */}
+      {(phase === 'watching' || phase === 'static') && (
+        <div className="absolute inset-0 z-30 flex items-center justify-between overflow-hidden bg-black">
+          {/* Life-sized Gaster standing directly in the black void behind the window border */}
+          <div className="absolute right-0 top-0 bottom-0 w-[45vw] h-full flex items-center justify-center overflow-hidden bg-black">
             <img
               src={gasterImage}
-              alt="Gaster Watching"
-              className="w-full h-full object-contain filter contrast-150 brightness-90 drop-shadow-[0_0_35px_rgba(255,255,255,0.4)]"
+              alt="Gaster Lurking"
+              className="h-full w-full object-contain filter contrast-125 brightness-95 select-none pointer-events-none"
+              style={{
+                // Raw, unlit, zero halo, zero glow - pure Shipwrecked 64 uncanny dread
+                filter: 'contrast(135%) brightness(90%)'
+              }}
             />
           </div>
 
-          {/* Sliding Window Curtain / Margin */}
+          {/* Main Program Window shifted/scaled to the left as if Gaster was behind it */}
           <motion.div
             initial={{ x: 0 }}
-            animate={{ x: '-38vw' }}
-            transition={{ duration: 1.6, ease: [0.25, 1, 0.5, 1] }}
-            className="absolute inset-0 bg-gradient-to-r from-black via-[#080808] to-black border-r-4 border-gray-800 shadow-[20px_0_50px_rgba(0,0,0,0.95)]"
+            animate={{ x: '-42vw' }}
+            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-0 bg-black border-r-2 border-[#1a1a1a] shadow-[40px_0_100px_rgba(0,0,0,1)] z-10"
           />
         </div>
       )}
 
-      {/* PHASE 3: Violent Static Overtaking the Screen (2-3 seconds) */}
+      {/* PHASE 3: CapCut Grain-Style TV Static Ramping up over 2.5s */}
       {phase === 'static' && (
-        <div className="absolute inset-0 z-40 overflow-hidden bg-black flex items-center justify-center">
-          {/* Gaster image flickering in static */}
-          <img
-            src={gasterImage}
-            alt="Gaster Glitch"
-            className="w-72 h-96 object-contain opacity-40 filter invert contrast-200 animate-ping"
+        <div
+          className="fixed inset-0 z-50 w-screen h-screen pointer-events-none transition-opacity"
+          style={{ opacity: staticOpacity }}
+        >
+          {/* Real-time high-density TV static noise canvas */}
+          <canvas
+            ref={staticCanvasRef}
+            className="w-full h-full object-cover mix-blend-screen"
+            style={{ imageRendering: 'pixelated' }}
           />
-
-          {/* Full Screen Noise / Static Scanline Canvas */}
-          <div
-            className="absolute inset-0 bg-[repeating-linear-gradient(0deg,rgba(255,255,255,0.18)_0px,rgba(255,255,255,0.18)_1px,transparent_1px,transparent_3px)] pointer-events-none mix-blend-difference animate-pulse"
-          />
-          <div
-            className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.9)_100%)] pointer-events-none"
-          />
-          <motion.div
-            animate={{
-              opacity: [0.4, 0.9, 0.3, 0.95, 0.6],
-              filter: ['invert(0%)', 'invert(100%)', 'invert(20%)', 'invert(100%)', 'invert(0%)']
-            }}
-            transition={{ duration: 0.12, repeat: Infinity }}
-            className="absolute inset-0 bg-white/20 pointer-events-none"
-          />
+          {/* Subtle horizontal CRT scanlines */}
+          <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,rgba(0,0,0,0.5)_0px,rgba(0,0,0,0.5)_1px,transparent_1px,transparent_2px)] pointer-events-none" />
         </div>
       )}
     </div>
