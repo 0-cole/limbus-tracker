@@ -192,6 +192,7 @@ export function generateRoadmap(
   let currentBonuses = Math.max(0, 3 - (scheduleState?.mdBonusesClaimed || 0));
   let currentDailiesDone = (scheduleState?.dailiesProgress || 0) >= 5;
   let currentWeekliesDone = scheduleState?.weekliesDone || false;
+  let currentWeekliesProg = scheduleState?.weekliesProgress !== undefined ? scheduleState.weekliesProgress : (currentWeekliesDone ? 5 : 0);
   const effectiveHasMdHard = (bpState?.canto === undefined || bpState?.canto >= 8) && (bpState?.preferHardMd !== false) && (bpState?.hasMdHard !== false);
 
   
@@ -201,7 +202,8 @@ export function generateRoadmap(
 
   // 1. Prepare Target Items & Progress for Egoshard Milestones
   const shardsInventory = inventory?.shards || {};
-  let targetProgress = (wishlist || []).map(item => {
+  const wishlistArr = Array.isArray(wishlist) ? wishlist : Array.from(wishlist || []);
+  let targetProgress = wishlistArr.map(item => {
     const sinnerId = normalizeSinnerId(item.sinnerId || item.sinner);
     const cost = item.rarity === '00' ? 150 : 400;
     const owned = getOwnedShards(shardsInventory, item.sinner || item.sinnerId || sinnerId);
@@ -271,6 +273,7 @@ export function generateRoadmap(
       // On the weekly reset day, bonuses refresh to 3 and weeklies reset
       currentBonuses = 3;
       currentWeekliesDone = false;
+      currentWeekliesProg = 0;
     }
 
     // 2. Calculate how many runs to do today

@@ -1,7 +1,7 @@
 # Limbus Tracker — Project Context & State Handoff
 
 > **Generated for AI Session Continuity**  
-> **Last Updated**: 2026-09-12 (v1.0.64 Released)  
+> **Last Updated**: 2026-09-12 (v1.0.65 Released)  
 > **Workspace**: `C:\Users\cdbla\Documents\Antigravity Playground\limbus-tracker`
 
 ---
@@ -35,9 +35,14 @@ Key features include:
 
 ---
 
-## 3. Recent Modifications & Verified State (Up through v1.0.64)
+## 3. Recent Modifications & Verified State (Up through v1.0.65)
 
 ### Verified Features & Fixes
+- **v1.0.65 Release (Critical Hotfix — Dashboard Crash on currentWeekliesProg)**:
+  - Resolved `ReferenceError: currentWeekliesProg is not defined` crash in `generateRoadmap()` within `limbusCalculator.js`.
+  - Added robust conversion of wishlist inputs (`Array.isArray(wishlist) ? wishlist : Array.from(wishlist || [])`) preventing runtime crashes when passed a Zustand `Set`.
+  - Added Kenneth memo for v1.0.65.
+  - Packaged `release2/Limbus Tracker Setup 1.0.65.exe` (106 MB).
 - **v1.0.64 Release (Themes, Compact Mode, Avatar Head Centering & Cloud Sync Fixes)**:
   - **Themes Engine**: Implemented full CSS variable and Tailwind class overrides for all 6 Project Moon theme presets (`gold`, `crimson`, `amber`, `cyan`, `violet`, `monochrome`) in `globals.css` driven by `data-theme` on `App.jsx`. Toggling themes instantly recolors text, backgrounds, glows, badges, and sidebar highlights.
   - **Compact Density Mode**: Wired `data-compact` and `compact-density` class into `App.jsx` with responsive compact padding (`p-6` to `p-4`, tighter gaps, and reduced card heights) in `globals.css`.
