@@ -277,7 +277,13 @@ export default function SettingsPage() {
       <div className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-4 border-b border-neutral-800">
         <div>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#c9a84c] to-[#8a7030] flex items-center justify-center text-black font-black text-lg shadow-[0_0_15px_rgba(201,168,76,0.3)]">
+            <div 
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-black font-black text-lg transition-all duration-300"
+              style={{
+                background: 'linear-gradient(135deg, var(--theme-primary, #c9a84c), var(--theme-accent, #8a7030))',
+                boxShadow: '0 0 15px var(--theme-glow, rgba(201,168,76,0.3))',
+              }}
+            >
               ⚙️
             </div>
             <div>
@@ -876,9 +882,10 @@ export default function SettingsPage() {
                       updateAppSettings({ activeTheme: theme.id });
                       triggerToast(`Switched theme to ${theme.name}!`);
                     }}
+                    style={isActive ? { boxShadow: `0 0 25px ${theme.glow}` } : undefined}
                     className={`p-5 rounded-2xl border text-left transition-all relative overflow-hidden cursor-pointer group ${
                       isActive
-                        ? `bg-gradient-to-br ${theme.swatch} ${theme.border} shadow-[0_0_25px_rgba(201,168,76,0.2)]`
+                        ? `bg-gradient-to-br ${theme.swatch} ${theme.border}`
                         : 'bg-black/40 border-neutral-800 hover:border-neutral-700'
                     }`}
                   >

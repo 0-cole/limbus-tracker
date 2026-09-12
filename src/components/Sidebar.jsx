@@ -159,7 +159,11 @@ export default function Sidebar() {
         title="Limbus Tracker"
       >
         <motion.div
-          className="w-9 h-9 rounded-xl bg-gradient-to-br from-limbus-accent to-limbus-accent-dim flex items-center justify-center text-black font-bold text-sm flex-shrink-0 group-hover:shadow-[0_0_12px_rgba(201,168,76,0.6)]"
+          className="w-9 h-9 rounded-xl flex items-center justify-center text-black font-bold text-sm flex-shrink-0 transition-all duration-300"
+          style={{
+            background: 'linear-gradient(135deg, var(--theme-primary, #c9a84c), var(--theme-accent, #8a7030))',
+            boxShadow: '0 0 12px var(--theme-glow, rgba(201,168,76,0.5))',
+          }}
           whileHover={{ scale: 1.1, rotate: 5 }}
           whileTap={{ scale: 0.95 }}
         >

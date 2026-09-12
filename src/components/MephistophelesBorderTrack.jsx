@@ -537,8 +537,8 @@ export default function MephistophelesBorderTrack() {
         style={{
           top: INSET,
           left: INSET,
-          border: '1.5px dashed rgba(201, 168, 76, 0.25)',
-          boxShadow: '0 0 12px rgba(201, 168, 76, 0.06), inset 0 0 12px rgba(201, 168, 76, 0.04)',
+          border: '1.5px dashed rgba(var(--theme-primary-rgb, 201, 168, 76), 0.25)',
+          boxShadow: '0 0 12px rgba(var(--theme-primary-rgb, 201, 168, 76), 0.08), inset 0 0 12px rgba(var(--theme-primary-rgb, 201, 168, 76), 0.04)',
         }}
       />
 
@@ -563,8 +563,8 @@ export default function MephistophelesBorderTrack() {
               width: `${BUS_WIDTH}px`,
               height: `${BUS_HEIGHT}px`,
               filter: honkEffect
-                ? 'drop-shadow(0 0 12px rgba(234,179,8,1))'
-                : 'drop-shadow(0 0 5px rgba(0,0,0,0.9)) drop-shadow(0 0 10px rgba(201,168,76,0.4))',
+                ? 'drop-shadow(0 0 14px var(--theme-accent, rgba(234,179,8,1)))'
+                : 'drop-shadow(0 0 5px rgba(0,0,0,0.9)) drop-shadow(0 0 10px rgba(var(--theme-primary-rgb, 201, 168, 76), 0.45))',
             }}
             className="object-contain"
           />
@@ -575,7 +575,8 @@ export default function MephistophelesBorderTrack() {
               initial={{ scale: 0.5, opacity: 1 }}
               animate={{ scale: 2, opacity: 0 }}
               transition={{ duration: 0.6 }}
-              className="absolute inset-0 rounded-full border-2 border-yellow-400 pointer-events-none"
+              className="absolute inset-0 rounded-full border-2 pointer-events-none"
+              style={{ borderColor: 'var(--theme-accent, #eab308)' }}
             />
           )}
         </div>

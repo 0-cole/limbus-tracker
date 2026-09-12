@@ -1164,7 +1164,7 @@ export const useStore = create((set, get) => ({
   exportBackupJson: () => {
     const state = get();
     const backup = {
-      version: '1.0.65',
+      version: '1.0.66',
       exportedAt: new Date().toISOString(),
       onboardingCompleted: state.onboardingCompleted,
       tutorialCompleted: state.tutorialCompleted,

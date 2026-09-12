@@ -1,7 +1,7 @@
 # Limbus Tracker — Project Context & State Handoff
 
 > **Generated for AI Session Continuity**  
-> **Last Updated**: 2026-09-12 (v1.0.65 Released)  
+> **Last Updated**: 2026-09-12 (v1.0.66 Preparing Release)  
 > **Workspace**: `C:\Users\cdbla\Documents\Antigravity Playground\limbus-tracker`
 
 ---
@@ -12,7 +12,7 @@
 Key features include:
 - Interactive **Identity & E.G.O Directory** with keyword filters, status effect matching, and damage-type classification.
 - **Daily Cycle Tracker & Farm Manager**: Real-time Enkephalin regeneration, mirror dungeon run logger, crate/shard planner, and granular daily/weekly mission trackers.
-- **In-Universe Settings & Manager Customization Console**: Manager call-sign, interactive avatar cropping studio (zoom & Y-offset for full-body art like Roland), Project Moon theme presets, Web Audio air horn, Sinner radio filters, and desktop tray controls.
+- **In-Universe Settings & Manager Customization Console**: Manager call-sign, interactive avatar cropping studio (zoom & Y-offset for full-body art like Roland), 12 Project Moon theme presets, Web Audio air horn, Sinner radio filters, and desktop tray controls.
 - **Rich Easter Egg System**: Includes *Library of Ruina*, *Lobotomy Corporation*, *Die of Death* (Roblox) classified dossiers, and an immersive multi-stage *W.D. Gaster* ARG sequence.
 - **Auto-Updater & Release Pipeline**: Fully configured GitHub release packaging with auto-update detection for Windows (`.exe` NSIS installer).
 
@@ -35,9 +35,14 @@ Key features include:
 
 ---
 
-## 3. Recent Modifications & Verified State (Up through v1.0.65)
+## 3. Recent Modifications & Verified State (Up through v1.0.66)
 
 ### Verified Features & Fixes
+- **v1.0.66 Release (Theme Expansion to 12 Roster, Dynamic Icon Colors & Residual Yellow Cleanup)**:
+  - **6 New Project Moon Aesthetic Themes**: Added `tcorp` (T Corp Time Bronze), `kcorp` (K Corp Ampoule Emerald), `liu` (Liu Association Blaze), `zwei` (Zwei Association Shield), `seven` (Seven Association Olive), and `blacksilence` (Black Silence Onyx) to `THEMES` in `src/styles/themes.js` and `globals.css`.
+  - **Dynamic Icon & Header Color Theming**: Sidebar "LT" logo badge and Settings page header ⚙️ icon container now dynamically apply gradient stops and glow matching the active theme.
+  - **Residual Yellow / Gold Cleanup**: Global CSS now dynamically overrides residual `.text-amber-400`, `.text-yellow-400`, `.border-amber-500`, and `.bg-amber-500` classes, inputs (`accent-color`), toggles (`peer-checked`), and Mephistopheles perimeter dashed track borders when non-gold themes are selected.
+  - **Kenneth Memo**: Added official v1.0.66 memo in `ChangelogPage.jsx`.
 - **v1.0.65 Release (Critical Hotfix — Dashboard Crash on currentWeekliesProg)**:
   - Resolved `ReferenceError: currentWeekliesProg is not defined` crash in `generateRoadmap()` within `limbusCalculator.js`.
   - Added robust conversion of wishlist inputs (`Array.isArray(wishlist) ? wishlist : Array.from(wishlist || [])`) preventing runtime crashes when passed a Zustand `Set`.
