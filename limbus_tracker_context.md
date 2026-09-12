@@ -1,7 +1,7 @@
 # Limbus Tracker — Project Context & State Handoff
 
 > **Generated for AI Session Continuity**  
-> **Last Updated**: 2026-09-12 (v1.0.61 In-Progress/Verified)  
+> **Last Updated**: 2026-09-12 (v1.0.62 In-Progress/Verified)  
 > **Workspace**: `C:\Users\cdbla\Documents\Antigravity Playground\limbus-tracker`
 
 ---
@@ -12,6 +12,7 @@
 Key features include:
 - Interactive **Identity & E.G.O Directory** with keyword filters, status effect matching, and damage-type classification.
 - **Daily Cycle Tracker & Farm Manager**: Real-time Enkephalin regeneration, mirror dungeon run logger, crate/shard planner, and daily mission trackers.
+- **In-Universe Settings & Manager Customization Console**: Manager call-sign, interactive avatar cropping studio (zoom & Y-offset for full-body art like Roland), Project Moon theme presets, Web Audio air horn, Sinner radio filters, and desktop tray controls.
 - **Rich Easter Egg System**: Includes *Library of Ruina*, *Lobotomy Corporation*, *Die of Death* (Roblox) classified dossiers, and an immersive multi-stage *W.D. Gaster* ARG sequence.
 - **Auto-Updater & Release Pipeline**: Fully configured GitHub release packaging with auto-update detection for Windows (`.exe` NSIS installer).
 
@@ -28,14 +29,27 @@ Key features include:
 ### Invariants & Protocols
 1. **Version Bump on Release**: `package.json` must be incremented whenever publishing changes. The client auto-updater strictly relies on newer semantic versions to trigger prompts.
 2. **Release Creation**: Whenever building production installers, run `npm run build`, package with `npx electron-builder --win`, push commit & git tag (`vX.X.X`), and publish via `gh release create vX.X.X release2/*.exe`.
-3. **Official Enkephalin Scaling**: Caps follow official Limbus Company tables (Level 1 = 60, Level 35 = 119, Level 300 = 216). Passive regeneration runs at 1 Enkephalin per 6 minutes (10/hr), both in real-time and calculated retrospectively from `enkephalinLastSynced` on app launch.
-4. **Task Polling Cadence**: Never rapidly poll long-running background tasks (like `electron-builder`) every second. Maintain at least 15–30+ second checks or rely on system notifications.
+3. **Gaster OS Username Invariant**: W.D. Gaster's sequence intentionally bypasses manager call-signs and directly pulls the host Windows username (`getSystemUsername`) for maximum fourth-wall ARG impact.
+4. **Official Enkephalin Scaling**: Caps follow official Limbus Company tables (Level 1 = 60, Level 35 = 119, Level 300 = 216). Passive regeneration runs at 1 Enkephalin per 6 minutes (10/hr), both in real-time and calculated retrospectively from `enkephalinLastSynced` on app launch.
+5. **Task Polling Cadence**: Never rapidly poll long-running background tasks (like `electron-builder`) every second. Maintain at least 15–30+ second checks or rely on system notifications.
 
 ---
 
-## 3. Recent Modifications & Verified State (Up through v1.0.61)
+## 3. Recent Modifications & Verified State (Up through v1.0.62)
 
 ### Verified Features & Fixes
+- **v1.0.62 Release (Settings & Manager Customization Console)**:
+  - Built comprehensive multi-tab **Settings & Manager Customization Console** (`SettingsPage.jsx`):
+    1. **Manager Profile**: Custom Manager Call-Sign, Favorite Sinner co-pilot, and avatar roster selector with an interactive **Live Avatar Cropper & Alignment Studio** (Zoom 1.0x–2.5x, Y-offset -50% to +50% for framing full-body portraits like Roland, X-offset, and reset).
+    2. **Mephistopheles Navigation & Audio**: Bus track toggle (`busEnabled`), dual-tone brass air horn (Web Audio API synthesized 340Hz + 425Hz brass resonator with volume slider and audio test button), chatter frequency controls (`off`, `slow`, `normal`, `fast`), and Sinner radio comms filter with quick All/None toggles.
+    3. **Themes & Visuals**: 6 Project Moon theme presets (`gold`, `crimson`, `amber`, `cyan`, `violet`, `monochrome`), CRT scanline overlay, and compact density mode.
+    4. **Desktop Integration**: Auto-open on `LimbusCompany.exe` launch, close to Windows system tray, and native Enkephalin cap alerts.
+    5. **Data Vault**: Export/import complete unencrypted JSON backup snapshots, Supabase force cloud push/pull, and factory reset wipe with double-confirmation.
+  - Added `ManagerAvatar.jsx` component for uniform avatar rendering across Sidebar, Dashboard headers, and Settings Studio.
+  - Added Settings nav item (`/settings`) and live Manager Profile card in `Sidebar.jsx`.
+  - Added Manager Live Badge in `DashboardPage.jsx` header.
+  - Added Electron Windows system tray integration and close-to-tray window interceptor in `electron/main.cjs`.
+  - Added `/settings` character dialogue routes to `MephistophelesBorderTrack.jsx`.
 - **v1.0.61 Release Published**:
   - Successfully packaged `release2/Limbus Tracker Setup 1.0.61.exe` (106 MB).
   - Pushed git tag `v1.0.61` to `origin/master` and published [GitHub Release v1.0.61](https://github.com/0-cole/limbus-tracker/releases/tag/v1.0.61).

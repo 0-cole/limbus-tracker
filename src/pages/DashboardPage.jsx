@@ -9,6 +9,8 @@ import { getSeasonEndDate } from '../utils/seasonUtils.js';
 import { useLocation, useNavigate } from 'react-router-dom';
 import DailyCycleTracker from '../components/DailyCycleTracker.jsx';
 import GasterApologyModal from '../components/GasterApologyModal.jsx';
+import ManagerAvatar from '../components/ManagerAvatar.jsx';
+import sinnersData from '../data/sinners.json';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -30,7 +32,8 @@ export default function DashboardPage() {
   const { 
     weeklyProgress, updateWeekly, scheduleState, updateScheduleState, 
     bpState, updateBpState, inventory, wantList, identitiesData, egosData, 
-    activeBanner, weeklyArchive = [], archiveCurrentWeek, deleteWeeklyArchive 
+    activeBanner, weeklyArchive = [], archiveCurrentWeek, deleteWeeklyArchive,
+    managerProfile
   } = useStore();
   const [showWhenGameStarts, setShowWhenGameStarts] = useState(true);
   const location = useLocation();
@@ -207,6 +210,23 @@ export default function DashboardPage() {
           <p className="text-[#737373] mt-1 flex items-center gap-2">
             <Calendar size={16} /> {DAYS[currentDayIndex]}, {currentDayStr}
           </p>
+        </div>
+
+        {/* Manager Live Badge */}
+        <div 
+          onClick={() => navigate('/settings')}
+          className="flex items-center gap-3 px-4 py-2 rounded-2xl bg-neutral-900/80 border border-neutral-800 hover:border-[#c9a84c]/50 transition-all cursor-pointer group shadow-sm"
+          title="Click to open Manager Settings"
+        >
+          <ManagerAvatar size="md" showBorder={true} />
+          <div className="text-left hidden sm:block">
+            <div className="text-xs font-bold text-white group-hover:text-[#c9a84c] transition-colors font-limbus flex items-center gap-1.5">
+              <span>Manager {managerProfile?.callSign || 'Dante'}</span>
+            </div>
+            <div className="text-[10px] text-[#c9a84c] font-mono">
+              Co-Pilot: {sinnersData.find(s => s.id === managerProfile?.favoriteSinner)?.name || 'Yi Sang'}
+            </div>
+          </div>
         </div>
       </div>
 

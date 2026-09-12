@@ -75,7 +75,47 @@ const defaultState = {
   customMetadata: {},
   identitiesData: baseIdentities,
   egosData: baseEgos,
-  activeBanner: null
+  activeBanner: null,
+
+  managerProfile: {
+    callSign: 'Dante',
+    favoriteSinner: 'yi-sang',
+    avatarType: 'sinner', // 'sinner' | 'dossier'
+    avatarId: 'yi-sang',
+    avatarZoom: 1.0, // 1.0 to 2.2
+    avatarYOffset: 0, // -40 to 40 (%)
+    discoveredDossiers: ['roland', 'angela', 'gebura', 'binah', 'carmen', 'dante', 'charon', 'vergilius']
+  },
+
+  appSettings: {
+    busEnabled: true,
+    busChatterFrequency: 'normal', // 'off' | 'slow' | 'normal' | 'fast'
+    busSinnerFilter: {
+      'yi-sang': true,
+      'faust': true,
+      'don-quixote': true,
+      'ryoshu': true,
+      'meursault': true,
+      'hong-lu': true,
+      'heathcliff': true,
+      'ishmael': true,
+      'rodion': true,
+      'sinclair': true,
+      'outis': true,
+      'gregor': true,
+      'charon': true,
+      'vergilius': true,
+      'kenneth': true
+    },
+    busHornVolume: 0.8,
+    activeTheme: 'gold', // 'gold' | 'crimson' | 'amber' | 'cyan' | 'violet' | 'monochrome'
+    crtScanlines: false,
+    compactMode: false,
+    closeToTray: true,
+    showWhenGameStarts: true,
+    notifyEnkephalinCap: true,
+    defaultExpLuxTier: 3 // 2 or 3
+  }
 };
 
 export const useStore = create((set, get) => ({
@@ -270,6 +310,8 @@ export const useStore = create((set, get) => ({
           identitiesData: mergedIds,
           egosData: mergedEgos,
           activeBanner: dynamicData.activeBanner || null,
+          managerProfile: { ...defaultState.managerProfile, ...(data.managerProfile || {}) },
+          appSettings: { ...defaultState.appSettings, ...(data.appSettings || {}) },
           isLoaded: true,
         });
       } else {
@@ -278,6 +320,8 @@ export const useStore = create((set, get) => ({
           identitiesData: mergedIds, 
           egosData: mergedEgos, 
           activeBanner: dynamicData.activeBanner || null,
+          managerProfile: defaultState.managerProfile,
+          appSettings: defaultState.appSettings,
           isLoaded: true 
         });
       }
@@ -383,6 +427,8 @@ export const useStore = create((set, get) => ({
       inventory: state.inventory,
       bpState: state.bpState,
       scheduleState: state.scheduleState,
+      managerProfile: state.managerProfile,
+      appSettings: state.appSettings,
       lastUpdated: now
     };
     if (window.electronAPI) {
@@ -1000,5 +1046,84 @@ export const useStore = create((set, get) => ({
         get().toggleDailyMissionStep(step);
       }
     });
+  },
+
+  updateManagerProfile: (updates) => {
+    set((state) => ({
+      managerProfile: { ...state.managerProfile, ...updates }
+    }));
+    get().saveStore();
+  },
+
+  updateAppSettings: (updates) => {
+    set((state) => ({
+      appSettings: { ...state.appSettings, ...updates }
+    }));
+    get().saveStore();
+  },
+
+  markDossierDiscovered: (dossierId) => {
+    if (!dossierId) return;
+    const current = get().managerProfile?.discoveredDossiers || [];
+    if (!current.includes(dossierId)) {
+      set((state) => ({
+        managerProfile: {
+          ...state.managerProfile,
+          discoveredDossiers: [...current, dossierId]
+        }
+      }));
+      get().saveStore();
+    }
+  },
+
+  exportBackupJson: () => {
+    const state = get();
+    const backup = {
+      version: '1.0.62',
+      exportedAt: new Date().toISOString(),
+      onboardingCompleted: state.onboardingCompleted,
+      tutorialCompleted: state.tutorialCompleted,
+      acquiredIds: Array.from(state.acquiredIds || []),
+      acquiredEgos: Array.from(state.acquiredEgos || []),
+      wantList: Array.from(state.wantList || []),
+      shardCounts: state.shardCounts,
+      weeklyProgress: state.weeklyProgress,
+      weeklyArchive: state.weeklyArchive || [],
+      customMetadata: state.customMetadata,
+      inventory: state.inventory,
+      bpState: state.bpState,
+      scheduleState: state.scheduleState,
+      managerProfile: state.managerProfile,
+      appSettings: state.appSettings
+    };
+    return JSON.stringify(backup, null, 2);
+  },
+
+  importBackupJson: (jsonString) => {
+    try {
+      const data = JSON.parse(jsonString);
+      if (!data || typeof data !== 'object') return { success: false, error: 'Invalid JSON file format' };
+
+      set({
+        onboardingCompleted: data.onboardingCompleted ?? true,
+        tutorialCompleted: data.tutorialCompleted ?? true,
+        acquiredIds: new Set(data.acquiredIds || []),
+        acquiredEgos: new Set(data.acquiredEgos || []),
+        wantList: new Set(data.wantList || []),
+        shardCounts: data.shardCounts || {},
+        weeklyProgress: data.weeklyProgress || defaultState.weeklyProgress,
+        weeklyArchive: data.weeklyArchive || [],
+        customMetadata: data.customMetadata || {},
+        inventory: { ...defaultState.inventory, ...(data.inventory || {}) },
+        bpState: { ...defaultState.bpState, ...(data.bpState || {}) },
+        scheduleState: { ...defaultState.scheduleState, ...(data.scheduleState || {}) },
+        managerProfile: { ...defaultState.managerProfile, ...(data.managerProfile || {}) },
+        appSettings: { ...defaultState.appSettings, ...(data.appSettings || {}) }
+      });
+      get().saveStore();
+      return { success: true };
+    } catch (e) {
+      return { success: false, error: e.message };
+    }
   }
 }));

@@ -55,6 +55,7 @@ let notifiedForThisCycle = false;
 
 function checkEnkephalin(userData) {
   if (!userData || !userData.inventory || !userData.inventory.maxEnkephalin) return;
+  if (userData.appSettings?.notifyEnkephalinCap === false) return;
   
   const { enkephalin, maxEnkephalin, enkephalinLastSynced } = userData.inventory;
   

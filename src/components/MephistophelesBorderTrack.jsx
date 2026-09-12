@@ -4,6 +4,70 @@ import { motion, AnimatePresence } from 'framer-motion';
 import mephistophelesImg from '../assets/mephistopheles.png';
 import sinnersData from '../data/sinners.json';
 
+import { useStore } from '../stores/useStore';
+
+// Web Audio dual-tone pneumatic truck/bus horn synthesizer
+export function playMephiHorn(volume = 0.8) {
+  if (volume <= 0) return;
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    const now = ctx.currentTime;
+    const duration = 0.42;
+
+    const masterGain = ctx.createGain();
+    const effectiveVol = Math.max(0.01, Math.min(1.0, volume)) * 0.28;
+    masterGain.gain.setValueAtTime(effectiveVol, now);
+    masterGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+    // Resonant lowpass filter to emulate heavy brass horn acoustic chamber
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(1700, now);
+    filter.Q.setValueAtTime(3.2, now);
+
+    // Dual horn tones: 340 Hz (primary) + 425 Hz (major third)
+    const osc1 = ctx.createOscillator();
+    osc1.type = 'sawtooth';
+    osc1.frequency.setValueAtTime(340, now);
+    osc1.frequency.linearRampToValueAtTime(335, now + duration);
+
+    const osc2 = ctx.createOscillator();
+    osc2.type = 'sawtooth';
+    osc2.frequency.setValueAtTime(425, now);
+    osc2.frequency.linearRampToValueAtTime(418, now + duration);
+
+    // Deep sub tone (170 Hz)
+    const oscSub = ctx.createOscillator();
+    oscSub.type = 'sine';
+    oscSub.frequency.setValueAtTime(170, now);
+
+    const subGain = ctx.createGain();
+    subGain.gain.setValueAtTime(0.4, now);
+    oscSub.connect(subGain);
+    subGain.connect(filter);
+
+    osc1.connect(filter);
+    osc2.connect(filter);
+    filter.connect(masterGain);
+    masterGain.connect(ctx.destination);
+
+    osc1.start(now);
+    osc2.start(now);
+    oscSub.start(now);
+    osc1.stop(now + duration);
+    osc2.stop(now + duration);
+    oscSub.stop(now + duration);
+
+    setTimeout(() => {
+      ctx.close().catch(() => {});
+    }, (duration + 0.15) * 1000);
+  } catch (err) {
+    console.warn('Bus horn synthesis error:', err);
+  }
+}
+
 // Character dialogue bank organized by active route (at least 2-3 for each sinner per tab)
 const TAB_DIALOGUES = {
   '/': [
@@ -23,6 +87,15 @@ const TAB_DIALOGUES = {
     { sinner: 'Gregor', quote: 'Man, the engine vibration on this bus always gives me a headache. Mind if I crack a window?', color: '#fca5a5' },
     { sinner: 'Yi Sang', quote: 'The wheels revolve, yet we remain in place. Is movement merely an illusion of the passing scenery?', color: '#4a90d9' },
     { sinner: 'Hong Lu', quote: 'Such scenic vistas outside! Though the smoke from the Backstreets does smudge the windows a bit~', color: '#34d399' },
+  ],
+  '/settings': [
+    { sinner: 'Faust', quote: 'System parameters and user preferences can be calibrated here. Precision adjustments are advised, Dante.', color: '#c084fc' },
+    { sinner: 'Charon', quote: 'Charon likes the horn button. Beep beep. Don\'t turn off the bus, Dante.', color: '#06b6d4' },
+    { sinner: 'Outis', quote: 'Adjusting operational protocols, Executive Manager? A disciplined command structure is key to victory!', color: '#6ee7b7' },
+    { sinner: 'Don Quixote', quote: 'CUSTOMIZE OUR EMBLEM! LET OUR ROAR ECHO THROUGH EVERY CORRIDOR OF THE CITY!', color: '#fbbf24' },
+    { sinner: 'Meursault', quote: 'Configuration console accessed. Awaiting directional parameters.', color: '#a3a3a3' },
+    { sinner: 'Vergilius', quote: 'Adjust whatever you want, Dante. Just make sure Mephistopheles remains in driving condition.', color: '#ef4444' },
+    { sinner: 'Ryōshū', quote: 'C.C. (Color Customization). Paint the perimeter whatever shade cuts cleanest.', color: '#f87171' },
   ],
   '/schedule': [
     { sinner: 'Meursault', quote: 'The Mirror Dungeon schedule has been synchronized to your exact specifications. Deviation is not recommended.', color: '#a3a3a3' },
@@ -111,6 +184,12 @@ const STORAGE_KEY = 'limbus_mephi_border_progress';
 export default function MephistophelesBorderTrack() {
   const location = useLocation();
   const containerRef = useRef(null);
+
+  const appSettings = useStore((s) => s.appSettings);
+  const busEnabled = appSettings?.busEnabled !== false;
+  const chatterFreq = appSettings?.busChatterFrequency || 'normal';
+  const busSinnerFilter = appSettings?.busSinnerFilter;
+  const hornVolume = appSettings?.busHornVolume !== undefined ? appSettings.busHornVolume : 0.8;
 
   // Position progress along perimeter: 0.0 to 1.0
   const progressRef = useRef(0);
@@ -353,12 +432,25 @@ export default function MephistophelesBorderTrack() {
     };
   }, [updateBusPosition]);
 
+  // Filter dialogue by user-enabled Sinners in settings
+  const getFilteredDialogues = useCallback(() => {
+    const list = TAB_DIALOGUES[location.pathname] || TAB_DIALOGUES['/'];
+    if (!busSinnerFilter) return list;
+
+    const filtered = list.filter((item) => {
+      const slug = item.sinner.toLowerCase().replace(/ō/g, 'o').replace(/\s+/g, '-');
+      return busSinnerFilter[slug] !== false;
+    });
+
+    return filtered.length > 0 ? filtered : list;
+  }, [location.pathname, busSinnerFilter]);
+
   // Trigger dialogue with anti-spam / anti-hang protection
   const triggerDialogue = useCallback(() => {
     // If a dialogue is currently playing, ignore spammed clicks to avoid hang/text overlap
     if (isDialogueActiveRef.current) return;
 
-    const list = TAB_DIALOGUES[location.pathname] || TAB_DIALOGUES['/'];
+    const list = getFilteredDialogues();
     const randomItem = list[Math.floor(Math.random() * list.length)];
 
     isDialogueActiveRef.current = true;
@@ -373,12 +465,27 @@ export default function MephistophelesBorderTrack() {
       setActiveDialogue(null);
       isDialogueActiveRef.current = false;
     }, 10000);
-  }, [location.pathname, updateBusPosition]);
+  }, [getFilteredDialogues, updateBusPosition]);
 
-  // Schedule random dialogues with longer intervals (30 to 60 seconds)
+  // Schedule random dialogues with user-configured frequency ('off' | 'slow' | 'normal' | 'fast')
   useEffect(() => {
+    if (!busEnabled || chatterFreq === 'off') {
+      if (nextDialogueTimeoutRef.current) clearTimeout(nextDialogueTimeoutRef.current);
+      return;
+    }
+
     const scheduleNext = () => {
-      const delay = 30000 + Math.random() * 30000; // 30 to 60 seconds
+      let minDelay = 30000;
+      let randDelay = 30000;
+      if (chatterFreq === 'slow') {
+        minDelay = 60000;
+        randDelay = 60000; // 60s - 120s
+      } else if (chatterFreq === 'fast') {
+        minDelay = 12000;
+        randDelay = 15000; // 12s - 27s
+      }
+
+      const delay = minDelay + Math.random() * randDelay;
       nextDialogueTimeoutRef.current = setTimeout(() => {
         triggerDialogue();
         scheduleNext();
@@ -390,7 +497,7 @@ export default function MephistophelesBorderTrack() {
     return () => {
       if (nextDialogueTimeoutRef.current) clearTimeout(nextDialogueTimeoutRef.current);
     };
-  }, [triggerDialogue]);
+  }, [triggerDialogue, busEnabled, chatterFreq]);
 
   // When tab changes: fade dialogue out quickly within 3 seconds
   useEffect(() => {
@@ -406,10 +513,15 @@ export default function MephistophelesBorderTrack() {
   // User manual click on the bus: horn honk + trigger dialogue safely
   const handleBusClick = (e) => {
     e.stopPropagation();
+    playMephiHorn(hornVolume);
     setHonkEffect(true);
     setTimeout(() => setHonkEffect(false), 800);
     triggerDialogue();
   };
+
+  if (!busEnabled) {
+    return null;
+  }
 
   return (
     <div

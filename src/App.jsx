@@ -11,6 +11,7 @@ import WantListPage from './pages/WantListPage';
 import InventoryPage from './pages/InventoryPage';
 import SchedulePage from './pages/SchedulePage';
 import ChangelogPage from './pages/ChangelogPage';
+import SettingsPage from './pages/SettingsPage';
 import OnboardingModal from './components/OnboardingModal';
 import TutorialTour from './components/TutorialTour';
 import UpdateNotification from './components/UpdateNotification';
@@ -155,6 +156,7 @@ export default function App() {
   const navigate = useNavigate();
   const initStore = useStore((s) => s.initStore);
   const isLoaded = useStore((s) => s.isLoaded);
+  const appSettings = useStore((s) => s.appSettings);
   const [showTrumpetAlert, setShowTrumpetAlert] = useState(false);
   const konamiIndexRef = useRef(0);
 
@@ -235,6 +237,7 @@ export default function App() {
                   <Route path="/ego" element={<EgoPage />} />
                   <Route path="/want-list" element={<WantListPage />} />
                   <Route path="/changelog" element={<ChangelogPage />} />
+                  <Route path="/settings" element={<SettingsPage />} />
                 </Routes>
               </motion.div>
             </AnimatePresence>
@@ -242,6 +245,9 @@ export default function App() {
           </main>
         </div>
       </div>
+      {appSettings?.crtScanlines && (
+        <div className="fixed inset-0 crt-overlay pointer-events-none z-[9999]" />
+      )}
     </>
   );
 }

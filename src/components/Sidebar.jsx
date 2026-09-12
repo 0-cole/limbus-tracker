@@ -14,10 +14,13 @@ import {
   Cloud,
   CheckCircle2,
   AlertTriangle,
-  Loader2
+  Loader2,
+  Settings
 } from 'lucide-react';
 import AuthModal from './AuthModal';
 import { syncEngine } from '../services/syncEngine';
+import ManagerAvatar from './ManagerAvatar';
+import { useStore } from '../stores/useStore';
 
 const navItems = [
   { path: '/', icon: LayoutDashboard, label: 'Dashboard', description: 'Overview' },
@@ -27,9 +30,11 @@ const navItems = [
   { path: '/identities', icon: Users, label: 'Identities', description: 'ID Database' },
   { path: '/ego', icon: Sparkles, label: 'E.G.O', description: 'EGO Database' },
   { path: '/changelog', icon: GitBranch, label: 'Changelog', description: 'Version History' },
+  { path: '/settings', icon: Settings, label: 'Settings', description: 'Preferences & System' },
 ];
 
 export default function Sidebar() {
+  const managerProfile = useStore((s) => s.managerProfile);
   const [collapsed, setCollapsed] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [lastClickTime, setLastClickTime] = useState(0);
@@ -291,13 +296,31 @@ export default function Sidebar() {
         </motion.button>
       </div>
 
-      {/* Footer */}
-      <div className="px-4 py-2 border-t border-limbus-border/40">
-        {!collapsed && (
-          <p className="text-[10px] text-limbus-muted text-center">
-            Limbus Company Companion
-          </p>
-        )}
+      {/* Manager Profile Footer Card */}
+      <div className="px-2 py-2 border-t border-limbus-border/40">
+        <NavLink
+          to="/settings"
+          className={({ isActive }) =>
+            `flex items-center gap-2.5 p-2 rounded-xl transition-all border ${
+              isActive
+                ? 'bg-neutral-900 border-[#c9a84c]/50 shadow-[0_0_12px_rgba(201,168,76,0.15)]'
+                : 'border-transparent hover:border-[#c9a84c]/30 hover:bg-white/5'
+            } ${collapsed ? 'justify-center' : ''}`
+          }
+          title={`Executive Manager: ${managerProfile?.callSign || 'Dante'} (Click to open Settings)`}
+        >
+          <ManagerAvatar size="sm" showBorder={true} />
+          {!collapsed && (
+            <div className="flex flex-col text-left overflow-hidden min-w-0">
+              <span className="text-xs font-bold text-white truncate font-limbus">
+                {managerProfile?.callSign || 'Dante'}
+              </span>
+              <span className="text-[10px] text-[#c9a84c] truncate font-mono">
+                Executive Manager
+              </span>
+            </div>
+          )}
+        </NavLink>
       </div>
 
       <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />

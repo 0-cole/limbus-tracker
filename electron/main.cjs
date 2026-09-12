@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, Tray, Menu, nativeImage } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
@@ -6,6 +6,55 @@ const { exec } = require('child_process');
 
 let mainWindow = null;
 let gameRunningLastCheck = false;
+let tray = null;
+let isQuitting = false;
+
+function createTray() {
+  if (tray) return;
+  try {
+    let iconPath = path.join(__dirname, '..', 'public', 'icon.png');
+    if (!fs.existsSync(iconPath)) {
+      iconPath = path.join(__dirname, '..', 'dist', 'icon.png');
+    }
+    if (!fs.existsSync(iconPath)) {
+      iconPath = path.join(__dirname, '..', 'build', 'icon.ico');
+    }
+
+    if (fs.existsSync(iconPath)) {
+      const icon = nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 });
+      tray = new Tray(icon);
+      const contextMenu = Menu.buildFromTemplate([
+        {
+          label: 'Open Limbus Tracker',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.show();
+              mainWindow.focus();
+            }
+          }
+        },
+        { type: 'separator' },
+        {
+          label: 'Quit',
+          click: () => {
+            isQuitting = true;
+            app.quit();
+          }
+        }
+      ]);
+      tray.setToolTip('Limbus Tracker');
+      tray.setContextMenu(contextMenu);
+      tray.on('double-click', () => {
+        if (mainWindow) {
+          mainWindow.show();
+          mainWindow.focus();
+        }
+      });
+    }
+  } catch (err) {
+    writeLog(`Tray creation error: ${err.message}`);
+  }
+}
 
 function setGameLaunchPreference(enabled) {
   app.setLoginItemSettings({
@@ -81,6 +130,17 @@ function createWindow() {
 
   // Remove default menu bar
   mainWindow.setMenuBarVisibility(false);
+
+  // Close to tray if enabled
+  mainWindow.on('close', (e) => {
+    const data = loadUserData();
+    const closeToTray = data.appSettings?.closeToTray !== false;
+    if (!isQuitting && closeToTray) {
+      e.preventDefault();
+      mainWindow.hide();
+      return false;
+    }
+  });
 }
 
 const { checkForUpdates, dynamicDataPath } = require('./autoUpdater.cjs');
@@ -115,8 +175,9 @@ ipcMain.handle('load-data', () => {
 });
 
 ipcMain.handle('save-data', (_, data) => {
-  // Renderer saves intentionally omit app-level preferences, so retain them.
-  return saveUserData({ ...data, appSettings: loadUserData().appSettings });
+  const currentDisk = loadUserData();
+  const mergedSettings = { ...(currentDisk.appSettings || {}), ...(data.appSettings || {}) };
+  return saveUserData({ ...data, appSettings: mergedSettings });
 });
 
 ipcMain.handle('wipe-data', () => {
@@ -310,6 +371,7 @@ ipcMain.handle('load-dynamic-data', () => {
 app.whenReady().then(() => {
   app.setAppUserModelId('com.limbustracker.app');
   createWindow();
+  createTray();
   pollGameStatus();
   
   // Read base data to pass to auto-updater
@@ -327,11 +389,16 @@ app.whenReady().then(() => {
 
   // A hidden background process is needed to detect the game's launch.
   setGameLaunchPreference(loadUserData().appSettings?.showWhenGameStarts !== false);
-  
+});
+
+app.on('before-quit', () => {
+  isQuitting = true;
 });
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+  const data = loadUserData();
+  const closeToTray = data.appSettings?.closeToTray !== false;
+  if (!closeToTray && process.platform !== 'darwin') {
     app.quit();
   }
 });
@@ -341,3 +408,4 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
