@@ -676,36 +676,48 @@ export const useStore = create((set, get) => ({
     // Auto-convert crates to target Sinner shards if enabled
     const bpState = get().bpState;
     if (bpState.autoConvertMdCrates && cratesDelta > 0) {
-      let targetSinner = bpState.targetSinnerForCrates;
-      if (!targetSinner) {
-        const wantList = Array.from(get().wantList || []);
-        if (wantList.length > 0) {
-          const item = (get().identitiesData || []).find(id => id.name === wantList[0]) || 
-                       (get().egosData || []).find(ego => ego.name === wantList[0]);
-          if (item?.sinner) targetSinner = item.sinner;
-        }
-      }
-      if (!targetSinner) targetSinner = 'sinclair';
-
-      const sinnerObj = sinnersData.find(s => 
-        s.id.toLowerCase() === String(targetSinner).toLowerCase() ||
-        s.name.toLowerCase() === String(targetSinner).toLowerCase() ||
-        normalizeSinnerId(s.id) === normalizeSinnerId(targetSinner)
-      ) || { id: targetSinner, name: targetSinner };
-
-      const rate = bpState.safeMath ? 1.5 : 2.0;
-      const shardsGained = Math.round(cratesDelta * rate);
-      get().openCratesForSinner(
-        sinnerObj.id,
+      get().autoConvertCratesToShards(
         cratesDelta,
-        shardsGained,
-        `Auto-Converted ${cratesDelta} MD Crates ➔ +${shardsGained} ${sinnerObj.name} Shards`,
+        null,
         runRecord.id
       );
     }
 
     get().saveStore();
     return runRecord;
+  },
+
+  autoConvertCratesToShards: (cratesDelta, customLabel, linkedRunId) => {
+    if (!cratesDelta || cratesDelta <= 0) return null;
+    const bpState = get().bpState;
+    if (!bpState.autoConvertMdCrates) return null;
+
+    let targetSinner = bpState.targetSinnerForCrates;
+    if (!targetSinner) {
+      const wantList = Array.from(get().wantList || []);
+      if (wantList.length > 0) {
+        const item = (get().identitiesData || []).find(id => id.name === wantList[0]) || 
+                     (get().egosData || []).find(ego => ego.name === wantList[0]);
+        if (item?.sinner) targetSinner = item.sinner;
+      }
+    }
+    if (!targetSinner) targetSinner = 'rodion';
+
+    const sinnerObj = sinnersData.find(s => 
+      s.id.toLowerCase() === String(targetSinner).toLowerCase() ||
+      s.name.toLowerCase() === String(targetSinner).toLowerCase() ||
+      normalizeSinnerId(s.id) === normalizeSinnerId(targetSinner)
+    ) || { id: targetSinner, name: targetSinner };
+
+    const rate = bpState.safeMath ? 1.5 : 2.0;
+    const shardsGained = Math.round(cratesDelta * rate);
+    return get().openCratesForSinner(
+      sinnerObj.id,
+      cratesDelta,
+      shardsGained,
+      customLabel || `Auto-Converted ${cratesDelta} Pass Crates ➔ +${shardsGained} ${sinnerObj.name} Shards`,
+      linkedRunId || null
+    );
   },
 
   undoMdRun: (runId) => {
@@ -1068,7 +1080,13 @@ export const useStore = create((set, get) => ({
       }
     });
 
-    get().injectBpExp(willBeDone ? 2 : -2);
+    const expResult = get().injectBpExp(willBeDone ? 2 : -2);
+    if (willBeDone && expResult?.cratesDelta > 0 && get().bpState.autoConvertMdCrates) {
+      get().autoConvertCratesToShards(
+        expResult.cratesDelta,
+        `Auto-Converted ${expResult.cratesDelta} Daily Mission Crates`
+      );
+    }
 
     const cycleInfo = getLimbusCycleInfo();
     const currentWeekly = get().weeklyProgress || {};
@@ -1115,7 +1133,13 @@ export const useStore = create((set, get) => ({
       }
     });
 
-    get().injectBpExp(willBeDone ? 4 : -4);
+    const expResult = get().injectBpExp(willBeDone ? 4 : -4);
+    if (willBeDone && expResult?.cratesDelta > 0 && get().bpState.autoConvertMdCrates) {
+      get().autoConvertCratesToShards(
+        expResult.cratesDelta,
+        `Auto-Converted ${expResult.cratesDelta} Weekly Mission Crates`
+      );
+    }
     get().saveStore();
     return { willBeDone, newProgress, isAllDone };
   },
@@ -1164,7 +1188,7 @@ export const useStore = create((set, get) => ({
   exportBackupJson: () => {
     const state = get();
     const backup = {
-      version: '1.0.68',
+      version: '1.0.69',
       exportedAt: new Date().toISOString(),
       onboardingCompleted: state.onboardingCompleted,
       tutorialCompleted: state.tutorialCompleted,

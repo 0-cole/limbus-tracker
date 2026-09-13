@@ -453,7 +453,7 @@ export default function DailyCycleTracker() {
                     className="accent-[#c9a84c] rounded w-4 h-4 cursor-pointer"
                   />
                   <span className="font-medium text-white flex items-center gap-1.5">
-                    <Sparkles size={14} className="text-[#eab308]" /> Auto-convert MD crates directly to shards
+                    <Sparkles size={14} className="text-[#eab308]" /> Auto-convert pass crates directly to shards (MDs & Missions)
                   </span>
                 </label>
                 <div className="flex items-center gap-1.5">

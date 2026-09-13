@@ -244,10 +244,11 @@ export function generateRoadmap(
     const shardYield = cratesToUse * R_crate;
     cur.currentShards = Math.min(cur.cost, cur.currentShards + shardYield);
     initialNominableCrates -= cratesToUse;
+    cur.cratesUsedFromInventory = (cur.cratesUsedFromInventory || 0) + cratesToUse;
     if (cur.currentShards >= cur.cost) {
       cur.completed = true;
       cur.completedDay = 1;
-      cur.completedDate = 'Day 1 (From Inventory Crates)';
+      cur.completedDate = `Day 1 (Using ${cur.cratesUsedFromInventory} Inventory Crates)`;
       activeTargetIdx++;
     }
   }
