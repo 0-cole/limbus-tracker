@@ -24,6 +24,7 @@ function formatNotes(body) {
 // Overworked, powerless, stressed Records Keeper Kenneth (OC) memos
 // Keyed specifically to notable updates, bugs fixed, or features added
 const KENNETH_SPECIFIC_MEMOS = {
+  'v1.0.70': "Corporate sent a disciplinary audit to my desk because the terminal intercom was spamming GitHub's communications relay every twenty seconds like a broken telegraph key! GitHub naturally threw up an iron wall with error 403 Rate Limit, cutting Dante off from the patch archives completely and leaving them staring at a black screen screaming that the tracker wouldn't update. I re-wired the telemetry receiver to poll on a sensible ten-minute interval so we never trigger GitHub's security countermeasures again, installed an offline archival cache that renders all my records locally even if the network is severed, and added a direct manual override button to open the dispatch files in a browser. Please, Dante... stop frantically mashing the update button.",
   'v1.0.69': "Dante barged into my cubicle in a complete panic asking why the terminal was telling them they had 0 Mirror Dungeons left to grind for Rodion when they only had 369 shards! Turns out the auto-conversion pneumatic tube was only hooked up to Mirror Dungeon runs, leaving all the battle pass crates earned from daily and weekly missions to quietly pile up in the supply closet like unopened cardboard towers. The roadmap calculator took one look at those 21 ghost crates, did the math, and thought Dante was already holding 42 shards in their back pocket! I re-plumbed the crate converter so missions and dungeon runs both funnel straight into target Sinner shards, added a clear inventory crate counter to the milestone HUD, and emptied the ghost crates from storage. Please, Dante... look inside the cardboard boxes before you yell at me.",
   'v1.0.68': "Dante tried double-clicking the Limbus Tracker desktop shortcut five times in three seconds and wondered why their taskbar was overflowing with duplicate command terminals! Then they asked me why the app didn't stop them. I had to hard-code a single-instance security protocol directly into the mainframe BIOS so only ONE instance of the tracker can run at a time. If someone tries to boot a second terminal while one is already active, my direct advisory pops up on their screen telling them 'Cannot start app, as there is already a running app, silly!', brings their existing window to the front, or lets them terminate the old instance and start fresh. Please, Dante... one bus is enough. We cannot afford two Mephistopheles on the road.",
   'v1.0.67': "Dante hooked the terminal up to a massive 1440p panoramic display and shouted that all the mission directives looked like a squished receipt stuck in the dead center of the glass! Then they dragged the window onto a vertical portrait monitor, and the Burnout Meter threw a fit, wrapping every single syllable of 'Daily Pace' onto its own line while the daily mission cards crushed into microscopic ribbons! I spent five hours tearing out the rigid 1152px viewport constraints, rebuilt the cockpit deck so Math Settings and Target Calculations sit side-by-side at the helm, gave the Daily Cycle Tracker full wide-screen clearance, and re-engineered the mission grids to adapt cleanly into multi-column cards on vertical displays. If Dante tries running this on a smartwatch next, I am resigning.",
@@ -116,10 +117,38 @@ export default function ChangelogPage() {
         const res = await fetch('https://api.github.com/repos/0-cole/limbus-tracker/releases?per_page=20', {
           headers: { 'Accept': 'application/vnd.github.v3+json' }
         });
-        if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
-        const data = await res.json();
-        setReleases(data);
+        if (res.ok) {
+          const data = await res.json();
+          setReleases(data);
+          try {
+            localStorage.setItem('limbus_cached_changelog', JSON.stringify(data));
+          } catch (e) {}
+          setError(null);
+          return;
+        }
+        throw new Error(`GitHub API error: ${res.status}`);
       } catch (e) {
+        // Fallback 1: load cached releases if available
+        try {
+          const cached = localStorage.getItem('limbus_cached_changelog');
+          if (cached) {
+            setReleases(JSON.parse(cached));
+            setError(`${e.message} (showing cached records)`);
+            return;
+          }
+        } catch (err) {}
+
+        // Fallback 2: build release cards from local Kenneth memos
+        const fallbackReleases = Object.keys(KENNETH_SPECIFIC_MEMOS).map((tag, idx) => ({
+          id: `memo_${tag}`,
+          tag_name: tag,
+          name: `${tag} - Operational Memo`,
+          body: KENNETH_SPECIFIC_MEMOS[tag],
+          published_at: null,
+          isOfflineFallback: true,
+          html_url: `https://github.com/0-cole/limbus-tracker/releases/tag/${tag}`
+        }));
+        setReleases(fallbackReleases);
         setError(e.message);
       } finally {
         setLoading(false);
@@ -167,16 +196,30 @@ export default function ChangelogPage() {
         </div>
       )}
 
-      {error && (
-        <div className="text-center py-24">
-          <div className="text-[#c9a84c] font-mono text-sm mb-2">[TRANSMISSION INTERRUPTED]</div>
-          <p className="font-bold text-red-400 mb-2">Archive records could not be retrieved</p>
-          <p className="text-sm text-gray-500">{error}</p>
-          <p className="text-sm text-gray-600 mt-2 italic">Kenneth notes: "Terminal connection timed out. Check your network before Corporate writes me up."</p>
+      {error && !loading && (
+        <div className="mb-6 p-4 rounded-xl bg-amber-950/30 border border-amber-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
+          <div>
+            <div className="text-amber-400 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 font-mono">
+              <span>⚠️</span>
+              <span>GitHub API Throttled ({error})</span>
+            </div>
+            <p className="text-xs text-gray-400 mt-1">
+              Displaying local archival memos. You can view full notes and download installers directly on GitHub.
+            </p>
+          </div>
+          <button
+            onClick={() => {
+              const url = 'https://github.com/0-cole/limbus-tracker/releases';
+              window.electronAPI?.openExternalUrl(url) || window.open(url, '_blank');
+            }}
+            className="px-3 py-1.5 bg-[#c9a84c] hover:bg-[#d8b85c] text-black font-bold text-xs rounded transition-colors whitespace-nowrap shadow-sm"
+          >
+            Open GitHub Releases
+          </button>
         </div>
       )}
 
-      {!loading && !error && (
+      {!loading && releases.length > 0 && (
         <div className="space-y-5">
           {releases.map((release, idx) => {
             const tag = release.tag_name || '';

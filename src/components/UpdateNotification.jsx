@@ -32,17 +32,36 @@ export default function UpdateNotification() {
       const res = await fetch('https://api.github.com/repos/0-cole/limbus-tracker/releases/latest', {
         headers: { 'Accept': 'application/vnd.github.v3+json' }
       });
-      if (!res.ok) return;
-      const release = await res.json();
-      if (release?.tag_name && isNewerVersion(release.tag_name, currentVer)) {
-        setUpdateInfo(release);
+      if (res.ok) {
+        const release = await res.json();
+        if (release?.tag_name) {
+          try {
+            localStorage.setItem('limbus_latest_release', JSON.stringify(release));
+          } catch (err) {}
+          if (isNewerVersion(release.tag_name, currentVer)) {
+            setUpdateInfo(release);
+          }
+        }
+        return;
       }
     } catch (e) { /* Silently ignore */ }
+
+    // Fallback: check cached release if throttled by GitHub 403 rate limit
+    try {
+      const cached = localStorage.getItem('limbus_latest_release');
+      if (cached) {
+        const release = JSON.parse(cached);
+        if (release?.tag_name && isNewerVersion(release.tag_name, currentVer)) {
+          setUpdateInfo(release);
+        }
+      }
+    } catch (err) {}
   };
 
   useEffect(() => {
     checkGitHubRelease();
-    const interval = setInterval(checkGitHubRelease, 20000); // Poll every 20 seconds
+    // Poll every 10 minutes (600,000ms) to avoid GitHub unauthenticated 403 rate-limiting (max 60/hr)
+    const interval = setInterval(checkGitHubRelease, 600000);
     return () => clearInterval(interval);
   }, [currentVer]);
 

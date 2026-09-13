@@ -1,7 +1,7 @@
 # Limbus Tracker — Project Context & State Handoff
 
 > **Generated for AI Session Continuity**  
-> **Last Updated**: 2026-09-13 (v1.0.69 Released)  
+> **Last Updated**: 2026-09-13 (v1.0.70 Released)  
 > **Workspace**: `C:\Users\cdbla\Documents\Antigravity Playground\limbus-tracker`
 
 ---
@@ -36,14 +36,17 @@ Key features include:
 
 ---
 
-## 3. Recent Modifications & Verified State (Up through v1.0.69)
+## 3. Recent Modifications & Verified State (Up through v1.0.70)
 
 ### Verified Features & Fixes
+- **v1.0.70 Release (GitHub 403 Rate-Limit Resolution & Offline Operational Log Fallback)**:
+  - **403 Rate-Limit Fix**: Reduced background update polling from 20s to 10m in `UpdateNotification.jsx`, preventing users from exceeding GitHub's 60 requests/hour unauthenticated limit. Added release caching in localStorage.
+  - **Offline & Throttling Fallback**: Re-engineered `ChangelogPage.jsx` so that if GitHub returns a 403 or network error, it seamlessly synthesizes the changelog from local records and Kenneth's memos with an alert banner and direct GitHub link, instead of crashing into a dead-end error screen.
+  - **Kenneth Memo**: Added official v1.0.70 memo in `ChangelogPage.jsx`.
 - **v1.0.69 Release (Pass Crate Auto-Conversion Unification & Ghost Crate Elimination)**:
   - **Unified Pass Crate Auto-Conversion**: Refactored `autoConvertCratesToShards` in `src/stores/useStore.js` and hooked into `toggleDailyMissionStep`, `toggleWeeklyMissionStep`, and `quickLogMdRun`. When auto-conversion is active, Battle Pass level-ups from missions or MDs immediately convert crates into target Sinner shards rather than accumulating as phantom unopened crates in inventory.
   - **Milestone Crate Transparency**: Updated `src/utils/limbusCalculator.js` to explicitly show the exact count of inventory crates consumed (e.g. `Day 1 (Using 16 Inventory Crates)`).
   - **Updated UI Label**: Renamed toggle to *"Auto-convert pass crates directly to shards (MDs & Missions)"* in `DailyCycleTracker.jsx`.
-  - **Kenneth Memo**: Added official v1.0.69 memo in `ChangelogPage.jsx`.
 - **v1.0.68 Release (Single-Instance Lock & Kenneth Duplicate App Advisory)**:
   - **Single-Instance Enforcement**: Integrated `app.requestSingleInstanceLock()` into `electron/main.cjs`.
   - **Kenneth Advisory Dialog**: When a secondary instance launch is attempted, a native warning dialog displays: *"Cannot start app, as there is already a running app, silly! — Kenneth"*.
