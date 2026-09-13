@@ -1,7 +1,7 @@
 # Limbus Tracker — Project Context & State Handoff
 
 > **Generated for AI Session Continuity**  
-> **Last Updated**: 2026-09-12 (v1.0.68 Releasing)  
+> **Last Updated**: 2026-09-12 (v1.0.68 Released)  
 > **Workspace**: `C:\Users\cdbla\Documents\Antigravity Playground\limbus-tracker`
 
 ---
