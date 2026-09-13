@@ -1,7 +1,7 @@
 # Limbus Tracker — Project Context & State Handoff
 
 > **Generated for AI Session Continuity**  
-> **Last Updated**: 2026-09-12 (v1.0.67 Releasing)  
+> **Last Updated**: 2026-09-12 (v1.0.68 Releasing)  
 > **Workspace**: `C:\Users\cdbla\Documents\Antigravity Playground\limbus-tracker`
 
 ---
@@ -29,15 +29,24 @@ Key features include:
 ### Invariants & Protocols
 1. **Version Bump on Release**: `package.json` must be incremented whenever publishing changes. The client auto-updater strictly relies on newer semantic versions to trigger prompts.
 2. **Release Creation**: Whenever building production installers, run `npm run build`, package with `npx electron-builder --win`, push commit & git tag (`vX.X.X`), and publish via `gh release create vX.X.X release2/*.exe`.
-3. **Gaster OS Username Invariant**: W.D. Gaster's sequence intentionally bypasses manager call-signs and directly pulls the host Windows username (`getSystemUsername`) for maximum fourth-wall ARG impact.
-4. **Official Enkephalin Scaling**: Caps follow official Limbus Company tables (Level 1 = 60, Level 35 = 119, Level 300 = 216). Passive regeneration runs at 1 Enkephalin per 6 minutes (10/hr), both in real-time and calculated retrospectively from `enkephalinLastSynced` on app launch.
-5. **Task Polling Cadence**: Never rapidly poll long-running background tasks (like `electron-builder`) every second. Maintain at least 15–30+ second checks or rely on system notifications.
+3. **Single Instance Protocol**: Only one running instance of the application is allowed at any time (`app.requestSingleInstanceLock()`). Secondary launches trigger Kenneth's advisory dialog allowing users to focus the existing instance or terminate it and launch fresh.
+4. **Gaster OS Username Invariant**: W.D. Gaster's sequence intentionally bypasses manager call-signs and directly pulls the host Windows username (`getSystemUsername`) for maximum fourth-wall ARG impact.
+5. **Official Enkephalin Scaling**: Caps follow official Limbus Company tables (Level 1 = 60, Level 35 = 119, Level 300 = 216). Passive regeneration runs at 1 Enkephalin per 6 minutes (10/hr), both in real-time and calculated retrospectively from `enkephalinLastSynced` on app launch.
+6. **Task Polling Cadence**: Never rapidly poll long-running background tasks (like `electron-builder`) every second. Maintain at least 15–30+ second checks or rely on system notifications.
 
 ---
 
-## 3. Recent Modifications & Verified State (Up through v1.0.67)
+## 3. Recent Modifications & Verified State (Up through v1.0.68)
 
 ### Verified Features & Fixes
+- **v1.0.68 Release (Single-Instance Lock & Kenneth Duplicate App Advisory)**:
+  - **Single-Instance Enforcement**: Integrated `app.requestSingleInstanceLock()` into `electron/main.cjs`.
+  - **Kenneth Advisory Dialog**: When a secondary instance launch is attempted, a native warning dialog displays: *"Cannot start app, as there is already a running app, silly! — Kenneth"*.
+  - **Interactive Options**: Users can choose to either:
+    1. *Switch to Existing App* (unminimizes/shows and focuses the existing window), or
+    2. *Close Other Version & Launch Here* (terminates the existing instance PID and relaunches a fresh window).
+  - **PID State Management**: Stores and unlinks `app.pid` in `userData` during the application lifecycle for clean process termination.
+  - **Kenneth Memo**: Added official v1.0.68 memo in `ChangelogPage.jsx`.
 - **v1.0.67 Release (Wide-Screen Cockpit Deck & Responsive Vertical Monitor Overhaul)**:
   - **1440p / Ultrawide Cockpit Expansion**: Replaced the narrow `max-w-6xl` (1152px) bottleneck with `max-w-[1600px] w-full mx-auto` on both `SchedulePage.jsx` and `SettingsPage.jsx`.
   - **Balanced Command Cockpit Deck**: Restructured the top section of `SchedulePage.jsx` into two equally balanced, matching cards (`Math Settings & Calibration` on the left, `Calculation Summary & Target Breakdown` on the right).

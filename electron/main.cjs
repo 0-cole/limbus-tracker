@@ -1,8 +1,86 @@
-const { app, BrowserWindow, ipcMain, shell, Tray, Menu, nativeImage } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, Tray, Menu, nativeImage, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const { exec } = require('child_process');
+
+// Single-Instance Lock Protocol
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+  // A secondary instance was launched while an instance is already active.
+  app.whenReady().then(() => {
+    let iconPath = path.join(__dirname, '..', 'public', 'icon.png');
+    if (!fs.existsSync(iconPath)) {
+      iconPath = path.join(__dirname, '..', 'dist', 'icon.png');
+    }
+    if (!fs.existsSync(iconPath)) {
+      iconPath = path.join(__dirname, '..', 'build', 'icon.ico');
+    }
+    const icon = fs.existsSync(iconPath) ? nativeImage.createFromPath(iconPath) : undefined;
+
+    const response = dialog.showMessageBoxSync({
+      type: 'warning',
+      icon: icon,
+      title: 'Limbus Tracker Already Running',
+      message: 'Cannot start app, as there is already a running app, silly! — Kenneth',
+      detail: 'An active instance of Limbus Tracker is already running on this workstation (check your taskbar or system tray).\n\nWould you like to switch to the existing window, or close it and launch here?',
+      buttons: ['Switch to Existing App', 'Close Other Version & Launch Here', 'Quit'],
+      defaultId: 0,
+      cancelId: 2,
+      noLink: true,
+    });
+
+    if (response === 1) {
+      // User clicked "Close Other Version & Launch Here"
+      try {
+        const PID_FILE = path.join(app.getPath('userData'), 'app.pid');
+        let killed = false;
+        if (fs.existsSync(PID_FILE)) {
+          const oldPid = parseInt(fs.readFileSync(PID_FILE, 'utf-8').trim(), 10);
+          if (oldPid && oldPid !== process.pid) {
+            try {
+              process.kill(oldPid, 'SIGKILL');
+              killed = true;
+            } catch (err) {
+              try {
+                const { execSync } = require('child_process');
+                execSync(`taskkill /F /PID ${oldPid}`, { stdio: 'ignore' });
+                killed = true;
+              } catch (e) {}
+            }
+          }
+        }
+        if (!killed && app.isPackaged) {
+          try {
+            const { execSync } = require('child_process');
+            execSync(`taskkill /F /IM "Limbus Tracker.exe" /FI "PID ne ${process.pid}"`, { stdio: 'ignore' });
+          } catch (e) {}
+        }
+      } catch (e) {
+        console.error('Failed to terminate existing instance:', e);
+      }
+
+      setTimeout(() => {
+        app.relaunch();
+        app.exit(0);
+      }, 500);
+      return;
+    }
+
+    app.exit(0);
+  });
+  return;
+}
+
+app.on('second-instance', (event, commandLine, workingDirectory) => {
+  // A secondary launch was attempted: bring the primary window to the foreground
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    if (!mainWindow.isVisible()) mainWindow.show();
+    mainWindow.focus();
+  }
+});
 
 let mainWindow = null;
 let gameRunningLastCheck = false;
@@ -370,6 +448,11 @@ ipcMain.handle('load-dynamic-data', () => {
 
 app.whenReady().then(() => {
   app.setAppUserModelId('com.limbustracker.app');
+  try {
+    const PID_FILE = path.join(app.getPath('userData'), 'app.pid');
+    fs.writeFileSync(PID_FILE, String(process.pid), 'utf-8');
+  } catch (e) {}
+
   createWindow();
   createTray();
   pollGameStatus();
@@ -393,6 +476,15 @@ app.whenReady().then(() => {
 
 app.on('before-quit', () => {
   isQuitting = true;
+  try {
+    const PID_FILE = path.join(app.getPath('userData'), 'app.pid');
+    if (fs.existsSync(PID_FILE)) {
+      const stored = fs.readFileSync(PID_FILE, 'utf-8').trim();
+      if (stored === String(process.pid)) {
+        fs.unlinkSync(PID_FILE);
+      }
+    }
+  } catch (e) {}
 });
 
 app.on('window-all-closed', () => {
