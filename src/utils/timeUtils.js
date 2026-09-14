@@ -61,6 +61,9 @@ export function getLimbusCycleInfo(nowMs = Date.now()) {
   const resetLocalTime = nextDaily.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
   const startLocalTime = startDaily.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 
+  // Has today's reset already happened in local day?
+  const isAfterResetToday = (startDaily.getDate() === now.getDate());
+
   // Local time windows for clear roadmap demarcation
   // Pre-Reset Window: 12:00 AM (midnight) up to the daily reset (e.g. 5:00 PM local)
   // Post-Reset Window: Daily reset up to 11:59 PM (midnight)
@@ -72,6 +75,11 @@ export function getLimbusCycleInfo(nowMs = Date.now()) {
   const windowDesc = isPreResetWindow
     ? `Finishing today's server cycle (Cycle ends at ${resetLocalTime} today / 06:00 KST)`
     : `New server cycle active (Cycle resets at ${resetLocalTime} tomorrow / 06:00 KST)`;
+
+  const remainingMs = Math.max(0, nextDaily.getTime() - nowMs);
+  const h = Math.floor(remainingMs / 3600000);
+  const m = Math.floor((remainingMs % 3600000) / 60000);
+  const remainingStr = h > 0 ? `${h}h ${m}m` : `${m}m`;
 
   return {
     cycleKey,
