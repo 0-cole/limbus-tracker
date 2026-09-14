@@ -195,7 +195,7 @@ export const useStore = create((set, get) => ({
         // Check for daily/weekly resets
         const resets = checkResets(loadedSchedule.lastResetCheck);
         const cycleInfo = getLimbusCycleInfo();
-        if (resets.hasDailyReset && !resets.hasWeeklyReset && !resets.hasMdWeeklyReset) {
+        if (resets.hasDailyReset) {
             const oldRuns = loadedSchedule.todayLoggedRuns || [];
             const oldShards = loadedSchedule.todayLoggedShards || [];
             const curW = loadedSchedule.currentWeekStats || { mdRuns: 0, expEarned: 0, shardsEarned: 0, cratesEarned: 0, dailiesDoneCount: 0, runs: [] };
@@ -228,6 +228,10 @@ export const useStore = create((set, get) => ({
             loadedSchedule.mdTodayDone = runsToday.length > 0;
             loadedSchedule.todayLoggedRuns = runsToday;
             loadedSchedule.todayLoggedShards = shardsToday;
+        } else {
+            // Strictly cull any stale runs/shards whose timestamps are before active cycleStartMs
+            loadedSchedule.todayLoggedRuns = (loadedSchedule.todayLoggedRuns || []).filter(r => (r.timestamp || 0) >= cycleInfo.cycleStartMs);
+            loadedSchedule.todayLoggedShards = (loadedSchedule.todayLoggedShards || []).filter(s => (s.timestamp || 0) >= cycleInfo.cycleStartMs);
         }
 
         if (!loadedSchedule.dailyMissionSteps) {
@@ -361,25 +365,26 @@ export const useStore = create((set, get) => ({
         if (intervalResets.hasDailyReset || intervalResets.hasWeeklyReset || intervalResets.hasMdWeeklyReset) {
           if (intervalResets.hasWeeklyReset || intervalResets.hasMdWeeklyReset) {
             get().archiveCurrentWeek();
-          } else if (intervalResets.hasDailyReset) {
-            const s = currentSchedule;
-            const oldRuns = s.todayLoggedRuns || [];
-            const oldShards = s.todayLoggedShards || [];
-            const curW = s.currentWeekStats || { mdRuns: 0, expEarned: 0, shardsEarned: 0, cratesEarned: 0, dailiesDoneCount: 0, runs: [] };
-            const cycleInfo = getLimbusCycleInfo();
-            const runsPast = oldRuns.filter(r => (r.timestamp || 0) < cycleInfo.cycleStartMs);
-            const runsToday = oldRuns.filter(r => (r.timestamp || 0) >= cycleInfo.cycleStartMs);
-            const shardsPast = oldShards.filter(s => (s.timestamp || 0) < cycleInfo.cycleStartMs);
-            const shardsToday = oldShards.filter(s => (s.timestamp || 0) >= cycleInfo.cycleStartMs);
-            
-            // Preserve 'done' for previous cycle if dailies were done
-            if (intervalResets.prevCycleKey && (s.dailiesProgress >= 5 || s.dailiesDone)) {
-              const updatedDailyStatus = { ...(currentWeekly.dailyStatus || {}) };
-              updatedDailyStatus[intervalResets.prevCycleKey] = 'done';
-              get().updateWeekly({ ...currentWeekly, dailyStatus: updatedDailyStatus });
-            }
+          }
 
-            get().updateScheduleState({
+          const s = currentSchedule;
+          const oldRuns = s.todayLoggedRuns || [];
+          const oldShards = s.todayLoggedShards || [];
+          const curW = s.currentWeekStats || { mdRuns: 0, expEarned: 0, shardsEarned: 0, cratesEarned: 0, dailiesDoneCount: 0, runs: [] };
+          const cycleInfo = getLimbusCycleInfo();
+          const runsPast = oldRuns.filter(r => (r.timestamp || 0) < cycleInfo.cycleStartMs);
+          const runsToday = oldRuns.filter(r => (r.timestamp || 0) >= cycleInfo.cycleStartMs);
+          const shardsPast = oldShards.filter(s => (s.timestamp || 0) < cycleInfo.cycleStartMs);
+          const shardsToday = oldShards.filter(s => (s.timestamp || 0) >= cycleInfo.cycleStartMs);
+          
+          if (intervalResets.hasDailyReset && intervalResets.prevCycleKey && (s.dailiesProgress >= 5 || s.dailiesDone)) {
+            const updatedDailyStatus = { ...(currentWeekly.dailyStatus || {}) };
+            updatedDailyStatus[intervalResets.prevCycleKey] = 'done';
+            get().updateWeekly({ ...currentWeekly, dailyStatus: updatedDailyStatus });
+          }
+
+          get().updateScheduleState({
+            ...(intervalResets.hasDailyReset ? {
               currentWeekStats: {
                 mdRuns: (curW.mdRuns || 0) + runsPast.length,
                 expEarned: (curW.expEarned || 0) + runsPast.reduce((sum, r) => sum + (r.exp || 0), 0),
@@ -395,19 +400,6 @@ export const useStore = create((set, get) => ({
               mdTodayDone: runsToday.length > 0,
               todayLoggedRuns: runsToday,
               todayLoggedShards: shardsToday,
-              lastResetCheck: intervalResets.now
-            });
-            return;
-          }
-          get().updateScheduleState({
-            ...(intervalResets.hasDailyReset ? { 
-              dailiesDone: false, 
-              dailiesProgress: 0, 
-              dailyMissionSteps: { 1: false, 2: false, 3: false, 4: false, 5: false },
-              dailyMissionDeductions: {},
-              mdTodayDone: false, 
-              todayLoggedRuns: [], 
-              todayLoggedShards: [] 
             } : {}),
             ...(intervalResets.hasWeeklyReset ? { 
               weekliesDone: false, 

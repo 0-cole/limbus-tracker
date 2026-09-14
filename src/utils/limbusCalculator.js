@@ -237,6 +237,7 @@ export function generateRoadmap(
 
   // Pre-allocate existing nominable crates in inventory
   let initialNominableCrates = inventory?.nominableCrates || 0;
+  const initialInventoryCompletedTargets = [];
   while (activeTargetIdx < targetProgress.length && initialNominableCrates > 0) {
     const cur = targetProgress[activeTargetIdx];
     const needed = cur.cost - cur.currentShards;
@@ -249,6 +250,17 @@ export function generateRoadmap(
       cur.completed = true;
       cur.completedDay = 1;
       cur.completedDate = `Day 1 (Using ${cur.cratesUsedFromInventory} Inventory Crates)`;
+      cur.isInventoryCraft = true;
+      initialInventoryCompletedTargets.push({
+        name: cur.name,
+        sinnerId: cur.sinnerId,
+        sinnerName: cur.sinnerName,
+        cost: cur.cost,
+        day: 1,
+        date: 'Day 1',
+        isInventoryCraft: true,
+        cratesUsed: cur.cratesUsedFromInventory
+      });
       activeTargetIdx++;
     }
   }
@@ -365,6 +377,9 @@ export function generateRoadmap(
     // Allocate earned crates as shards to active target
     let shardsToAlloc = cratesEarnedToday * R_crate;
     const milestonesReachedToday = [];
+    if (isToday && initialInventoryCompletedTargets.length > 0) {
+      milestonesReachedToday.push(...initialInventoryCompletedTargets);
+    }
 
     while (activeTargetIdx < targetProgress.length && shardsToAlloc > 0) {
       const cur = targetProgress[activeTargetIdx];

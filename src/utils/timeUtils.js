@@ -61,13 +61,17 @@ export function getLimbusCycleInfo(nowMs = Date.now()) {
   const resetLocalTime = nextDaily.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
   const startLocalTime = startDaily.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 
-  // Has today's reset already happened in local day?
-  const isAfterResetToday = (startDaily.getDate() === now.getDate());
-
-  const remainingMs = Math.max(0, nextDaily.getTime() - nowMs);
-  const h = Math.floor(remainingMs / 3600000);
-  const m = Math.floor((remainingMs % 3600000) / 60000);
-  const remainingStr = h > 0 ? `${h}h ${m}m` : `${m}m`;
+  // Local time windows for clear roadmap demarcation
+  // Pre-Reset Window: 12:00 AM (midnight) up to the daily reset (e.g. 5:00 PM local)
+  // Post-Reset Window: Daily reset up to 11:59 PM (midnight)
+  const isPreResetWindow = !isAfterResetToday;
+  const windowPhase = isPreResetWindow ? 'Pre-Reset Window' : 'Post-Reset Window';
+  const windowTimeRange = isPreResetWindow 
+    ? `12:00 AM – ${resetLocalTime}` 
+    : `${startLocalTime} – 11:59 PM`;
+  const windowDesc = isPreResetWindow
+    ? `Finishing today's server cycle (Cycle ends at ${resetLocalTime} today / 06:00 KST)`
+    : `New server cycle active (Cycle resets at ${resetLocalTime} tomorrow / 06:00 KST)`;
 
   return {
     cycleKey,
@@ -80,8 +84,12 @@ export function getLimbusCycleInfo(nowMs = Date.now()) {
     resetLocalTime,
     startLocalTime,
     isAfterResetToday,
+    isPreResetWindow,
+    windowPhase,
+    windowTimeRange,
+    windowDesc,
     explanation: isAfterResetToday
-      ? `Today's 5:00 PM reset has passed. You are currently in the ${cycleDayName} cycle (Server Day: ${cycleDateLabel}). It remains active until ${resetLocalTime} tomorrow.`
+      ? `Today's ${startLocalTime} reset has passed. You are currently in the ${cycleDayName} cycle (Server Day: ${cycleDateLabel}). It remains active until ${resetLocalTime} tomorrow.`
       : `Currently in the ${cycleDayName} cycle (Server Day: ${cycleDateLabel}). Resets at ${resetLocalTime} today.`
   };
 }

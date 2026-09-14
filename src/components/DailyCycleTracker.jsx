@@ -220,6 +220,13 @@ export default function DailyCycleTracker() {
           <span className="text-white font-bold">
             Cycle: <span className="text-[#c9a84c]">{cycleInfo.cycleDateLabel}</span>
           </span>
+          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
+            cycleInfo.isPreResetWindow 
+              ? 'text-cyan-300 bg-cyan-950/60 border-cyan-500/40' 
+              : 'text-indigo-300 bg-indigo-950/60 border-indigo-500/40'
+          }`}>
+            {cycleInfo.windowPhase} ({cycleInfo.windowTimeRange})
+          </span>
           <span className="text-gray-400 text-[11px]">
             ({cycleInfo.isAfterResetToday 
               ? `Rolled over at ${cycleInfo.startLocalTime} local / 06:00 KST` 

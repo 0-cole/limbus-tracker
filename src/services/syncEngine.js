@@ -1,5 +1,6 @@
 import { supabase } from './supabaseClient';
 import { useStore } from '../stores/useStore';
+import { getLimbusCycleInfo } from '../utils/timeUtils.js';
 
 let syncTimeout = null;
 let autoInterval = null;
@@ -205,14 +206,17 @@ export const syncEngine = {
         const localSched = store.scheduleState || {};
         const cloudSched = cloudData.scheduleState || {};
 
-        // Merge today's logged runs & shards without duplicates so quick logs show cross-device for the day
+        const cycleInfo = getLimbusCycleInfo();
+        const activeCycleStart = cycleInfo.cycleStartMs;
+
+        // Merge today's logged runs & shards without duplicates, strictly filtering by current active cycle
         const runsMap = new Map();
-        (localSched.todayLoggedRuns || []).forEach(r => runsMap.set(r.id, r));
-        (cloudSched.todayLoggedRuns || []).forEach(r => runsMap.set(r.id, r));
+        (localSched.todayLoggedRuns || []).filter(r => (r.timestamp || 0) >= activeCycleStart).forEach(r => runsMap.set(r.id, r));
+        (cloudSched.todayLoggedRuns || []).filter(r => (r.timestamp || 0) >= activeCycleStart).forEach(r => runsMap.set(r.id, r));
 
         const shardsMap = new Map();
-        (localSched.todayLoggedShards || []).forEach(s => shardsMap.set(s.id, s));
-        (cloudSched.todayLoggedShards || []).forEach(s => shardsMap.set(s.id, s));
+        (localSched.todayLoggedShards || []).filter(s => (s.timestamp || 0) >= activeCycleStart).forEach(s => shardsMap.set(s.id, s));
+        (cloudSched.todayLoggedShards || []).filter(s => (s.timestamp || 0) >= activeCycleStart).forEach(s => shardsMap.set(s.id, s));
 
         const mergedSchedule = {
           ...localSched,

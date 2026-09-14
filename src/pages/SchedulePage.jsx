@@ -1,11 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../stores/useStore';
-import { Calculator, Calendar, Check, AlertTriangle, ArrowRight, Target, Flame, Settings } from 'lucide-react';
+import { Calculator, Calendar, Check, AlertTriangle, ArrowRight, Target, Flame, Settings, Clock } from 'lucide-react';
 import DailyCycleTracker from '../components/DailyCycleTracker.jsx';
 import sinnersData from '../data/sinners.json';
 import { calculateLimbusGrind, generateRoadmap } from '../utils/limbusCalculator.js';
 import { getEntityImageUrl } from '../utils/imageUtils.js';
+import { getLimbusCycleInfo } from '../utils/timeUtils.js';
 import { 
   DEFAULT_SEASON_END_DATE, 
   getSeasonEndDate, 
@@ -35,6 +36,7 @@ export default function SchedulePage() {
   const cantoUnlockedHard = canto >= 8;
   const preferHardMd = bpState.preferHardMd !== false;
   const hasMdHard = cantoUnlockedHard && preferHardMd;
+  const cycleInfo = useMemo(() => getLimbusCycleInfo(), [scheduleState?.lastResetCheck]);
 
   // Update store when canto changes
   const handleCantoChange = (val) => {
@@ -558,9 +560,76 @@ export default function SchedulePage() {
       )}
 
       {/* Roadmap Table */}
-      <h2 className="text-2xl font-bold text-white mt-12 mb-6 flex items-center gap-2">
+      <h2 className="text-2xl font-bold text-white mt-12 mb-4 flex items-center gap-2">
         <Calendar size={24} className="text-[#c9a84c]" /> Grind Roadmap (Next 30 Days)
       </h2>
+
+      {/* Server Cycle & Reset Windows Demarcation Banner */}
+      <div className="bg-[#141414] border border-[#2e2e2e] rounded-xl p-4 mb-6 shadow-md">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#282828] pb-3 mb-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-sm font-bold text-white flex items-center gap-2">
+              <Clock size={16} className="text-[#c9a84c]" />
+              Server Cycle Clock & Reset Windows
+            </span>
+            <span className={`text-[10px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded border ${
+              cycleInfo.isPreResetWindow 
+                ? 'bg-cyan-950/70 border-cyan-500/50 text-cyan-300 shadow-sm' 
+                : 'bg-indigo-950/70 border-indigo-500/50 text-indigo-300 shadow-sm'
+            }`}>
+              ● {cycleInfo.windowPhase}
+            </span>
+          </div>
+          <div className="text-xs font-mono text-gray-400">
+            Next Daily Reset: <span className="text-yellow-400 font-bold">{cycleInfo.remainingStr}</span> ({cycleInfo.resetLocalTime} local / 06:00 KST)
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          {/* Pre-Reset Phase Card */}
+          <div className={`p-3 rounded-lg border transition-all ${
+            cycleInfo.isPreResetWindow 
+              ? 'bg-cyan-950/20 border-cyan-500/40 ring-1 ring-cyan-500/30' 
+              : 'bg-black/30 border-[#262626] opacity-60'
+          }`}>
+            <div className="flex items-center justify-between mb-1">
+              <span className="font-bold text-cyan-300 flex items-center gap-1.5">
+                <span>☀️</span> Phase 1: 12:00 AM – {cycleInfo.resetLocalTime} (Pre-Reset)
+              </span>
+              {cycleInfo.isPreResetWindow && (
+                <span className="text-[9px] bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">
+                  Active Now
+                </span>
+              )}
+            </div>
+            <p className="text-gray-400 text-[11px] leading-relaxed">
+              Belongs to Server Day <strong>{cycleInfo.cycleDateLabel}</strong>. Mirror Dungeons, daily missions, and crate logs submitted here count toward finishing this cycle before the {cycleInfo.resetLocalTime} reset.
+            </p>
+          </div>
+
+          {/* Post-Reset Phase Card */}
+          <div className={`p-3 rounded-lg border transition-all ${
+            !cycleInfo.isPreResetWindow 
+              ? 'bg-indigo-950/20 border-indigo-500/40 ring-1 ring-indigo-500/30' 
+              : 'bg-black/30 border-[#262626] opacity-60'
+          }`}>
+            <div className="flex items-center justify-between mb-1">
+              <span className="font-bold text-indigo-300 flex items-center gap-1.5">
+                <span>🌙</span> Phase 2: {cycleInfo.startLocalTime} – 11:59 PM (Post-Reset)
+              </span>
+              {!cycleInfo.isPreResetWindow && (
+                <span className="text-[9px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">
+                  Active Now
+                </span>
+              )}
+            </div>
+            <p className="text-gray-400 text-[11px] leading-relaxed">
+              New Server Day begins! Daily missions refresh, and all runs logged belong to the new server cycle until {cycleInfo.resetLocalTime} tomorrow.
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="bg-[#111] border border-[#333] rounded-xl overflow-x-auto overflow-y-hidden mb-12 shadow-lg">
          {(() => {
            const formatRunType = (type) => {
@@ -652,6 +721,20 @@ export default function SchedulePage() {
                              <span className="text-xs text-gray-400 font-normal mt-0.5">
                                {row.weekday}, {row.date}
                              </span>
+                             {row.isToday && cycleInfo && (
+                               <div className="mt-1.5 flex flex-col gap-0.5">
+                                 <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded w-fit border ${
+                                   cycleInfo.isPreResetWindow 
+                                     ? 'text-cyan-300 bg-cyan-950/60 border-cyan-500/40' 
+                                     : 'text-indigo-300 bg-indigo-950/60 border-indigo-500/40'
+                                 }`}>
+                                   {cycleInfo.windowPhase}
+                                 </span>
+                                 <span className="text-[9px] text-gray-400 font-mono">
+                                   {cycleInfo.windowTimeRange}
+                                 </span>
+                               </div>
+                             )}
                            </div>
 
                            {/* Required MDs */}
@@ -659,7 +742,11 @@ export default function SchedulePage() {
                              {row.isToday && mdDoneToday ? (
                                <div className="flex flex-col gap-1">
                                  <span className="text-[10px] font-black px-2 py-0.5 rounded bg-emerald-950/70 border border-emerald-500/60 text-emerald-300 flex items-center gap-1 w-fit shadow-sm">
-                                   <Check size={12} className="text-emerald-400 shrink-0" /> Done ({todayRuns.length}/{Math.max(1, totalPlannedMd)} {runDescriptor})
+                                   <Check size={12} className="text-emerald-400 shrink-0" /> {
+                                     totalPlannedMd === 0 
+                                       ? `Done (${todayRuns.length} Logged Run${todayRuns.length !== 1 ? 's' : ''})`
+                                       : `Done (${todayRuns.length}/${totalPlannedMd} ${runDescriptor})`
+                                   }
                                  </span>
                                  {todayRuns.map((r, i) => (
                                    <span key={i} className="text-[10px] text-emerald-400/90 flex items-center gap-1 font-medium break-words">
@@ -808,9 +895,17 @@ export default function SchedulePage() {
                              {hasMilestone ? (
                                <div className="space-y-1">
                                  {row.milestonesReachedToday.map((m, mi) => (
-                                   <div key={mi} className="bg-[#c9a84c] text-black font-black text-[10px] px-2 py-1 rounded shadow flex items-center gap-1 break-words" title={m.name}>
-                                     <span className="shrink-0">🏆</span>
-                                     <span className="break-words">CRAFT: {m.name}</span>
+                                   <div key={mi} className={`${
+                                     m.isInventoryCraft 
+                                       ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-black border border-amber-300 shadow-[0_0_12px_rgba(251,191,36,0.5)]' 
+                                       : 'bg-[#c9a84c] text-black'
+                                   } font-black text-[10px] px-2 py-1 rounded shadow flex items-center gap-1.5 break-words`} title={m.name}>
+                                     <span className="shrink-0">{m.isInventoryCraft ? '✨' : '🏆'}</span>
+                                     <span className="break-words">
+                                       {m.isInventoryCraft 
+                                         ? `READY TO CRAFT: ${m.name} (${m.cratesUsed} Inventory Crates)` 
+                                         : `CRAFT: ${m.name}`}
+                                     </span>
                                    </div>
                                  ))}
                                </div>
