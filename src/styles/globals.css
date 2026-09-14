@@ -286,6 +286,20 @@ body {
   --theme-glow: rgba(244, 63, 94, 0.4);
 }
 
+[data-theme="dieci"] {
+  --theme-primary: #3b82f6;
+  --theme-accent: #60a5fa;
+  --theme-primary-rgb: 59, 130, 246;
+  --theme-glow: rgba(59, 130, 246, 0.4);
+}
+
+[data-theme="cinq"] {
+  --theme-primary: #f43f5e;
+  --theme-accent: #fb7185;
+  --theme-primary-rgb: 244, 63, 94;
+  --theme-glow: rgba(244, 63, 94, 0.4);
+}
+
 /* Dynamic Theme Overrides for all active non-default themes */
 [data-theme]:not([data-theme="gold"]) .text-\[\#c9a84c\],
 [data-theme]:not([data-theme="gold"]) .text-\[\#eab308\],

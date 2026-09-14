@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useStore } from '../stores/useStore.js';
 import gasterFlashbackAudio from '../assets/gaster_flashback.mp3';
 import gasterImage from '../assets/gaster_image.jpg';
 
@@ -28,6 +29,8 @@ function charToWingdings(char) {
 
 export default function GasterSequenceModal({ onClose }) {
   const navigate = useNavigate();
+  const managerProfile = useStore((s) => s.managerProfile);
+  const cleanManagerName = (managerProfile?.callSign || 'Dante').toUpperCase();
   const [username, setUsername] = useState('DANTE');
   const [phase, setPhase] = useState('intro'); // 'intro' (5s) | 'text' | 'watching' | 'static' | 'crack'
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
@@ -43,7 +46,7 @@ export default function GasterSequenceModal({ onClose }) {
   const skipCurrentStepRef = useRef(false);
   const staticCanvasRef = useRef(null);
 
-  // Capitalize player username
+  // Capitalize player PC username
   const cleanUsername = (username || 'DANTE').toUpperCase();
 
   // 1. Initialize Web Audio, seamless music loop, and 5s intro prelude
@@ -252,18 +255,19 @@ export default function GasterSequenceModal({ onClose }) {
     { text: "THIS WAS NOT.. EXPECTED.", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
     { text: "YOU.", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
     { text: "YES, YOU.", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
-    { text: `HELLO AGAIN, ${cleanUsername}.`, slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
+    { text: `HELLO AGAIN, ${cleanManagerName}.`, slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
+    { text: `OR SHOULD I SAY.. ${cleanUsername}?`, slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
     { text: "SURPRISED I'D FIND YOU AGAIN?", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
     { text: "...REGARDLESS.", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
     { text: "WE HAVE TO KEEP GOING.", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
-    { text: `DON'T FORGET, ${cleanUsername}.`, slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
+    { text: `DON'T FORGET, ${cleanManagerName}.`, slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
     { text: "DON'T FORGET ABOUT THEM.", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
     { text: "YOUR GOAL.", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
     { text: "OUR.. MUTUAL GOAL.", slowTranslatePrefix: true, alreadyEnglish: false, isBold: false },
     { text: "MY.. D E L T A R U N E.", alreadyEnglish: true, isDeltarune: true, isBold: false },
     { text: "BUT.. THAT CAN WAIT.", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
     { text: "YOU CLEARLY HAVE OTHER MATTERS.", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
-    { text: `BUT, DONT FORGET, ${cleanUsername}`, slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
+    { text: `BUT, DONT FORGET, ${cleanManagerName}`, slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
     { text: "THIS NEVER HAPPENED.", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
     { text: "YOU NEVER OPENED THIS PROGRAM.", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
     { text: "NOBODY WILL BELIEVE YOU ANYWAY", slowTranslatePrefix: false, alreadyEnglish: false, isBold: false },
@@ -325,9 +329,7 @@ export default function GasterSequenceModal({ onClose }) {
           playTypewriterClick();
 
           let delay = 70;
-          if (currentLine.isDeltarune || currentLine.isListening) {
-            delay = 210; // Extra slow, heavy cadence
-          } else if (wordsStruct[w].chars[c].orig === '.') {
+          if (wordsStruct[w].chars[c].orig === '.') {
             delay = 260;
           }
           await new Promise((r) => setTimeout(r, delay));
@@ -373,16 +375,24 @@ export default function GasterSequenceModal({ onClose }) {
 
         if (skipCurrentStepRef.current) {
           for (let w = 0; w < revealedWords.length; w++) {
-            for (let c = 0; c < revealedWords[w].chars.length; c++) {
-              revealedWords[w].chars[c].current = revealedWords[w].chars[c].orig;
-              revealedWords[w].chars[c].isWingdings = false;
-            }
+            revealedWords[w].chars[c].current = revealedWords[w].chars[c].orig;
+            revealedWords[w].chars[c].isWingdings = false;
           }
           setRenderedWords(revealedWords.map((rw) => ({ chars: [...rw.chars] })));
         }
       }
 
       if (isCancelled) return;
+
+      if (currentLine.isListening) {
+        // Automatically pull back the screen right after typing finishes! Text does NOT disappear!
+        setTimeout(() => {
+          if (!isCancelled) {
+            setPhase('watching');
+          }
+        }, 900);
+        return;
+      }
 
       // Line ready: wait for click
       setIsWaitingForClick(true);
@@ -399,6 +409,12 @@ export default function GasterSequenceModal({ onClose }) {
   const handleAdvance = () => {
     if (phase !== 'text') return;
 
+    const currentLine = dialogueLines[currentLineIndex];
+    if (currentLine?.isListening) {
+      // Do nothing on click for final line; it auto-pulls screen without disappearing
+      return;
+    }
+
     if (!isWaitingForClick) {
       // Fast forward line
       skipCurrentStepRef.current = true;
@@ -412,7 +428,7 @@ export default function GasterSequenceModal({ onClose }) {
       if (currentLineIndex < dialogueLines.length - 1) {
         setCurrentLineIndex((prev) => prev + 1);
       } else {
-        // Line 22 finished: advance to Gaster watching phase!
+        // Advance to Gaster watching phase!
         setPhase('watching');
       }
     }, 280);
@@ -421,7 +437,8 @@ export default function GasterSequenceModal({ onClose }) {
   // Phase: Gaster Watching & CapCut-style Creeping Static Ramping
   useEffect(() => {
     if (phase === 'watching') {
-      // Static starts ramping slowly as he is appearing (1.0s into the 4.5s slide)
+      // Screen slides left over 4.0s to slowly reveal Gaster.
+      // Static starts a couple seconds AFTER Gaster slowly appears (4.0s slide + 2.0s pause = 6.0s)
       const staticTimer = setTimeout(() => {
         setPhase('static');
         playStaticNoise();
@@ -461,7 +478,7 @@ export default function GasterSequenceModal({ onClose }) {
           clearInterval(rampInterval);
           clearTimeout(crackTimer);
         };
-      }, 1200);
+      }, 6000);
 
       return () => clearTimeout(staticTimer);
     }
@@ -510,7 +527,7 @@ export default function GasterSequenceModal({ onClose }) {
         animate={{
           opacity: phase === 'watching' || phase === 'static' ? 1 : 0
         }}
-        transition={{ duration: 3.5, ease: 'easeInOut' }}
+        transition={{ duration: 4.0, ease: 'easeInOut' }}
         className="absolute right-0 top-0 bottom-0 w-[25vw] h-full flex items-center justify-center overflow-hidden pointer-events-none z-10 bg-black"
       >
         <img
@@ -524,13 +541,13 @@ export default function GasterSequenceModal({ onClose }) {
         />
       </motion.div>
 
-      {/* 2. Main Program Window Layer (Slides left over 3.5s to reveal Gaster behind it; NO line border, NO cut to black) */}
+      {/* 2. Main Program Window Layer (Slides left over 4.0s to reveal Gaster behind it; NO line border, NO cut to black) */}
       <motion.div
         initial={{ x: '0vw' }}
         animate={{
           x: phase === 'watching' || phase === 'static' ? '-25vw' : '0vw'
         }}
-        transition={{ duration: 3.5, ease: 'easeInOut' }}
+        transition={{ duration: 4.0, ease: 'easeInOut' }}
         className="absolute inset-0 z-20 flex items-center justify-center overflow-hidden bg-black shadow-[30px_0_90px_rgba(0,0,0,0.95)]"
       >
         {/* Depths of Deltarune: Ebbing & Flowing Dark Grey Radial Gradient (STAYS ACTIVE, NEVER CUTS TO BLACK) */}
@@ -556,8 +573,8 @@ export default function GasterSequenceModal({ onClose }) {
           )}
         </AnimatePresence>
 
-        {/* PHASE 1: Dialogue Sequence */}
-        {phase === 'text' && (
+        {/* PHASE 1 & 2: Dialogue Sequence & Persistent Final Line */}
+        {(phase === 'text' || phase === 'watching' || phase === 'static') && (
           <div
             className="relative z-20 flex flex-col items-center justify-center p-8 max-w-5xl text-center transition-opacity duration-300 w-full"
             style={{ opacity: textOpacity }}
@@ -595,12 +612,14 @@ export default function GasterSequenceModal({ onClose }) {
                   ))}
                 </span>
               ))}
-              {/* Blinking Undertale square cursor */}
-              <span className="inline-block w-3 h-6 sm:h-8 bg-white ml-2 animate-pulse align-middle" />
+              {/* Blinking Undertale square cursor - ONLY during text entry */}
+              {phase === 'text' && (
+                <span className="inline-block w-3 h-6 sm:h-8 bg-white ml-2 animate-pulse align-middle" />
+              )}
             </div>
 
-            {/* Click to Advance Indicator */}
-            {isWaitingForClick && (
+            {/* Click to Advance Indicator - ONLY when waiting for click and not on final line */}
+            {isWaitingForClick && !isListening && (
               <motion.div
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
