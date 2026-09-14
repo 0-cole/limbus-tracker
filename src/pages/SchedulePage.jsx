@@ -803,8 +803,8 @@ export default function SchedulePage() {
                                  {todayRuns.length > 0 ? (
                                    <div className={`${mdDoneToday ? 'text-emerald-400' : 'text-amber-400'} font-bold flex items-start gap-1 text-xs break-words`}>
                                      {mdDoneToday ? <Check size={12} className="shrink-0 mt-0.5" /> : <span className="shrink-0">⏳</span>}
-                                     <span>+{todayRuns.reduce((acc, r) => acc + r.exp, 0)} EXP gained from Mirror Dungeon -- [{mdDoneToday ? 'Logged' : 'In Progress'}]</span>
-                                   </div>
+                                      <span>+{todayRuns.reduce((acc, r) => acc + r.exp, 0)} EXP gained from Mirror Dungeon -- [{mdDoneToday ? 'Logged' : 'In Progress'}]{!mdDoneToday && row.gainedExpFromRuns > 0 ? ` (+${row.gainedExpFromRuns} EXP remaining)` : ''}</span>
+                                    </div>
                                  ) : row.runs > 0 ? (
                                    <div className="text-green-400 font-bold text-xs break-words">+{row.gainedExpFromRuns} EXP from Mirror Dungeon</div>
                                  ) : (

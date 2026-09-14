@@ -351,10 +351,10 @@ export function generateRoadmap(
             runsList.push({ type: 'Normal', runKey: 'normal_nobonus', exp: 30, modules: 5 });
         }
     }
-    // Credit EXP from runs already logged today
-    if (isToday) {
-      gainedExpFromRuns += todayExpLogged;
-    }
+    // Note: Do NOT add `todayExpLogged` into `gainedExpFromRuns` here.
+    // Runs already logged today have already been credited to the player's live inventory,
+    // shards, and battle pass level. Day 1 forward simulation must strictly calculate crates
+    // and EXP from uncompleted, remaining runs so resources are not double-counted.
 
     // 4. Passive EXP
     const todayDailyExpRemaining = Math.max(0, (5 - (scheduleState?.dailiesProgress || 0)) * 2);
