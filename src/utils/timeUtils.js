@@ -137,34 +137,28 @@ export function getRemainingCycles(seasonEndDateIso) {
   
   if (endMs <= nowMs) return { daysLeft: 0, weeksLeft: 0 };
 
-  // Calculate remaining days based on daily resets
+  const now = new Date(nowMs);
+  
+  // Calculate remaining calendar days that have playable time before endMs.
+  // A calendar day has playable time if its start (00:00 local time) is strictly before endMs.
   let daysLeft = 0;
-  let cursorMs = nowMs;
-  while(cursorMs < endMs) {
-      let nextResets = getNextResets(cursorMs);
-      if (nextResets.nextDaily <= endMs) {
-          daysLeft++;
-          cursorMs = nextResets.nextDaily;
-      } else {
-          // If we reach here, the next reset is past the end date.
-          // Add 1 more day for the final partial day if endMs is strictly after cursorMs
-          if (endMs > cursorMs) daysLeft++;
-          break;
-      }
+  let cursorDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+  while (cursorDay.getTime() < endMs) {
+    daysLeft++;
+    cursorDay.setDate(cursorDay.getDate() + 1);
   }
 
-  // Calculate remaining weeks based on weekly resets
+  // Calculate remaining weekly resets that occur strictly before endMs.
   let weeksLeft = 0;
-  cursorMs = nowMs;
-  while(cursorMs < endMs) {
-      let nextResets = getNextResets(cursorMs);
-      if (nextResets.nextWeekly <= endMs) {
-          weeksLeft++;
-          cursorMs = nextResets.nextWeekly;
-      } else {
-          if (endMs > cursorMs) weeksLeft++;
-          break;
-      }
+  let cursorMs = nowMs;
+  while (cursorMs < endMs) {
+    let nextResets = getNextResets(cursorMs);
+    if (nextResets.nextWeekly < endMs) {
+      weeksLeft++;
+      cursorMs = nextResets.nextWeekly + 1000;
+    } else {
+      break;
+    }
   }
 
   return { daysLeft, weeksLeft };

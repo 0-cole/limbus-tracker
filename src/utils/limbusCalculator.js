@@ -3,6 +3,7 @@
  * Deterministic Engine & Roadmap Generator with Egoshard Allocation Milestones
  */
 import { getRemainingCycles, getNextResets } from './timeUtils.js';
+import { getSeasonEndDate } from './seasonUtils.js';
 
 export function normalizeSinnerId(name) {
   if (!name) return 'yi-sang';
@@ -269,6 +270,8 @@ export function generateRoadmap(
   let partialExpAccumulator = bpState?.currentExp || 0;
   let totalCratesGenerated = 0;
 
+  const seasonEndMs = bpState?.seasonEndDate ? new Date(getSeasonEndDate(bpState)).getTime() : null;
+
   for (let i = 0; i < availableDays; i++) {
     // 1. Calendar Date & Weekly Reset for Day i
     const isToday = i === 0;
@@ -277,6 +280,16 @@ export function generateRoadmap(
     const dateStr = dayDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     const weekdayStr = dayDate.toLocaleDateString('en-US', { weekday: 'short' });
     
+    // Hard cutoff: If this calendar day starts strictly after the season has already ended, stop generating days.
+    const dayStartMs = new Date(dayDate.getFullYear(), dayDate.getMonth(), dayDate.getDate(), 0, 0, 0, 0).getTime();
+    if (seasonEndMs && dayStartMs >= seasonEndMs) {
+      break;
+    }
+
+    const nextDayStartMs = dayStartMs + 24 * 60 * 60 * 1000;
+    const isSeasonEndDay = seasonEndMs ? (seasonEndMs > dayStartMs && seasonEndMs <= nextDayStartMs) : false;
+    const seasonEndLocalTime = isSeasonEndDay ? new Date(seasonEndMs).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '';
+
     // Check if the upcoming weekly reset falls on this calendar day
     const dayEndMs = new Date(dayDate.getFullYear(), dayDate.getMonth(), dayDate.getDate(), 23, 59, 59, 999).getTime();
     let isWeeklyReset = false;
@@ -411,6 +424,8 @@ export function generateRoadmap(
       weekday: weekdayStr,
       isToday,
       isWeeklyReset,
+      isSeasonEndDay,
+      seasonEndLocalTime,
       runs: runsCountToday,
       plannedRuns: plannedRunsToday,
       remainingRuns: isToday ? effectiveRunsCountToday : runsCountToday,

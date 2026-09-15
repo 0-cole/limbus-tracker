@@ -712,6 +712,11 @@ export default function SchedulePage() {
                                    🔄 Weekly Reset
                                  </span>
                                )}
+                               {row.isSeasonEndDay && (
+                                 <span className="text-[9px] uppercase tracking-wider bg-red-600 text-white font-black px-1.5 py-0.5 rounded shadow-[0_0_10px_rgba(239,68,68,0.7)]">
+                                   🏁 Season Finale ({row.seasonEndLocalTime || 'Cutoff'})
+                                 </span>
+                               )}
                                {isGoal && !hasMilestone && (
                                  <span className="text-[9px] uppercase tracking-wider bg-[#22c55e] text-black px-1.5 py-0.5 rounded font-black shadow-[0_0_8px_rgba(34,197,94,0.6)]">
                                    Goal Met
@@ -918,6 +923,11 @@ export default function SchedulePage() {
                                  <span className="text-[10px] text-gray-400 font-mono">
                                    {row.activeFarmingTarget.currentShards} / {row.activeFarmingTarget.targetCost} Shards
                                  </span>
+                                 {row.isSeasonEndDay && (
+                                   <span className="text-[10px] text-red-300 font-bold bg-red-950/80 border border-red-500/60 px-1.5 py-0.5 rounded w-fit mt-1 shadow-sm">
+                                     ⚠️ Incomplete by Season End (Shortfall: {row.activeFarmingTarget.targetCost - row.activeFarmingTarget.currentShards} Shards)
+                                   </span>
+                                 )}
                                </div>
                              ) : (
                                <span className="text-gray-600 text-[10px]">All Goals Reached</span>
