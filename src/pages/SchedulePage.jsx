@@ -982,6 +982,16 @@ export default function SchedulePage() {
                                </div>
                              ) : row.activeFarmingTarget ? (
                                <div className="text-gray-300 flex flex-col gap-0.5">
+                                 {row.isPreEx && (
+                                   <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
+                                     <span className="text-[10px] font-black font-mono px-1.5 py-0.2 rounded bg-purple-950/80 text-purple-300 border border-purple-600/50">
+                                       Pass Lv. {row.simulatedBpLevel || 1}/120
+                                     </span>
+                                     <span className="text-[9px] text-gray-400 font-mono">
+                                       (EX Crates at Lv. 121)
+                                     </span>
+                                   </div>
+                                 )}
                                  <span className="text-[11px] text-[#c9a84c] font-bold flex items-center gap-1 break-words">
                                    <span className="shrink-0">🎯</span>
                                    {row.activeFarmingTarget.priority && (
@@ -993,6 +1003,7 @@ export default function SchedulePage() {
                                  </span>
                                  <span className="text-[10px] text-gray-400 font-mono">
                                    {row.activeFarmingTarget.currentShards} / {row.activeFarmingTarget.targetCost} Shards
+                                   {row.isPreEx && <span className="text-gray-500 ml-1 text-[9px]">(Manual Quick Log)</span>}
                                  </span>
                                  {row.isSeasonEndDay && (
                                    <span className="text-[10px] text-red-300 font-bold bg-red-950/80 border border-red-500/60 px-1.5 py-0.5 rounded w-fit mt-1 shadow-sm">

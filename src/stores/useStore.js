@@ -396,7 +396,7 @@ export const useStore = create((set, get) => ({
           const regenerated = recalculateEnkephalin(currentInv);
           if (regenerated.enkephalin !== currentInv.enkephalin || regenerated.maxEnkephalin !== currentInv.maxEnkephalin) {
             set((s) => ({ inventory: { ...s.inventory, ...regenerated } }));
-            get().saveStore();
+            get().saveStore(false);
           }
         }
 
@@ -479,7 +479,7 @@ export const useStore = create((set, get) => ({
     }
   },
 
-  saveStore: async () => {
+  saveStore: async (isUserAction = true) => {
     if (!get().isLoaded) return;
     const state = get();
     const now = Date.now();
@@ -505,7 +505,9 @@ export const useStore = create((set, get) => ({
     } else {
       localStorage.setItem('limbus-tracker-data', JSON.stringify(dataToSave));
     }
-    syncEngine.queuePush();
+    if (isUserAction) {
+      syncEngine.queuePush();
+    }
   },
 
   toggleAcquiredId: (name) => {

@@ -156,7 +156,11 @@ export function calculateLimbusGrind(
   const nominableCrates = inventory?.nominableCrates || 0;
   const netCratesNeeded = Math.max(0, Math.ceil(totalShardDeficit / R_crate) - nominableCrates);
   
-  const bpLevelsNeeded = Math.ceil(netCratesNeeded / cratesPerLevel);
+  const currentLevel = bpState?.level || 1;
+  const levelsToReachEx = Math.max(0, 120 - currentLevel);
+  const exLevelsNeeded = Math.ceil(netCratesNeeded / cratesPerLevel);
+  // If crates are still needed, player must clear milestone levels 1-120 first before EX crates unlock
+  const bpLevelsNeeded = (netCratesNeeded > 0 ? levelsToReachEx : 0) + exLevelsNeeded;
   let bpExpNeeded = bpLevelsNeeded * 10;
 
   // Offset by current partial EXP
@@ -221,6 +225,7 @@ export function calculateLimbusGrind(
   return {
     shardsNeeded: totalShardDeficit,
     cratesNeeded: netCratesNeeded,
+    bpLevelsNeeded,
     bpExpNeeded,
     passiveExp: truePassiveExp,
     expToGrind: Math.max(0, bpExpNeeded - truePassiveExp),
@@ -373,6 +378,7 @@ export function generateRoadmap(
   let totalModulesNeeded = 0;
   let partialExpAccumulator = bpState?.currentExp || 0;
   let totalCratesGenerated = 0;
+  let simulatedBpLevel = bpState?.level || 1;
 
   const seasonEndIso = getSeasonEndDate(bpState);
   const seasonEndMs = seasonEndIso ? new Date(seasonEndIso).getTime() : null;
@@ -489,10 +495,17 @@ export function generateRoadmap(
     const newLevels = Math.floor(newExpTotal / 10);
     partialExpAccumulator = newExpTotal % 10;
 
-    const cratesEarnedToday = newLevels * cratesPerLevel;
+    // Limbus Pass levels 1-120 give fixed milestone rewards (not choice crates).
+    // Choice Egoshard crates only begin at EX levels (Level 121+).
+    const prevExLevels = Math.max(0, simulatedBpLevel - 120);
+    const nextExLevels = Math.max(0, (simulatedBpLevel + newLevels) - 120);
+    const exLevelsGainedToday = nextExLevels - prevExLevels;
+    simulatedBpLevel += newLevels;
+
+    const cratesEarnedToday = exLevelsGainedToday * cratesPerLevel;
     totalCratesGenerated += cratesEarnedToday;
 
-    // Allocate earned crates as shards to active target
+    // Allocate earned crates as shards to active target (0 shards allocated while Lv <= 120)
     let shardsToAlloc = cratesEarnedToday * R_crate;
     const milestonesReachedToday = [];
     if (isToday && initialInventoryCompletedTargets.length > 0) {
@@ -550,6 +563,9 @@ export function generateRoadmap(
       modulesUsed: modulesUsedToday,
       cratesEarnedToday,
       totalCratesGenerated,
+      simulatedBpLevel,
+      isPreEx: simulatedBpLevel <= 120,
+      exLevelsGainedToday,
       milestonesReachedToday,
       activeFarmingTarget: currentActiveTarget ? {
         priority: currentActiveTarget.priority,
