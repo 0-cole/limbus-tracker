@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../stores/useStore.js';
-import { CheckCircle, XCircle, AlertCircle, Calendar, Target, Flame, CalendarDays, Battery, Archive, Award, Trash2, Clock, Check, Sparkles, X } from 'lucide-react';
+import { CheckCircle, XCircle, AlertCircle, Calendar, Target, Flame, CalendarDays, Battery, Archive, Award, Trash2, Clock, Check, Sparkles, X, RotateCcw } from 'lucide-react';
 import { calculateLimbusGrind, generateRoadmap } from '../utils/limbusCalculator.js';
 import { getNextResets, getLimbusCycleInfo } from '../utils/timeUtils.js';
 import { getSeasonEndDate } from '../utils/seasonUtils.js';
@@ -33,7 +33,7 @@ export default function DashboardPage() {
     weeklyProgress, updateWeekly, scheduleState, updateScheduleState, 
     bpState, updateBpState, inventory, wantList, identitiesData, egosData, 
     activeBanner, weeklyArchive = [], archiveCurrentWeek, deleteWeeklyArchive,
-    managerProfile
+    managerProfile, injectBpExp
   } = useStore();
   const [showWhenGameStarts, setShowWhenGameStarts] = useState(true);
   const location = useLocation();
@@ -236,8 +236,137 @@ export default function DashboardPage() {
           <DailyCycleTracker />
         </div>
 
-        {/* Right Column: Preferences & Contingency */}
+        {/* Right Column: Battle Pass, Preferences & Contingency */}
         <div className="space-y-6">
+          {/* Permanent Battle Pass Level & EXP Widget */}
+          <div className="glass-card p-6 border-[#c9a84c]/30 shadow-[0_0_20px_rgba(201,168,76,0.1)]">
+            <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#333]">
+              <h2 className="text-lg font-bold font-limbus text-white flex items-center gap-2">
+                <Award size={18} className="text-[#c9a84c]" /> Battle Pass Status
+              </h2>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[#c9a84c] text-black">
+                  Season 8
+                </span>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-black/60 text-gray-300 border border-white/10">
+                  {bpState?.isPremium ? '★ Limbus Pass' : 'Standard'}
+                </span>
+              </div>
+            </div>
+
+            {/* Level Controls */}
+            <div className="space-y-4">
+              <div>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label className="text-xs font-bold text-gray-300 uppercase tracking-wider">
+                    Pass Level
+                  </label>
+                  <span className="text-[11px] text-gray-400 font-mono">
+                    Target: Level {calcResult?.levelsNeeded || 120}+
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => updateBpState({ level: Math.max(1, (bpState?.level || 1) - 1) })}
+                    className="w-9 h-9 rounded-lg bg-black/60 border border-[#444] hover:border-gray-300 text-white font-bold text-base flex items-center justify-center transition-colors cursor-pointer"
+                    title="-1 Level"
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    min="1"
+                    max="999"
+                    value={bpState?.level || 1}
+                    onChange={(e) => updateBpState({ level: Math.max(1, parseInt(e.target.value) || 1) })}
+                    className="flex-1 bg-black/80 border border-[#555] focus:border-[#c9a84c] rounded-lg px-3 py-1.5 text-center text-white font-mono font-black text-lg outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => updateBpState({ level: (bpState?.level || 1) + 1 })}
+                    className="w-9 h-9 rounded-lg bg-black/60 border border-[#444] hover:border-gray-300 text-white font-bold text-base flex items-center justify-center transition-colors cursor-pointer"
+                    title="+1 Level"
+                  >
+                    +
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => updateBpState({ level: (bpState?.level || 1) + 5 })}
+                    className="px-2.5 h-9 rounded-lg bg-black/60 border border-[#444] hover:border-[#c9a84c] text-yellow-400 font-mono font-bold text-xs flex items-center justify-center transition-colors cursor-pointer"
+                    title="+5 Levels"
+                  >
+                    +5
+                  </button>
+                </div>
+              </div>
+
+              {/* EXP Progress Bar & Quick Adjustments */}
+              <div>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label className="text-xs font-bold text-gray-300 uppercase tracking-wider">
+                    Current EXP
+                  </label>
+                  <span className="text-xs font-mono font-bold text-[#c9a84c]">
+                    {bpState?.currentExp || 0} / 10 EXP
+                  </span>
+                </div>
+                
+                {/* Visual Progress Bar */}
+                <div className="w-full bg-black/70 h-2.5 rounded-full overflow-hidden border border-[#333] mb-2.5">
+                  <div 
+                    className="h-full bg-gradient-to-r from-[#c9a84c] to-[#22c55e] transition-all duration-300"
+                    style={{ width: `${Math.min(100, Math.max(0, ((bpState?.currentExp || 0) / 10) * 100))}%` }}
+                  />
+                </div>
+
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const curExp = bpState?.currentExp || 0;
+                      if (curExp >= 2) updateBpState({ currentExp: curExp - 2 });
+                      else if ((bpState?.level || 1) > 1) updateBpState({ level: (bpState?.level || 1) - 1, currentExp: curExp + 8 });
+                    }}
+                    className="flex-1 py-1.5 text-[11px] rounded-lg bg-black/50 border border-[#333] hover:border-gray-500 text-gray-400 hover:text-white font-mono transition-colors cursor-pointer"
+                  >
+                    -2 EXP
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => injectBpExp(2)}
+                    className="flex-1 py-1.5 text-[11px] rounded-lg bg-black/50 border border-[#333] hover:border-emerald-500 text-emerald-300 font-mono font-bold transition-colors cursor-pointer"
+                  >
+                    +2 (Daily)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => injectBpExp(4)}
+                    className="flex-1 py-1.5 text-[11px] rounded-lg bg-black/50 border border-[#333] hover:border-emerald-500 text-emerald-300 font-mono font-bold transition-colors cursor-pointer"
+                  >
+                    +4 (Weekly)
+                  </button>
+                </div>
+              </div>
+
+              {/* Reset to Level 1 Action */}
+              <div className="pt-2 border-t border-[#222] flex justify-between items-center">
+                <span className="text-[10px] text-gray-500 font-mono">Season 8 Start</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm('Reset your Battle Pass to Level 1 (0 EXP) for Season 8?')) {
+                      updateBpState({ level: 1, currentExp: 0 });
+                    }
+                  }}
+                  className="text-[11px] text-red-400 hover:text-red-300 hover:underline font-bold transition-colors cursor-pointer flex items-center gap-1"
+                >
+                  <RotateCcw size={11} /> Reset to Lv. 1
+                </button>
+              </div>
+            </div>
+          </div>
+
           {/* MD Hard Mode Preference Card */}
           <div className="glass-card p-6 border-[#c9a84c]/20">
             <h2 className="text-lg font-bold mb-3 font-limbus text-white flex items-center gap-2">

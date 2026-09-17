@@ -131,15 +131,15 @@ export function checkResets(lastUpdatedIso) {
 
 export function getRemainingCycles(seasonEndDateIso) {
   if (!seasonEndDateIso || seasonEndDateIso === 'Unknown' || seasonEndDateIso === 'TBA') {
-    return { daysLeft: 120, weeksLeft: 17, isUnknown: true };
+    return { daysLeft: 260, weeksLeft: 37, isUnknown: true };
   }
   
   const endMs = new Date(seasonEndDateIso).getTime();
   const nowMs = Date.now();
   
-  // If end date has passed, season 8 has begun -> fallback to nominal season length
+  // If end date has passed, season 8 has begun -> fallback to nominal season length (~8.5 months / 260 days)
   if (isNaN(endMs) || endMs <= nowMs) {
-    return { daysLeft: 120, weeksLeft: 17, isUnknown: true };
+    return { daysLeft: 260, weeksLeft: 37, isUnknown: true };
   }
 
   const now = new Date(nowMs);

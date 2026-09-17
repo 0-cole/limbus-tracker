@@ -246,7 +246,7 @@ export function generateRoadmap(
   const customDailyRuns = Math.max(1, bpState?.customDailyRuns || 3);
   let totalRunsLeft = plannedRuns.length;
   
-  const totalSeasonDays = Math.max(1, daysLeft > 0 ? daysLeft : 120);
+  const totalSeasonDays = Math.max(1, daysLeft > 0 ? daysLeft : 260);
   const availableDays = Math.min(totalSeasonDays, 30);
   const baseMdsPerDay = Math.floor(totalRunsLeft / totalSeasonDays);
   let remainderMds = totalRunsLeft % totalSeasonDays;

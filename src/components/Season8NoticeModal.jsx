@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertTriangle, Package, Layers, ArrowRight, X, Sparkles } from 'lucide-react';
+import { AlertTriangle, Package, Layers, ArrowRight, X, Sparkles, Award, RotateCcw, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useStore } from '../stores/useStore.js';
 
-const STORAGE_KEY = 'lt_s8_shard_halving_notice_v1077';
+const STORAGE_KEY = 'lt_s8_bp_and_shard_reset_notice_v1079';
 
 export default function Season8NoticeModal() {
   const [isOpen, setIsOpen] = useState(false);
+  const [showBpResetConfirm, setShowBpResetConfirm] = useState(false);
+  const [bpResetDone, setBpResetDone] = useState(false);
   const navigate = useNavigate();
+  const { bpState, updateBpState } = useStore();
 
   useEffect(() => {
     try {
@@ -84,8 +88,79 @@ export default function Season8NoticeModal() {
               </span>
               <p>
                 With the launch of Season 8, the standard Limbus Company season rollover has occurred: 
-                <strong> 50% of your unused Egoshards and Egoshard Crates have been converted into Thread!</strong>
+                <strong> 50% of your unused Egoshards and Egoshard Crates have been converted into Thread, and the Battle Pass has reset to Level 1!</strong>
               </p>
+            </div>
+
+            {/* 1. BATTLE PASS RESET PROMPT & CONFIRMATION SUBNOTICE */}
+            <div className="p-4 rounded-xl bg-purple-950/30 border border-purple-800/40 text-xs text-purple-200 flex flex-col gap-2.5">
+              <div className="flex items-center justify-between">
+                <span className="font-bold uppercase tracking-wider text-purple-300 flex items-center gap-1.5">
+                  <Award size={16} className="text-purple-400" /> Season 8 Battle Pass Reset
+                </span>
+                <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-purple-900/60 text-purple-200 border border-purple-700/50">
+                  Current Tracked: Lv. {bpState?.level || 1}
+                </span>
+              </div>
+
+              <p className="text-gray-300">
+                Because everyone starts fresh in Season 8, your tracker should be reset to Level 1 so your schedule, daily pace, and target shard milestones calculate accurately!
+              </p>
+
+              {bpResetDone ? (
+                <div className="p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 flex items-center gap-2 font-bold text-xs">
+                  <CheckCircle size={15} className="text-emerald-400 shrink-0" />
+                  <span>Battle Pass successfully reset to Level 1 (0 EXP) for Season 8!</span>
+                </div>
+              ) : (bpState?.level || 1) > 1 ? (
+                !showBpResetConfirm ? (
+                  <div className="pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setShowBpResetConfirm(true)}
+                      className="px-4 py-2 rounded-xl bg-red-600/90 hover:bg-red-500 text-white font-bold text-xs transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(220,38,38,0.4)] cursor-pointer"
+                    >
+                      <RotateCcw size={14} /> Reset Battle Pass to Level 1
+                    </button>
+                  </div>
+                ) : (
+                  /* EXPLICIT CONFIRMATION SUBNOTICE */
+                  <div className="p-3.5 rounded-xl bg-red-950/80 border-2 border-red-500 text-xs space-y-2.5 mt-1">
+                    <div className="flex items-center gap-2 text-red-200 font-black">
+                      <AlertTriangle size={16} className="text-red-400 shrink-0" />
+                      <span>Subnotice Confirmation Required:</span>
+                    </div>
+                    <p className="text-gray-100 text-[11px] leading-relaxed">
+                      By confirming, your tracked Battle Pass will reset to <strong>Level 1 (0 EXP)</strong>. 
+                      Please also confirm you understand that <strong>your in-game Egoshards and Boxes were halved</strong>, and that you will verify your numbers in the <strong>Inventory</strong> tab!
+                    </p>
+                    <div className="flex flex-wrap items-center gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          updateBpState({ level: 1, currentExp: 0 });
+                          setBpResetDone(true);
+                          setShowBpResetConfirm(false);
+                        }}
+                        className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white font-black text-xs transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(220,38,38,0.6)] cursor-pointer"
+                      >
+                        <CheckCircle size={14} /> I Understand — Reset Pass to Lv. 1
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setShowBpResetConfirm(false)}
+                        className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-gray-300 text-xs font-bold transition-colors cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )
+              ) : (
+                <div className="inline-flex items-center gap-1.5 text-emerald-400 font-bold text-xs pt-1">
+                  <CheckCircle size={15} /> Battle Pass is already at Level 1 (Season 8 Standard)
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

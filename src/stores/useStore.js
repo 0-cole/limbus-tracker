@@ -45,7 +45,7 @@ const defaultState = {
     asapMode: false, // Rely on MDs directly to reach goals ASAP instead of waiting on future passive dailies/weeklies
     paceMode: 'relaxed', // 'relaxed' | 'rush'
     customDailyRuns: 3, // custom MD runs per day when in 'rush' mode
-    daysLeft: 45 // Default
+    daysLeft: 260 // Default (~8.5 months)
   },
   
   scheduleState: {
@@ -452,6 +452,20 @@ export const useStore = create((set, get) => ({
             ...(intervalResets.hasMdWeeklyReset ? { mdBonusesClaimed: 0 } : {}),
             lastResetCheck: intervalResets.now
           });
+        } else {
+          const s = currentSchedule;
+          const cycleInfo = getLimbusCycleInfo();
+          const currentRuns = s.todayLoggedRuns || [];
+          const currentShards = s.todayLoggedShards || [];
+          const validRuns = currentRuns.filter(r => (r.timestamp || 0) >= cycleInfo.cycleStartMs);
+          const validShards = currentShards.filter(s => (s.timestamp || 0) >= cycleInfo.cycleStartMs);
+          if (validRuns.length !== currentRuns.length || validShards.length !== currentShards.length) {
+            get().updateScheduleState({
+              todayLoggedRuns: validRuns,
+              todayLoggedShards: validShards,
+              mdTodayDone: validRuns.length > 0
+            });
+          }
         }
       }, 60000);
 
@@ -607,7 +621,7 @@ export const useStore = create((set, get) => ({
   },
 
   injectBpExp: (amount) => {
-    let result = { levelsGained: 0, cratesDelta: 0 };
+    let result = { levelsGained: 0 };
     set((state) => {
       let newLevel = state.bpState.level;
       let newExp = state.bpState.currentExp + amount;
@@ -625,18 +639,10 @@ export const useStore = create((set, get) => ({
       }
       if (newExp < 0) newExp = 0;
 
-      // In Limbus Company, gaining BP levels awards Nominable Egocrates
-      // (3 crates/level with Premium Pass, 1 crate/level without).
-      const cratesPerLevel = state.bpState.isPremium ? 3 : 1;
-      const cratesDelta = levelsGained * cratesPerLevel;
-      const currentCrates = state.inventory.nominableCrates || 0;
-      const newNominableCrates = Math.max(0, currentCrates + cratesDelta);
-
-      result = { levelsGained, cratesDelta };
+      result = { levelsGained };
 
       return {
-        bpState: { ...state.bpState, level: newLevel, currentExp: newExp },
-        inventory: { ...state.inventory, nominableCrates: newNominableCrates }
+        bpState: { ...state.bpState, level: newLevel, currentExp: newExp }
       };
     });
     get().saveStore();
@@ -737,19 +743,7 @@ export const useStore = create((set, get) => ({
       }
     }));
 
-    const expResult = get().injectBpExp(exp);
-    const cratesDelta = expResult?.cratesDelta || 0;
-    runRecord.cratesEarned = cratesDelta;
-
-    // Auto-convert crates to target Sinner shards if enabled
-    const bpState = get().bpState;
-    if (bpState.autoConvertMdCrates && cratesDelta > 0) {
-      get().autoConvertCratesToShards(
-        cratesDelta,
-        null,
-        runRecord.id
-      );
-    }
+    get().injectBpExp(exp);
 
     get().saveStore();
     return runRecord;
@@ -1148,13 +1142,7 @@ export const useStore = create((set, get) => ({
       }
     });
 
-    const expResult = get().injectBpExp(willBeDone ? 2 : -2);
-    if (willBeDone && expResult?.cratesDelta > 0 && get().bpState.autoConvertMdCrates) {
-      get().autoConvertCratesToShards(
-        expResult.cratesDelta,
-        `Auto-Converted ${expResult.cratesDelta} Daily Mission Crates`
-      );
-    }
+    get().injectBpExp(willBeDone ? 2 : -2);
 
     const cycleInfo = getLimbusCycleInfo();
     const currentWeekly = get().weeklyProgress || {};
@@ -1201,13 +1189,7 @@ export const useStore = create((set, get) => ({
       }
     });
 
-    const expResult = get().injectBpExp(willBeDone ? 4 : -4);
-    if (willBeDone && expResult?.cratesDelta > 0 && get().bpState.autoConvertMdCrates) {
-      get().autoConvertCratesToShards(
-        expResult.cratesDelta,
-        `Auto-Converted ${expResult.cratesDelta} Weekly Mission Crates`
-      );
-    }
+    get().injectBpExp(willBeDone ? 4 : -4);
     get().saveStore();
     return { willBeDone, newProgress, isAllDone };
   },

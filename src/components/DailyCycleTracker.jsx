@@ -137,7 +137,11 @@ export default function DailyCycleTracker() {
 
   const bonusesClaimed = scheduleState.mdBonusesClaimed || 0;
   const bonusesAvailable = Math.max(0, 3 - bonusesClaimed);
-  const todayRuns = scheduleState.todayLoggedRuns || [];
+  
+  // Strictly filter logged runs & shards so they disappear after the 2-part daily cycle resets
+  const activeCycle = getLimbusCycleInfo();
+  const todayRuns = (scheduleState.todayLoggedRuns || []).filter(r => (r.timestamp || 0) >= activeCycle.cycleStartMs);
+  const todayShards = (scheduleState.todayLoggedShards || []).filter(s => (s.timestamp || 0) >= activeCycle.cycleStartMs);
 
   const totalRequiredMd = todayRoadmap?.plannedRuns !== undefined ? todayRoadmap.plannedRuns : (todayRoadmap?.runs || 0);
   const isMdCompletedToday = scheduleState.mdTodayDone || (totalRequiredMd > 0 ? todayRuns.length >= totalRequiredMd : todayRuns.length > 0);
@@ -450,35 +454,6 @@ export default function DailyCycleTracker() {
                 </div>
               </button>
 
-              {/* Auto-Convert MD Crates to Shards Setting */}
-              <div className="sm:col-span-3 flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-lg bg-black/40 border border-[#333] mt-1 text-xs">
-                <label className="flex items-center gap-2 cursor-pointer text-gray-300 select-none">
-                  <input 
-                    type="checkbox"
-                    checked={bpState.autoConvertMdCrates !== false}
-                    onChange={(e) => updateBpState({ autoConvertMdCrates: e.target.checked })}
-                    className="accent-[#c9a84c] rounded w-4 h-4 cursor-pointer"
-                  />
-                  <span className="font-medium text-white flex items-center gap-1.5">
-                    <Sparkles size={14} className="text-[#eab308]" /> Auto-convert pass crates directly to shards (MDs & Missions)
-                  </span>
-                </label>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase">Target:</span>
-                  <select
-                    value={bpState.targetSinnerForCrates || defaultTargetSinner}
-                    onChange={(e) => {
-                      updateBpState({ targetSinnerForCrates: e.target.value });
-                      setCratesTargetSinner(e.target.value);
-                    }}
-                    className="bg-[#111] border border-[#444] rounded px-2 py-1 text-xs text-white focus:border-[#c9a84c] outline-none"
-                  >
-                    {sinnersData.map(s => (
-                      <option key={s.id} value={s.id}>{s.name} ({getOwnedShards(inventory.shards, s.id)} owned)</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
             </div>
           )}
 
@@ -727,12 +702,12 @@ export default function DailyCycleTracker() {
             </div>
           )}
 
-          {/* List of shards/crates logged today */}
-          {scheduleState.todayLoggedShards && scheduleState.todayLoggedShards.length > 0 && (
+          {/* List of shards/crates logged today in active cycle */}
+          {todayShards.length > 0 && (
             <div className="mt-3 pt-3 border-t border-[#222]">
               <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Shards & Crates Logged Today</div>
               <div className="flex flex-wrap gap-2">
-                {scheduleState.todayLoggedShards.map(item => (
+                {todayShards.map(item => (
                   <div key={item.id} className="bg-black/60 border border-[#444] rounded px-2.5 py-1 flex items-center gap-2 text-xs">
                     <span className="text-white font-medium">{item.label}</span>
                     <button 

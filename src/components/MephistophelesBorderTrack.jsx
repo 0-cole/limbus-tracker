@@ -436,15 +436,19 @@ export default function MephistophelesBorderTrack() {
     let lastTime = performance.now();
     let animationFrameId;
 
-    // Full loop takes ~60 seconds
-    const LAP_DURATION_MS = 60000;
+    // Constant cruising speed in pixels per second across all pages
+    const BUS_SPEED_PX_PER_SEC = 75;
 
     const loop = (currentTime) => {
       const delta = currentTime - lastTime;
       lastTime = currentTime;
 
-      // Increment progress
-      progressRef.current = (progressRef.current + delta / LAP_DURATION_MS) % 1;
+      const { totalPerimeter } = dimensionsRef.current;
+      if (totalPerimeter > 0) {
+        // Increment progress by exact physical pixel distance so speed is identical on every page
+        const distanceDelta = (delta / 1000) * BUS_SPEED_PX_PER_SEC;
+        progressRef.current = (progressRef.current + distanceDelta / totalPerimeter) % 1;
+      }
 
       updateBusPosition();
 

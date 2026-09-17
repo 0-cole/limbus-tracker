@@ -46,12 +46,7 @@ const IdCard = React.memo(function IdCard({ id, meta, acquired, onToggleAcquired
   const bgUrl = imgError ? null : (useAltUrl ? altBg : defaultBg);
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, scale: 0.95 }} 
-      animate={{ opacity: 1, scale: 1 }} 
-      exit={{ opacity: 0, scale: 0.9 }} 
-      transition={{ duration: 0.2 }}
-      style={{ contentVisibility: 'auto', containIntrinsicSize: '256px' }}
+    <div 
       className={`relative flex flex-col group overflow-hidden rounded-xl border-2 transition-all cursor-pointer h-64 ${acquired ? 'border-[#c9a84c] shadow-[0_0_15px_rgba(201,168,76,0.2)]' : 'border-[#333] opacity-80 hover:opacity-100 hover:border-[#666]'}`}
       onClick={() => onClickDetails(id)}
     >
@@ -126,7 +121,7 @@ const IdCard = React.memo(function IdCard({ id, meta, acquired, onToggleAcquired
           </button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 });
 
@@ -494,7 +489,6 @@ export default function IdentitiesPage() {
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 pb-12">
-              <AnimatePresence>
                 {/* 🔴 Vergilius Easter Egg Card */}
                 {isVergilius && (
                   <motion.div
@@ -1432,8 +1426,6 @@ export default function IdentitiesPage() {
                     onClickDetails={() => setDetailsId(id)}
                   />
                 ))}
-              </AnimatePresence>
-
             </div>
           </>
         );
