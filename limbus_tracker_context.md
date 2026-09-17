@@ -1,164 +1,49 @@
-# Limbus Tracker — Project Context & State Handoff
-
-> **Generated for AI Session Continuity**  
-> **Last Updated**: 2026-09-13 (v1.0.70 Released)  
-> **Workspace**: `C:\Users\cdbla\Documents\Antigravity Playground\limbus-tracker`
-
----
+# Limbus Tracker — System Context & Architecture Guide
 
 ## 1. Executive Summary & High-Level Objective
-**Limbus Tracker** is a feature-rich, high-performance desktop companion app for *Limbus Company* built with Electron, React, Vite, Tailwind CSS, and Zustand, featuring cloud sync via Supabase.
-
-Key features include:
-- Interactive **Identity & E.G.O Directory** with keyword filters, status effect matching, and damage-type classification.
-- **Daily Cycle Tracker & Farm Manager**: Real-time Enkephalin regeneration, mirror dungeon run logger, crate/shard planner, and granular daily/weekly mission trackers.
-- **In-Universe Settings & Manager Customization Console**: Manager call-sign, interactive avatar cropping studio (zoom & Y-offset for full-body art like Roland), 12 Project Moon theme presets, Web Audio air horn, Sinner radio filters, and desktop tray controls.
-- **Rich Easter Egg System**: Includes *Library of Ruina*, *Lobotomy Corporation*, *Die of Death* (Roblox) classified dossiers, and an immersive multi-stage *W.D. Gaster* ARG sequence.
-- **Auto-Updater & Release Pipeline**: Fully configured GitHub release packaging with auto-update detection for Windows (`.exe` NSIS installer).
+Limbus Tracker is an Electron + React desktop tracking companion for Project Moon's *Limbus Company*. It manages Sinner Egoshards, nominable/random crate inventories, Mirror Dungeon runs, extraction banner timelines, and season milestone projections.
+- **Latest Release**: `v1.0.79` (Git tag `v1.0.79`, release asset `Limbus.Tracker.Setup.1.0.79.exe`).
+- **Repository**: [0-cole/limbus-tracker](https://github.com/0-cole/limbus-tracker) (`master` branch up to date).
 
 ---
 
 ## 2. Critical Architecture & Invariants
-
-### Tech Stack & Runtime
-- **Frontend**: React 18, Vite 5, Tailwind CSS, Lucide Icons, Canvas API for procedural visual effects (CRT scanlines, static noise).
-- **Desktop Container**: Electron (`electron-main.cjs`, `preload.cjs`), `electron-builder` with NSIS packaging.
-- **State Management**: Zustand store (`src/store/useStore.js`) with custom persistence and Supabase cloud sync (`src/services/syncEngine.js`).
-- **Asset Handling**: All 37+ Easter egg character portraits and CGs are stored locally in `src/assets/easter_eggs/` to ensure 100% offline capability without external CDN dependencies.
-
-### Invariants & Protocols
-1. **Version Bump on Release**: `package.json` must be incremented whenever publishing changes. The client auto-updater strictly relies on newer semantic versions to trigger prompts.
-2. **Release Creation**: Whenever building production installers, run `npm run build`, package with `npx electron-builder --win`, push commit & git tag (`vX.X.X`), and publish via `gh release create vX.X.X release2/*.exe`.
-3. **Single Instance Protocol**: Only one running instance of the application is allowed at any time (`app.requestSingleInstanceLock()`). Secondary launches trigger Kenneth's advisory dialog allowing users to focus the existing instance or terminate it and launch fresh.
-4. **Gaster OS Username Invariant**: W.D. Gaster's sequence intentionally bypasses manager call-signs and directly pulls the host Windows username (`getSystemUsername`) for maximum fourth-wall ARG impact.
-5. **Official Enkephalin Scaling**: Caps follow official Limbus Company tables (Level 1 = 60, Level 35 = 119, Level 300 = 216). Passive regeneration runs at 1 Enkephalin per 6 minutes (10/hr), both in real-time and calculated retrospectively from `enkephalinLastSynced` on app launch.
-6. **Task Polling Cadence**: Never rapidly poll long-running background tasks (like `electron-builder`) every second. Maintain at least 15–30+ second checks or rely on system notifications.
-
----
-
-## 3. Recent Modifications & Verified State (Up through v1.0.70)
-
-### Verified Features & Fixes
-- **v1.0.70 Release (GitHub 403 Rate-Limit Resolution & Offline Operational Log Fallback)**:
-  - **403 Rate-Limit Fix**: Reduced background update polling from 20s to 10m in `UpdateNotification.jsx`, preventing users from exceeding GitHub's 60 requests/hour unauthenticated limit. Added release caching in localStorage.
-  - **Offline & Throttling Fallback**: Re-engineered `ChangelogPage.jsx` so that if GitHub returns a 403 or network error, it seamlessly synthesizes the changelog from local records and Kenneth's memos with an alert banner and direct GitHub link, instead of crashing into a dead-end error screen.
-  - **Kenneth Memo**: Added official v1.0.70 memo in `ChangelogPage.jsx`.
-- **v1.0.69 Release (Pass Crate Auto-Conversion Unification & Ghost Crate Elimination)**:
-  - **Unified Pass Crate Auto-Conversion**: Refactored `autoConvertCratesToShards` in `src/stores/useStore.js` and hooked into `toggleDailyMissionStep`, `toggleWeeklyMissionStep`, and `quickLogMdRun`. When auto-conversion is active, Battle Pass level-ups from missions or MDs immediately convert crates into target Sinner shards rather than accumulating as phantom unopened crates in inventory.
-  - **Milestone Crate Transparency**: Updated `src/utils/limbusCalculator.js` to explicitly show the exact count of inventory crates consumed (e.g. `Day 1 (Using 16 Inventory Crates)`).
-  - **Updated UI Label**: Renamed toggle to *"Auto-convert pass crates directly to shards (MDs & Missions)"* in `DailyCycleTracker.jsx`.
-- **v1.0.68 Release (Single-Instance Lock & Kenneth Duplicate App Advisory)**:
-  - **Single-Instance Enforcement**: Integrated `app.requestSingleInstanceLock()` into `electron/main.cjs`.
-  - **Kenneth Advisory Dialog**: When a secondary instance launch is attempted, a native warning dialog displays: *"Cannot start app, as there is already a running app, silly! — Kenneth"*.
-  - **Interactive Options**: Users can choose to either:
-    1. *Switch to Existing App* (unminimizes/shows and focuses the existing window), or
-    2. *Close Other Version & Launch Here* (terminates the existing instance PID and relaunches a fresh window).
-  - **PID State Management**: Stores and unlinks `app.pid` in `userData` during the application lifecycle for clean process termination.
-  - **Kenneth Memo**: Added official v1.0.68 memo in `ChangelogPage.jsx`.
-- **v1.0.67 Release (Wide-Screen Cockpit Deck & Responsive Vertical Monitor Overhaul)**:
-  - **1440p / Ultrawide Cockpit Expansion**: Replaced the narrow `max-w-6xl` (1152px) bottleneck with `max-w-[1600px] w-full mx-auto` on both `SchedulePage.jsx` and `SettingsPage.jsx`.
-  - **Balanced Command Cockpit Deck**: Restructured the top section of `SchedulePage.jsx` into two equally balanced, matching cards (`Math Settings & Calibration` on the left, `Calculation Summary & Target Breakdown` on the right).
-  - **Full-Width Daily Cycle Tracker**: Extracted `<DailyCycleTracker />` from the cramped right-hand column into its own full-width command panel below the cockpit deck.
-  - **Responsive Mission Grids (Portrait & Vertical Monitors)**: Replaced rigid `sm:grid-cols-5` with `grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3` for both Daily and Weekly Missions in `DailyCycleTracker.jsx`. On vertical/portrait monitors, mission cards display in spacious 2–3 column layouts with zero text or badge clipping.
-  - **Burnout Meter Title Collision Fix**: Changed pacing header flex direction to `flex-col xl:flex-row xl:items-center` with `flex-1 min-w-0`, preventing the Burnout Meter title from breaking into single-word lines ("Daily / Pace: / 0.4 / MDs / Day") on portrait viewports.
-  - **Target Milestones & Settings Grid Scaling**: Added `xl:grid-cols-4` to Target Milestones and `2xl:grid-cols-4` to Project Moon theme selection for fluid wide-screen layouts.
-  - **Kenneth Memo**: Added official v1.0.67 memo in `ChangelogPage.jsx`.
-- **v1.0.66 Release (Theme Expansion to 12 Roster, Dynamic Icon Colors & Residual Yellow Cleanup)**:
-  - **6 New Project Moon Aesthetic Themes**: Added `tcorp` (T Corp Time Bronze), `kcorp` (K Corp Ampoule Emerald), `liu` (Liu Association Blaze), `zwei` (Zwei Association Shield), `seven` (Seven Association Olive), and `blacksilence` (Black Silence Onyx) to `THEMES` in `src/styles/themes.js` and `globals.css`.
-  - **Dynamic Icon & Header Color Theming**: Sidebar "LT" logo badge and Settings page header ⚙️ icon container now dynamically apply gradient stops and glow matching the active theme.
-  - **Residual Yellow / Gold Cleanup**: Global CSS now dynamically overrides residual `.text-amber-400`, `.text-yellow-400`, `.border-amber-500`, and `.bg-amber-500` classes, inputs (`accent-color`), toggles (`peer-checked`), and Mephistopheles perimeter dashed track borders when non-gold themes are selected.
-  - **Kenneth Memo**: Added official v1.0.66 memo in `ChangelogPage.jsx`.
-- **v1.0.65 Release (Critical Hotfix — Dashboard Crash on currentWeekliesProg)**:
-  - Resolved `ReferenceError: currentWeekliesProg is not defined` crash in `generateRoadmap()` within `limbusCalculator.js`.
-  - Added robust conversion of wishlist inputs (`Array.isArray(wishlist) ? wishlist : Array.from(wishlist || [])`) preventing runtime crashes when passed a Zustand `Set`.
-  - Added Kenneth memo for v1.0.65.
-  - Packaged `release2/Limbus Tracker Setup 1.0.65.exe` (106 MB).
-- **v1.0.64 Release (Themes, Compact Mode, Avatar Head Centering & Cloud Sync Fixes)**:
-  - **Themes Engine**: Implemented full CSS variable and Tailwind class overrides for all 6 Project Moon theme presets (`gold`, `crimson`, `amber`, `cyan`, `violet`, `monochrome`) in `globals.css` driven by `data-theme` on `App.jsx`. Toggling themes instantly recolors text, backgrounds, glows, badges, and sidebar highlights.
-  - **Compact Density Mode**: Wired `data-compact` and `compact-density` class into `App.jsx` with responsive compact padding (`p-6` to `p-4`, tighter gaps, and reduced card heights) in `globals.css`.
-  - **Avatar Head Centering**: Added `object-top` and `origin-[center_18%]` in `ManagerAvatar.jsx`. Full-body character art (Binah, Zena, Roland, Gebura, etc.) now centers on their head and face by default rather than waist level.
-  - **Organized Dossier Discovery**: Initialized `discoveredDossiers: []` in store and hooked up `markDossierDiscovered()` in `SpecialDossierModal.jsx` so secret dossiers must be discovered via archival queries rather than appearing unearned in the avatar roster.
-  - **In-Universe Spoiler Removal**: Sanitized Gaster references from `SettingsPage.jsx` into atmospheric, in-universe containment protocols. Added Kenneth memos in `ChangelogPage.jsx` preserving mystery.
-  - **Cross-Device Cloud Sync Fix**: Added `managerProfile` and `appSettings` to `syncEngine.js` push/pull routines and wired `pushLocalToCloud()` / `pullCloudToLocal()` methods. Manager call-signs, avatars, and settings now persist seamlessly across the cloud.
-  - Packaged `release2/Limbus Tracker Setup 1.0.64.exe` (106 MB).
-  - **Individual Weekly Mission Tracking**:
-    - Replaced the single binary weeklies toggle with a 5-card interactive grid matching official in-game weekly missions:
-      1. `Clear Any Stage 10x` (+4 Pass EXP)
-      2. `Enter Mirror Dungeon 1x` (+4 Pass EXP)
-      3. `Defeat 100 Enemies` (+4 Pass EXP)
-      4. `Thread Luxcavation 5x` (+4 Pass EXP)
-      5. `EXP Luxcavation 5x` (+4 Pass EXP)
-    - Added `toggleWeeklyMissionStep(step)` to `useStore.js` awarding +4 EXP per completed step with clean rollback.
-    - Added `setAllWeeklyMissions(completeAll)` button ("Complete All 5 (+20 EXP)" or "Reset All Weeklies") with live `weekliesProgress / 5` counter.
-    - Preserved complete backward compatibility with `weekliesDone` boolean for downstream components and archive sync.
-    - Updated `limbusCalculator.js` to dynamically account for granular weekly progress (`(5 - weekliesProgress) * 4` EXP remaining).
-  - **Daily Missions Enkephalin Auto-Conversion**:
-    - Step 1 (`Assemble 1 Module`): Deducts 20 Enkephalin and grants +1 Module in inventory with amber badge indicators and rollback on uncheck.
-    - Preserved interactive 2m/3m tier buttons for EXP Luxcavation (Step 4) and constant 2-module deduction for Thread Luxcavation (Step 5).
-  - Packaged `release2/Limbus Tracker Setup 1.0.63.exe` (106 MB).
-- **v1.0.62 Release (Settings & Manager Customization Console)**:
-  - Built comprehensive multi-tab **Settings & Manager Customization Console** (`SettingsPage.jsx`):
-    1. **Manager Profile**: Custom Manager Call-Sign, Favorite Sinner co-pilot, and avatar roster selector with an interactive **Live Avatar Cropper & Alignment Studio** (Zoom 1.0x–2.5x, Y-offset -50% to +50% for framing full-body portraits like Roland, X-offset, and reset).
-    2. **Mephistopheles Navigation & Audio**: Bus track toggle (`busEnabled`), dual-tone brass air horn (Web Audio API synthesized 340Hz + 425Hz brass resonator with volume slider and audio test button), chatter frequency controls (`off`, `slow`, `normal`, `fast`), and Sinner radio comms filter with quick All/None toggles.
-    3. **Themes & Visuals**: 6 Project Moon theme presets (`gold`, `crimson`, `amber`, `cyan`, `violet`, `monochrome`), CRT scanline overlay, and compact density mode.
-    4. **Desktop Integration**: Auto-open on `LimbusCompany.exe` launch, close to Windows system tray, and native Enkephalin cap alerts.
-    5. **Data Vault**: Export/import complete unencrypted JSON backup snapshots, Supabase force cloud push/pull, and factory reset wipe with double-confirmation.
-  - Added `ManagerAvatar.jsx` component for uniform avatar rendering across Sidebar, Dashboard headers, and Settings Studio.
-  - Added Settings nav item (`/settings`) and live Manager Profile card in `Sidebar.jsx`.
-  - Added Manager Live Badge in `DashboardPage.jsx` header.
-  - Added Electron Windows system tray integration and close-to-tray window interceptor in `electron/main.cjs`.
-  - Added `/settings` character dialogue routes to `MephistophelesBorderTrack.jsx`.
-- **v1.0.61 Release Published**:
-  - Successfully packaged `release2/Limbus Tracker Setup 1.0.61.exe` (106 MB).
-  - Pushed git tag `v1.0.61` to `origin/master` and published [GitHub Release v1.0.61](https://github.com/0-cole/limbus-tracker/releases/tag/v1.0.61).
-  - Fixed Daily Mission descriptions to clarify that **Thread Luxcavation is always 2 Modules (40 Enk)** across all levels (Lv 20–60), while **EXP Luxcavation is 2–3 Modules (40–60 Enk)** depending on Canto level (Cantos I–III = 2 Modules; Cantos IV+ = 3 Modules).
-  - Added an interactive `[2m | 3m]` tier selector directly to the Daily Missions EXP Luxcavation card in `DailyCycleTracker.jsx`.
-  - Updated `toggleDailyMissionStep` in `useStore.js` to dynamically deduct 2 or 3 modules (or equivalent Enkephalin) and preserve exact deduction amounts for clean rollback on uncheck.
-  - Added Records Keeper Kenneth's v1.0.61 patch memo to `ChangelogPage.jsx`.
-- **v1.0.60 Release Published**:
-  - Successfully packaged `release2/Limbus Tracker Setup 1.0.60.exe` (106 MB).
-  - Pushed git tag `v1.0.60` to `origin/master` and published [GitHub Release v1.0.60](https://github.com/0-cole/limbus-tracker/releases/tag/v1.0.60).
-- **Enkephalin Offline & Passive Auto-Balance**:
-  - Added `src/utils/enkephalinLevels.js` with complete Level 1–300 cap table.
-  - Implemented `recalculateEnkephalin()` in `useStore.js` to calculate energy restored while the app was closed.
-  - Added company level input with auto-balanced cap synchronization across `DailyCycleTracker` and `InventoryPage`.
-  - Added automated module/enkephalin deductions for Daily Luxcavations (missions 4 & 5) and Mirror Dungeon runs.
-- **Cross-Device Sync Integrity**:
-  - Resolved `ReferenceError: state is not defined` crash in `saveStore`.
-  - Added de-duplication merge by unique ID for `todayLoggedRuns` and `todayLoggedShards` in `syncEngine.js`.
-  - Preserved quick logs across active 24h reset cycles until official reset time (21:00 UTC).
-- **W.D. Gaster ARG Overhaul**:
-  - Implemented initial corrupted ID card and realistic `GasterCorruptedModal.jsx` (aspect 2/3 black frame, `NaN` stats, unallocated heap stack traces, zero eye emojis).
-  - Adjusted `GasterSequenceModal.jsx` to a narrow 25% peeking margin (`25vw`) and a slow procedural static rise (building over 5.2s) matching *Shipwrecked 64* aesthetic.
-- **Special Dossier Modal & Character Expansion**:
-  - Added 37 high-resolution local assets and classified dossier profiles for Library of Ruina Librarians, The Head (Claw, Arbiters), ALEPH Abnormalities, and Die of Death characters.
+- **Version Bump & Release Pipeline**:
+  - Always increment `version` in `package.json`.
+  - Compile with `npm run build` (Vite) and package with `npm run package` (electron-builder).
+  - Output binary is produced at `release2/Limbus Tracker Setup <version>.exe` (~106 MB).
+  - Release tagging and publication: `git tag v<version>`, `git push origin v<version>`, `gh release create v<version>`, and `gh release upload v<version> "release2\Limbus Tracker Setup <version>.exe" --clobber`.
+- **Mephistopheles Bus Speed Invariant**:
+  - Locked to physical pixels per second (`BUS_SPEED_PX_PER_SEC = 75` in `src/components/MephistophelesBorderTrack.jsx`).
+  - Physical rate calculation: `frameDistance = (deltaSec * BUS_SPEED_PX_PER_SEC) / totalPerimeterPx`.
+  - Traversal speed is completely identical across all pages regardless of page length.
+- **Catalog Scrolling Performance**:
+  - In `src/pages/IdentitiesPage.jsx` and `src/pages/EgoPage.jsx`, card items are standard `<div>` elements with `transform: translateZ(0)` hardware compositing.
+  - Never introduce `contentVisibility: 'auto'` with arbitrary `containIntrinsicSize` or Framer Motion layout animation wrappers around catalog cards, as they trigger Chromium scroll rebound and boundingClientRect DOM thrashing.
+- **Season Horizon & Burnout Logic**:
+  - Season 8 fallback duration is set to **260 days / 37 weeks (~8.5 months)** (`src/utils/timeUtils.js` and `src/utils/limbusCalculator.js`), matching Season 7 actual lifespan.
+  - Prevents false "High Burnout (4.1 MDs/day)" panic calculations.
+- **Decoupled Crate / Shard Invariant**:
+  - Mirror Dungeon and daily/weekly quest logs do **NOT** auto-generate choice crates or auto-convert crates into shards.
+  - Battle Pass levels 1–120 give fixed milestone rewards; choice crates are only awarded at level 121+ (EX levels).
+  - Shard and crate additions are strictly manual via the "+ Open Crates / Log Shards" dialog.
+  - Quick logs for runs and shards disappear automatically at the daily server reset boundary (21:00 UTC / 06:00 KST / 5:00 PM EDT).
 
 ---
 
-## 4. Key File Map
-
-| Path | Purpose |
-| :--- | :--- |
-| `src/store/useStore.js` | Core Zustand store (Enkephalin timers, daily missions, quick logs, cross-device sync triggers) |
-| `src/utils/enkephalinLevels.js` | Canonical Enkephalin caps for company levels 1–300 |
-| `src/services/syncEngine.js` | Supabase cloud save / pull / conflict resolution engine |
-| `src/pages/DailyCycleTracker.jsx` | Daily missions, Enkephalin progress ring, timer display, quick logging |
-| `src/pages/IdentitiesPage.jsx` | Identity search grid, filter controls, Easter egg card injection |
-| `src/components/modals/GasterCorruptedModal.jsx` | Initial corrupted deserialization error modal for Gaster |
-| `src/components/modals/GasterSequenceModal.jsx` | Full-screen interactive Gaster reveal sequence (25% margin, static audio) |
-| `src/components/modals/SpecialDossierModal.jsx` | Classified dossiers for Ruina, Lobotomy, and Die of Death entities |
-| `src/data/specialEasterEggs.js` | Database of classified abilities, lore memos, and threat levels |
-| `src/assets/easter_eggs/` | Offline character CGs and portraits |
-| `package.json` | Project scripts, dependencies, and current app version (`1.0.60`) |
+## 3. Recent Modifications & Verified State (v1.0.79)
+- `src/components/MephistophelesBorderTrack.jsx`: Physical velocity engine deployed.
+- `src/pages/IdentitiesPage.jsx` & `src/pages/EgoPage.jsx`: Rebound and jitter completely eliminated; silky 120 FPS scrolling restored.
+- `src/utils/timeUtils.js` & `src/utils/limbusCalculator.js`: Recalibrated unknown season fallback to 260 days.
+- `src/stores/useStore.js` & `src/components/DailyCycleTracker.jsx`: Decoupled MD crates; strict 21:00 UTC cycle timestamp filtering (`timestamp >= cycleStartMs`).
+- `src/pages/DashboardPage.jsx`: Permanent Battle Pass Status card added with level/exp stepper buttons and EX level indicators.
+- `src/components/Season8NoticeModal.jsx`: Season 8 Battle Pass Level detection, Level 1 reset button, and mandatory confirmation modal added.
+- `src/pages/ChangelogPage.jsx`: Kenneth's v1.0.79 field report added.
 
 ---
 
-## 5. Immediate Next Steps / Pending Roadmap
-
-1. **User Testing on v1.0.60**:
-   - Verify client auto-updater prompts update on secondary/fresh devices.
-   - Confirm Enkephalin values and daily missions remain synchronized across sessions.
-2. **Potential Future Additions (from user brainstorming)**:
-   - "Gasharpoon" (Captain Ahab) LARP / Blame Citation easter egg modal (*"CRITICAL CITATION #0001-AHAB // COMPASS CORRUPTION"*).
-   - Die of Death Special Civilians (Loveshot, Caretaker, etc.).
-   - Additional sound effects or audio toggles for the classified dossiers.
+## 4. Verification & Deployment State
+- `npm run build`: Success (`✓ built in 19.07s`).
+- `electron-builder`: Successfully built `release2/Limbus Tracker Setup 1.0.79.exe` (106,066,091 bytes).
+- Git Commit & Push: Committed to `master` (`a7fcb3c`).
+- GitHub Release: Published as `v1.0.79` with installer attached (`https://github.com/0-cole/limbus-tracker/releases/tag/v1.0.79`).
