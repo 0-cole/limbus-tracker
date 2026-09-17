@@ -33,7 +33,7 @@ export default function DashboardPage() {
     weeklyProgress, updateWeekly, scheduleState, updateScheduleState, 
     bpState, updateBpState, inventory, wantList, identitiesData, egosData, 
     activeBanner, weeklyArchive = [], archiveCurrentWeek, deleteWeeklyArchive,
-    managerProfile, injectBpExp
+    resetWeeklyCalendar, managerProfile, injectBpExp
   } = useStore();
   const [showWhenGameStarts, setShowWhenGameStarts] = useState(true);
   const location = useLocation();
@@ -86,7 +86,8 @@ export default function DashboardPage() {
     const cycleInfo = getLimbusCycleInfo();
     const currentCycleKey = cycleInfo.cycleKey;
     const now = new Date();
-    setCurrentDayStr(currentCycleKey);
+    const localTodayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    setCurrentDayStr(localTodayKey);
     setCurrentDayIndex(now.getDay());
 
     const updated = { ...(weeklyProgress || {}) };
@@ -94,29 +95,27 @@ export default function DashboardPage() {
 
     let needsUpdate = false;
 
-    // Check if a cycle rollover occurred
-    if (updated.lastCheckedCycle && updated.lastCheckedCycle !== currentCycleKey) {
-      // If previous cycle wasn't marked done, check if dailies were done
-      if (updated.dailyStatus[updated.lastCheckedCycle] !== 'done') {
+    // Check if a local day rollover occurred (only mark missed across actual midnight local day boundaries)
+    if (updated.lastCheckedLocalDate && updated.lastCheckedLocalDate !== localTodayKey) {
+      if (updated.dailyStatus[updated.lastCheckedLocalDate] !== 'done') {
         if (scheduleState.dailiesDone || (scheduleState.dailiesProgress || 0) >= 5) {
-          updated.dailyStatus[updated.lastCheckedCycle] = 'done';
+          updated.dailyStatus[updated.lastCheckedLocalDate] = 'done';
         } else {
-          updated.dailyStatus[updated.lastCheckedCycle] = 'missed';
+          updated.dailyStatus[updated.lastCheckedLocalDate] = 'missed';
         }
       }
+      updated.lastCheckedLocalDate = localTodayKey;
       updated.lastCheckedCycle = currentCycleKey;
       needsUpdate = true;
-    } else if (!updated.lastCheckedCycle) {
+    } else if (!updated.lastCheckedLocalDate) {
+      updated.lastCheckedLocalDate = localTodayKey;
       updated.lastCheckedCycle = currentCycleKey;
       needsUpdate = true;
     }
 
-    // Ensure active cycle has an entry
-    if (!updated.dailyStatus[currentCycleKey]) {
-      updated.dailyStatus[currentCycleKey] = (scheduleState.dailiesDone || (scheduleState.dailiesProgress || 0) >= 5) ? 'done' : 'pending';
-      needsUpdate = true;
-    } else if ((scheduleState.dailiesDone || (scheduleState.dailiesProgress || 0) >= 5) && updated.dailyStatus[currentCycleKey] !== 'done') {
-      updated.dailyStatus[currentCycleKey] = 'done';
+    // Current local day entry
+    if ((scheduleState.dailiesDone || (scheduleState.dailiesProgress || 0) >= 5) && updated.dailyStatus[localTodayKey] !== 'done') {
+      updated.dailyStatus[localTodayKey] = 'done';
       needsUpdate = true;
     }
 
@@ -462,8 +461,14 @@ export default function DashboardPage() {
         const resetTimeStr = resetDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 
         const activeCycle = getLimbusCycleInfo();
-        const activeDateObj = new Date(activeCycle.cycleStartMs + 12 * 3600 * 1000);
-        const activeDayIndex = activeDateObj.getUTCDay();
+        const now = new Date();
+        const localDayIndex = now.getDay();
+        const localDayName = DAYS[localDayIndex];
+
+        // Sunday of current local week
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - localDayIndex);
+        startOfWeek.setHours(0, 0, 0, 0);
 
         return (
           <div className="glass-card p-6">
@@ -475,8 +480,22 @@ export default function DashboardPage() {
                     ? 'bg-purple-950/40 text-purple-300 border-purple-500/40' 
                     : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
                 }`}>
-                  ⚡ Active Cycle: {activeCycle.cycleDayName} ({activeCycle.cycleDateLabel})
+                  {activeCycle.isAfterResetToday 
+                    ? `⚡ Active Cycle: ${localDayName} Evening (Post-Reset: 5:00 PM – 11:59 PM | Resets ${activeCycle.resetLocalTime} Tomorrow)`
+                    : `⚡ Active Cycle: ${localDayName} (Pre-Reset: 12:00 AM – ${activeCycle.resetLocalTime} | Resets Today)`}
                 </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm("Reset the weekly calendar daily status marks? This will clear any missed/done marks for this week.")) {
+                      resetWeeklyCalendar();
+                    }
+                  }}
+                  className="text-[10px] text-gray-400 hover:text-amber-300 bg-[#1a1a1a] hover:bg-[#252525] border border-[#444] hover:border-amber-500/50 px-2 py-0.5 rounded font-bold transition-all flex items-center gap-1 cursor-pointer"
+                  title="Clear all daily status marks for this week"
+                >
+                  🔄 Reset Calendar
+                </button>
                 {bpState.asapMode && (
                   <span className="text-[10px] px-2 py-0.5 rounded font-black bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
                     🚀 ASAP Mode Active
@@ -489,13 +508,19 @@ export default function DashboardPage() {
             </div>
             <div className="grid grid-cols-7 gap-2">
               {DAYS.map((day, idx) => {
-                const diffFromActive = idx - activeDayIndex;
-                const colMs = activeCycle.cycleStartMs + (diffFromActive * 86400000) + (12 * 3600 * 1000);
-                const colInfo = getLimbusCycleInfo(colMs);
-                const dateStr = colInfo.cycleKey;
-                const status = weeklyProgress?.dailyStatus?.[dateStr];
+                const colDate = new Date(startOfWeek);
+                colDate.setDate(startOfWeek.getDate() + idx);
+                const colYear = colDate.getFullYear();
+                const colMonth = String(colDate.getMonth() + 1).padStart(2, '0');
+                const colDayNum = String(colDate.getDate()).padStart(2, '0');
+                const localDateKey = `${colYear}-${colMonth}-${colDayNum}`;
+
+                const isCurrentCycle = (idx === localDayIndex);
+                const isPastDay = (idx < localDayIndex);
                 const isResetDay = idx === resetDayIndex;
-                const isCurrentCycle = (diffFromActive === 0);
+
+                const status = weeklyProgress?.dailyStatus?.[localDateKey] || (isCurrentCycle && (scheduleState.dailiesDone || (scheduleState.dailiesProgress || 0) >= 5) ? 'done' : undefined);
+
                 const todayRuns = scheduleState.todayLoggedRuns || [];
                 const mdDoneToday = isCurrentCycle && (totalRequiredMd > 0 ? todayRuns.length >= totalRequiredMd : (scheduleState.mdTodayDone || todayRuns.length > 0));
                 const mdInProgressToday = isCurrentCycle && (totalRequiredMd > 0 && todayRuns.length > 0 && todayRuns.length < totalRequiredMd);
@@ -506,7 +531,7 @@ export default function DashboardPage() {
                 if (status === 'done') {
                   bgClass = "bg-[#c9a84c]/20 border-[#c9a84c]";
                   icon = <CheckCircle className="text-[#c9a84c] mx-auto mt-2" size={20} />;
-                } else if (status === 'missed') {
+                } else if (status === 'missed' && isPastDay) {
                   bgClass = "bg-red-950/30 border-red-900";
                   icon = (
                     <div className="flex flex-col items-center">
@@ -516,7 +541,7 @@ export default function DashboardPage() {
                           e.stopPropagation();
                           const updated = { ...(weeklyProgress || {}) };
                           const newStatus = { ...(updated.dailyStatus || {}) };
-                          newStatus[dateStr] = 'done';
+                          newStatus[localDateKey] = 'done';
                           updateWeekly({ ...updated, dailyStatus: newStatus });
                         }}
                         className="text-[9px] text-emerald-400 hover:underline mt-1 cursor-pointer font-bold"
@@ -525,7 +550,7 @@ export default function DashboardPage() {
                       </button>
                     </div>
                   );
-                } else if (diffFromActive < 0) {
+                } else if (isPastDay) {
                   bgClass = "bg-black/30 border-[#222] opacity-60";
                 } else if (isCurrentCycle) {
                   bgClass = mdDoneToday 
@@ -535,15 +560,13 @@ export default function DashboardPage() {
                       : "bg-[#222] border-amber-400/80 shadow-[0_0_10px_rgba(234,179,8,0.2)]";
                 }
 
-                const colDateObj = new Date(colMs);
-
                 return (
                   <div key={day} className={`p-3 rounded-lg border text-center transition-all ${bgClass}`}>
                     <div className="flex items-center justify-center gap-1">
                       <p className={`text-xs font-bold ${isCurrentCycle ? 'text-amber-400' : 'text-[#737373]'}`}>{day.slice(0,3)}</p>
                       {isResetDay && <span className="text-[8px] bg-amber-500/30 text-amber-300 font-black px-1 rounded">Reset</span>}
                     </div>
-                    <p className="text-[10px] text-[#555]">{colDateObj.getUTCDate()}</p>
+                    <p className="text-[10px] text-[#555]">{colDate.getDate()}</p>
                     {isCurrentCycle && (
                       <span className="text-[8px] bg-amber-500/20 text-amber-300 font-black px-1 rounded block mt-0.5 uppercase">Active</span>
                     )}

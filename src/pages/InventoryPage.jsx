@@ -2,9 +2,97 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useStore } from '../stores/useStore';
 import sinnersData from '../data/sinners.json';
-import { Settings, Battery, Box, Wallet, Zap } from 'lucide-react';
+import { Battery, Ticket, Calculator } from 'lucide-react';
 import { calculateLimbusGrind, generateRoadmap, getOwnedShards } from '../utils/limbusCalculator.js';
-import { getEnkephalinCapForLevel, getEnkephalinCountdown } from '../utils/enkephalinLevels.js';
+import { getEnkephalinCountdown } from '../utils/enkephalinLevels.js';
+
+// Safe arithmetic evaluator for Sinner shard inputs
+function evaluateArithmetic(expr, maxCap = 1500) {
+  if (!expr || typeof expr !== 'string') return null;
+  const clean = expr.trim();
+  if (!clean) return 0;
+  
+  // Only allow digits, spaces, and safe math characters + - * / ( ) .
+  if (!/^[\d\s+\-*/().]+$/.test(clean)) return null;
+  
+  try {
+    const result = new Function(`'use strict'; return (${clean})`)();
+    if (typeof result !== 'number' || isNaN(result) || !isFinite(result)) return null;
+    const rounded = Math.round(result);
+    return Math.max(0, Math.min(maxCap, rounded));
+  } catch {
+    return null;
+  }
+}
+
+// Mini calculator input component for each Sinner's shard card
+function SinnerShardCalculatorInput({ sinner, value, onCommit }) {
+  const [text, setText] = useState(String(value ?? 0));
+  const [isFocused, setIsFocused] = useState(false);
+
+  // Sync external value when input is not actively focused
+  useEffect(() => {
+    if (!isFocused) {
+      setText(String(value ?? 0));
+    }
+  }, [value, isFocused]);
+
+  const hasOperator = /[+\-*/]/.test(text);
+  const evaluated = hasOperator ? evaluateArithmetic(text, 1500) : null;
+  const isCapped = evaluated !== null && evaluated >= 1500 && text.length > 3;
+
+  const handleCommit = () => {
+    setIsFocused(false);
+    if (hasOperator) {
+      const res = evaluateArithmetic(text, 1500);
+      if (res !== null) {
+        setText(String(res));
+        onCommit(res);
+        return;
+      }
+    }
+    // Fallback standard numeric parse
+    const rawDigits = text.replace(/[^0-9-]/g, '');
+    const rawNum = parseInt(rawDigits, 10);
+    const validNum = isNaN(rawNum) ? (value ?? 0) : Math.max(0, Math.min(1500, rawNum));
+    setText(String(validNum));
+    onCommit(validNum);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.currentTarget.blur();
+    } else if (e.key === 'Escape') {
+      setText(String(value ?? 0));
+      setIsFocused(false);
+      e.currentTarget.blur();
+    }
+  };
+
+  return (
+    <div className="relative w-full">
+      <input
+        type="text"
+        inputMode="text"
+        value={text}
+        onFocus={() => setIsFocused(true)}
+        onBlur={handleCommit}
+        onKeyDown={handleKeyDown}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="0"
+        title="Type an amount or mini-math like 18+4 (Enter to calculate, max 1,500)"
+        className={`bg-black/50 border ${
+          hasOperator ? 'border-[#c9a84c] text-[#eab308]' : 'border-[#444] text-white'
+        } rounded text-center w-full py-2 text-xl font-bold font-mono focus:border-white focus:outline-none transition-colors`}
+      />
+      {hasOperator && evaluated !== null && (
+        <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-[#1c1917] border border-[#c9a84c] text-[#c9a84c] text-[10px] font-mono font-bold px-1.5 py-0.5 rounded shadow-xl whitespace-nowrap z-20 pointer-events-none animate-pulse">
+          = {evaluated} {isCapped ? '(max 1500)' : ''}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function InventoryPage() {
   const { inventory, updateInventory, saveStore, wantList, bpState, scheduleState, activeBanner, identitiesData, egosData } = useStore();
@@ -66,7 +154,7 @@ export default function InventoryPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Enkephalin & Module Tracker */}
-        <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} className="bg-[#111] border border-[#333] rounded-xl p-6 relative overflow-hidden">
+        <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} className="lg:col-span-2 bg-[#111] border border-[#333] rounded-xl p-6 relative overflow-hidden">
           <div className="absolute -right-10 -top-10 text-[#222] rotate-12 pointer-events-none">
             <Battery size={200} />
           </div>
@@ -177,58 +265,84 @@ export default function InventoryPage() {
           </div>
         </motion.div>
 
-        {/* Universal Crates & Currency */}
-        <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{delay:0.1}} className="bg-[#111] border border-[#333] rounded-xl p-6 relative overflow-hidden">
-          <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-            <Box className="text-[#eab308]" /> Dispensary Assets
-          </h2>
-          
-          <div className="space-y-4">
-            <div className="flex justify-between items-center bg-black/50 p-3 rounded">
-              <span className="text-[#eab308] font-bold">Nominable Egocrates</span>
-              <input type="number" value={inventory.nominableCrates} onChange={e => { updateInventory({nominableCrates: parseInt(e.target.value)||0}); saveStore(); }} className="bg-transparent border border-[#333] text-right w-20 px-2 rounded text-white" />
+        {/* Extraction Tickets Card */}
+        <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{delay:0.1}} className="lg:col-span-1 bg-[#111] border border-[#333] rounded-xl p-6 relative overflow-hidden flex flex-col justify-between">
+          <div className="absolute -right-10 -top-10 text-[#222] rotate-12 pointer-events-none">
+            <Ticket size={200} />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-white mb-6 relative z-10 flex items-center gap-2">
+              <Ticket className="text-red-400" /> Extraction Tickets
+            </h2>
+            
+            <div className="bg-black/50 p-4 border border-[#333] rounded-lg relative z-10">
+              <span className="text-xs text-red-400 font-bold uppercase tracking-wider block mb-1">Extraction / Decaextraction Tickets</span>
+              <div className="flex items-end gap-2">
+                <input 
+                  type="number" 
+                  min="0"
+                  value={inventory.extractionTickets || 0}
+                  onChange={e => {
+                    updateInventory({ extractionTickets: Math.max(0, parseInt(e.target.value) || 0) });
+                    saveStore();
+                  }}
+                  className="text-4xl font-black bg-transparent w-24 border-b-2 border-red-500 text-red-400 focus:outline-none font-mono"
+                />
+                <div className="flex gap-1 mb-1">
+                  <button onClick={() => { updateInventory({ extractionTickets: Math.max(0, (inventory.extractionTickets||0) + 1) }); saveStore(); }} className="px-2 py-0.5 bg-[#222] hover:bg-[#333] border border-[#444] text-xs font-bold rounded text-white cursor-pointer">+1</button>
+                  <button onClick={() => { updateInventory({ extractionTickets: Math.max(0, (inventory.extractionTickets||0) + 10) }); saveStore(); }} className="px-2 py-0.5 bg-[#222] hover:bg-[#333] border border-[#444] text-xs font-bold rounded text-white cursor-pointer">+10</button>
+                  <button onClick={() => { updateInventory({ extractionTickets: Math.max(0, (inventory.extractionTickets||0) - 1) }); saveStore(); }} className="px-2 py-0.5 bg-[#222] hover:bg-[#333] border border-[#444] text-xs font-bold rounded text-gray-400 cursor-pointer">-1</button>
+                </div>
+              </div>
+              <div className="text-xs text-gray-400 font-mono mt-2">
+                Single or 10-pull extraction tickets for Sinner ID & E.G.O banners.
+              </div>
             </div>
-            <div className="flex justify-between items-center bg-black/50 p-3 rounded">
-              <span className="text-gray-300 font-bold">Random Egocrates</span>
-              <input type="number" value={inventory.randomCrates} onChange={e => { updateInventory({randomCrates: parseInt(e.target.value)||0}); saveStore(); }} className="bg-transparent border border-[#333] text-right w-20 px-2 rounded text-white" />
-            </div>
-            <div className="flex justify-between items-center bg-black/50 p-3 rounded">
-              <span className="text-red-400 font-bold">Extraction Tickets</span>
-              <input type="number" value={inventory.extractionTickets} onChange={e => { updateInventory({extractionTickets: parseInt(e.target.value)||0}); saveStore(); }} className="bg-transparent border border-[#333] text-right w-20 px-2 rounded text-white" />
-            </div>
+          </div>
+
+          <div className="text-xs text-gray-500 italic relative z-10 pt-4 border-t border-[#222]">
+            💡 <span className="text-gray-400 font-bold">Manual Crate Freedom:</span> Egoshard crates are tracked dynamically in the Quick Log / Battle Pass so you can log any quantity freely without artificial limits.
           </div>
         </motion.div>
 
       </div>
 
-      {/* Sinner Shards */}
-      <h2 className="text-2xl font-bold text-white mt-12 mb-6">Sinner Egoshards</h2>
+      {/* Sinner Shards with Mini Calculator */}
+      <div className="mt-12 mb-6 flex flex-wrap items-end justify-between gap-2 border-b border-[#333] pb-3">
+        <div>
+          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+            <Calculator className="text-[#c9a84c]" size={24} /> Sinner Egoshards
+          </h2>
+          <p className="text-xs text-gray-400 mt-1">
+            Track owned shards per Sinner. Use the mini calculator (e.g. <span className="text-[#c9a84c] font-mono font-bold">18+4</span>) and press <kbd className="px-1.5 py-0.5 bg-[#222] border border-[#444] rounded text-[10px] text-gray-300 font-mono font-bold">Enter</kbd> to add or subtract shards quickly (max 1,500).
+          </p>
+        </div>
+      </div>
+
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
         {sinnersData.map((sinner, i) => (
           <motion.div 
             key={sinner.id}
             initial={{opacity:0, scale:0.9}} animate={{opacity:1, scale:1}} transition={{delay: i * 0.02}}
-            className="bg-[#1a1a1a] border border-[#333] rounded-lg p-3 flex flex-col items-center gap-2 hover:border-[#c9a84c]/50 transition-colors"
+            className="bg-[#1a1a1a] border border-[#333] rounded-lg p-3 flex flex-col items-center gap-2 hover:border-[#c9a84c]/50 transition-colors relative"
           >
             <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-black text-xl bg-gradient-to-br" style={{ backgroundImage: `linear-gradient(to bottom right, ${sinner.color}, #ffffff)` }}>
               {sinner.name.charAt(0)}
             </div>
             <span className="font-bold text-sm" style={{ color: sinner.color }}>{sinner.name}</span>
-            <input 
-              type="number"
+            <SinnerShardCalculatorInput
+              sinner={sinner}
               value={getOwnedShards(inventory.shards, sinner.name)}
-              onChange={e => { 
-                const val = parseInt(e.target.value) || 0;
-                updateInventory({ 
-                  shards: { 
-                    ...inventory.shards, 
+              onCommit={(val) => {
+                updateInventory({
+                  shards: {
+                    ...inventory.shards,
                     [sinner.name]: val,
-                    [sinner.id]: val 
-                  } 
-                }); 
-                saveStore(); 
+                    [sinner.id]: val
+                  }
+                });
+                saveStore();
               }}
-              className="bg-black/50 border border-[#444] rounded text-center w-full py-2 text-xl font-bold text-white focus:border-white focus:outline-none transition-colors"
             />
           </motion.div>
         ))}

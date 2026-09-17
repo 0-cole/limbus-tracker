@@ -446,7 +446,24 @@ ipcMain.handle('load-dynamic-data', () => {
   return { identities: [], egos: [] };
 });
 
+function cleanupOldTempInstallers() {
+  try {
+    const os = require('os');
+    const tempDir = os.tmpdir();
+    fs.readdir(tempDir, (err, files) => {
+      if (err || !files) return;
+      files.forEach(file => {
+        if (/^Limbus[._-]Tracker[._-]Setup.*\.exe$/i.test(file) || file === 'LimbusTrackerUpdate.exe') {
+          const filePath = path.join(tempDir, file);
+          fs.unlink(filePath, () => {});
+        }
+      });
+    });
+  } catch (e) {}
+}
+
 app.whenReady().then(() => {
+  cleanupOldTempInstallers();
   app.setAppUserModelId('com.limbustracker.app');
   try {
     const PID_FILE = path.join(app.getPath('userData'), 'app.pid');

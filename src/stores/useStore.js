@@ -302,6 +302,7 @@ export const useStore = create((set, get) => ({
             loadedSchedule.weekliesProgress = 0;
             loadedSchedule.weeklyMissionSteps = { 1: false, 2: false, 3: false, 4: false, 5: false };
             loadedSchedule.canClaimWeeklies = false;
+            loadedWeeklyProgress.dailyStatus = {};
         }
         if (resets.hasMdWeeklyReset) {
             loadedSchedule.mdBonusesClaimed = 0;
@@ -407,6 +408,9 @@ export const useStore = create((set, get) => ({
         if (intervalResets.hasDailyReset || intervalResets.hasWeeklyReset || intervalResets.hasMdWeeklyReset) {
           if (intervalResets.hasWeeklyReset || intervalResets.hasMdWeeklyReset) {
             get().archiveCurrentWeek();
+            if (intervalResets.hasWeeklyReset) {
+              get().updateWeekly({ ...(get().weeklyProgress || {}), dailyStatus: {} });
+            }
           }
 
           const s = currentSchedule;
@@ -818,11 +822,11 @@ export const useStore = create((set, get) => ({
     get().saveStore();
   },
 
-  openCratesForSinner: (sinnerId, cratesUsed, shardsGained, customLabel, linkedRunId) => {
+  openCratesForSinner: (sinnerId, cratesUsed, shardsGained, customLabel, linkedRunId, crateType = 'nominable') => {
     const state = get();
-    const available = state.inventory.nominableCrates || 0;
-    const actualCrates = Math.min(available, Math.max(0, cratesUsed));
-    if (actualCrates <= 0 && cratesUsed > 0) return null;
+    const actualCrates = Math.max(0, parseInt(cratesUsed) || 0);
+    const actualShards = parseInt(shardsGained) || 0;
+    if (actualShards <= 0 && actualCrates <= 0) return null;
 
     const sinnerObj = sinnersData.find(s => 
       s.id.toLowerCase() === String(sinnerId).toLowerCase() ||
@@ -831,26 +835,32 @@ export const useStore = create((set, get) => ({
     ) || { id: sinnerId, name: sinnerId };
 
     const currentOwned = getOwnedShards(state.inventory.shards, sinnerObj.id);
-    const newShards = Math.max(0, currentOwned + shardsGained);
+    const newShards = Math.max(0, currentOwned + actualShards);
 
+    const isRandom = crateType === 'random';
     const record = {
       id: `${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
       isConversion: true,
+      crateType: crateType,
       sinnerId: sinnerObj.id,
       sinnerName: sinnerObj.name,
       cratesUsed: actualCrates,
-      amount: shardsGained,
+      amount: actualShards,
       linkedRunId: linkedRunId || null,
-      label: customLabel || `Opened ${actualCrates} Crates ➔ +${shardsGained} ${sinnerObj.name} Shards`,
+      label: customLabel || `Opened ${actualCrates} ${isRandom ? 'Random ' : 'Choice '}Crates ➔ +${actualShards} ${sinnerObj.name} Shards`,
       timestamp: Date.now()
     };
 
     const newLogged = [...(state.scheduleState.todayLoggedShards || []), record];
 
+    // Deduct from inventory crate count if tracked, without dropping below 0
+    const prop = isRandom ? 'randomCrates' : 'nominableCrates';
+    const currentCrates = state.inventory[prop] || 0;
+
     set((s) => ({
       inventory: {
         ...s.inventory,
-        nominableCrates: Math.max(0, (s.inventory.nominableCrates || 0) - actualCrates),
+        [prop]: Math.max(0, currentCrates - actualCrates),
         shards: {
           ...s.inventory.shards,
           [sinnerObj.name]: newShards,
@@ -1032,6 +1042,19 @@ export const useStore = create((set, get) => ({
     set((s) => ({
       weeklyArchive: (s.weeklyArchive || []).filter(a => a.id !== id)
     }));
+    get().saveStore();
+  },
+
+  resetWeeklyCalendar: () => {
+    const currentWeekly = get().weeklyProgress || {};
+    const cycleInfo = getLimbusCycleInfo();
+    set({
+      weeklyProgress: {
+        ...currentWeekly,
+        dailyStatus: {},
+        lastCheckedCycle: cycleInfo.cycleKey
+      }
+    });
     get().saveStore();
   },
 
