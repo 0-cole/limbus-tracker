@@ -251,7 +251,7 @@ export default function MephistophelesBorderTrack() {
     // Measure the actual page content element so trackBorderRef doesn't hold open the page height
     const contentEl = scrollContainer.querySelector('.min-h-full') || scrollContainer.children[1];
     const cw = scrollContainer.clientWidth;
-    const contentHeight = contentEl ? contentEl.offsetHeight : scrollContainer.clientHeight;
+    const contentHeight = contentEl ? Math.max(contentEl.scrollHeight, contentEl.offsetHeight) : scrollContainer.clientHeight;
     const ch = Math.max(scrollContainer.clientHeight, contentHeight);
 
     if (cw <= 0 || ch <= 0) return;

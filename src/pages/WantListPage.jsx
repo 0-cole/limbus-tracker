@@ -1,15 +1,32 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../stores/useStore.js';
-import { Search, Plus, Trash2, Calculator, ChevronUp, ChevronDown } from 'lucide-react';
+import { Search, Plus, Trash2, Calculator, ChevronUp, ChevronDown, GripVertical } from 'lucide-react';
 import { getEntityImageUrl } from '../utils/imageUtils.js';
 import { normalizeText, getSinnerSortIndex } from '../utils/textUtils.js';
 import { getOwnedShards, getShardabilityStatus } from '../utils/limbusCalculator.js';
 
 export default function WantListPage() {
-  const { wantList, toggleWantList, moveWantListPriority, inventory, updateInventory, acquiredIds, acquiredEgos, identitiesData, egosData } = useStore();
+  const { 
+    wantList, 
+    toggleWantList, 
+    moveWantListPriority, 
+    setWantListPriority, 
+    reorderWantList, 
+    inventory, 
+    updateInventory, 
+    acquiredIds, 
+    acquiredEgos, 
+    identitiesData, 
+    egosData 
+  } = useStore();
   const [search, setSearch] = useState('');
-  
+  const [draggedItem, setDraggedItem] = useState(null);
+  const [draggedIndex, setDraggedIndex] = useState(null);
+  const [dragOverIndex, setDragOverIndex] = useState(null);
+  const [editingPriorityItem, setEditingPriorityItem] = useState(null);
+  const [tempPriorityValue, setTempPriorityValue] = useState('');
+
   const GRADE_ORDER = { ZAYIN: 1, TETH: 2, HE: 3, WAW: 4, ALEPH: 5 };
 
   // Combine unowned IDs and EGOs
@@ -91,8 +108,24 @@ export default function WantListPage() {
     };
   });
 
+  const handleDropReorder = (fromIdx, toIdx) => {
+    if (fromIdx === toIdx || fromIdx === null || toIdx === null) return;
+    const currentOrder = wantedItems.map(item => item.name);
+    const [moved] = currentOrder.splice(fromIdx, 1);
+    currentOrder.splice(toIdx, 0, moved);
+    reorderWantList(currentOrder);
+  };
+
+  const commitPriority = (itemName) => {
+    const num = parseInt(tempPriorityValue, 10);
+    if (!isNaN(num) && num >= 1) {
+      setWantListPriority(itemName, num);
+    }
+    setEditingPriorityItem(null);
+  };
+
   return (
-      <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="p-6 text-[#e5e5e5] h-full overflow-y-auto">
+    <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="p-6 text-[#e5e5e5] min-h-full">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-4xl font-bold font-limbus text-[#c9a84c]">Want List & Shards</h1>
       </div>
@@ -107,7 +140,7 @@ export default function WantListPage() {
               </h2>
               {wantedItems.length > 1 && (
                 <span className="text-[11px] text-gray-400 font-mono">
-                  Priority determines shard & crate allocation
+                  Drag ⠿ or click # to set priority rank
                 </span>
               )}
             </div>
@@ -115,7 +148,7 @@ export default function WantListPage() {
             {wantedItems.length === 0 ? (
               <p className="text-[#737373] text-sm">Add IDs or EGOs to your want list to see shard requirements.</p>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {wantedItems.map((item, idx) => {
                   const req = item.req;
                   const allocated = item.allocated;
@@ -124,13 +157,61 @@ export default function WantListPage() {
                   const shardStatus = getShardabilityStatus(item);
                   const isFirst = idx === 0;
                   const isLast = idx === wantedItems.length - 1;
+                  const isDragging = draggedItem === item.name;
+                  const isDragOver = dragOverIndex === idx;
 
                   return (
-                    <div key={item.name} className="p-3 bg-[#111] rounded border border-[#333] relative overflow-hidden group">
-                      <div className="absolute top-0 left-0 bottom-0 bg-[#c9a84c]/20" style={{ width: `${percent}%` }} />
+                    <div 
+                      key={item.name} 
+                      draggable={true}
+                      onDragStart={(e) => {
+                        e.dataTransfer.setData('text/plain', item.name);
+                        e.dataTransfer.effectAllowed = 'move';
+                        setDraggedItem(item.name);
+                        setDraggedIndex(idx);
+                      }}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        e.dataTransfer.dropEffect = 'move';
+                        if (dragOverIndex !== idx) setDragOverIndex(idx);
+                      }}
+                      onDragLeave={(e) => {
+                        if (dragOverIndex === idx) setDragOverIndex(null);
+                      }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        if (draggedIndex !== null && draggedIndex !== idx) {
+                          handleDropReorder(draggedIndex, idx);
+                        }
+                        setDraggedItem(null);
+                        setDraggedIndex(null);
+                        setDragOverIndex(null);
+                      }}
+                      onDragEnd={() => {
+                        setDraggedItem(null);
+                        setDraggedIndex(null);
+                        setDragOverIndex(null);
+                      }}
+                      className={`p-3 bg-[#111] rounded border relative overflow-hidden group transition-all duration-150 ${
+                        isDragging 
+                          ? 'opacity-40 scale-[0.98] border-dashed border-[#c9a84c]' 
+                          : isDragOver
+                          ? 'border-[#c9a84c] ring-2 ring-[#c9a84c]/60 shadow-[0_0_15px_rgba(201,168,76,0.3)]'
+                          : 'border-[#333] hover:border-[#555]'
+                      }`}
+                    >
+                      <div className="absolute top-0 left-0 bottom-0 bg-[#c9a84c]/20 pointer-events-none" style={{ width: `${percent}%` }} />
                         <div className="relative flex justify-between items-center z-10">
-                          <div className="flex items-center gap-3">
-                            {/* Priority Controls & Badge */}
+                          <div className="flex items-center gap-2 sm:gap-3">
+                            {/* Grip / Drag Handle */}
+                            <div 
+                              className="cursor-grab active:cursor-grabbing text-gray-500 hover:text-[#c9a84c] transition-colors p-1 -ml-1 flex items-center justify-center shrink-0 select-none"
+                              title="Drag to reorder priority"
+                            >
+                              <GripVertical size={16} />
+                            </div>
+
+                            {/* Priority Controls & Interactive Editable Badge */}
                             <div className="flex flex-col items-center justify-center shrink-0 pr-1.5 border-r border-[#333]/80">
                               <button
                                 onClick={() => moveWantListPriority(item.name, 'up')}
@@ -140,9 +221,36 @@ export default function WantListPage() {
                               >
                                 <ChevronUp size={14} />
                               </button>
-                              <span className="text-[11px] font-black font-mono text-[#c9a84c] px-1.5 py-0.5 rounded bg-black/70 border border-[#c9a84c]/40 my-0.5 shadow-sm">
-                                #{item.priority}
-                              </span>
+                              
+                              {editingPriorityItem === item.name ? (
+                                <input 
+                                  type="number"
+                                  min="1"
+                                  max={wantedItems.length}
+                                  value={tempPriorityValue}
+                                  autoFocus
+                                  onFocus={(e) => e.target.select()}
+                                  onChange={(e) => setTempPriorityValue(e.target.value)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter') commitPriority(item.name);
+                                    if (e.key === 'Escape') setEditingPriorityItem(null);
+                                  }}
+                                  onBlur={() => commitPriority(item.name)}
+                                  className="w-10 text-center text-[11px] font-black font-mono text-[#c9a84c] bg-black border border-[#c9a84c] rounded px-0.5 py-0.5 outline-none shadow-[0_0_8px_rgba(201,168,76,0.6)] my-0.5"
+                                />
+                              ) : (
+                                <button
+                                  onClick={() => {
+                                    setEditingPriorityItem(item.name);
+                                    setTempPriorityValue(String(item.priority));
+                                  }}
+                                  title="Click to manually type priority rank, or drag card with ⠿"
+                                  className="text-[11px] font-black font-mono text-[#c9a84c] hover:text-white px-1.5 py-0.5 rounded bg-black/70 border border-[#c9a84c]/40 hover:border-[#c9a84c] hover:bg-[#c9a84c]/20 my-0.5 shadow-sm transition-all cursor-pointer"
+                                >
+                                  #{item.priority}
+                                </button>
+                              )}
+
                               <button
                                 onClick={() => moveWantListPriority(item.name, 'down')}
                                 disabled={isLast}

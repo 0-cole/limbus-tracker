@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Edit3, CheckCircle, Info, Sparkles, AlertTriangle, X, ShieldAlert, Star, Flame, Eye, Skull, Radio } from 'lucide-react';
 import { useStore } from '../stores/useStore.js';
+import { imagePreloader } from '../utils/imagePreloader.js';
 import sinnersData from '../data/sinners.json';
 import { parseEffectsIntoTriggerGroups, getSkillTriggerColor, extractKeywordsFromEffects } from '../utils/skillParser';
 
@@ -225,7 +226,7 @@ const SIN_COLORS = { Wrath: '#dc2626', Lust: '#ea580c', Sloth: '#ca8a04', Glutto
 const GRADE_COLORS = { ZAYIN: '#22c55e', TETH: '#06b6d4', HE: '#eab308', WAW: '#a855f7', ALEPH: '#ef4444' };
 const GRADE_ORDER = { ZAYIN: 0, TETH: 1, HE: 2, WAW: 3, ALEPH: 4 };
 
-function EgoCard({ ego, meta, acquired, onToggleAcquired, onEdit, onClickDetails }) {
+const EgoCard = React.memo(function EgoCard({ ego, meta, acquired, onToggleAcquired, onEdit, onClickDetails }) {
   const sinnerInfo = getSinnerInfo(ego.sinner);
   const [imgError, setImgError] = useState(false);
   
@@ -234,19 +235,30 @@ function EgoCard({ ego, meta, acquired, onToggleAcquired, onEdit, onClickDetails
 
   return (
     <motion.div 
-      layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.2 }}
+      initial={{ opacity: 0, scale: 0.95 }} 
+      animate={{ opacity: 1, scale: 1 }} 
+      exit={{ opacity: 0, scale: 0.9 }} 
+      transition={{ duration: 0.2 }}
+      style={{ contentVisibility: 'auto', containIntrinsicSize: '256px' }}
       className={`relative flex flex-col group overflow-hidden rounded-xl border-2 transition-all cursor-pointer h-64 ${acquired ? 'border-[#c9a84c] shadow-[0_0_15px_rgba(201,168,76,0.2)]' : 'border-[#333] opacity-80 hover:opacity-100 hover:border-[#666]'}`}
       onClick={() => onClickDetails(ego)}
     >
-      {/* Background Art */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-110"
-        style={{ backgroundImage: bgUrl ? `url("${encodeURI(bgUrl)}")` : 'none' }}
-      />
-      {bgUrl && <img src={bgUrl} onError={() => setImgError(true)} className="hidden" alt="preload check" />}
+      {/* Background Art - Asynchronous Off-thread Native Image */}
+      {bgUrl ? (
+        <img 
+          src={bgUrl} 
+          alt={ego.name}
+          loading="lazy"
+          decoding="async"
+          onError={() => setImgError(true)} 
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 pointer-events-none" 
+        />
+      ) : (
+        <div className="absolute inset-0 bg-[#121216]" />
+      )}
       
       {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/60" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/60 pointer-events-none" />
 
       {/* Top Section */}
       <div className="relative flex justify-between items-start p-3 z-10">
@@ -283,7 +295,7 @@ function EgoCard({ ego, meta, acquired, onToggleAcquired, onEdit, onClickDetails
       </div>
     </motion.div>
   );
-}
+});
 
 export default function EgoPage() {
   const { egosData, acquiredEgos, toggleAcquiredEgo, customMetadata, updateCustomMetadata } = useStore();
@@ -317,31 +329,50 @@ export default function EgoPage() {
     });
   };
 
-  const getMetadata = (ego) => {
-    if (customMetadata?.[ego.name]) return customMetadata[ego.name];
-    
-    let sins = new Set();
-    let keywords = new Set();
-    
-    if (ego.sins) ego.sins.forEach(s => sins.add(s));
-    
-    const skillsToScan = (ego.upties && ego.upties[4]) ? ego.upties[4] : (ego.skills || []);
-    skillsToScan.forEach(skill => {
+  useEffect(() => {
+    if (egosData && egosData.length > 0) {
+      imagePreloader.preloadEgos(egosData);
+    }
+  }, [egosData]);
+
+  const metadataMap = useMemo(() => {
+    const map = new Map();
+    if (!egosData) return map;
+
+    for (const ego of egosData) {
+      if (customMetadata?.[ego.name]) {
+        map.set(ego.name, customMetadata[ego.name]);
+        continue;
+      }
+
+      let sins = new Set();
+      let keywords = new Set();
+
+      if (ego.sins) ego.sins.forEach(s => sins.add(s));
+
+      const skillsToScan = (ego.upties && ego.upties[4]) ? ego.upties[4] : (ego.skills || []);
+      skillsToScan.forEach(skill => {
         if (skill.affinity) sins.add(skill.affinity);
         if (skill.sin) sins.add(skill.sin);
-        
+
         const effectStr = JSON.stringify(skill.effects || []).toLowerCase();
         ['burn', 'bleed', 'tremor', 'poise', 'sinking', 'charge', 'rupture'].forEach(kw => {
-            if (effectStr.includes(kw)) keywords.add(kw.charAt(0).toUpperCase() + kw.slice(1));
+          if (effectStr.includes(kw)) keywords.add(kw.charAt(0).toUpperCase() + kw.slice(1));
         });
-    });
-    
-    return { 
-      cost: Array.from(sins), 
-      sins: Array.from(sins), 
-      keywords: Array.from(keywords)
-    };
-  };
+      });
+
+      map.set(ego.name, {
+        cost: Array.from(sins),
+        sins: Array.from(sins),
+        keywords: Array.from(keywords)
+      });
+    }
+    return map;
+  }, [egosData, customMetadata]);
+
+  const getMetadata = useCallback((ego) => {
+    return metadataMap.get(ego.name) || { cost: [], sins: [], keywords: [] };
+  }, [metadataMap]);
 
   const filteredEgos = useMemo(() => {
     const normSearch = normalizeText(search);
@@ -395,10 +426,10 @@ export default function EgoPage() {
       return a.name.localeCompare(b.name);
     });
     return result;
-  }, [search, filters, showAcquiredOnly, sortBy, acquiredEgos, customMetadata]);
+  }, [search, filters, showAcquiredOnly, sortBy, acquiredEgos, customMetadata, getMetadata]);
 
   return (
-    <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="p-6 text-[#e5e5e5] h-full overflow-y-auto">
+    <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="p-6 text-[#e5e5e5] min-h-full">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-4xl font-bold font-limbus text-[#c9a84c]">E.G.O</h1>
         <div className="flex gap-2">
@@ -463,7 +494,6 @@ export default function EgoPage() {
             return (
               <motion.div
                 key={egg.id}
-                layout
                 initial={{ opacity: 0, scale: 0.88 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.88 }}

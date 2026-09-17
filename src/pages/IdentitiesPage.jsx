@@ -22,11 +22,12 @@ import EASTER_EGG_IMAGES from '../assets/easter_eggs/index.js';
 import SPECIAL_EASTER_EGGS from '../data/specialEasterEggs.js';
 import { syncEngine } from '../services/syncEngine.js';
 import vergiliusImg from '../assets/vergilius.png';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Star, Edit3, CheckCircle, Info, Clock, Compass, Sparkles, X, Heart } from 'lucide-react';
 import { useStore } from '../stores/useStore.js';
+import { imagePreloader } from '../utils/imagePreloader.js';
 import sinnersData from '../data/sinners.json';
 import { normalizeText, normalizeSinnerId, getSinnerInfo, getSinnerSortIndex, parseSeasonNumber, getCardImageUrl } from '../utils/textUtils.js';
 
@@ -34,7 +35,7 @@ const SIN_COLORS = { Wrath: '#dc2626', Lust: '#ea580c', Sloth: '#ca8a04', Glutto
 const KEYWORD_COLORS = { Burn: '#ef4444', Bleed: '#dc2626', Tremor: '#d97706', Rupture: '#22c55e', Sinking: '#3b82f6', Poise: '#06b6d4', Charge: '#8b5cf6' };
 const ATTACK_TYPES = ['Slash', 'Pierce', 'Blunt'];
 
-function IdCard({ id, meta, acquired, onToggleAcquired, onEdit, onClickDetails }) {
+const IdCard = React.memo(function IdCard({ id, meta, acquired, onToggleAcquired, onEdit, onClickDetails }) {
   const sinnerInfo = getSinnerInfo(id.sinner);
   const [imgError, setImgError] = useState(false);
   const [useAltUrl, setUseAltUrl] = useState(false);
@@ -46,18 +47,21 @@ function IdCard({ id, meta, acquired, onToggleAcquired, onEdit, onClickDetails }
 
   return (
     <motion.div 
-      layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.2 }}
+      initial={{ opacity: 0, scale: 0.95 }} 
+      animate={{ opacity: 1, scale: 1 }} 
+      exit={{ opacity: 0, scale: 0.9 }} 
+      transition={{ duration: 0.2 }}
+      style={{ contentVisibility: 'auto', containIntrinsicSize: '256px' }}
       className={`relative flex flex-col group overflow-hidden rounded-xl border-2 transition-all cursor-pointer h-64 ${acquired ? 'border-[#c9a84c] shadow-[0_0_15px_rgba(201,168,76,0.2)]' : 'border-[#333] opacity-80 hover:opacity-100 hover:border-[#666]'}`}
       onClick={() => onClickDetails(id)}
     >
-      {/* Background Art */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-110"
-        style={{ backgroundImage: bgUrl ? `url("${encodeURI(bgUrl)}")` : 'none' }}
-      />
-      {bgUrl && (
+      {/* Background Art - Asynchronous Off-thread Native Image */}
+      {bgUrl ? (
         <img 
           src={bgUrl} 
+          alt={id.name}
+          loading="lazy"
+          decoding="async"
           onError={() => {
             if (!useAltUrl && altBg && altBg !== defaultBg) {
               setUseAltUrl(true);
@@ -65,13 +69,14 @@ function IdCard({ id, meta, acquired, onToggleAcquired, onEdit, onClickDetails }
               setImgError(true);
             }
           }} 
-          className="hidden" 
-          alt="preload check" 
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 pointer-events-none" 
         />
+      ) : (
+        <div className="absolute inset-0 bg-[#121216]" />
       )}
       
       {/* Gradient Overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/60" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/60 pointer-events-none" />
 
       {/* Top Section */}
       <div className="relative flex justify-between items-start p-3 z-10">
@@ -123,7 +128,7 @@ function IdCard({ id, meta, acquired, onToggleAcquired, onEdit, onClickDetails }
       </div>
     </motion.div>
   );
-}
+});
 
 export default function IdentitiesPage() {
   const navigate = useNavigate();
@@ -200,39 +205,55 @@ export default function IdentitiesPage() {
     });
   };
 
-  const getMetadata = (id) => {
-    if (customMetadata?.[id.name]) return customMetadata[id.name];
+  useEffect(() => {
+    if (identitiesData && identitiesData.length > 0) {
+      imagePreloader.preloadIdentities(identitiesData);
+    }
+  }, [identitiesData]);
+
+  const metadataMap = useMemo(() => {
+    const map = new Map();
+    if (!identitiesData) return map;
     
-    let sins = new Set();
-    let attackTypes = new Set();
-    let keywords = new Set();
-    
-    // Check root level (fallback for old data structure)
-    if (id.sins) id.sins.forEach(s => sins.add(s));
-    if (id.attackTypes) id.attackTypes.forEach(s => attackTypes.add(s));
-    if (id.keywords) id.keywords.forEach(s => keywords.add(s));
-    
-    // Extract from skills
-    const skillsToScan = (id.upties && id.upties[4]) ? id.upties[4] : (id.skills || []);
-    skillsToScan.forEach(skill => {
+    for (const id of identitiesData) {
+      if (customMetadata?.[id.name]) {
+        map.set(id.name, customMetadata[id.name]);
+        continue;
+      }
+      
+      let sins = new Set();
+      let attackTypes = new Set();
+      let keywords = new Set();
+      
+      if (id.sins) id.sins.forEach(s => sins.add(s));
+      if (id.attackTypes) id.attackTypes.forEach(s => attackTypes.add(s));
+      if (id.keywords) id.keywords.forEach(s => keywords.add(s));
+      
+      const skillsToScan = (id.upties && id.upties[4]) ? id.upties[4] : (id.skills || []);
+      skillsToScan.forEach(skill => {
         if (skill.affinity) sins.add(skill.affinity);
         if (skill.sin) sins.add(skill.sin);
         if (skill.type) attackTypes.add(skill.type);
         if (skill.attackType) attackTypes.add(skill.attackType);
         
-        // Very basic keyword extraction from effects
         const effectStr = JSON.stringify(skill.effects || []).toLowerCase();
         ['burn', 'bleed', 'tremor', 'poise', 'sinking', 'charge', 'rupture'].forEach(kw => {
-            if (effectStr.includes(kw)) keywords.add(kw.charAt(0).toUpperCase() + kw.slice(1));
+          if (effectStr.includes(kw)) keywords.add(kw.charAt(0).toUpperCase() + kw.slice(1));
         });
-    });
-    
-    return { 
-      sins: Array.from(sins), 
-      attackTypes: Array.from(attackTypes), 
-      keywords: Array.from(keywords) 
-    };
-  };
+      });
+      
+      map.set(id.name, { 
+        sins: Array.from(sins), 
+        attackTypes: Array.from(attackTypes), 
+        keywords: Array.from(keywords) 
+      });
+    }
+    return map;
+  }, [identitiesData, customMetadata]);
+
+  const getMetadata = useCallback((id) => {
+    return metadataMap.get(id.name) || { sins: [], attackTypes: [], keywords: [] };
+  }, [metadataMap]);
 
   const filteredIdentities = useMemo(() => {
     const normSearch = normalizeText(search);
@@ -285,7 +306,7 @@ export default function IdentitiesPage() {
   }, [search, filters, showAcquiredOnly, sortBy, acquiredIds, customMetadata]);
 
   return (
-    <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="p-6 text-[#e5e5e5] h-full overflow-y-auto">
+    <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="p-6 text-[#e5e5e5] min-h-full">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-4xl font-bold font-limbus text-[#c9a84c]">Identities</h1>
         <div className="flex gap-2">
@@ -478,8 +499,7 @@ export default function IdentitiesPage() {
                 {isVergilius && (
                   <motion.div
                     key="vergilius-easter-egg"
-                    layout
-                    initial={{ opacity: 0, scale: 0.85 }}
+                                        initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowVergiliusModal(true)}
@@ -540,8 +560,7 @@ export default function IdentitiesPage() {
                 {isDante && (
                   <motion.div
                     key="dante-easter-egg"
-                    layout
-                    initial={{ opacity: 0, scale: 0.85 }}
+                                        initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowDanteModal(true)}
@@ -584,8 +603,7 @@ export default function IdentitiesPage() {
                 {isCharon && (
                   <motion.div
                     key="charon-easter-egg"
-                    layout
-                    initial={{ opacity: 0, scale: 0.85 }}
+                                        initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowCharonModal(true)}
@@ -622,8 +640,7 @@ export default function IdentitiesPage() {
                 {isRoachEmperor && (
                   <motion.div
                     key="roach-emperor-easter-egg"
-                    layout
-                    initial={{ opacity: 0, scale: 0.85 }}
+                                        initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowRoachModal(true)}
@@ -694,8 +711,7 @@ export default function IdentitiesPage() {
                 {isMuga && (
                   <motion.div
                     key="muga-ryoshu-easter-egg"
-                    layout
-                    initial={{ opacity: 0, scale: 0.85 }}
+                                        initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowMugaModal(true)}
@@ -766,8 +782,7 @@ export default function IdentitiesPage() {
                 {isRoland && (
                   <motion.div
                     key="roland-easter-egg"
-                    layout
-                    initial={{ opacity: 0, scale: 0.85 }}
+                                        initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowRolandModal(true)}
@@ -831,8 +846,7 @@ export default function IdentitiesPage() {
                 {isAngela && (
                   <motion.div
                     key="angela-easter-egg"
-                    layout
-                    initial={{ opacity: 0, scale: 0.85 }}
+                                        initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowAngelaModal(true)}
@@ -896,8 +910,7 @@ export default function IdentitiesPage() {
                 {isGebura && (
                   <motion.div
                     key="gebura-easter-egg"
-                    layout
-                    initial={{ opacity: 0, scale: 0.85 }}
+                                        initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowGeburaModal(true)}
@@ -961,8 +974,7 @@ export default function IdentitiesPage() {
                 {isErlkonig && (
                   <motion.div
                     key="erlkonig-easter-egg"
-                    layout
-                    initial={{ opacity: 0, scale: 0.85 }}
+                                        initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowErlkonigModal(true)}
@@ -1005,8 +1017,7 @@ export default function IdentitiesPage() {
                 {isSancho && (
                   <motion.div
                     key="sancho-easter-egg"
-                    layout
-                    initial={{ opacity: 0, scale: 0.85 }}
+                                        initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowSanchoModal(true)}
@@ -1049,8 +1060,7 @@ export default function IdentitiesPage() {
                 {isCarmen && (
                   <motion.div
                     key="carmen-easter-egg"
-                    layout
-                    initial={{ opacity: 0, scale: 0.85 }}
+                                        initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowCarmenModal(true)}
@@ -1093,8 +1103,7 @@ export default function IdentitiesPage() {
                 {isChesed && (
                   <motion.div
                     key="chesed-easter-egg"
-                    layout
-                    initial={{ opacity: 0, scale: 0.85 }}
+                                        initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowChesedModal(true)}
@@ -1137,8 +1146,7 @@ export default function IdentitiesPage() {
                 {isNetzach && (
                   <motion.div
                     key="netzach-easter-egg"
-                    layout
-                    initial={{ opacity: 0, scale: 0.85 }}
+                                        initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowNetzachModal(true)}
@@ -1181,8 +1189,7 @@ export default function IdentitiesPage() {
                 {isHod && (
                   <motion.div
                     key="hod-easter-egg"
-                    layout
-                    initial={{ opacity: 0, scale: 0.85 }}
+                                        initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowHodModal(true)}
@@ -1225,8 +1232,7 @@ export default function IdentitiesPage() {
                 {isArtful && (
                   <motion.div
                     key="artful-easter-egg"
-                    layout
-                    initial={{ opacity: 0, scale: 0.85 }}
+                                        initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowArtfulModal(true)}
@@ -1269,8 +1275,7 @@ export default function IdentitiesPage() {
                 {isHacklord && (
                   <motion.div
                     key="hacklord-easter-egg"
-                    layout
-                    initial={{ opacity: 0, scale: 0.85 }}
+                                        initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={() => setShowHacklordModal(true)}
@@ -1313,8 +1318,7 @@ export default function IdentitiesPage() {
                 {isGaster && (
                   <motion.div
                     key="gaster-easter-egg"
-                    layout
-                    initial={{ opacity: 0, scale: 0.85 }}
+                                        initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.85 }}
                     onClick={handleGasterClick}
@@ -1359,8 +1363,7 @@ export default function IdentitiesPage() {
                   return (
                     <motion.div
                       key={egg.id}
-                      layout
-                      initial={{ opacity: 0, scale: 0.85 }}
+                                            initial={{ opacity: 0, scale: 0.85 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.85 }}
                       onClick={() => setSelectedSpecialDossier(egg)}

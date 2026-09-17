@@ -7,6 +7,7 @@ import { getOwnedShards, normalizeSinnerId } from '../utils/limbusCalculator.js'
 import { checkResets, getLimbusCycleInfo } from '../utils/timeUtils.js';
 import { getEnkephalinCapForLevel, recalculateEnkephalin } from '../utils/enkephalinLevels.js';
 import { syncEngine } from '../services/syncEngine.js';
+import { imagePreloader } from '../utils/imagePreloader.js';
 
 // Initial state values
 const defaultState = {
@@ -382,6 +383,10 @@ export const useStore = create((set, get) => ({
           isLoaded: true 
         });
       }
+
+      // Preload identity and EGO images in the background using idle scheduling
+      imagePreloader.preloadIdentities(mergedIds);
+      imagePreloader.preloadEgos(mergedEgos);
 
       // Background timer to check resets and passive enkephalin regen while app is running
       setInterval(() => {
