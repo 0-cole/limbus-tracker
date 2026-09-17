@@ -1542,6 +1542,143 @@ function generateTeamSynergies(identity, keywords) {
   };
 }
 
+// Comprehensive Affiliations & Factions
+export const AFFILIATION_RULES = [
+  { key: 'The Thumb', match: /thumb/i, desc: 'East Thumb syndicate with specialized munitions and bayonet strikes.' },
+  { key: 'The Middle', match: /middle/i, desc: 'Vengeful syndicate prioritizing counters and retribution.' },
+  { key: 'The Ring', match: /the ring|ring /i, desc: 'Artistic syndicate specializing in multi-debuffs and coin reuse.' },
+  { key: 'The Index', match: /the index|index /i, desc: 'Prescript-following syndicate with Unbreakable Coins and scaling power.' },
+  { key: 'The Pinky', match: /the pinky|pinky /i, desc: 'Fingers syndicate with elusive combat arts.' },
+  { key: 'Zwei Association', match: /zwei/i, desc: 'Protective peacekeeping fixers specializing in heavy shields and defense.' },
+  { key: 'Blade Lineage', match: /blade lineage/i, desc: 'Slash swordsmen with team Poise generation and Retaliation nukes.' },
+  { key: 'Kurokumo Clan', match: /kurokumo/i, desc: 'Bleed slashers inflicting crippling multi-coin bleed.' },
+  { key: 'Shi Association', match: /shi assoc/i, desc: 'Crisis fixers whose power doubles when HP drops below 50%.' },
+  { key: 'Cinq Association', match: /cinq assoc/i, desc: 'Speed duelists dominating 1v1 clashes with Haste and Declared Duelist.' },
+  { key: 'Seven Association', match: /seven assoc/i, desc: 'Analytical fixers shredding defense levels with Weakness Analyzed and Rupture.' },
+  { key: 'Liu Association', match: /liu assoc/i, desc: 'Fiery martial artists stacking Burn potency and count.' },
+  { key: 'Dieci Association', match: /dieci assoc/i, desc: 'Knowledge monks discarding cards for massive shields and Sinking.' },
+  { key: 'Devyat\' Association', match: /devyat/i, desc: 'High-speed couriers delivering Rupture without count consumption.' },
+  { key: 'Öufi Association', match: /öufi|oufi/i, desc: 'Contract adjudicators converting and bursting Tremor.' },
+  { key: 'W Corp.', match: /w corp/i, desc: 'Dimensional cleanup agents charging batteries for devastating S3 finishers.' },
+  { key: 'R Corp.', match: /r corp/i, desc: 'Mercenary specialists utilizing high-speed ammo and heavy Charge weapons.' },
+  { key: 'K Corp.', match: /k corp/i, desc: 'Excision security utilizing regenerative Ampules and revival protocols.' },
+  { key: 'T Corp.', match: /t corp/i, desc: 'Time collectors using Time Moratorium damage stasis and Tremor - Decay.' },
+  { key: 'N Corp.', match: /n corp|the one who grips|the one who shall grip/i, desc: 'Inquisitors hammering Nails, inflicting Gaze, and buffing Fanatic allies.' },
+  { key: 'La Manchaland', match: /la manchaland/i, desc: 'Bloodfiends harvesting Bloodfeast to fuel feral vampiric skills.' },
+  { key: 'Heishou Pack', match: /heishou/i, desc: 'Assassins adept in martial stances, poise, and charge.' },
+  { key: 'Dawn Office', match: /dawn office/i, desc: 'Passionate fixers channeling volatile flames and SP-fueled E.G.O states.' },
+  { key: 'Full-Stop Office', match: /full-stop/i, desc: 'Sniper fixers unleashing massive Turn 1 ammo and Fragile burst.' },
+  { key: 'Molar Office', match: /molar/i, desc: 'Sinking and Tremor fixers utilizing card discard and high-clash tools.' },
+  { key: 'MultiCrack Office', match: /multicrack/i, desc: 'Charge battery specialists transferring Charge across teammates.' },
+  { key: 'The Pequod', match: /pequod/i, desc: 'Obsessive whaling crew using Assist Attacks and Pride resonance.' },
+  { key: 'Edgar Family / Wuthering Heights', match: /edgar|wuthering heights|wild hunt/i, desc: 'Estate personnel and mourners wielding Sinking and Gloom.' },
+  { key: 'Haute Couture', match: /haute couture/i, desc: 'High fashion combatants spending HP for Pulsation and Changing Room.' },
+  { key: 'Lobotomy E.G.O', match: /lobotomy e\.g\.o/i, desc: 'Extractors synchronized with Abnormality E.G.O gear.' }
+];
+
+export function getIdentityAffiliation(name) {
+  if (!name) return 'Independent Fixer';
+  for (const rule of AFFILIATION_RULES) {
+    if (rule.match.test(name)) return rule.key;
+  }
+  return 'Independent Fixer';
+}
+
+export function detectSynergyPairs(team = []) {
+  const pairs = [];
+  const names = team.map(t => t.name || '');
+
+  const has = (query) => names.some(n => n.toLowerCase().includes(query.toLowerCase()));
+
+  // N Sinclair + N Faust
+  if (has('The One Who Shall Grip Sinclair') && has('The One Who Grips Faust')) {
+    pairs.push({
+      title: 'Inquisitor Vanguard',
+      duo: ['The One Who Shall Grip Sinclair', 'The One Who Grips Faust'],
+      tag: 'N Corp / Lust Reson',
+      desc: 'Faust provides Gaze (+20% Blunt/Pierce taken) and Lust resonance without over-healing Sinclair out of his negative sanity sweet spot.'
+    });
+  }
+
+  // Spicebush + Wild Hunt / Dieci Rodion
+  if (has('Spicebush Yi Sang') && (has('Wild Hunt Heathcliff') || has('Dieci Assoc. South Section 4 Rodion'))) {
+    pairs.push({
+      title: 'Sinking Deluge Detonation',
+      duo: ['Spicebush Yi Sang', has('Wild Hunt Heathcliff') ? 'Wild Hunt Heathcliff' : 'Dieci Rodion'],
+      tag: 'Sinking Nuke',
+      desc: 'Allies stack massive Sinking Potency and Count, which Spicebush detonates instantly with Skill 3 (Potency × Count = pure Gloom damage)!'
+    });
+  }
+
+  // Blade Lineage Mentor Meursault + BL
+  if (has('Blade Lineage Mentor Meursault')) {
+    const blCount = team.filter(t => (t.name || '').includes('Blade Lineage')).length;
+    if (blCount >= 2) {
+      pairs.push({
+        title: 'Swordplay of the Homeland',
+        duo: ['Blade Lineage Mentor Meursault', `${blCount} Blade Lineage Allies`],
+        tag: 'Poise & Slash Aura',
+        desc: `Meursault provides team-wide Poise Potency/Count and Slash Power Up to ${blCount} Blade Lineage Sinners on critical hits.`
+      });
+    }
+  }
+
+  // Captain Ishmael + High DPS
+  if (has('The Pequod Captain Ishmael') && team.length >= 2) {
+    pairs.push({
+      title: 'Captain\'s Assist Command',
+      duo: ['The Pequod Captain Ishmael', 'Highest DPS Ally'],
+      tag: 'Double Action Economy',
+      desc: 'Captain Ishmael\'s Skill 2 commands your strongest damage dealer to immediately strike the same target for double damage.'
+    });
+  }
+
+  // MultiCrack Faust + W Corp
+  if (has('MultiCrack Office Rep Faust') && (has('W Corp. L3 Cleanup Agent Ryōshū') || has('W Corp. L3 Cleanup Agent Don Quixote'))) {
+    pairs.push({
+      title: 'Charge Battery Transfer',
+      duo: ['MultiCrack Office Rep Faust', has('W Corp. L3 Cleanup Agent Ryōshū') ? 'W Corp. Ryōshū' : 'W Corp. Don Quixote'],
+      tag: 'Instant S3 Priming',
+      desc: 'Faust transfers Charge count directly to W Corp nukers, enabling Turn 2 Rip Space and D.D.E.D.R. without setup delays.'
+    });
+  }
+
+  // T Corp Don + Tremor Allies
+  if (has('T Corp. Class 3 Collection Staff Don Quixote') && team.length >= 2) {
+    pairs.push({
+      title: 'Time Moratorium Storage',
+      duo: ['T Corp. Don Quixote', 'Fielded Team'],
+      tag: 'Damage Stasis Detonation',
+      desc: 'Don stores 100% of damage dealt during the moratorium turn, then detonates all stored damage at once with a +30% to +50% multiplier.'
+    });
+  }
+
+  // La Manchaland Don + Bloodfiends
+  if (has('The Manager of La Manchaland Don Quixote')) {
+    const bfCount = team.filter(t => (t.name || '').includes('La Manchaland')).length;
+    if (bfCount >= 2) {
+      pairs.push({
+        title: 'Shared Bloodfeast Reservoir',
+        duo: ['The Manager of La Manchaland Don Quixote', `${bfCount} Bloodfiends`],
+        tag: 'Vampiric Empower',
+        desc: `All ${bfCount} Bloodfiends harvest battlefield Bleed damage into a shared Bloodfeast pool to fuel feral multi-coin skills.`
+      });
+    }
+  }
+
+  // The Ring Yi Sang + Multi-Debuffers
+  if (has('The Ring Pointillist Student Yi Sang') && team.length >= 2) {
+    pairs.push({
+      title: 'Debuff Roulette & Coin Re-Use',
+      duo: ['The Ring Pointillist Student Yi Sang', 'Multi-Status Squad'],
+      tag: 'Coin Re-Use Grinder',
+      desc: 'When attacking any target with 3+ distinct negative status effects, Yi Sang rolls bonus Coin Power and re-uses Skill 2 coins.'
+    });
+  }
+
+  return pairs;
+}
+
 // Team Synergy Analysis Engine for Deck Builder
 export function analyzeTeamSynergy(identitiesList = []) {
   const valid = (identitiesList || []).filter(Boolean);
@@ -1549,7 +1686,7 @@ export function analyzeTeamSynergy(identitiesList = []) {
   const sinCounts = { Wrath: 0, Lust: 0, Sloth: 0, Gluttony: 0, Gloom: 0, Pride: 0, Envy: 0 };
   const attackCounts = { Slash: 0, Pierce: 0, Blunt: 0 };
   const keywordCounts = { Burn: 0, Bleed: 0, Tremor: 0, Rupture: 0, Sinking: 0, Poise: 0, Charge: 0 };
-  const factionCounts = {};
+  const affiliationMap = {};
 
   valid.forEach(id => {
     // Skills
@@ -1568,14 +1705,19 @@ export function analyzeTeamSynergy(identitiesList = []) {
       if (keywordCounts[k] !== undefined) keywordCounts[k]++;
     });
 
-    // Factions
-    const name = id.name || '';
-    const factions = ['Liu', 'Blade Lineage', 'Dieci', 'The Index', 'W Corp', 'Kurokumo', 'Seven', 'Shi', 'N Corp', 'Devyat', 'Heishou', 'Cinq', 'Pequod', 'T Corp', 'Rosespanner', 'Middle', 'Ring', 'Thumb'];
-    factions.forEach(f => {
-      if (name.includes(f)) {
-        factionCounts[f] = (factionCounts[f] || 0) + 1;
-      }
-    });
+    // Affiliations
+    const aff = getIdentityAffiliation(id.name);
+    if (!affiliationMap[aff]) {
+      const rule = AFFILIATION_RULES.find(r => r.key === aff);
+      affiliationMap[aff] = {
+        name: aff,
+        count: 0,
+        desc: rule?.desc || 'Independent operations.',
+        members: []
+      };
+    }
+    affiliationMap[aff].count++;
+    affiliationMap[aff].members.push(id.name);
   });
 
   const highResonances = Object.entries(sinCounts)
@@ -1585,9 +1727,11 @@ export function analyzeTeamSynergy(identitiesList = []) {
   const sortedKeywords = Object.entries(keywordCounts).sort((a, b) => b[1] - a[1]);
   const dominantKeyword = sortedKeywords[0] && sortedKeywords[0][1] >= 3 ? sortedKeywords[0] : null;
 
-  const activeFactions = Object.entries(factionCounts)
-    .filter(([_, c]) => c >= 2)
-    .map(([faction, count]) => ({ faction, count }));
+  const activeAffiliations = Object.values(affiliationMap)
+    .filter(a => a.name !== 'Independent Fixer' && a.count >= 1)
+    .sort((a, b) => b.count - a.count);
+
+  const synergyPairs = detectSynergyPairs(valid);
 
   return {
     totalMembers: valid.length,
@@ -1596,6 +1740,7 @@ export function analyzeTeamSynergy(identitiesList = []) {
     keywordCounts,
     highResonances,
     dominantKeyword,
-    activeFactions
+    activeAffiliations,
+    synergyPairs
   };
 }
