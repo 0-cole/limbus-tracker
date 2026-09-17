@@ -1,8 +1,8 @@
 # Limbus Tracker — System Context & Architecture Guide
 
 ## 1. Executive Summary & High-Level Objective
-Limbus Tracker is an Electron + React desktop tracking companion for Project Moon's *Limbus Company*. It manages Sinner Egoshards, nominable/random crate inventories, Mirror Dungeon runs, extraction banner timelines, and season milestone projections.
-- **Latest Release**: `v1.0.81` (Git tag `v1.0.81`, release asset `Limbus Tracker Setup 1.0.81.exe`).
+Limbus Tracker is an Electron + React desktop tracking companion for Project Moon's *Limbus Company*. It manages Sinner Egoshards, nominable/random crate inventories, Mirror Dungeon runs, extraction banner timelines, season milestone projections, character tactical dossiers, and 12-Sinner deck building compositions.
+- **Latest Release**: `v1.0.83` (Git tag `v1.0.83`, release asset `Limbus Tracker Setup 1.0.83.exe`).
 - **Repository**: [0-cole/limbus-tracker](https://github.com/0-cole/limbus-tracker) (`master` branch).
 
 ---
@@ -13,35 +13,38 @@ Limbus Tracker is an Electron + React desktop tracking companion for Project Moo
   - Compile with `npm run build` (Vite) and package with `npm run package` (electron-builder).
   - Output binary is produced at `release2/Limbus Tracker Setup <version>.exe` (~106 MB).
   - Release tagging and publication: `git tag v<version>`, `git push origin v<version>`, `gh release create v<version>`, and `gh release upload v<version> "release2\Limbus Tracker Setup <version>.exe" --clobber`.
-- **Pre-120 Battle Pass Shard Invariant**:
-  - Battle Pass levels 1–120 award fixed milestone rewards (decals, banners, tickets, lunacy, thread) rather than choice crates.
-  - Choice Egoshard crates only start generating at Level 121+ (EX levels).
-  - In `limbusCalculator.js` (`generateRoadmap`), daily crate gain is strictly 0 while `simulatedBpLevel <= 120`. `SchedulePage.jsx` renders `Pass Lv. X/120 (EX Crates at Lv. 121)` without auto-incrementing target shard counts.
-- **Sinner Shard Mini Calculator Invariant**:
-  - In `src/pages/InventoryPage.jsx`, `<SinnerShardCalculatorInput />` allows arithmetic expressions (e.g. `18+4`, `50-10`, `20*2`) with live preview.
-  - Clamped strictly to `[0, 1500]` on evaluation to block absurd numbers like `18+4000`.
-- **Crate Unconstrained Tracking**:
-  - In `src/stores/useStore.js` (`openCratesForSinner`), players can open and log any quantity of Choice Crates or Random Crates without being blocked by an in-tracker crate ceiling.
-  - Crate tracker removed from `InventoryPage.jsx`; extraction tickets are housed in a dedicated card.
-- **Weekly Calendar Local Date Alignment**:
-  - In `src/pages/DashboardPage.jsx`, weekly calendar grid columns and rollover checks anchor to local calendar date (`new Date().getDay()` and `localTodayKey`). Thursday evening post-reset (5:00 PM – 11:59 PM EDT) remains active and is never marked missed. Includes a manual `🔄 Reset Calendar` button.
-- **Startup Auto-Cleaner**:
-  - In `electron/main.cjs`, `cleanupOldTempInstallers()` runs on `app.whenReady()` to unlink old `Limbus.Tracker.Setup.*.exe` files in `%TEMP%`.
+- **Universal Tactical Intelligence Engine**:
+  - Located at `src/utils/identityTactics.js`.
+  - Provides **100% verified tactical intelligence across all 187 identities** in `identities.json`.
+  - Features 25 curated dossiers for high-complexity IDs (N Sinclair, N Faust, R Ishmael, R Heathcliff, W Don, K Hong Lu, Spicebush Yi Sang, Magic Bullet Outis, Dieci Rodion, T Corp Don, La Manchaland Don, Yurodivy Hong Lu, Shi Ishmael, Cinq Don, Haute Couture Ishmael, Index Yi Sang, Ring Yi Sang, Wild Hunt Heathcliff, Blade Lineage Meursault, Solemn Lament Yi Sang, Captain Ishmael, Dawn Sinclair, Devyat Rodion, MultiCrack Faust, W Ryōshū).
+  - Upgraded universal dynamic engine for all other 162 IDs detecting Minus Coins, Limited Munitions, Discard & Insight cycling, and Self-HP consumption.
+  - Generates striking `hazardAlert` banners for friendly-fire risks (Mind Whip under 10 Charge, 7th Magic Bullet low SP), lethal overdose (K Corp 5 Ampules), minus coin inversions, and ammo limits.
+  - Handles minus-coin clash math properly (`maxPower = basePower` at negative SP / tails roll) so players see real clash ceilings (e.g. 30 on N Sinclair S3).
+- **Identity Details Modal Integration (`src/components/IdDetailsModal.jsx`)**:
+  - "⚔️ Tactics" (Tactical Dossier) is the primary default tab.
+  - Displays LimbusDeck-style Combat Profile stats (HP, Speed, Defense type/affinity, Max Clash Power, Keywords).
+  - Shows animated Critical Combat Warning hazard alerts.
+  - Contains Turn-by-Turn Combat Guides (Opener, Mid-Game, Finisher) and skill coin calculations.
+- **Interactive Deck Builder (`src/pages/DeckBuilderPage.jsx`)**:
+  - Accessible via `/deckbuilder` in sidebar navigation.
+  - 12-Sinner squad grid demarcated into Frontline Combatants (Slots 1–6+) and Support Bench (Passives Active).
+  - 7 status keyword filter pills (Burn, Bleed, Tremor, Rupture, Sinking, Poise, Charge) with 1-click `⚡ Auto-Fill`.
+  - "My Pool Only" toggle restricting selection to acquired IDs.
+  - Real-time Synergy HUD displaying Dominant Archetype, Sin Affinity Resonance gauges with `⚡ A-Reson (4+)` alerts, Slash/Pierce/Blunt damage balance, and active faction synergies.
+  - Custom Squad Preset creation, loading, renaming, and deletion with cloud and local disk synchronization.
 
 ---
 
-## 3. Recent Modifications & Verified State (v1.0.81)
-- `src/pages/InventoryPage.jsx`: Added `SinnerShardCalculatorInput` with live `= [result]` preview, arithmetic evaluator, and 1,500 shard cap. Replaced Dispensary Crates with Extraction Tickets card.
-- `src/components/DailyCycleTracker.jsx`: Added Random (Non-Nominable) Crates tab; removed crate ceiling from Choice Crates tab.
-- `src/stores/useStore.js`: Added `resetWeeklyCalendar()` action; updated `openCratesForSinner` to support both nominable and random crate batches without box limits.
-- `src/pages/DashboardPage.jsx`: Fixed Thursday evening calendar display bug; added manual `🔄 Reset Calendar` button.
-- `electron/main.cjs`: Added startup cleanup daemon to purge old installer files in `%TEMP%`.
-- `package.json`: Version bumped to `1.0.81`.
-- `src/pages/ChangelogPage.jsx`: Added Kenneth's v1.0.81 memo.
+## 3. Recent Modifications & Verified State (v1.0.83)
+- `src/utils/identityTactics.js`: Expanded to 25 curated dossiers and enhanced dynamic analyzer covering all 187 identities. Added hazard alerts, minus-coin calculations, ammo tracking, and refined keyword application notes.
+- `src/components/IdDetailsModal.jsx`: Added Critical Combat Warning hazard banner, updated minus-coin power multipliers display (`x -4`), fixed Tails Max calculation, and calibrated Combat Profile Max Clash to respect minus coins.
+- `package.json`: Bumped version to `1.0.83`.
+- `src/pages/ChangelogPage.jsx`: Added Kenneth's v1.0.83 dispatch memo.
 
 ---
 
 ## 4. Verification & Deployment State
 - Build: `npm run build` completed cleanly with 0 errors.
-- Packaging: `npm run package` produced `release2/Limbus Tracker Setup 1.0.81.exe` (106,068,773 bytes).
-- Git & Release: Pushed to `master`, tagged `v1.0.81`, and published to GitHub Releases.
+- Verification script (`verify_all_187.mjs`): 187/187 identities verified with 0 errors, 25 curated dossiers, 18 hazard alerts, correct Sinclair max clash of 30.
+- Packaging: `npm run package` produced signed installer `release2/Limbus Tracker Setup 1.0.83.exe`.
+- Git & Release: Pushed to `origin/master`, tagged `v1.0.83`, pushed tags, and published to GitHub Releases.

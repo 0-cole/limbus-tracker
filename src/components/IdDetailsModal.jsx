@@ -116,7 +116,11 @@ export default function IdDetailsModal({ idData, onClose }) {
                             <div key={i} className="w-4 h-4 rounded-full border border-[#c9a84c] bg-[#c9a84c]/20 shadow-[0_0_5px_rgba(201,168,76,0.2)]"></div>
                          ))}
                        </div>
-                       {skill.coinPower > 0 && <span className="text-lg font-bold text-white ml-2">x +{skill.coinPower}</span>}
+                        {skill.coinPower > 0 ? (
+                          <span className="text-lg font-bold text-white ml-2">x +{skill.coinPower}</span>
+                        ) : skill.coinPower < 0 ? (
+                          <span className="text-lg font-bold text-red-400 ml-2">x {skill.coinPower}</span>
+                        ) : null}
                     </div>
                  </div>
                  <span className="text-xl font-black text-gray-600">=</span>
@@ -124,7 +128,7 @@ export default function IdDetailsModal({ idData, onClose }) {
                     <span className="text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1">Max</span>
                     <span className="text-xl font-black text-yellow-500">
                         {skill.basePower !== undefined && skill.coinPower !== undefined && skill.coins !== undefined 
-                            ? (skill.basePower + (skill.coinPower * skill.coins)) 
+                            ? (skill.coinPower < 0 ? `${skill.basePower} (Tails Max)` : (skill.basePower + (skill.coinPower * skill.coins))) 
                             : '?'}
                     </span>
                  </div>
@@ -221,12 +225,15 @@ export default function IdDetailsModal({ idData, onClose }) {
                          {defenseSkill ? `${defenseSkill.type || 'Guard'} (${defenseSkill.affinity || 'None'})` : 'None'}
                        </span>
                    </div>
-                   <div className="flex justify-between items-center pb-2 border-b border-[#222]">
-                       <span className="text-xs text-gray-500 font-medium">Max Clash</span>
-                       <span className="text-amber-400 font-black text-sm">
-                         {skills.reduce((max, s) => Math.max(max, (s.basePower || 0) + (s.coinPower || 0) * (s.coins || 1)), 0)}
-                       </span>
-                   </div>
+                    <div className="flex justify-between items-center pb-2 border-b border-[#222]">
+                        <span className="text-xs text-gray-500 font-medium">Max Clash</span>
+                        <span className="text-amber-400 font-black text-sm">
+                          {skills.reduce((max, s) => {
+                            const p = (s.coinPower || 0) < 0 ? (s.basePower || 0) : (s.basePower || 0) + (s.coinPower || 0) * (s.coins || 1);
+                            return Math.max(max, p);
+                          }, 0)}
+                        </span>
+                    </div>
                    <div>
                        <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider block mb-1">Archetype</span>
                        <div className="flex flex-wrap gap-1">
@@ -334,6 +341,20 @@ export default function IdDetailsModal({ idData, onClose }) {
                             </div>
                           </div>
                         </div>
+
+                        {/* Critical Hazard Alert Banner */}
+                        {tactics.hazardAlert && (
+                          <div className="p-4 rounded-xl border border-red-500/60 bg-red-950/30 shadow-[0_0_25px_rgba(239,68,68,0.2)] flex items-start gap-3.5">
+                            <span className="text-2xl flex-shrink-0 mt-0.5 animate-pulse">⚠️</span>
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs font-black uppercase tracking-wider text-red-400">Critical Combat Warning</span>
+                                <span className="text-[10px] font-bold text-red-300 bg-red-500/20 px-2 py-0.5 rounded border border-red-500/40">{tactics.hazardAlert.badge}</span>
+                              </div>
+                              <p className="text-xs text-red-200/90 leading-relaxed font-medium">{tactics.hazardAlert.message}</p>
+                            </div>
+                          </div>
+                        )}
 
                        {/* Turn-by-Turn Combat Rotation */}
                        <div className="p-5 rounded-xl border border-[#333] bg-[#111] space-y-4 shadow-md">

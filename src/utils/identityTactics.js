@@ -24,7 +24,7 @@ export const SIN_COLORS = {
 };
 
 // Comprehensive dictionary of special mechanics across all Limbus Company factions
-const MECHANICS_DICTIONARY = [
+export const MECHANICS_DICTIONARY = [
   {
     key: 'pulsation',
     title: 'Pulsation & Pulsation Count',
@@ -117,6 +117,20 @@ const MECHANICS_DICTIONARY = [
     explanation: 'Pauses all damage dealt to the target during the turn, storing 100% of it in temporal stasis. At moratorium end, detonates all stored damage at once plus a huge bonus percentage!'
   },
   {
+    key: 'tremor - decay',
+    title: 'Tremor - Decay (T Corp)',
+    badge: 'Defense Shredder',
+    trigger: 'Converting Tremor into Decay via T Corp skills',
+    explanation: 'Lowers target Defense Level by 1 for every 4 Tremor Potency, amplifying all incoming damage significantly.'
+  },
+  {
+    key: 'tremor - reverb',
+    title: 'Tremor - Reverb (Yurodivy)',
+    badge: 'Sloth HP Nuker',
+    trigger: 'Converting Tremor into Reverb via Yurodivy skills',
+    explanation: 'Causes every Tremor-Burst to deal direct Sloth HP damage equal to the target\'s Tremor Potency, turning Tremor into a lethal direct-damage keyword!'
+  },
+  {
     key: 'dark flame',
     title: 'Dark Flame (Der Freischütz)',
     badge: 'True Fire Damage',
@@ -180,6 +194,20 @@ const MECHANICS_DICTIONARY = [
     explanation: 'Grants bonus Clash Power and damage against enemies afflicted with Nails.'
   },
   {
+    key: 'gaze',
+    title: 'Gaze (Vulnerability)',
+    badge: 'Damage Amplifier',
+    trigger: 'Inflicted by The One Who Grips Faust Skill 2',
+    explanation: 'Causes the target to take +20% more Pierce and Blunt damage from all attacks for the remainder of the turn.'
+  },
+  {
+    key: 'whistles',
+    title: 'Whistles (SP Battery)',
+    badge: 'Passive SP Heal',
+    trigger: 'Combat turn end with 4+ Lust Absolute Resonance',
+    explanation: 'Faust\'s core engine passive: heals 15 SP to the ally with the lowest Sanity, keeping Negative Sanity allies under control or reviving panicked allies.'
+  },
+  {
     key: 'bloodfeast',
     title: 'Bloodfeast (Bloodfiends)',
     badge: 'Vampiric Stockpile',
@@ -187,8 +215,15 @@ const MECHANICS_DICTIONARY = [
     explanation: 'Accumulated when any unit bleeds. Consumed to empower high-tier Bloodfiend skills, increase coin power, and heal HP.'
   },
   {
+    key: 'bloodfiend thirst',
+    title: 'Bloodfiend Thirst',
+    badge: 'Feral State',
+    trigger: 'Consuming accumulated Bloodfeast or low HP',
+    explanation: 'Unleashes feral vampiric instincts: boosts coin power, restores HP on hit, and enhances bleed application.'
+  },
+  {
     key: 'ammo',
-    title: 'Ammo Management (R Corp / LCCB)',
+    title: 'Ammo Management (R Corp / Full-Stop / Thumb / LCCB)',
     badge: 'Limited Munitions',
     trigger: 'Using firearms that consume 1-4 bullets per skill',
     explanation: 'Enters battle with fixed bullets. Skills spend ammo for overwhelming coin power; once ammo is exhausted, attacks deal minimal damage.'
@@ -227,12 +262,34 @@ const MECHANICS_DICTIONARY = [
     badge: 'Coin Invariant',
     trigger: 'Empowered high-tier stance or 9 Grace',
     explanation: 'Coins that never break upon losing clashes, guaranteeing the subsequent coins still hit the target.'
+  },
+  {
+    key: 'k corp ampule',
+    title: 'K Corp Ampules & Overdose Hazard',
+    badge: 'Regen & Lethal Risk',
+    trigger: 'Gained upon being hit or using K Corp skills',
+    explanation: 'Heals 10% max HP at turn start and grants full-HP revives on fatal damage. BUT at 5 stacks, triggers fatal Ampule Overdose and INSTANTLY DIES!'
+  },
+  {
+    key: 'crisis',
+    title: 'Crisis State (Shi Association)',
+    badge: 'Crisis Power Boost',
+    trigger: 'Dropping to or below 50% max HP',
+    explanation: 'Unlocks the true power of Shi Association fixers: doubles coin power, unlocks additional coins, and grants guaranteed critical strikes!'
+  },
+  {
+    key: 'declared duel',
+    title: 'Declared Duelist (Cinq Association)',
+    badge: '1v1 Lockout',
+    trigger: 'Landing designated dueling skills',
+    explanation: 'Locks a single target into a 1v1 duel, granting massive Haste, clash power, and lowering the enemy\'s defense level.'
   }
 ];
 
-// Curated high-complexity identities
-const CURATED_TACTICS = {
-  'Haute Couture::Boutique du Rouge Ishmael': {
+// Curated high-complexity identities (normalized keys for exact matching)
+export const CURATED_TACTICS = {
+  // 1. Haute Couture Ishmael
+  'Haute Couture::Boutique Du Rouge Ishmael': {
     archetype: 'Bleed & Self-HP Pulsation Tank / Rebirth Duelist',
     primaryKeywords: ['Bleed', 'Charge'],
     role: 'HP Consumption Tank & Changing Room Duelist',
@@ -263,10 +320,432 @@ const CURATED_TACTICS = {
     },
     teamSynergies: {
       keywords: ['Bleed', 'Charge', 'Lust Resonance'],
-      bestPartners: ['Haute Couture Le Noir Footwear Hall Ryōshū', 'The Ring Pointillist Student Yi Sang', 'The Pequod Captain Ishmael'],
+      bestPartners: ['Haute Couture::Le Noir Footwear Hall Ryōshū', 'The Ring Pointillist Student Yi Sang', 'The Pequod Captain Ishmael'],
       tip: 'Pairs excellently with other Rouge and Bleed identities that leverage Lust resonance and capitalize on high Bleed count.'
     }
   },
+
+  // 2. The One Who Shall Grip Sinclair (N Sinclair)
+  'The One Who Shall Grip Sinclair': {
+    archetype: 'Negative Sanity Berserker / Minus Coin Executioner',
+    primaryKeywords: ['Burn', 'Bleed'],
+    role: 'Minus-Coin Boss Eraser',
+    hazardAlert: {
+      badge: 'Negative Sanity Invariant',
+      message: 'CRITICAL: Sinclair gains maximum clash rolls (up to 30 on Skill 3!) when his coins roll TAILS at negative Sanity. DO NOT bring Sanity healers (like Faust Fluid Sac). Keep his SP between -15 and -35. If SP approaches -45, use his Guard skill immediately to prevent Turn-Start E.G.O Corrosion!'
+    },
+    uniqueMechanics: [
+      {
+        title: 'Minus Coin Scaling (Tails Roll King)',
+        badge: 'Inverse Math',
+        trigger: 'Tossing coins in clashes and attacks',
+        explanation: 'His skills have enormous Base Power (30 on Skill 3, 16 on Skill 2), but NEGATIVE Coin Power (-12 on S3, -4 on S2). Rolling Heads lowers his power; rolling Tails preserves his catastrophic maximum clash!'
+      },
+      {
+        title: 'Self-Sanity Depletion',
+        badge: 'Berserk Fuel',
+        trigger: 'Using Skill 2 and Skill 3',
+        explanation: 'Each attack subtracts Sanity from Sinclair, naturally dropping him into the negative sweet spot where he dominates clashes.'
+      },
+      {
+        title: 'E.G.O Corrosion Hazard (-45 SP)',
+        badge: 'Corrosion Watch',
+        trigger: 'Reaching -45 Sanity at turn end',
+        explanation: 'If Sinclair reaches -45 SP, he automatically corrodes into a berserk E.G.O state at turn start, indiscriminately attacking allies with lethal force. Use Guard to cancel attacks when too low!'
+      }
+    ],
+    combatRotation: {
+      opener: 'Use Skill 1 or Skill 2 to safely lose early Sanity and push his SP into the negative zone (-10 to -25).',
+      midGame: 'Maintain his Sanity sweet spot (-15 to -35). His 4-coin Skill 2 rolls 16 max and deals devastating Blunt and Bleed damage.',
+      finisher: 'Unleash "Self-Destructive Purge" (Skill 3) at negative SP. With 30 Base Power and 3 coins, rolling tails deals 300+ blunt damage and erases the boss!'
+    },
+    teamSynergies: {
+      keywords: ['Burn', 'Bleed', 'Wrath / Lust Resonance'],
+      bestPartners: ['The One Who Grips Faust', 'Liu Assoc. South Section 4 Director Rodion', 'Kurokumo Clan Captain Ishmael', 'Dawn Office Fixer Sinclair'],
+      tip: 'Never pair with SP-healing passives. Pair with The One Who Grips Faust for Fanatic buffs without healing him above 0 SP.'
+    }
+  },
+
+  // 3. The One Who Grips Faust (N Faust)
+  'The One Who Grips Faust': {
+    archetype: 'Nails & Fanatic Commander / SP Battery',
+    primaryKeywords: ['Bleed'],
+    role: 'Team SP Catalyst & Damage Amplifier',
+    uniqueMechanics: [
+      {
+        title: 'Whistles (Team Sanity Engine)',
+        badge: 'SP Battery',
+        trigger: 'Combat turn end with 4+ Lust Absolute Resonance',
+        explanation: 'Heals 15 SP to the ally with the lowest Sanity. Revitalizes allies who suffered sanity drain and ensures consistent heads rolls for standard Sinners.'
+      },
+      {
+        title: 'Gaze (Vulnerability Debuff)',
+        badge: 'Damage Amplifier',
+        trigger: 'Hitting with Skill 2 (The Gripping)',
+        explanation: 'Applies Gaze to the target: they take +20% more Pierce and Blunt damage from all subsequent attacks that turn!'
+      },
+      {
+        title: 'Nails & Fanatic Catalyst',
+        badge: 'Bleed Catalyst',
+        trigger: 'Striking enemies with N Corp skills',
+        explanation: 'Hammers Nails into enemies, converting into heavy Bleed at turn end while granting Fanatic (+Attack Power) to all N Corp teammates.'
+      }
+    ],
+    combatRotation: {
+      opener: 'Lead with Skill 1 to establish Lust resonance and start planting Nails on the primary enemy.',
+      midGame: 'Direct Skill 2 (The Gripping) at the boss to apply Gaze, then let blunt and pierce teammates follow up with amplified damage.',
+      finisher: 'Use Skill 3 (Execution) to finish off low-HP enemies. If it lands a kill, buffs all N Corp allies with Fanatic and Attack Power Up.'
+    },
+    teamSynergies: {
+      keywords: ['Bleed', 'Lust Resonance'],
+      bestPartners: ['The One Who Shall Grip Sinclair', 'N Corp. Großhammer Meursault', 'The Ring Pointillist Student Yi Sang', 'Kurokumo Clan Wakashu Ryōshū'],
+      tip: 'The cornerstone of Lust resonance squads and N Corp Bleed teams.'
+    }
+  },
+
+  // 4. R Corp. 4th Pack Reindeer Ishmael
+  'R Corp. 4th Pack Reindeer Ishmael': {
+    archetype: 'Charge Stacker & Nuclear Mind Whip Finisher',
+    primaryKeywords: ['Charge', 'Sinking'],
+    role: 'Blunt Stagger Nuker',
+    hazardAlert: {
+      badge: 'Indiscriminate Friendly Fire',
+      message: 'CRITICAL TEAM-WIPE HAZARD: Skill 3 (Mind Whip) targets INDISCRIMINATELY if used with less than 10 Charge Count! She will randomly target and one-shot your own Sinners. Never fire Mind Whip before reaching 10 Charge.'
+    },
+    uniqueMechanics: [
+      {
+        title: 'Mind Whip 10-Charge Prerequisite',
+        badge: 'Nuclear Finisher',
+        trigger: 'Having 10+ Charge Count before using Skill 3',
+        explanation: 'At 10+ Charge, consumes 10 Charge to target the chosen enemy with an unstoppable 4-coin Blunt barrage. Below 10 Charge, she fires indiscriminately into allies!'
+      },
+      {
+        title: 'Charge Battery & Self-Sinking',
+        badge: 'Battery Engine',
+        trigger: 'Using Skill 1 and Skill 2',
+        explanation: 'Skill 1 and Skill 2 generate high Charge count while expending a tiny amount of SP to build internal power.'
+      }
+    ],
+    combatRotation: {
+      opener: 'Cycle Skill 1 and Skill 2 exclusively to build Charge count to 10+. Avoid touching Skill 3.',
+      midGame: 'Use Skill 2 to win difficult clashes and push Charge to 12+. Guard if bad skills threaten to force an early Mind Whip.',
+      finisher: 'Once at 10+ Charge, fire Mind Whip (Skill 3) directly at the boss. The 4-coin blunt assault will instantly stagger or delete them.'
+    },
+    teamSynergies: {
+      keywords: ['Charge', 'Blunt', 'Envy Resonance'],
+      bestPartners: ['MultiCrack Office Rep Faust', 'W Corp. L3 Cleanup Agent Don Quixote', 'W Corp. L3 Cleanup Agent Ryōshū'],
+      tip: 'Pair with Charge batteries like MultiCrack Faust to reach the 10-Charge threshold turns earlier.'
+    }
+  },
+
+  // 5. R Corp. 4th Pack Rabbit Heathcliff
+  'R Corp. 4th Pack Rabbit Heathcliff': {
+    archetype: 'High-Speed Ammo Assassin & Fragile Inflictor',
+    primaryKeywords: ['Bleed', 'Rupture'],
+    role: 'Turn 1-3 Burst Assassin',
+    hazardAlert: {
+      badge: 'Limited Munitions (13 Ammo)',
+      message: 'Enters combat with 13 Ammo. Each skill consumes bullets (Quick Suppression spends 4-5 bullets). Once Ammo reaches 0, his skills deal almost 0 damage and lose their coin effects. Win the fight fast!'
+    },
+    uniqueMechanics: [
+      {
+        title: 'Quick Suppression (4 Fragile)',
+        badge: 'Burst Finisher',
+        trigger: 'Firing Skill 3 with sufficient Ammo',
+        explanation: 'Unleashes a rapid 5-coin burst that inflicts up to 4 Fragile on the target, causing that enemy to take +40% more damage from all teammate attacks that turn!'
+      },
+      {
+        title: 'Extreme Speed Range (3-7)',
+        badge: 'Priority Intercept',
+        trigger: 'Turn start speed roll',
+        explanation: 'Naturally fast speed ensures he acts first, applying Fragile and Rupture to the boss before your slower nukers attack.'
+      },
+      {
+        title: 'Ammo Depletion Penalty',
+        badge: 'Munitions Limit',
+        trigger: 'Exhausting all 13 bullets',
+        explanation: 'When ammo runs dry, his skills fail to trigger coin effects and deal negligible blunt damage.'
+      }
+    ],
+    combatRotation: {
+      opener: 'Use high speed on Turn 1 to win clashes with Skill 1 or Skill 2, establishing early damage.',
+      midGame: 'Fire Quick Suppression (Skill 3) into the boss on Turn 2 or 3. Apply 4 Fragile, then let your team hammer that target for multiplied damage.',
+      finisher: 'Use remaining bullets to clean up before turn 5.'
+    },
+    teamSynergies: {
+      keywords: ['Bleed', 'Rupture', 'Envy Resonance'],
+      bestPartners: ['The Pequod Captain Ishmael', 'W Corp. L3 Cleanup Agent Don Quixote', 'W Corp. L3 Cleanup Agent Ryōshū', 'Dieci Assoc. South Section 4 Rodion'],
+      tip: 'His 4 Fragile turns any teammate into a nuclear weapon. Position him to act before your primary nukers in speed order.'
+    }
+  },
+
+  // 6. W Corp. L3 Cleanup Agent Don Quixote
+  'W Corp. L3 Cleanup Agent Don Quixote': {
+    archetype: 'Charge Hypercarry & Dimensional Pierce Finisher',
+    primaryKeywords: ['Charge', 'Rupture'],
+    role: 'Single-Target Pierce Obliterator',
+    hazardAlert: {
+      badge: 'Rip Space Recoil',
+      message: 'Skill 3 (Rip Space) requires 10 Charge Count! If used with less than 10 Charge, Don loses 20% of her max HP, loses massive coin power, and rolls poorly. Always bank 10 Charge before firing.'
+    },
+    uniqueMechanics: [
+      {
+        title: 'Rip Space (5-Coin Nuke)',
+        badge: 'Dimensional Shred',
+        trigger: 'Having 10+ Charge Count before using Skill 3',
+        explanation: 'Consumes 10 Charge count to roll up to 31+ clash power and unleash 5 consecutive Pierce hits, dealing massive burst damage.'
+      },
+      {
+        title: 'Telepole E.G.O Synergy',
+        badge: 'Instant Battery',
+        trigger: 'Activating Telepole E.G.O',
+        explanation: 'Her Telepole E.G.O grants 10+ Charge count to herself and teammates in a single turn, instantly priming Rip Space for turn 2.'
+      }
+    ],
+    combatRotation: {
+      opener: 'Cycle Skill 1 and Skill 2 (or fire Telepole E.G.O) to build Charge count to 10+.',
+      midGame: 'Hold Skill 3 until Charge count is >= 10. Win intermediate clashes with Skill 2 (Leap).',
+      finisher: 'Unleash Rip Space at 10+ Charge into a staggered enemy to deal catastrophic 5-coin pierce damage.'
+    },
+    teamSynergies: {
+      keywords: ['Charge', 'Pierce', 'Envy Resonance'],
+      bestPartners: ['MultiCrack Office Rep Faust', 'W Corp. L3 Cleanup Agent Ryōshū', 'W Corp. L3 Cleanup Agent Yi Sang', 'R Corp. 4th Pack Reindeer Ishmael'],
+      tip: 'Equip Don\'s Telepole E.G.O for instant turn-2 Rip Space activation.'
+    }
+  },
+
+  // 7. K Corp. Class 3 Excision Staff Hong Lu
+  'K Corp. Class 3 Excision Staff Hong Lu': {
+    archetype: 'Immortal Regeneration Tank / Ampule Overdose Risk',
+    primaryKeywords: ['Rupture'],
+    role: 'Unkillable Frontline Anchor',
+    hazardAlert: {
+      badge: 'Ampule Overdose (Instant Death)',
+      message: 'K Corp Ampules heal 10% HP each turn and provide revives, BUT reaching 5 Ampules triggers lethal Ampule Overdose and INSTANTLY KILLS Hong Lu! Track his stacks carefully.'
+    },
+    uniqueMechanics: [
+      {
+        title: 'K Corp Ampules & 3 Full-HP Revives',
+        badge: 'Immortal Anchor',
+        trigger: 'Taking lethal damage while holding Ampules',
+        explanation: 'If reduced to 0 HP while holding Ampules, he revives immediately with 100% max HP (up to 3 times per combat encounter)!'
+      },
+      {
+        title: 'Lethal Overdose (5 Stacks)',
+        badge: 'Instant Death',
+        trigger: 'Reaching 5 K Corp Ampules',
+        explanation: 'At 5 Ampules, Hong Lu suffers catastrophic cell rupture and dies instantly without triggering revives.'
+      },
+      {
+        title: 'Rupture Potency Support',
+        badge: 'Rupture Stacker',
+        trigger: 'Striking enemies with skills',
+        explanation: 'Applies heavy Rupture potency with blunt attacks while drawing aggro away from squishy teammates.'
+      }
+    ],
+    combatRotation: {
+      opener: 'Use Skill 1 and Skill 2 to establish clash control and begin gaining 1-2 Ampules.',
+      midGame: 'Direct all dangerous boss attacks into Hong Lu. His regeneration and revives will soak infinite damage while your DPS Sinners attack freely.',
+      finisher: 'Use Skill 3 to burst down staggered targets. Make sure Ampule stacks stay below 5.'
+    },
+    teamSynergies: {
+      keywords: ['Rupture', 'Gluttony Resonance'],
+      bestPartners: ['Devyat\' Assoc. North Section 3 Rodion', 'Seven Assoc. South Section 4 Faust', 'W Corp. L3 Cleanup Agent Yi Sang'],
+      tip: 'The ultimate tank for difficult Refraction Railway and boss stages.'
+    }
+  },
+
+  // 8. Effloresced E.G.O::Spicebush Yi Sang
+  'Effloresced E.G.O::Spicebush Yi Sang': {
+    archetype: 'Sinking Deluge Detonator & AoE Pierce Striker',
+    primaryKeywords: ['Sinking', 'Tremor'],
+    role: 'Sinking Catastrophe Nuker',
+    uniqueMechanics: [
+      {
+        title: 'Sinking Deluge (Gloom Detonation)',
+        badge: 'Catastrophic Nuke',
+        trigger: 'Landing Skill 3 (Fragrant Deluge) on an enemy with Sinking',
+        explanation: 'Detonates the target\'s entire Sinking stack: deals (Sinking Potency × Sinking Count) as pure Gloom damage in one catastrophic hit! A target with 20 Potency and 10 Count instantly takes 200+ Gloom damage.'
+      },
+      {
+        title: 'Multi-Target AoE S2',
+        badge: 'Cleave Strike',
+        trigger: 'Meeting Gloom resonance conditions',
+        explanation: 'Skill 2 strikes multiple dashboard slots simultaneously, spreading Sinking across the entire enemy squad.'
+      }
+    ],
+    combatRotation: {
+      opener: 'Use Skill 1 and Skill 2 to apply Sinking Potency and build team Gloom resonance.',
+      midGame: 'Have teammates (Wild Hunt Heathcliff, Dieci Rodion, Molar Ishmael) stack high Sinking Potency AND Count on the boss.',
+      finisher: 'Fire Skill 3 to trigger Sinking Deluge, detonating the entire stack into an instantaneous 400–1000+ damage explosion!'
+    },
+    teamSynergies: {
+      keywords: ['Sinking', 'Gloom Resonance'],
+      bestPartners: ['Wild Hunt Heathcliff', 'Dieci Assoc. South Section 4 Rodion', 'Lobotomy E.G.O::Solemn Lament Yi Sang', 'Molar Boatworks Fixer Ishmael'],
+      tip: 'Only fire S3 after the team has built up substantial Sinking count, because Deluge wipes all Sinking from the enemy upon detonation.'
+    }
+  },
+
+  // 9. Lobotomy E.G.O::Magic Bullet Outis
+  'Lobotomy E.G.O::Magic Bullet Outis': {
+    archetype: 'Magic Bullet Sniper & Dark Flame Burn Specialist',
+    primaryKeywords: ['Burn', 'Poise'],
+    role: 'Dark Flame True Damage & Full-Screen Piercer',
+    hazardAlert: {
+      badge: '7th Bullet Friendly Fire',
+      message: 'At 7 Magic Bullets, Skill 3 transforms into an apocalyptic piercing shot that targets all enemies. However, if her Sanity is negative, she fires indiscriminately through your own Sinners! Keep her SP positive.'
+    },
+    uniqueMechanics: [
+      {
+        title: 'Magic Bullet Stacks (1 to 7)',
+        badge: 'Munitions Count',
+        trigger: 'Using skills to load bullets',
+        explanation: 'Skills load Magic Bullets. Each bullet grants +1 Coin Power and increases target count.'
+      },
+      {
+        title: 'Dark Flame (True Pride Fire)',
+        badge: 'True Damage',
+        trigger: 'Inflicted by Outis skills and passives',
+        explanation: 'At turn end, the enemy takes (Dark Flame × Burn Potency) as direct Pride true damage, bypassing enemy defense levels completely!'
+      },
+      {
+        title: '7th Bullet Armageddon',
+        badge: 'Screen Cleave',
+        trigger: 'Firing Skill 3 with 7 loaded Magic Bullets',
+        explanation: 'At 7 bullets, Skill 3 pierces up to 7 enemy slots simultaneously.'
+      }
+    ],
+    combatRotation: {
+      opener: 'Use Skill 1 and Skill 2 to load Magic Bullets and apply Burn and Dark Flame.',
+      midGame: 'Keep SP high (+45) to ensure high heads rolls and prevent friendly-fire panic.',
+      finisher: 'Discharge Skill 3 with 7 Magic Bullets to incinerate all enemy slots in a single glorious blast.'
+    },
+    teamSynergies: {
+      keywords: ['Burn', 'Wrath / Pride Resonance'],
+      bestPartners: ['Dawn Office Fixer Sinclair', 'Liu Assoc. South Section 4 Director Rodion', 'Liu Assoc. South Section 4 Ishmael'],
+      tip: 'The undisputed queen of Burn teams. Her Dark Flame scales multiplicatively with teammate Burn stacks.'
+    }
+  },
+
+  // 10. Dieci Assoc. South Section 4 Rodion
+  'Dieci Assoc. South Section 4 Rodion': {
+    archetype: 'Discard Knowledge Monk & Sinking Fortress',
+    primaryKeywords: ['Sinking'],
+    role: 'Shield Generation & High-Power Clash Tank',
+    uniqueMechanics: [
+      {
+        title: 'Discard Engine & Hand Cycling',
+        badge: 'Deck Cycling',
+        trigger: 'Using skills that discard adjacent dashboard slots',
+        explanation: 'Discards lower-tier skills from the dashboard, cycling cards rapidly and generating massive Knowledge Shields based on discarded skill rank.'
+      },
+      {
+        title: 'Insight Level (1 to 3)',
+        badge: 'Knowledge Shield',
+        trigger: 'Discarding skills via passives',
+        explanation: 'Gained by discarding skills. Converts discarded skill rank into raw shield, Clash Power, and Sinking potency.'
+      }
+    ],
+    combatRotation: {
+      opener: 'Use Skill 1 or Skill 2 to discard adjacent Skill 1s, building Insight and generating free shields.',
+      midGame: 'With Insight at level 2-3, win every clash cleanly with boosted coin power while soaking enemy hits with your thick shield.',
+      finisher: 'Discard into Skill 3 (Rime Shank synergy) to inflict heavy Sinking and crush staggered enemies with Blunt force.'
+    },
+    teamSynergies: {
+      keywords: ['Sinking', 'Gloom Resonance'],
+      bestPartners: ['Effloresced E.G.O::Spicebush Yi Sang', 'Wild Hunt Heathcliff', 'Dieci Assoc. South Section 4 Hong Lu', 'Dieci Assoc. South Section 4 Director Meursault'],
+      tip: 'Equip her with Rime Shank E.G.O (Gloom/Sinking) to turn her into the most devastating Sinking enabler in the game.'
+    }
+  },
+
+  // 11. T Corp. Class 3 Collection Staff Don Quixote
+  'T Corp. Class 3 Collection Staff Don Quixote': {
+    archetype: 'Time Moratorium Damage Stasis & Tremor Buffer',
+    primaryKeywords: ['Tremor'],
+    role: 'Burst Damage Multiplier',
+    uniqueMechanics: [
+      {
+        title: 'Time Moratorium (Damage Detonation)',
+        badge: 'Delayed Nuke',
+        trigger: 'Applying Skill 3 on target',
+        explanation: 'Inflicts Time Moratorium on an enemy. While active, 100% of damage dealt to that enemy is frozen in temporal stasis. When Moratorium expires, detonates all stored damage at once plus a +30% to +50% bonus multiplier!'
+      },
+      {
+        title: 'Tremor - Decay (Defense Shredder)',
+        badge: 'Defense Down',
+        trigger: 'Converting Tremor into Decay via T Corp skills',
+        explanation: 'Lowers target Defense Level by 1 for every 4 Tremor Potency, amplifying all incoming damage significantly.'
+      }
+    ],
+    combatRotation: {
+      opener: 'Use Skill 1 and Skill 2 to build Tremor and convert it to Tremor - Decay.',
+      midGame: 'Coordinate with your highest-damage teammates before applying Time Moratorium.',
+      finisher: 'Apply Time Moratorium with Skill 3. Have all 6 Sinners pour their highest-damaging attacks into that target during the moratorium turn, then watch the delayed damage detonate for catastrophic boss wipes!'
+    },
+    teamSynergies: {
+      keywords: ['Tremor', 'Sloth Resonance'],
+      bestPartners: ['Öufi Assoc. South Section 3 Heathcliff', 'District 20 Yurodivy Hong Lu', 'T Corp. Class 3 VDCU Staff Outis'],
+      tip: 'Time Moratorium allows you to bypass boss HP threshold phases by storing overkill damage in stasis.'
+    }
+  },
+
+  // 12. The Manager of La Manchaland Don Quixote
+  'The Manager of La Manchaland Don Quixote': {
+    archetype: 'Bloodfiend Monarch & Bloodfeast Devourer',
+    primaryKeywords: ['Bleed'],
+    role: 'Bleed Resonance Hypercarry',
+    uniqueMechanics: [
+      {
+        title: 'Bloodfeast Stockpile',
+        badge: 'Vampiric Pool',
+        trigger: 'Whenever any ally or enemy takes Bleed damage',
+        explanation: 'Bleed damage fuels a shared Bloodfeast reservoir. Spent to empower high-tier Bloodfiend skills, enhance coin power, and grant lifesteal.'
+      },
+      {
+        title: 'Bloodfiend Thirst & HP Conversion',
+        badge: 'Feral Empower',
+        trigger: 'Consuming accumulated Bloodfeast or low HP',
+        explanation: 'Consumes HP or Bloodfeast to enter an empowered bloodthirsty state, unlocking devastating multi-coin execution skills.'
+      }
+    ],
+    combatRotation: {
+      opener: 'Stack Bleed on enemies using S1 and team Bleed skills to rapidly fill the Bloodfeast pool.',
+      midGame: 'Consume Bloodfeast to empower Skill 2 and heal back any spent HP through vampiric lifesteal.',
+      finisher: 'Unleash empowered Skill 3 to drain enemy health and trigger catastrophic Bleed bursts.'
+    },
+    teamSynergies: {
+      keywords: ['Bleed', 'Lust Resonance'],
+      bestPartners: ['The Barber of La Manchaland Outis', 'The Priest of La Manchaland Gregor', 'The Princess of La Manchaland Rodion', 'The Ring Pointillist Student Yi Sang'],
+      tip: 'The linchpin of Bloodfiend squads. Always ensure multiple bleeding enemies are on field to feed her Bloodfeast.'
+    }
+  },
+
+  // 13. District 20 Yurodivy Hong Lu
+  'District 20 Yurodivy Hong Lu': {
+    archetype: 'Tremor - Reverb Sloth Conversion Striker',
+    primaryKeywords: ['Tremor'],
+    role: 'Tremor Direct Damage Nuker',
+    uniqueMechanics: [
+      {
+        title: 'Tremor - Reverb (Direct Sloth Damage)',
+        badge: 'Tremor Reverb',
+        trigger: 'Converting Tremor into Reverb via Yurodivy skills',
+        explanation: 'Causes every Tremor-Burst to deal direct Sloth HP damage equal to the target\'s Tremor Potency, turning Tremor into a lethal direct-damage keyword!'
+      }
+    ],
+    combatRotation: {
+      opener: 'Use Skill 1 to apply Tremor Potency and build Sloth resonance.',
+      midGame: 'Use Skill 2 to convert enemy Tremor into Tremor - Reverb.',
+      finisher: 'Trigger Tremor-Bursts with Skill 3 and teammate skills to turn every burst into hundreds of direct Sloth damage.'
+    },
+    teamSynergies: {
+      keywords: ['Tremor', 'Sloth Resonance'],
+      bestPartners: ['T Corp. Class 3 Collection Staff Don Quixote', 'Öufi Assoc. South Section 3 Heathcliff', 'Molar Boatworks Fixer Ishmael'],
+      tip: 'Transforms Tremor teams from pure stagger stall into high-velocity kill squads.'
+    }
+  },
+
+  // 14. The House of Spiders: The Index Nursefather Yi Sang
   'The House of Spiders: The Index Nursefather Yi Sang': {
     archetype: 'Prescript Duelist & 9-Coin Finisher',
     primaryKeywords: ['Poise', 'Sinking'],
@@ -275,21 +754,19 @@ const CURATED_TACTICS = {
       {
         title: 'Grace of the Prescript & The Prescript Target',
         badge: 'Core Engine',
-        explanation: 'Every turn, a random enemy or part receives "The Prescript\'s Target". Using a prescript-marked skill on that exact target executes the prescript, healing 8 SP and granting 3 Grace of the Prescript (at 3/6/9 Grace, Yi Sang unlocks higher power stages).'
+        trigger: 'Assigned randomly to an enemy at combat start each turn',
+        explanation: 'Every turn, a random enemy receives "The Prescript\'s Target". Using a prescript-marked skill on that exact target executes the prescript, healing 8 SP and granting 3 Grace of the Prescript (at 3/6/9 Grace, Yi Sang unlocks higher power stages).'
       },
       {
         title: 'Unlock Stages & Unbreakable Coins',
         badge: 'Scaling',
+        trigger: 'Accumulating 3, 6, and 9 Grace',
         explanation: 'At Unlock I, II, and III, your skills turn regular coins into Unbreakable Coins (they cannot break in clashes and always deal damage), while permanently nullifying Karmic Consequence penalties.'
       },
       {
-        title: 'Wound-casing Mask (Free Stagger Reset)',
-        badge: 'Survival',
-        explanation: 'If Yi Sang is staggered for the first time in an encounter, he instantly breaks out of stagger at the end of the turn and fully recovers.'
-      },
-      {
-        title: 'Furioso-Replica (9-Coin Apocalyptic Burst)',
+        title: 'Furioso-Replica (9-Coin Finisher)',
         badge: 'Win Condition',
+        trigger: 'Reaching 9 stacks of Procuration -Hermes-',
         explanation: 'Using prescript skills builds Procuration -Hermes- stacks. Upon reaching 9 stacks, his Skill 3 transforms into the devastating 9-coin "Furioso-Replica", gaining +90% Critical Damage and erasing boss health bars!'
       }
     ],
@@ -300,11 +777,12 @@ const CURATED_TACTICS = {
     },
     teamSynergies: {
       keywords: ['Poise', 'Sinking', 'Pride Resonance'],
-      bestPartners: ['The Index Proxy Don Quixote', 'Blade Lineage Mentor Meursault', 'Solemn Lament Yi Sang', 'Butler Outis'],
+      bestPartners: ['The Index Proxy - Effloresced E.G.O::Procuration Don Quixote', 'Blade Lineage Mentor Meursault', 'Lobotomy E.G.O::Solemn Lament Yi Sang'],
       tip: 'Pairs best with Pride and Gluttony resonance teams to trigger his passives and empower his Unbreakable Coins.'
     }
   },
 
+  // 15. The Ring Pointillist Student Yi Sang
   'The Ring Pointillist Student Yi Sang': {
     archetype: 'Debuff Roulette & Coin-Reuse Assassin',
     primaryKeywords: ['Bleed', 'Tremor'],
@@ -313,11 +791,13 @@ const CURATED_TACTICS = {
       {
         title: 'Random Debuff Roulette',
         badge: 'Setup',
+        trigger: 'Attacking targets with negative status effects',
         explanation: 'Every attack inflicts random status ailments (Bleed, Tremor, Burn, Sinking, or Rupture) on the target in addition to baseline Bleed.'
       },
       {
         title: 'Skill 2 Coin Re-Use (The Meat Grinder)',
         badge: 'Win Condition',
+        trigger: 'Attacking a target with 3+ distinct negative status types',
         explanation: 'When attacking an enemy with 3 or more distinct negative status effect types, Skill 2 rolls extra Coin Power and re-uses its coins, dealing absurd multi-hit burst damage!'
       }
     ],
@@ -328,11 +808,12 @@ const CURATED_TACTICS = {
     },
     teamSynergies: {
       keywords: ['Bleed', 'Tremor', 'Multi-Status'],
-      bestPartners: ['The Ring Pointillist Student Outis', 'The Pequod Captain Ishmael', 'Harpooner Heathcliff', 'Kurokumo Ryōshū'],
+      bestPartners: ['The Ring Fauvist Docent Rodion', 'The Pequod Captain Ishmael', 'The Pequod Harpooneer Heathcliff', 'Kurokumo Clan Wakashu Ryōshū'],
       tip: 'Combine with teammates that inflict different status types to keep the 3+ distinct debuff threshold active permanently.'
     }
   },
 
+  // 16. Blade Lineage Mentor Meursault
   'Blade Lineage Mentor Meursault': {
     archetype: 'Slash & Pride Commander / Counter God',
     primaryKeywords: ['Poise'],
@@ -341,11 +822,13 @@ const CURATED_TACTICS = {
       {
         title: 'Swordplay of the Homeland',
         badge: 'Team Aura',
+        trigger: 'Combat start / having Poise on self',
         explanation: 'Grants massive Poise Potency/Count and Slash Power Up to all Blade Lineage allies, turning an entire BL squad into critical-hit monsters.'
       },
       {
         title: 'Yield My Flesh ➔ To Claim Their Bones',
-        badge: 'Gimmick',
+        badge: 'Clash Lose Counter',
+        trigger: 'Deliberately losing a clash with Skill 3',
         explanation: 'Skill 3 has 20 Base Power and cannot be staggered. If he intentionally LOSES a clash, he absorbs the blow and unleashes "To Claim Their Bones"—an unstoppable 4-coin nuke dealing astronomical critical damage!'
       }
     ],
@@ -356,11 +839,12 @@ const CURATED_TACTICS = {
     },
     teamSynergies: {
       keywords: ['Poise', 'Pride Resonance'],
-      bestPartners: ['Blade Lineage Salsu Faust', 'Blade Lineage Salsu Yi Sang', 'Blade Lineage Salsu Don Quixote', 'Cinq Sinclair'],
+      bestPartners: ['Blade Lineage Salsu Faust', 'Blade Lineage Salsu Yi Sang', 'Blade Lineage Salsu Sinclair', 'Cinq Assoc. South Section 4 Director Sinclair'],
       tip: 'Stack Pride skills across your team to maximize Sword of the Homeland buffs.'
     }
   },
 
+  // 17. Wild Hunt Heathcliff
   'Wild Hunt Heathcliff': {
     archetype: 'Mounted Sinking Juggernaut',
     primaryKeywords: ['Sinking', 'Tremor'],
@@ -369,11 +853,13 @@ const CURATED_TACTICS = {
       {
         title: 'Mounting Dullahan',
         badge: 'Mode Shift',
+        trigger: 'Skill 3 or counter activation',
         explanation: 'Summoning his spectral steed Dullahan grants high Speed, Clash Power, and transforms his standard skills into sweeping multi-target cleaves.'
       },
       {
         title: 'Coffin & Sinking Conversion',
         badge: 'Scaling',
+        trigger: 'Winning clashes and defeating enemies',
         explanation: 'Winning clashes and defeating enemies stocks Coffin. Skill 3 consumes Coffin to inflict massive Gloom damage scaling directly with target\'s Sinking count & potency.'
       }
     ],
@@ -384,11 +870,12 @@ const CURATED_TACTICS = {
     },
     teamSynergies: {
       keywords: ['Sinking', 'Gloom Resonance'],
-      bestPartners: ['Spicebush Yi Sang', 'Dieci Assoc. Rodion', 'Molar Boatworks Ishmael', 'Butler Faust'],
+      bestPartners: ['Effloresced E.G.O::Spicebush Yi Sang', 'Dieci Assoc. South Section 4 Rodion', 'Molar Boatworks Fixer Ishmael'],
       tip: 'Essential centerpiece for Sinking Deluge and high-tier Sinking dungeon comps.'
     }
   },
 
+  // 18. Lobotomy E.G.O::Solemn Lament Yi Sang
   'Lobotomy E.G.O::Solemn Lament Yi Sang': {
     archetype: 'Dual-Wield Gunner / Sinking & Poise Duelist',
     primaryKeywords: ['Sinking', 'Poise'],
@@ -396,12 +883,14 @@ const CURATED_TACTICS = {
     uniqueMechanics: [
       {
         title: 'Living & Departed Butterflies',
-        badge: 'Gimmick',
+        badge: 'Butterfly Engine',
+        trigger: 'Alternating Skill 1 and Skill 2 shots',
         explanation: 'Fires twin pistols: white rounds accumulate Poise and inflict Sinking count, while black rounds expend butterflies to deal bonus damage on critical strikes.'
       },
       {
         title: 'Multi-Coin Ranged Salvos',
-        badge: 'DPS',
+        badge: 'Rapid Fire',
+        trigger: 'Using firearm skills',
         explanation: 'Boasts extremely high coin counts across all skills, applying Sinking rapidly without depleting enemy count excessively.'
       }
     ],
@@ -412,11 +901,12 @@ const CURATED_TACTICS = {
     },
     teamSynergies: {
       keywords: ['Sinking', 'Poise'],
-      bestPartners: ['Wild Hunt Heathcliff', 'Spicebush Yi Sang', 'Dieci Hong Lu', 'Edgar Chief Butler Ryōshū'],
+      bestPartners: ['Wild Hunt Heathcliff', 'Effloresced E.G.O::Spicebush Yi Sang', 'Dieci Assoc. South Section 4 Hong Lu'],
       tip: 'Excels in hybrid Poise-Sinking compositions.'
     }
   },
 
+  // 19. The Pequod Captain Ishmael
   'The Pequod Captain Ishmael': {
     archetype: 'Pride Commander & Assist Attack Facilitator',
     primaryKeywords: ['Bleed', 'Burn', 'Poise'],
@@ -425,11 +915,13 @@ const CURATED_TACTICS = {
       {
         title: 'Assist Attack Order',
         badge: 'Team Action',
+        trigger: 'Landing Skill 2 (Harpoon of Obsession)',
         explanation: 'Skill 2 commands the ally with the highest damage or specific priority to immediately launch an Assist Attack on her target, doubling your action economy!'
       },
       {
         title: 'Obsessive Execution & SP Recovery',
         badge: 'Morale',
+        trigger: 'Defeating enemies with Skill 3',
         explanation: 'Skill 3 deals immense execution damage against targets below 50% HP. If she lands a kill, she heals SP for the entire squad.'
       }
     ],
@@ -440,11 +932,12 @@ const CURATED_TACTICS = {
     },
     teamSynergies: {
       keywords: ['Bleed', 'Poise', 'Pride Resonance'],
-      bestPartners: ['The Pequod First Mate Yi Sang', 'Harpooner Heathcliff', 'Blade Lineage Meursault', 'Ring Yi Sang'],
+      bestPartners: ['The Pequod Harpooneer Heathcliff', 'Blade Lineage Mentor Meursault', 'The Ring Pointillist Student Yi Sang'],
       tip: 'One of the best buffers in the game. Position your highest single-target DPS right next to her.'
     }
   },
 
+  // 20. Dawn Office Fixer Sinclair
   'Dawn Office Fixer Sinclair': {
     archetype: 'SP-Fueled Fire Hypercarry',
     primaryKeywords: ['Burn'],
@@ -453,11 +946,13 @@ const CURATED_TACTICS = {
       {
         title: 'E.G.O Manifestation: Volatile Wax',
         badge: 'Transformation',
+        trigger: 'Reaching 40+ Sanity (SP)',
         explanation: 'Reaching 40+ SP transforms Sinclair into his E.G.O state, turning his skills into 4-coin flaming cleaves with overwhelming clash power.'
       },
       {
         title: 'Sanity Drain Management',
-        badge: 'Caution',
+        badge: 'SP Drain',
+        trigger: 'Every turn while transformed',
         explanation: 'E.G.O form drains SP every turn. You must win clashes and keep Burn stacked on enemies to avoid dropping out of transformation or suffering panic.'
       }
     ],
@@ -468,12 +963,13 @@ const CURATED_TACTICS = {
     },
     teamSynergies: {
       keywords: ['Burn', 'Wrath Resonance'],
-      bestPartners: ['Liu Assoc. South Section 4 Rodion', 'Liu Assoc. South Section 4 Ryōshū', 'Liu Assoc. South Section 3 Meursault', 'Magic Bullet Outis'],
+      bestPartners: ['Liu Assoc. South Section 4 Director Rodion', 'Liu Assoc. South Section 4 Ishmael', 'Lobotomy E.G.O::Magic Bullet Outis'],
       tip: 'Needs SP support (e.g. Faust\'s Fluid Sac or Hong Lu\'s Land of Illusion) to sustain his fiery transformation.'
     }
   },
 
-  'Devyat Assoc. North Section 3 Courier Rodion': {
+  // 21. Devyat' Assoc. North Section 3 Rodion
+  'Devyat\' Assoc. North Section 3 Rodion': {
     archetype: 'High-Velocity Rupture Courier',
     primaryKeywords: ['Rupture'],
     role: 'Rupture Potency & Count Enabler',
@@ -481,11 +977,13 @@ const CURATED_TACTICS = {
       {
         title: 'Courier Trunk & Velocity Scaling',
         badge: 'Speed Engine',
+        trigger: 'Accumulating speed and delivery distance each turn',
         explanation: 'Gains speed each turn to build "Delivery Distance". High delivery speed empowers her skills with positive Rupture Count, fixing Rupture\'s biggest weakness!'
       },
       {
         title: 'Package Delivery (S3 Burst)',
         badge: 'Finisher',
+        trigger: 'Skill 3 hit with high delivery distance',
         explanation: 'Skill 3 expends accumulated courier distance to deliver massive Rupture damage without shedding Rupture Count.'
       }
     ],
@@ -496,12 +994,13 @@ const CURATED_TACTICS = {
     },
     teamSynergies: {
       keywords: ['Rupture', 'Gluttony Resonance'],
-      bestPartners: ['W Corp. Yi Sang', 'Seven Assoc. South Section 6 Faust', 'K Corp. Class 3 Security Hong Lu', 'Rosespanner Gregor'],
+      bestPartners: ['K Corp. Class 3 Excision Staff Hong Lu', 'W Corp. L3 Cleanup Agent Yi Sang', 'Seven Assoc. South Section 4 Faust'],
       tip: 'The gold standard for Rupture teams because she preserves Count instead of consuming it.'
     }
   },
 
-  'Multicrack Office Rep Faust': {
+  // 22. MultiCrack Office Rep Faust
+  'MultiCrack Office Rep Faust': {
     archetype: 'Charge Battery & Team Redistribution',
     primaryKeywords: ['Charge'],
     role: 'Charge Buffer & Clash Anchor',
@@ -509,6 +1008,7 @@ const CURATED_TACTICS = {
       {
         title: 'Charge Transfer & Multi-Discharge',
         badge: 'Battery',
+        trigger: 'Using Skill 2 and passives',
         explanation: 'Generates internal Charge and passes Charge potency to team allies who need it for their S3 finishers, eliminating the ramp-up delay for Charge teams.'
       }
     ],
@@ -524,14 +1024,20 @@ const CURATED_TACTICS = {
     }
   },
 
+  // 23. W Corp. L3 Cleanup Agent Ryōshū
   'W Corp. L3 Cleanup Agent Ryōshū': {
     archetype: 'Charge Hypercarry & Dimensional Finisher',
     primaryKeywords: ['Charge'],
     role: 'Nuclear Slash Finisher',
+    hazardAlert: {
+      badge: 'D.D.E.D.R. Recoil Hazard',
+      message: 'Skill 3 requires 15 Charge Count! If fired below 15 Charge, she takes massive self-HP damage and deals reduced damage. Build 15 Charge before unleashing.'
+    },
     uniqueMechanics: [
       {
         title: 'D.D.E.D.R. (Dimension Shredder)',
         badge: 'Nuclear Finisher',
+        trigger: 'Having 15+ Charge count before using Skill 3',
         explanation: 'Skill 3 requires 15 Charge count. If used at 15+ Charge, it unleashes 4 devastating Slash coins that hit for hundreds of damage. If used below 15 Charge, she suffers severe self-HP recoil!'
       }
     ],
@@ -541,36 +1047,132 @@ const CURATED_TACTICS = {
       finisher: 'Once at 15+ Charge, fire D.D.E.D.R. at the boss or staggered target for an instant kill.'
     },
     teamSynergies: {
-      keywords: ['Charge', 'Slash'],
-      bestPartners: ['Multicrack Faust', 'W Corp. Don Quixote', 'W Corp. Yi Sang', 'R Corp. Heathcliff'],
+      keywords: ['Charge', 'Slash', 'Envy Resonance'],
+      bestPartners: ['MultiCrack Office Rep Faust', 'W Corp. L3 Cleanup Agent Don Quixote', 'W Corp. L3 Cleanup Agent Yi Sang'],
       tip: 'Always pair with Charge batteries to unlock D.D.E.D.R. as fast as possible.'
+    }
+  },
+
+  // 24. Shi Assoc. South Section 5 Ishmael
+  'Shi Assoc. South Section 5 Ishmael': {
+    archetype: 'Crisis State Duelist / Low-HP Critical Sweeper',
+    primaryKeywords: ['Poise'],
+    role: 'Crisis Burst DPS',
+    uniqueMechanics: [
+      {
+        title: 'Crisis Threshold (<= 50% HP)',
+        badge: 'Crisis Doubler',
+        trigger: 'Dropping to or below 50% max HP',
+        explanation: 'When her HP drops below 50%, her skills gain extra coins, doubled coin power, and guaranteed Poise critical hits!'
+      },
+      {
+        title: 'Flashing Blade (S2)',
+        badge: 'Clash Dominator',
+        trigger: 'Active while below 50% HP',
+        explanation: 'At low HP, Skill 2 becomes a 4-coin slaughtering slash that rolls astronomical clash power.'
+      }
+    ],
+    combatRotation: {
+      opener: 'Deliberately take minor uncontrolled hits or use defense skills to safely bring her HP under 50%.',
+      midGame: 'Once below 50% HP, activate "Crisis" mode: her skills will dominate every clash and score continuous critical strikes.',
+      finisher: 'Unleash Skill 2 and Skill 3 on bosses to shred their HP bars with double-coin criticals.'
+    },
+    teamSynergies: {
+      keywords: ['Poise', 'Wrath Resonance'],
+      bestPartners: ['Blade Lineage Mentor Meursault', 'Shi Assoc. South Section 5 Heathcliff', 'Cinq Assoc. South Section 4 Director Sinclair'],
+      tip: 'Do NOT bring burst healers that put her above 50% HP, as that turns off her Crisis buffs.'
+    }
+  },
+
+  // 25. Cinq Assoc. South Section 5 Director Don Quixote
+  'Cinq Assoc. South Section 5 Director Don Quixote': {
+    archetype: 'Speed Duelist & Declared Duelist Lockout',
+    primaryKeywords: ['Poise'],
+    role: 'Single-Target 1v1 Dominator',
+    uniqueMechanics: [
+      {
+        title: 'Declared Duelist',
+        badge: '1v1 Lockout',
+        trigger: 'Landing designated dueling skills',
+        explanation: 'Marks a target as her dueling partner. Gains massive Haste, Clash Power, and Defense Level debuffs against that specific opponent.'
+      },
+      {
+        title: 'Speed Differential Scaling',
+        badge: 'Velocity Power',
+        trigger: 'Having higher speed than the target',
+        explanation: 'The higher her Speed relative to the target, the higher her coin damage and critical hit chance.'
+      }
+    ],
+    combatRotation: {
+      opener: 'Use Skill 1 to gain Haste and establish speed advantage.',
+      midGame: 'Mark the boss with Declared Duelist using Skill 2, locking them in an unwinnable clash.',
+      finisher: 'Lunge with Skill 3 at maximum Speed differential for piercing critical devastation.'
+    },
+    teamSynergies: {
+      keywords: ['Poise', 'Pierce'],
+      bestPartners: ['Cinq Assoc. South Section 4 Director Sinclair', 'Blade Lineage Mentor Meursault'],
+      tip: 'Outstanding against solo bosses and Abnormality focal points.'
     }
   }
 };
 
-// Universal analyzer that produces in-depth, specific tactical dossiers for ALL identities
+// Universal analyzer that produces in-depth, specific tactical dossiers for ALL 187 identities
 export function getIdentityTactics(identity) {
   if (!identity) return null;
 
-  // Curated table priority
-  if (CURATED_TACTICS[identity.name]) {
+  // Curated table lookup with fuzzy/normalized key matching
+  const exactKey = identity.name;
+  let curated = CURATED_TACTICS[exactKey];
+  if (!curated) {
+    const normName = exactKey.toLowerCase().replace(/['"`\-]/g, '').trim();
+    for (const [k, v] of Object.entries(CURATED_TACTICS)) {
+      if (k.toLowerCase().replace(/['"`\-]/g, '').trim() === normName) {
+        curated = v;
+        break;
+      }
+    }
+  }
+
+  const skillsTactical = extractSkillsTactical(identity);
+  const detectedKeywords = detectKeywords(identity);
+
+  if (curated) {
     return {
-      ...CURATED_TACTICS[identity.name],
+      ...curated,
       name: identity.name,
       sinner: identity.sinner,
       rarity: identity.rarity,
       isCurated: true,
-      skillsTactical: extractSkillsTactical(identity)
+      skillsTactical
     };
   }
 
-  // Universal In-Depth Extraction
-  const detectedKeywords = detectKeywords(identity);
-  const skillsTactical = extractSkillsTactical(identity);
-  const detectedMechanics = detectUniqueMechanics(identity, detectedKeywords);
-  const primaryRole = determineRole(identity, detectedKeywords, skillsTactical);
-  const archetype = determineArchetype(identity, detectedKeywords);
-  const combatRotation = generateDynamicRotation(identity, skillsTactical, detectedKeywords);
+  // Universal In-Depth Dynamic Extraction for all other identities
+  const hasMinusCoins = (identity.skills || []).some(s => s.coinPower < 0);
+  const jsonText = JSON.stringify([
+    identity.skills || [],
+    identity.passives || [],
+    identity.defense || {},
+    identity.alternateSkills || []
+  ]).toLowerCase();
+
+  const hasAmmo = jsonText.includes('ammo');
+  const hasDiscard = jsonText.includes('discard') || jsonText.includes('insight');
+  const hasSelfHp = jsonText.includes('consume') && jsonText.includes('hp');
+  const hasFriendlyFire = jsonText.includes('indiscriminate') || jsonText.includes('friendly fire');
+
+  const detectedMechanics = detectUniqueMechanics(identity, detectedKeywords, {
+    hasMinusCoins,
+    hasAmmo,
+    hasDiscard,
+    hasSelfHp,
+    hasFriendlyFire
+  });
+
+  const primaryRole = determineRole(identity, detectedKeywords, skillsTactical, { hasMinusCoins, hasAmmo, hasDiscard });
+  const archetype = determineArchetype(identity, detectedKeywords, { hasMinusCoins, hasAmmo, hasDiscard });
+  const hazardAlert = generateHazardAlert(identity, { hasMinusCoins, hasAmmo, hasDiscard, hasSelfHp, hasFriendlyFire });
+  const combatRotation = generateDynamicRotation(identity, skillsTactical, detectedKeywords, { hasMinusCoins, hasAmmo, hasDiscard, hasSelfHp });
   const teamSynergies = generateTeamSynergies(identity, detectedKeywords);
 
   return {
@@ -581,6 +1183,7 @@ export function getIdentityTactics(identity) {
     archetype,
     primaryKeywords: detectedKeywords.length > 0 ? detectedKeywords : ['Direct Combat'],
     role: primaryRole,
+    hazardAlert,
     uniqueMechanics: detectedMechanics,
     combatRotation,
     skillsTactical,
@@ -597,13 +1200,13 @@ export function detectKeywords(identity) {
   ]);
   const found = [];
   for (const kw of KEYWORDS) {
-    const reg = new RegExp(`\\b${kw}\\b`, 'i');
+    const reg = new RegExp('\\b' + kw + '\\b', 'i');
     if (reg.test(text)) found.push(kw);
   }
   return found;
 }
 
-function detectUniqueMechanics(identity, keywords) {
+function detectUniqueMechanics(identity, keywords, flags = {}) {
   const text = JSON.stringify([
     identity.skills || [],
     identity.passives || [],
@@ -613,13 +1216,51 @@ function detectUniqueMechanics(identity, keywords) {
 
   const matched = [];
 
+  // Match recognized dictionary items
   for (const mech of MECHANICS_DICTIONARY) {
     if (text.includes(mech.key)) {
       matched.push(mech);
     }
   }
 
-  // Baseline fallbacks if no named faction mechanics matched
+  // Kit flags fallback mechanics
+  if (flags.hasMinusCoins && !matched.some(m => m.title.includes('Minus Coin'))) {
+    matched.unshift({
+      title: 'Minus Coin Scaling (Negative Sanity)',
+      badge: 'Inverse Math',
+      trigger: 'Tossing coins with negative coin power',
+      explanation: 'Base Power is high, but Coin Power is negative. Rolling Tails preserves maximum clash power, meaning this unit is strongest at negative Sanity.'
+    });
+  }
+
+  if (flags.hasAmmo && !matched.some(m => m.title.includes('Ammo'))) {
+    matched.unshift({
+      title: 'Limited Ammunition Pool',
+      badge: 'Limited Munitions',
+      trigger: 'Consuming bullets on firearm attacks',
+      explanation: 'Enters combat with fixed ammo. Skills expend bullets for massive early clash power. Once depleted, attacks lose coin effects.'
+    });
+  }
+
+  if (flags.hasDiscard && !matched.some(m => m.title.includes('Discard'))) {
+    matched.unshift({
+      title: 'Discard & Card Flow',
+      badge: 'Deck Cycling',
+      trigger: 'Using skills that discard adjacent dashboard slots',
+      explanation: 'Discards lower-tier skills from the dashboard to cycle into high-tier skills quickly while generating shields.'
+    });
+  }
+
+  if (flags.hasSelfHp && !matched.some(m => m.title.includes('HP'))) {
+    matched.push({
+      title: 'HP Consumption Stance',
+      badge: 'Risk / Reward',
+      trigger: 'Using skills that trade HP for power',
+      explanation: 'Sacrifices a portion of current HP to boost coin power or gain status count. Pair with passive healing to sustain longevity.'
+    });
+  }
+
+  // Baseline keyword cards if no specific faction mechanic matched
   if (matched.length === 0) {
     if (keywords.includes('Charge')) {
       matched.push({
@@ -691,16 +1332,42 @@ function detectUniqueMechanics(identity, keywords) {
   return matched;
 }
 
+function generateHazardAlert(identity, flags = {}) {
+  if (flags.hasMinusCoins) {
+    return {
+      badge: 'Minus Coin Invariant',
+      message: 'This identity gains power at NEGATIVE Sanity (SP) because coin power is negative. Avoid SP-healing teammates, maintain SP between -15 and -35, and use Guard if nearing -45 SP to avoid corrosion.'
+    };
+  }
+  if (flags.hasFriendlyFire) {
+    return {
+      badge: 'Friendly Fire Hazard',
+      message: 'Certain skills or conditions can cause this identity to target allies indiscriminately! Check Charge or Sanity prerequisites before firing.'
+    };
+  }
+  if (flags.hasAmmo) {
+    return {
+      badge: 'Munitions Limit',
+      message: 'Enters combat with fixed ammo. Bullet-consuming skills lose virtually all damage and coin effects once ammo is depleted. Prioritize high-threat targets early.'
+    };
+  }
+  return null;
+}
+
 function extractSkillsTactical(identity) {
   const skills = identity.skills || [];
   return skills.map((s, idx) => {
     const base = s.basePower || 0;
     const coin = s.coinPower || 0;
     const count = s.coins || 1;
-    const maxPower = base + (coin * count);
+    
+    // For minus-coin skills, max clash is basePower (when rolling tails)
+    const maxPower = coin < 0 ? base : base + (coin * count);
     
     let roleTag = '🔄 Setup';
-    if (idx === 2) {
+    if (coin < 0) {
+      roleTag = '🎯 Minus Coin King';
+    } else if (idx === 2) {
       roleTag = maxPower >= 18 ? '💥 Nuclear Finisher' : '💥 Burst Finisher';
     } else if (maxPower >= 15 || coin >= 4) {
       roleTag = '🎯 Clash Anchor';
@@ -709,12 +1376,20 @@ function extractSkillsTactical(identity) {
     }
 
     const effStr = Array.isArray(s.effects) ? s.effects.join(' ') : (s.effects || '');
-    let tacticalSummary = `Solid ${s.type || ''} attack with max clash of ${maxPower}.`;
-    if (effStr.includes('Count')) tacticalSummary = `Applies key status Count to keep your team's debuffs active.`;
-    else if (effStr.includes('Critical') || effStr.includes('Poise')) tacticalSummary = 'Builds Poise or scores high critical hit damage.';
-    else if (effStr.includes('Tremor-Burst')) tacticalSummary = 'Triggers Tremor-Burst to immediately advance enemy stagger.';
-    else if (effStr.includes('Damage') && effStr.includes('+')) tacticalSummary = 'Conditional high-damage coin scaling with active battle status.';
-    else if (maxPower >= 16) tacticalSummary = 'High-power clashing tool for winning difficult head-to-heads.';
+    let tacticalSummary = 'Solid ' + (s.type || '') + ' attack with max clash of ' + maxPower + '.';
+    if (coin < 0) {
+      tacticalSummary = 'Minus Coin skill: Base ' + base + ', Coin ' + coin + '. Highest roll (' + base + ') at negative Sanity.';
+    } else if (effStr.includes('Count')) {
+      tacticalSummary = 'Applies key status Count to keep your team\'s debuffs active.';
+    } else if (effStr.includes('Critical') || effStr.includes('Poise')) {
+      tacticalSummary = 'Builds Poise or scores high critical hit damage.';
+    } else if (effStr.includes('Tremor-Burst')) {
+      tacticalSummary = 'Triggers Tremor-Burst to immediately advance enemy stagger.';
+    } else if (effStr.includes('Damage') && effStr.includes('+')) {
+      tacticalSummary = 'Conditional high-damage coin scaling with active battle status.';
+    } else if (maxPower >= 16) {
+      tacticalSummary = 'High-power clashing tool for winning difficult head-to-heads.';
+    }
 
     return {
       name: s.name,
@@ -731,7 +1406,11 @@ function extractSkillsTactical(identity) {
   });
 }
 
-function determineRole(identity, keywords, skillsTactical) {
+function determineRole(identity, keywords, skillsTactical, flags = {}) {
+  if (flags.hasMinusCoins) return 'Negative Sanity / Minus-Coin Berserker';
+  if (flags.hasAmmo) return 'Limited Ammo Burst Specialist';
+  if (flags.hasDiscard) return 'Discard & Insight Deck Cycler';
+
   const s3 = skillsTactical[2];
   if (s3 && s3.maxPower >= 18) return 'Clash Specialist / Finisher';
   if (keywords.includes('Tremor')) return 'Stagger Accelerator';
@@ -744,8 +1423,12 @@ function determineRole(identity, keywords, skillsTactical) {
   return 'Flexible Combatant';
 }
 
-function determineArchetype(identity, keywords) {
+function determineArchetype(identity, keywords, flags = {}) {
   const name = identity.name || '';
+  if (flags.hasMinusCoins) return 'Negative Sanity Berserker';
+  if (flags.hasAmmo) return 'Limited Munitions Specialist';
+  if (flags.hasDiscard) return 'Dieci / Molar Discard Cycler';
+
   if (name.includes('Blade Lineage')) return 'Blade Lineage Poise Master';
   if (name.includes('Liu')) return 'Liu Association Burn Striker';
   if (name.includes('Dieci')) return 'Dieci Knowledge & Shield Monk';
@@ -762,20 +1445,60 @@ function determineArchetype(identity, keywords) {
   if (name.includes('T Corp')) return 'T Corp. Time Moratorium Collector';
   if (name.includes('Lobotomy')) return 'Lobotomy E.G.O Synchronizer';
   
-  if (keywords.length >= 2) return `${keywords[0]} & ${keywords[1]} Hybrid`;
-  if (keywords.length === 1) return `Dedicated ${keywords[0]} Specialist`;
+  if (keywords.length >= 2) return keywords[0] + ' & ' + keywords[1] + ' Hybrid';
+  if (keywords.length === 1) return 'Dedicated ' + keywords[0] + ' Specialist';
   return 'General Combat Vanguard';
 }
 
-function generateDynamicRotation(identity, skillsTactical, keywords) {
+function generateDynamicRotation(identity, skillsTactical, keywords, flags = {}) {
   const s1 = skillsTactical[0];
   const s2 = skillsTactical[1];
   const s3 = skillsTactical[2];
 
+  if (flags.hasMinusCoins) {
+    return {
+      opener: 'Use ' + (s1?.name || 'Skill 1') + ' to lose early Sanity safely and push SP into the negative zone (-10 to -25).',
+      midGame: 'Maintain SP between -15 and -35. His ' + (s2?.name || 'Skill 2') + ' rolls high base power. Guard if SP approaches -45 to prevent corrosion.',
+      finisher: 'Unleash ' + (s3?.name || 'Skill 3') + ' at negative Sanity. Rolling tails hits maximum base clash power (' + (s3?.maxPower || 30) + ') for massive damage!'
+    };
+  }
+
+  if (flags.hasAmmo) {
+    return {
+      opener: 'Deploy high-speed ammo skills to clash and eliminate dangerous threats on Turn 1–2 while munitions are full.',
+      midGame: 'Use ' + (s2?.name || 'Skill 2') + ' on priority enemies. Conserve remaining bullets for staggered targets.',
+      finisher: 'Unload ' + (s3?.name || 'Skill 3') + ' before ammo runs out to deliver maximum burst before switching to support.'
+    };
+  }
+
+  if (flags.hasDiscard) {
+    return {
+      opener: 'Use ' + (s1?.name || 'Skill 1') + ' or ' + (s2?.name || 'Skill 2') + ' to discard adjacent lower-tier skills, immediately drawing higher cards and generating shields.',
+      midGame: 'Build Insight stacks by cycling cards continuously. Use Insight bonuses to dominate mid-fight clashes.',
+      finisher: 'Unleash ' + (s3?.name || 'Skill 3') + ' with maximum Insight for enhanced coin damage and heavy status application.'
+    };
+  }
+
+  if (keywords.includes('Charge')) {
+    return {
+      opener: 'Open with ' + (s1?.name || 'Skill 1') + ' to begin building internal Charge count. Do not waste heavy charge skills yet.',
+      midGame: 'Use ' + (s2?.name || 'Skill 2') + ' to clash and push Charge count to the required threshold (8–10+).',
+      finisher: 'Once fully charged, discharge ' + (s3?.name || 'Skill 3') + ' (' + (s3?.roleTag || 'Finisher') + ', Max roll ' + (s3?.maxPower || 18) + ') for massive multi-coin damage.'
+    };
+  }
+
+  if (keywords.includes('Rupture')) {
+    return {
+      opener: 'Use ' + (s1?.name || 'Skill 1') + ' to plant initial Rupture potency while monitoring Rupture Count carefully.',
+      midGame: 'Ensure positive Rupture Count skills hit before multi-coin skills so the Rupture stack does not expire.',
+      finisher: 'Fire ' + (s3?.name || 'Skill 3') + ' on an enemy with 15+ Rupture potency for an avalanche of true Gluttony damage.'
+    };
+  }
+
   return {
-    opener: `Open with ${s1?.name || 'Skill 1'} (Max roll ${s1?.maxPower || 11}) to build early Sanity and establish ${keywords[0] || 'combat presence'}.`,
-    midGame: `Use ${s2?.name || 'Skill 2'} (Max roll ${s2?.maxPower || 15}) to win clashes and stack key ${keywords.join('/') || 'status'} conditions.`,
-    finisher: `Unleash ${s3?.name || 'Skill 3'} (${s3?.roleTag || 'Finisher'}, Max roll ${s3?.maxPower || 18}) once conditions are met to stagger or eliminate the target.`
+    opener: 'Open with ' + (s1?.name || 'Skill 1') + ' (Max roll ' + (s1?.maxPower || 11) + ') to build early Sanity and establish ' + (keywords[0] || 'combat presence') + '.',
+    midGame: 'Use ' + (s2?.name || 'Skill 2') + ' (Max roll ' + (s2?.maxPower || 15) + ') to win clashes and stack key ' + (keywords.join('/') || 'status') + ' conditions.',
+    finisher: 'Unleash ' + (s3?.name || 'Skill 3') + ' (' + (s3?.roleTag || 'Finisher') + ', Max roll ' + (s3?.maxPower || 18) + ') once conditions are met to stagger or eliminate the target.'
   };
 }
 
@@ -784,32 +1507,32 @@ function generateTeamSynergies(identity, keywords) {
   const partners = [];
 
   // Faction partner synergies
-  if (name.includes('Blade Lineage')) partners.push('Blade Lineage Mentor Meursault', 'Blade Lineage Faust', 'Blade Lineage Yi Sang');
-  else if (name.includes('Liu')) partners.push('Liu Assoc. Ryōshū', 'Liu Assoc. Rodion', 'Dawn Office Sinclair');
-  else if (name.includes('Dieci')) partners.push('Dieci Rodion', 'Dieci Yi Sang', 'Dieci Hong Lu');
-  else if (name.includes('W Corp')) partners.push('W Corp. Ryōshū', 'W Corp. Don Quixote', 'Multicrack Faust');
-  else if (name.includes('The Index')) partners.push('The Index Nursefather Yi Sang', 'The Index Proxy Don Quixote');
-  else if (name.includes('Kurokumo')) partners.push('Kurokumo Ryōshū', 'Kurokumo Hong Lu', 'Kurokumo Rodion');
-  else if (name.includes('Pequod')) partners.push('The Pequod Captain Ishmael', 'The Pequod First Mate Yi Sang', 'The Pequod Harpooner Heathcliff');
-  else if (name.includes('Seven')) partners.push('Seven Assoc. Faust', 'Seven Assoc. Heathcliff', 'Seven Assoc. Outis');
-  else if (name.includes('Cinq')) partners.push('Cinq Assoc. Sinclair', 'Cinq Assoc. Outis', 'Cinq Assoc. Don Quixote');
-  else if (name.includes('Devyat')) partners.push('Devyat Assoc. Rodion', 'Devyat Assoc. Sinclair');
+  if (name.includes('Blade Lineage')) partners.push('Blade Lineage Mentor Meursault', 'Blade Lineage Salsu Faust', 'Blade Lineage Salsu Yi Sang');
+  else if (name.includes('Liu')) partners.push('Liu Assoc. South Section 4 Director Rodion', 'Liu Assoc. South Section 4 Ishmael', 'Dawn Office Fixer Sinclair');
+  else if (name.includes('Dieci')) partners.push('Dieci Assoc. South Section 4 Rodion', 'Dieci Assoc. South Section 4 Hong Lu', 'Dieci Assoc. South Section 4 Director Meursault');
+  else if (name.includes('W Corp')) partners.push('W Corp. L3 Cleanup Agent Ryōshū', 'W Corp. L3 Cleanup Agent Don Quixote', 'MultiCrack Office Rep Faust');
+  else if (name.includes('The Index')) partners.push('The House of Spiders: The Index Nursefather Yi Sang', 'The Index Proxy - Effloresced E.G.O::Procuration Don Quixote');
+  else if (name.includes('Kurokumo')) partners.push('Kurokumo Clan Captain Ishmael', 'Kurokumo Clan Wakashu Ryōshū', 'Kurokumo Clan Wakashu Rodion');
+  else if (name.includes('Pequod')) partners.push('The Pequod Captain Ishmael', 'The Pequod Harpooneer Heathcliff');
+  else if (name.includes('Seven')) partners.push('Seven Assoc. South Section 4 Faust', 'Seven Assoc. South Section 6 Director Outis');
+  else if (name.includes('Cinq')) partners.push('Cinq Assoc. South Section 4 Director Sinclair', 'Cinq Assoc. South Section 5 Director Don Quixote');
+  else if (name.includes('Devyat')) partners.push('Devyat\' Assoc. North Section 3 Rodion', 'Devyat\' Assoc. North Section 3 Sinclair');
 
   // Keyword partner fallbacks
   if (partners.length === 0) {
-    if (keywords.includes('Bleed')) partners.push('The Ring Pointillist Student Yi Sang', 'The Pequod Captain Ishmael', 'Kurokumo Ryōshū');
-    else if (keywords.includes('Burn')) partners.push('Dawn Office Fixer Sinclair', 'Liu Assoc. Rodion', 'Liu Assoc. Ryōshū');
-    else if (keywords.includes('Tremor')) partners.push('T Corp. Don Quixote', 'Oufi Assoc. Heathcliff', 'Yurodivy Hong Lu');
-    else if (keywords.includes('Rupture')) partners.push('Devyat Assoc. Rodion', 'W Corp. Yi Sang', 'Seven Assoc. Faust');
-    else if (keywords.includes('Sinking')) partners.push('Wild Hunt Heathcliff', 'Solemn Lament Yi Sang', 'Spicebush Yi Sang');
-    else if (keywords.includes('Poise')) partners.push('Blade Lineage Mentor Meursault', 'Cinq Assoc. Sinclair', 'Pequod Yi Sang');
-    else if (keywords.includes('Charge')) partners.push('W Corp. Ryōshū', 'W Corp. Don Quixote', 'Multicrack Faust');
+    if (keywords.includes('Bleed')) partners.push('The Ring Pointillist Student Yi Sang', 'The Pequod Captain Ishmael', 'The One Who Grips Faust');
+    else if (keywords.includes('Burn')) partners.push('Dawn Office Fixer Sinclair', 'Lobotomy E.G.O::Magic Bullet Outis', 'Liu Assoc. South Section 4 Director Rodion');
+    else if (keywords.includes('Tremor')) partners.push('T Corp. Class 3 Collection Staff Don Quixote', 'District 20 Yurodivy Hong Lu', 'Öufi Assoc. South Section 3 Heathcliff');
+    else if (keywords.includes('Rupture')) partners.push('Devyat\' Assoc. North Section 3 Rodion', 'K Corp. Class 3 Excision Staff Hong Lu', 'Seven Assoc. South Section 4 Faust');
+    else if (keywords.includes('Sinking')) partners.push('Wild Hunt Heathcliff', 'Effloresced E.G.O::Spicebush Yi Sang', 'Dieci Assoc. South Section 4 Rodion');
+    else if (keywords.includes('Poise')) partners.push('Blade Lineage Mentor Meursault', 'Cinq Assoc. South Section 4 Director Sinclair', 'The Pequod Captain Ishmael');
+    else if (keywords.includes('Charge')) partners.push('W Corp. L3 Cleanup Agent Ryōshū', 'W Corp. L3 Cleanup Agent Don Quixote', 'MultiCrack Office Rep Faust');
     else partners.push('High-clash Sinner identities matching your Sin affinities');
   }
 
   let tip = 'Versatile identity that slots comfortably into any standard story or dungeon lineup.';
   if (keywords.length > 0) {
-    tip = `Synergizes heavily with ${keywords.join('/')} compositions to maintain count and trigger maximum coin damage multipliers.`;
+    tip = 'Synergizes heavily with ' + keywords.join('/') + ' compositions to maintain count and trigger maximum coin damage multipliers.';
   }
 
   return {
@@ -847,7 +1570,7 @@ export function analyzeTeamSynergy(identitiesList = []) {
 
     // Factions
     const name = id.name || '';
-    const factions = ['Liu', 'Blade Lineage', 'Dieci', 'The Index', 'W Corp', 'Kurokumo', 'Seven', 'Shi', 'N Corp', 'Devyat', 'Heishou', 'Cinq', 'Pequod', 'T Corp', 'Rosespanner', 'Middle', 'Ring'];
+    const factions = ['Liu', 'Blade Lineage', 'Dieci', 'The Index', 'W Corp', 'Kurokumo', 'Seven', 'Shi', 'N Corp', 'Devyat', 'Heishou', 'Cinq', 'Pequod', 'T Corp', 'Rosespanner', 'Middle', 'Ring', 'Thumb'];
     factions.forEach(f => {
       if (name.includes(f)) {
         factionCounts[f] = (factionCounts[f] || 0) + 1;
