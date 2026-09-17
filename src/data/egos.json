@@ -22323,7 +22323,7 @@
         "description": "Locked until Tier 2"
       }
     ],
-    "season": "Season 7",
+    "season": 7,
     "upties": {
       "1": [
         {
@@ -22590,7 +22590,7 @@
         "description": "Locked until Tier 2"
       }
     ],
-    "season": "Season 7",
+    "season": 7,
     "upties": {
       "1": [
         {
@@ -22850,7 +22850,7 @@
         "description": "Locked until Tier 2"
       }
     ],
-    "season": "Season 7",
+    "season": 7,
     "upties": {
       "1": [
         {
@@ -23109,7 +23109,7 @@
         "description": "Locked until Tier 2"
       }
     ],
-    "season": "Standard",
+    "season": 0,
     "upties": {
       "1": [
         {
@@ -23368,7 +23368,7 @@
         "description": "Locked until Tier 2"
       }
     ],
-    "season": "Season 6",
+    "season": 6,
     "upties": {
       "1": [
         {
@@ -23656,7 +23656,7 @@
         "description": "Locked until Tier 2"
       }
     ],
-    "season": "Season 6",
+    "season": 6,
     "upties": {
       "1": [
         {
@@ -23872,7 +23872,7 @@
         "description": "Locked until Tier 2"
       }
     ],
-    "season": "Season 6",
+    "season": 6,
     "upties": {
       "1": [
         {
@@ -23996,5 +23996,166 @@
       ]
     },
     "maxThreadspin": 4
+  },
+  {
+    "name": "Repudiation Hong Lu",
+    "sinner": "Hong Lu",
+    "grade": "ZAYIN",
+    "season": 8,
+    "affinity": "Gloom",
+    "sanityCost": 10,
+    "cost": 400,
+    "slug": "repudiation-hong-lu",
+    "maxThreadspin": 4,
+    "keywords": [
+      "Sinking",
+      "Pierce"
+    ],
+    "passives": [
+      {
+        "name": "E.G.O Passive",
+        "description": "Severed Longing - Combat Start: At 3+ Gloom Resonance, inflict 2 Sinking on all enemies. If Hong Lu takes damage while below 50% HP, gain 2 Protection next turn."
+      }
+    ],
+    "awaken": {
+      "name": "Repudiation",
+      "type": "Pierce",
+      "basePower": 16,
+      "coinPower": 6,
+      "coins": 1,
+      "effects": [
+        "[On Hit] Inflict 4 Sinking Potency and 2 Sinking Count. Target deals -10% damage for 1 turn."
+      ]
+    },
+    "corrosion": null,
+    "skills": []
+  },
+  {
+    "name": "Mirror-Touch Rodion",
+    "sinner": "Rodion",
+    "grade": "TETH",
+    "season": 8,
+    "affinity": "Pride",
+    "sanityCost": 15,
+    "cost": 400,
+    "slug": "mirror-touch-rodion",
+    "maxThreadspin": 4,
+    "keywords": [
+      "Tremor",
+      "Blunt"
+    ],
+    "passives": [
+      {
+        "name": "E.G.O Passive",
+        "description": "Echoing Sensibility - After triggering Tremor Burst, heal 5 SP on self and the ally with lowest SP."
+      }
+    ],
+    "awaken": {
+      "name": "Mirror-Touch",
+      "type": "Blunt",
+      "basePower": 18,
+      "coinPower": 8,
+      "coins": 1,
+      "effects": [
+        "[On Hit] Inflict 5 Tremor Potency. Trigger Tremor Burst. Target gains +1 Tremor Count."
+      ]
+    },
+    "corrosion": {
+      "name": "Corrosion: Mirror-Touch",
+      "type": "Blunt",
+      "basePower": 24,
+      "coinPower": -6,
+      "coins": 1,
+      "effects": [
+        "[Indiscriminate] [On Hit] Inflict 8 Tremor. Trigger Tremor Burst twice."
+      ]
+    },
+    "skills": []
+  },
+  {
+    "name": "Hollow Faust",
+    "sinner": "Faust",
+    "grade": "WAW",
+    "season": 8,
+    "affinity": "Envy",
+    "sanityCost": 25,
+    "cost": 400,
+    "slug": "hollow-faust",
+    "maxThreadspin": 4,
+    "keywords": [
+      "Charge",
+      "Bleed",
+      "Slash"
+    ],
+    "passives": [
+      {
+        "name": "E.G.O Passive",
+        "description": "Empty Shell Resonance - Combat Start: Gain +3 Charge Count. At 4+ Envy A-Resonance, all allies deal +15% Slash and Bleed damage."
+      }
+    ],
+    "awaken": {
+      "name": "Hollow",
+      "type": "Slash",
+      "basePower": 22,
+      "coinPower": 12,
+      "coins": 1,
+      "effects": [
+        "[Before Attack] At 10+ Charge Count, spend 10 Charge Count for Atk Weight +2  [On Hit] Inflict 6 Bleed Potency and 3 Bleed Count  [On Hit] Gain 10 Charge Count"
+      ]
+    },
+    "corrosion": {
+      "name": "Corrosion: Hollow",
+      "type": "Slash",
+      "basePower": 30,
+      "coinPower": -8,
+      "coins": 1,
+      "effects": [
+        "[Indiscriminate] [On Hit] Inflict 10 Bleed. Consume 15 Charge to deal +50% Gloom damage."
+      ]
+    },
+    "skills": []
+  },
+  {
+    "name": "Hollow Meursault",
+    "sinner": "Meursault",
+    "grade": "WAW",
+    "season": 8,
+    "affinity": "Envy",
+    "sanityCost": 25,
+    "cost": 400,
+    "slug": "hollow-meursault",
+    "maxThreadspin": 4,
+    "keywords": [
+      "Charge",
+      "Tremor",
+      "Blunt"
+    ],
+    "passives": [
+      {
+        "name": "E.G.O Passive",
+        "description": "Silent Abnegation - Combat Start: Gain 2 Protection and 3 Charge Count. On Clash Win, trigger Tremor Reverb on target."
+      }
+    ],
+    "awaken": {
+      "name": "Hollow",
+      "type": "Blunt",
+      "basePower": 24,
+      "coinPower": 10,
+      "coins": 1,
+      "effects": [
+        "[On Use] Spend 10 Charge to gain +2 Atk Weight  [On Hit] Inflict 8 Tremor. Trigger Tremor Burst. Target takes +20% Stagger damage this turn."
+      ]
+    },
+    "corrosion": {
+      "name": "Corrosion: Hollow",
+      "type": "Blunt",
+      "basePower": 32,
+      "coinPower": -10,
+      "coins": 1,
+      "effects": [
+        "[Indiscriminate] [On Hit] Trigger Tremor Burst 3 times. Inflict 3 Fragile next turn."
+      ]
+    },
+    "skills": []
   }
 ]

@@ -3,9 +3,9 @@
  * Automatic timezone conversion between KST (Korea Standard Time) and the User's Local Time (EST/EDT/etc.)
  */
 
-// Default Project Moon Season End maintenance target in KST (UTC+9)
-export const DEFAULT_SEASON_END_KST = '2026-09-17T10:00:00+09:00';
-export const DEFAULT_SEASON_END_DATE = '2026-09-17T10:00';
+// Default Project Moon Season End maintenance target (Season 8 just started, end date is Unknown/TBA)
+export const DEFAULT_SEASON_END_KST = null;
+export const DEFAULT_SEASON_END_DATE = 'Unknown';
 
 export function getUserTimeZone() {
   try {
@@ -26,7 +26,7 @@ export function getUserTimeZoneShort() {
 
 // Convert an ISO / KST timestamp to a value suitable for <input type="datetime-local"> in local time
 export function toLocalInputString(isoOrDateString) {
-  if (!isoOrDateString) return '';
+  if (!isoOrDateString || isoOrDateString === 'Unknown' || isoOrDateString === 'TBA') return '';
   const d = new Date(isoOrDateString);
   if (isNaN(d.getTime())) return '';
   const year = d.getFullYear();
@@ -39,9 +39,9 @@ export function toLocalInputString(isoOrDateString) {
 
 // Format local date/time with timezone (e.g. "Sep 16, 2026, 9:00 PM EDT")
 export function formatLocalDateTime(isoOrDateString) {
-  if (!isoOrDateString) return 'Unknown';
+  if (!isoOrDateString || isoOrDateString === 'Unknown' || isoOrDateString === 'TBA') return 'Unknown / TBA';
   const d = new Date(isoOrDateString);
-  if (isNaN(d.getTime())) return 'Unknown';
+  if (isNaN(d.getTime())) return 'Unknown / TBA';
   return d.toLocaleString('en-US', {
     month: 'short',
     day: 'numeric',
@@ -55,9 +55,9 @@ export function formatLocalDateTime(isoOrDateString) {
 
 // Format KST date/time (e.g. "Sep 17, 2026, 10:00 AM KST")
 export function formatKstDateTime(isoOrDateString) {
-  if (!isoOrDateString) return 'Unknown';
+  if (!isoOrDateString || isoOrDateString === 'Unknown' || isoOrDateString === 'TBA') return 'Unknown / TBA';
   const d = new Date(isoOrDateString);
-  if (isNaN(d.getTime())) return 'Unknown';
+  if (isNaN(d.getTime())) return 'Unknown / TBA';
   return d.toLocaleString('en-US', {
     timeZone: 'Asia/Seoul',
     month: 'short',
@@ -72,21 +72,33 @@ export function formatKstDateTime(isoOrDateString) {
 
 export function getSeasonEndDate(bpState) {
   const value = bpState?.seasonEndDate;
-  if (!value) return new Date(DEFAULT_SEASON_END_KST).toISOString();
+  if (!value || value === 'Unknown' || value === 'TBA') return null;
+
+  let iso = null;
 
   // If already contains timezone or is standard ISO
   if (value.includes('Z') || value.includes('+') || (value.includes('-') && value.length > 16 && value.charAt(10) === 'T')) {
     const d = new Date(value);
-    if (!isNaN(d.getTime())) return d.toISOString();
+    if (!isNaN(d.getTime())) iso = d.toISOString();
+  } else {
+    // If entered from a local datetime-local input (e.g. "2026-09-16T21:00")
+    const localDate = new Date(value);
+    if (!isNaN(localDate.getTime())) {
+      iso = localDate.toISOString();
+    } else {
+      iso = `${value}:00+09:00`;
+    }
   }
 
-  // If entered from a local datetime-local input (e.g. "2026-09-16T21:00")
-  const localDate = new Date(value);
-  if (!isNaN(localDate.getTime())) {
-    return localDate.toISOString();
+  // If the parsed date is already in the past, season has transitioned to Season 8 -> treat as Unknown
+  if (iso) {
+    const endMs = new Date(iso).getTime();
+    if (!isNaN(endMs) && endMs <= Date.now()) {
+      return null;
+    }
+    return iso;
   }
 
-  // Fallback as KST date
-  return `${value}:00+09:00`;
+  return null;
 }
 

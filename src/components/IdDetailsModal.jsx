@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getShardabilityStatus } from '../utils/limbusCalculator.js';
 
 const KEYWORD_COLORS = { Burn: '#ef4444', Bleed: '#dc2626', Tremor: '#eab308', Poise: '#22c55e', Charge: '#a855f7', Rupture: '#0ea5e9', Sinking: '#3b82f6' };
 const SIN_COLORS = { Wrath: '#dc2626', Lust: '#ea580c', Sloth: '#ca8a04', Gluttony: '#16a34a', Gloom: '#0ea5e9', Pride: '#4f46e5', Envy: '#9333ea' };
@@ -155,7 +156,31 @@ export default function IdDetailsModal({ idData, onClose }) {
                       <span className="text-yellow-500 text-sm drop-shadow-md">{'★'.repeat(idData.rarity || 1)}</span>
                    </div>
                    <h2 className="text-2xl font-black text-white leading-tight drop-shadow-md">{idData.name}</h2>
-                   <p className="text-[#c9a84c] text-sm font-bold mt-1 opacity-90">{idData.season}</p>
+                   {(() => {
+                     const shardStatus = getShardabilityStatus(idData);
+                     return (
+                       <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                         <span className={`text-[10px] font-black px-2 py-0.5 rounded shadow-sm uppercase tracking-wider ${
+                           shardStatus.reason === 'walpurgis'
+                             ? 'bg-purple-950/90 text-purple-300 border border-purple-600/60'
+                             : shardStatus.reason === 'previous_season'
+                             ? 'bg-zinc-900/90 text-zinc-300 border border-zinc-600'
+                             : shardStatus.reason === 'current_season'
+                             ? 'bg-amber-950/90 text-amber-300 border border-amber-500/80'
+                             : shardStatus.reason === 'standard'
+                             ? 'bg-gray-900/80 text-gray-400 border border-gray-700'
+                             : 'bg-black/70 text-gray-300 border border-white/20'
+                         }`}>
+                           {shardStatus.fullBadge}
+                         </span>
+                         <span className={`text-xs font-semibold ${
+                           shardStatus.shardable ? 'text-green-400' : 'text-amber-400'
+                         }`}>
+                           ● {shardStatus.message}
+                         </span>
+                       </div>
+                     );
+                   })()}
                 </div>
             </div>
 

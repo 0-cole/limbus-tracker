@@ -233,30 +233,77 @@ export default function MephistophelesBorderTrack() {
     }
   }, []);
 
-  // Compute (x, y, rotation, side) dynamically matching page scroll dimensions with smooth cornering
-  const updateBusPosition = useCallback(() => {
-    // Look up the scrollable main container to scale with full page height
+  // Cached track dimensions to eliminate per-frame layout reading/writing (zero layout thrashing)
+  const dimensionsRef = useRef({
+    cw: 0,
+    ch: 0,
+    topLen: 0,
+    rightLen: 0,
+    cornerArc: 0,
+    totalPerimeter: 0,
+  });
+
+  // Calculate track border dimensions from visible scroll container and content element
+  const updateDimensions = useCallback(() => {
     const scrollContainer = document.getElementById('app-main-scroll') || containerRef.current?.parentElement;
     if (!scrollContainer) return;
 
-    // Use clientWidth to hug the visible viewport width (prevents overflow on smaller laptop screens),
-    // and use max(clientHeight, scrollHeight) to scale with vertical page scroll
+    // Measure the actual page content element so trackBorderRef doesn't hold open the page height
+    const contentEl = scrollContainer.querySelector('.min-h-full') || scrollContainer.children[1];
     const cw = scrollContainer.clientWidth;
-    const ch = Math.max(scrollContainer.clientHeight, scrollContainer.scrollHeight);
-    if (cw <= 0 || ch <= 0) return;
+    const contentHeight = contentEl ? contentEl.offsetHeight : scrollContainer.clientHeight;
+    const ch = Math.max(scrollContainer.clientHeight, contentHeight);
 
-    // Dynamically adjust track border size to hug the edge of the visible scroll area
-    if (trackBorderRef.current) {
-      trackBorderRef.current.style.width = `${cw - INSET * 2}px`;
-      trackBorderRef.current.style.height = `${ch - INSET * 2}px`;
-      trackBorderRef.current.style.borderRadius = `${CORNER_R}px`;
-    }
+    if (cw <= 0 || ch <= 0) return;
 
     const topLen = Math.max(0, (cw - 2 * INSET) - 2 * CORNER_R);
     const rightLen = Math.max(0, (ch - 2 * INSET) - 2 * CORNER_R);
     const cornerArc = (Math.PI / 2) * CORNER_R;
     const totalPerimeter = 2 * topLen + 2 * rightLen + 4 * cornerArc;
-    if (totalPerimeter <= 0) return;
+
+    dimensionsRef.current = { cw, ch, topLen, rightLen, cornerArc, totalPerimeter };
+
+    if (trackBorderRef.current) {
+      trackBorderRef.current.style.width = `${cw - INSET * 2}px`;
+      trackBorderRef.current.style.height = `${ch - INSET * 2}px`;
+      trackBorderRef.current.style.borderRadius = `${CORNER_R}px`;
+    }
+  }, [INSET, CORNER_R]);
+
+  // Observer to update dimensions on resize and route changes without layout thrashing
+  useEffect(() => {
+    updateDimensions();
+
+    const scrollContainer = document.getElementById('app-main-scroll') || containerRef.current?.parentElement;
+    if (!scrollContainer) return;
+
+    const contentEl = scrollContainer.querySelector('.min-h-full') || scrollContainer.children[1];
+
+    const ro = new ResizeObserver(() => {
+      updateDimensions();
+    });
+
+    ro.observe(scrollContainer);
+    if (contentEl) ro.observe(contentEl);
+
+    window.addEventListener('resize', updateDimensions);
+
+    // Re-check shortly after mount or route transition to catch animated heights
+    const t1 = setTimeout(updateDimensions, 60);
+    const t2 = setTimeout(updateDimensions, 300);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', updateDimensions);
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [updateDimensions, location.pathname]);
+
+  // Compute (x, y, rotation, side) purely from cached dimensions — 0 layout reflows per frame!
+  const updateBusPosition = useCallback(() => {
+    const { cw, ch, topLen, rightLen, cornerArc, totalPerimeter } = dimensionsRef.current;
+    if (totalPerimeter <= 0 || cw <= 0 || ch <= 0) return;
 
     let d = (progressRef.current % 1) * totalPerimeter;
 
@@ -293,7 +340,7 @@ export default function MephistophelesBorderTrack() {
           // 4. Bottom-Right corner curve
           if (d < cornerArc) {
             const angle = (d / cornerArc) * (Math.PI / 2);
-            x = cw - INSET - CORNER_R + Math.cos(angle) * CORNER_R;
+            x = cw - INSET - CORNER_R + Math.sin(angle) * CORNER_R;
             y = ch - INSET - CORNER_R + Math.sin(angle) * CORNER_R;
             rotation = 180 + (d / cornerArc) * 90;
             side = 'right';
@@ -340,9 +387,9 @@ export default function MephistophelesBorderTrack() {
 
     coordsRef.current = { x, y, rotation, side, cw, ch };
 
-    // Direct DOM update for bus (zero React state lag)
+    // Direct DOM update for bus (zero React state lag, GPU-accelerated translate3d)
     if (busRef.current) {
-      busRef.current.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${rotation}deg)`;
+      busRef.current.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) rotate(${rotation}deg)`;
     }
 
     // Calculate speech bubble position
@@ -359,34 +406,26 @@ export default function MephistophelesBorderTrack() {
       bx = x - BUS_HEIGHT / 2 - BUBBLE_WIDTH - 16;
       by = y - BUBBLE_HEIGHT / 2;
     } else {
-      // left
       bx = x + BUS_HEIGHT / 2 + 16;
       by = y - BUBBLE_HEIGHT / 2;
     }
 
     // Viewport-aware clamping ("hanging"):
-    // Keep bubble inside visible viewport even if bus is scrolled off screen
-    const scrollTop = scrollContainer.scrollTop || 0;
-    const clientHeight = scrollContainer.clientHeight || window.innerHeight;
+    const scrollContainer = document.getElementById('app-main-scroll');
+    const scrollTop = scrollContainer ? scrollContainer.scrollTop : 0;
+    const clientHeight = scrollContainer ? scrollContainer.clientHeight : window.innerHeight;
     const padding = 12;
 
-    // Clamp X within visible container width
     bx = Math.max(padding, Math.min(bx, cw - BUBBLE_WIDTH - padding));
-
-    // Clamp Y to visible viewport (between current scroll top and bottom of view)
     const minViewportY = scrollTop + padding;
     const maxViewportY = scrollTop + clientHeight - BUBBLE_HEIGHT - padding;
     by = Math.max(minViewportY, Math.min(by, maxViewportY));
-
-    // Also ensure it doesn't exceed total document scroll bounds
     by = Math.max(padding, Math.min(by, ch - BUBBLE_HEIGHT - padding));
 
     coordsRef.current.bx = bx;
     coordsRef.current.by = by;
 
-    // Direct DOM update for speech bubble (synchronous 60fps tracking)
     if (bubbleRef.current) {
-      // Use left / top so framer-motion's transform (scale & fade) won't conflict or reset to (0,0)
       bubbleRef.current.style.left = `${bx}px`;
       bubbleRef.current.style.top = `${by}px`;
     }
@@ -526,8 +565,8 @@ export default function MephistophelesBorderTrack() {
   return (
     <div
       ref={containerRef}
-      className="absolute top-0 left-0 pointer-events-none z-20"
-      style={{ width: '100%', height: '100%' }}
+      className="absolute top-0 left-0 pointer-events-none z-20 overflow-visible"
+      style={{ width: '100%', height: 0 }}
       aria-hidden="true"
     >
       {/* ── Dynamic Scaled Track Border (scales to full scroll size) ── */}

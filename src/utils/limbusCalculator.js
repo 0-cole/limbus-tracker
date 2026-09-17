@@ -23,6 +23,83 @@ export function normalizeSinnerId(name) {
   return clean;
 }
 
+export function getShardabilityStatus(item, currentSeason = 8) {
+  if (!item) return { shardable: true, label: 'Available', badge: 'Standard', color: 'gray', message: 'Available in Dispenser' };
+
+  // Check Walpurgisnacht: season === null or undefined, or flagged isWalpurgis
+  const isWalpurgis = item.season === null || item.season === undefined || item.isWalpurgis === true;
+  if (isWalpurgis) {
+    return {
+      shardable: false,
+      reason: 'walpurgis',
+      badge: 'Walpurgis',
+      fullBadge: 'Walpurgisnacht Exclusive',
+      color: 'purple',
+      message: 'Cannot be sharded until Walpurgisnacht (Date TBA)'
+    };
+  }
+
+  const seasonNum = typeof item.season === 'number' ? item.season : parseInt(item.season);
+
+  // Previous season (Season 7 in Season 8) is locked from Dispenser sharding
+  if (seasonNum === 7) {
+    return {
+      shardable: false,
+      reason: 'previous_season',
+      badge: 'Season 7 (Locked)',
+      fullBadge: 'Season 7 (Locked)',
+      color: 'zinc',
+      message: 'Unshardable in Dispenser during Season 8 (Extraction Only)'
+    };
+  }
+
+  // Current Season (Season 8)
+  if (seasonNum === currentSeason) {
+    return {
+      shardable: true,
+      reason: 'current_season',
+      badge: `Season ${currentSeason}`,
+      fullBadge: `Season ${currentSeason}`,
+      color: 'gold',
+      message: `Available in Season ${currentSeason} Dispenser`
+    };
+  }
+
+  // Standard (Season 0)
+  if (seasonNum === 0 || isNaN(seasonNum)) {
+    return {
+      shardable: true,
+      reason: 'standard',
+      badge: 'Standard',
+      fullBadge: 'Standard Fare',
+      color: 'gray',
+      message: 'Always available in Dispenser'
+    };
+  }
+
+  // Past Seasons 1 to 6
+  if (seasonNum > 0 && seasonNum < (currentSeason - 1)) {
+    return {
+      shardable: true,
+      reason: 'past_season',
+      badge: `Season ${seasonNum}`,
+      fullBadge: `Season ${seasonNum}`,
+      color: 'blue',
+      message: 'Available in Dispenser'
+    };
+  }
+
+  return {
+    shardable: true,
+    reason: 'standard',
+    badge: `Season ${seasonNum}`,
+    fullBadge: `Season ${seasonNum}`,
+    color: 'gray',
+    message: 'Available in Dispenser'
+  };
+}
+
+
 export function getOwnedShards(shardsInventory = {}, sinnerInput = '') {
   if (!shardsInventory || !sinnerInput) return 0;
   
@@ -169,9 +246,10 @@ export function generateRoadmap(
   const customDailyRuns = Math.max(1, bpState?.customDailyRuns || 3);
   let totalRunsLeft = plannedRuns.length;
   
-  const availableDays = daysLeft > 0 ? daysLeft : 1;
-  const baseMdsPerDay = Math.floor(totalRunsLeft / availableDays);
-  let remainderMds = totalRunsLeft % availableDays;
+  const totalSeasonDays = Math.max(1, daysLeft > 0 ? daysLeft : 120);
+  const availableDays = Math.min(totalSeasonDays, 30);
+  const baseMdsPerDay = Math.floor(totalRunsLeft / totalSeasonDays);
+  let remainderMds = totalRunsLeft % totalSeasonDays;
   let remainingRunsPool = totalRunsLeft;
   
   let cumulativeExp = 0;
@@ -210,6 +288,7 @@ export function generateRoadmap(
     const owned = getOwnedShards(shardsInventory, item.sinner || item.sinnerId || sinnerId);
     const remaining = Math.max(0, cost - owned);
     const alreadyCraftable = owned >= cost;
+    const shardStatus = getShardabilityStatus(item);
     return {
       name: item.name || sinnerId,
       sinnerId,
@@ -223,7 +302,8 @@ export function generateRoadmap(
       alreadyCraftable,
       completed: alreadyCraftable,
       completedDay: alreadyCraftable ? 0 : null,
-      completedDate: alreadyCraftable ? 'Already Craftable' : null
+      completedDate: alreadyCraftable ? 'Already Craftable' : null,
+      shardStatus
     };
   });
 
@@ -260,7 +340,8 @@ export function generateRoadmap(
         day: 1,
         date: 'Day 1',
         isInventoryCraft: true,
-        cratesUsed: cur.cratesUsedFromInventory
+        cratesUsed: cur.cratesUsedFromInventory,
+        shardStatus: cur.shardStatus
       });
       activeTargetIdx++;
     }
@@ -270,7 +351,8 @@ export function generateRoadmap(
   let partialExpAccumulator = bpState?.currentExp || 0;
   let totalCratesGenerated = 0;
 
-  const seasonEndMs = bpState?.seasonEndDate ? new Date(getSeasonEndDate(bpState)).getTime() : null;
+  const seasonEndIso = getSeasonEndDate(bpState);
+  const seasonEndMs = seasonEndIso ? new Date(seasonEndIso).getTime() : null;
 
   for (let i = 0; i < availableDays; i++) {
     // 1. Calendar Date & Weekly Reset for Day i
@@ -282,7 +364,7 @@ export function generateRoadmap(
     
     // Hard cutoff: If this calendar day starts strictly after the season has already ended, stop generating days.
     const dayStartMs = new Date(dayDate.getFullYear(), dayDate.getMonth(), dayDate.getDate(), 0, 0, 0, 0).getTime();
-    if (seasonEndMs && dayStartMs >= seasonEndMs) {
+    if (seasonEndMs && seasonEndMs > Date.now() && dayStartMs >= seasonEndMs) {
       break;
     }
 
@@ -410,7 +492,8 @@ export function generateRoadmap(
           sinnerName: cur.sinnerName,
           cost: cur.cost,
           day: i + 1,
-          date: `${weekdayStr}, ${dateStr}`
+          date: `${weekdayStr}, ${dateStr}`,
+          shardStatus: cur.shardStatus
         });
         activeTargetIdx++;
       }

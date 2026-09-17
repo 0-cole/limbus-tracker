@@ -314,6 +314,17 @@ export const useStore = create((set, get) => ({
         rawInventory.maxEnkephalin = maxCap;
         const loadedInventory = recalculateEnkephalin(rawInventory);
 
+        let loadedBpState = { ...defaultState.bpState, ...(data.bpState || {}) };
+        if (loadedBpState.seasonEndDate) {
+          const endMs = new Date(loadedBpState.seasonEndDate).getTime();
+          if (isNaN(endMs) || endMs <= Date.now()) {
+            loadedBpState.seasonEndDate = 'Unknown';
+          }
+        }
+        if (!loadedBpState.paceMode) {
+          loadedBpState.paceMode = 'relaxed';
+        }
+
         set({
           onboardingCompleted: data.onboardingCompleted || false,
           tutorialCompleted: data.tutorialCompleted || false,
@@ -321,7 +332,7 @@ export const useStore = create((set, get) => ({
           acquiredEgos: new Set(data.acquiredEgos || []),
           wantList: new Set(data.wantList || []),
           inventory: loadedInventory,
-          bpState: { ...defaultState.bpState, ...(data.bpState || {}) },
+          bpState: loadedBpState,
           scheduleState: loadedSchedule,
           weeklyArchive: loadedWeeklyArchive,
           shardCounts: data.shardCounts || {},

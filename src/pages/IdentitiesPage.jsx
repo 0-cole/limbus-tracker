@@ -75,8 +75,23 @@ function IdCard({ id, meta, acquired, onToggleAcquired, onEdit, onClickDetails }
 
       {/* Top Section */}
       <div className="relative flex justify-between items-start p-3 z-10">
-        <div className="flex text-[#c9a84c] drop-shadow-md">
-          {Array.from({length: id.rarity || 1}).map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <div className="flex text-[#c9a84c] drop-shadow-md">
+            {Array.from({length: id.rarity || 1}).map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
+          </div>
+          <span className={`text-[9px] font-black px-1.5 py-0.5 rounded shadow-sm uppercase tracking-wider backdrop-blur-md ${
+            id.season === null || id.season === undefined
+              ? 'bg-purple-950/90 text-purple-300 border border-purple-600/60 shadow-[0_0_8px_rgba(168,85,247,0.3)]'
+              : id.season === 7
+              ? 'bg-zinc-900/90 text-zinc-300 border border-zinc-600 shadow-sm'
+              : id.season === 8
+              ? 'bg-amber-950/90 text-amber-300 border border-amber-500/80 shadow-[0_0_8px_rgba(245,158,11,0.3)]'
+              : id.season === 0
+              ? 'bg-gray-900/80 text-gray-400 border border-gray-700'
+              : 'bg-black/70 text-gray-300 border border-white/20'
+          }`} title={id.season === null ? 'Walpurgisnacht Exclusive' : id.season === 7 ? 'Season 7 (Unshardable in Season 8)' : id.season === 8 ? 'Season 8' : id.season === 0 ? 'Standard' : `Season ${id.season}`}>
+            {id.season === null ? '🌙 Walpurgis' : id.season === 7 ? 'S7 🔒' : id.season === 8 ? 'Season 8' : id.season === 0 ? 'Standard' : `S${id.season}`}
+          </span>
         </div>
         <p className="text-sm font-bold drop-shadow-md" style={{ color: sinnerInfo?.color || '#fff' }}>
           {sinnerInfo?.name || id.sinner}

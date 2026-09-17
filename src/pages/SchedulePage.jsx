@@ -117,9 +117,14 @@ export default function SchedulePage() {
   return (
     <div className="p-4 sm:p-6 md:p-8 pb-32 max-w-[1600px] w-full mx-auto">
       <div className="flex justify-between items-end mb-8 border-b-2 border-[#333] pb-4">
-        <h1 className="text-4xl font-black uppercase tracking-wider text-[#c9a84c]">
-          Mirror Dungeon Schedule
-        </h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-4xl font-black uppercase tracking-wider text-[#c9a84c]">
+            Mirror Dungeon Schedule
+          </h1>
+          <span className="text-xs uppercase font-black px-2.5 py-1 rounded bg-[#c9a84c]/20 border border-[#c9a84c]/50 text-[#c9a84c]">
+            Season 8: Punctum
+          </span>
+        </div>
         {activeBanner && (
           <div className="text-right">
             <div className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-2">Active Banner Detected</div>
@@ -146,9 +151,13 @@ export default function SchedulePage() {
               <label className="flex justify-between items-center bg-black/50 p-3 rounded">
                 <div>
                   <span className="text-gray-300 font-bold text-sm">Days Left in Season</span>
-                  <span className="text-[10px] text-gray-500 ml-2">Calculated from the date below</span>
+                  <span className="text-[10px] text-gray-500 ml-2">
+                    {seasonEndDate ? 'Calculated from the date below' : 'Estimated ~4 Months (Unknown End Date)'}
+                  </span>
                 </div>
-                <span className="text-white font-mono text-lg font-bold bg-black/60 border border-[#c9a84c]/30 px-3 py-0.5 rounded">{calcResult.daysLeft}</span>
+                <span className="text-white font-mono text-lg font-bold bg-black/60 border border-[#c9a84c]/30 px-3 py-0.5 rounded">
+                  {seasonEndDate ? calcResult.daysLeft : `~${calcResult.daysLeft} (Est.)`}
+                </span>
               </label>
 
               <div className="bg-black/50 p-3 rounded space-y-2">
@@ -158,21 +167,35 @@ export default function SchedulePage() {
                       Season End ({userTzShort})
                     </span>
                     <span className="text-[10px] text-gray-500 block mt-0.5">
-                      Automatically matched to your local timezone ({userTzShort}).
+                      {seasonEndDate ? `Automatically matched to your local timezone (${userTzShort}).` : 'Season end date is currently Unknown / TBA.'}
                     </span>
                   </div>
-                  <input
-                    type="datetime-local"
-                    value={toLocalInputString(seasonEndDate)}
-                    onChange={e => {
-                      if (!e.target.value) return;
-                      const localDt = new Date(e.target.value);
-                      if (!isNaN(localDt.getTime())) {
-                        updateBpState({ seasonEndDate: localDt.toISOString() });
-                      }
-                    }}
-                    className="bg-[#1a1a1a] border border-[#444] text-white text-sm rounded p-1.5 focus:border-[#c9a84c] outline-none"
-                  />
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="datetime-local"
+                      value={toLocalInputString(seasonEndDate)}
+                      onChange={e => {
+                        if (!e.target.value) {
+                          updateBpState({ seasonEndDate: 'Unknown' });
+                          return;
+                        }
+                        const localDt = new Date(e.target.value);
+                        if (!isNaN(localDt.getTime())) {
+                          updateBpState({ seasonEndDate: localDt.toISOString() });
+                        }
+                      }}
+                      className="bg-[#1a1a1a] border border-[#444] text-white text-sm rounded p-1.5 focus:border-[#c9a84c] outline-none"
+                    />
+                    {seasonEndDate && (
+                      <button
+                        onClick={() => updateBpState({ seasonEndDate: 'Unknown' })}
+                        title="Reset Season End to Unknown / TBA"
+                        className="text-[11px] px-2.5 py-1.5 rounded bg-[#222] hover:bg-[#333] border border-[#444] text-gray-300 transition-colors whitespace-nowrap"
+                      >
+                        Reset to TBA
+                      </button>
+                    )}
+                  </div>
                 </div>
                 <div className="pt-2 border-t border-[#333]/60 flex flex-wrap items-center justify-between text-[10px] text-gray-400 gap-2">
                   <span>🌐 Local: <strong className="text-gray-200">{formatLocalDateTime(seasonEndDate)}</strong></span>
@@ -512,7 +535,22 @@ export default function SchedulePage() {
                     <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-[#c9a84c] text-black">
                       Step {idx + 1} Target
                     </span>
-                    <span className="text-xs text-gray-400 capitalize font-medium">{target.sinnerName}</span>
+                    <div className="flex items-center gap-1.5">
+                      {target.shardStatus && (
+                        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
+                          target.shardStatus.reason === 'walpurgis'
+                            ? 'bg-purple-950/80 text-purple-300 border border-purple-700'
+                            : target.shardStatus.reason === 'previous_season'
+                            ? 'bg-zinc-800 text-zinc-300 border border-zinc-600'
+                            : target.shardStatus.reason === 'current_season'
+                            ? 'bg-amber-950 text-amber-300 border border-amber-600'
+                            : 'bg-[#222] text-gray-400 border border-gray-700'
+                        }`}>
+                          {target.shardStatus.badge}
+                        </span>
+                      )}
+                      <span className="text-xs text-gray-400 capitalize font-medium">{target.sinnerName}</span>
+                    </div>
                   </div>
 
                   <h3 className="font-bold text-white text-base truncate mb-3" title={target.name}>
@@ -544,11 +582,13 @@ export default function SchedulePage() {
                             ? 'text-yellow-400' 
                             : 'text-gray-500'
                       }`}>
-                        {isAlreadyCraftable 
-                          ? '✅ Ready to Craft Now' 
-                          : willCraftInRoadmap 
-                            ? `${target.completedDate || `Day ${target.completedDay}`}` 
-                            : `In Progress (+${target.cost - currentOwned} needed)`}
+                        {target.shardStatus && !target.shardStatus.shardable
+                          ? (isAlreadyCraftable ? `⚠️ Shards Ready (${target.shardStatus.badge})` : willCraftInRoadmap ? `${target.completedDate || `Day ${target.completedDay}`} (${target.shardStatus.badge})` : `In Progress (${target.shardStatus.badge})`)
+                          : (isAlreadyCraftable 
+                            ? '✅ Ready to Craft Now' 
+                            : willCraftInRoadmap 
+                              ? `${target.completedDate || `Day ${target.completedDay}`}` 
+                              : `In Progress (+${target.cost - currentOwned} needed)`)}
                       </span>
                     </div>
                   </div>
@@ -905,11 +945,15 @@ export default function SchedulePage() {
                                        ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-black border border-amber-300 shadow-[0_0_12px_rgba(251,191,36,0.5)]' 
                                        : 'bg-[#c9a84c] text-black'
                                    } font-black text-[10px] px-2 py-1 rounded shadow flex items-center gap-1.5 break-words`} title={m.name}>
-                                     <span className="shrink-0">{m.isInventoryCraft ? '✨' : '🏆'}</span>
+                                     <span className="shrink-0">{m.isInventoryCraft ? '✨' : (m.shardStatus && !m.shardStatus.shardable ? '⏳' : '🏆')}</span>
                                      <span className="break-words">
                                        {m.isInventoryCraft 
-                                         ? `READY TO CRAFT: ${m.name} (${m.cratesUsed} Inventory Crates)` 
-                                         : `CRAFT: ${m.name}`}
+                                         ? (m.shardStatus && !m.shardStatus.shardable
+                                             ? `SHARDS READY: ${m.name} (${m.shardStatus.badge})`
+                                             : `READY TO CRAFT: ${m.name} (${m.cratesUsed} Inventory Crates)`) 
+                                         : (m.shardStatus && !m.shardStatus.shardable
+                                             ? `SHARDS REACHED: ${m.name} (${m.shardStatus.badge})`
+                                             : `CRAFT: ${m.name}`)}
                                      </span>
                                    </div>
                                  ))}

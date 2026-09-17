@@ -4,7 +4,7 @@ import { useStore } from '../stores/useStore.js';
 import { Search, Plus, Trash2, Calculator } from 'lucide-react';
 import { getEntityImageUrl } from '../utils/imageUtils.js';
 import { normalizeText, getSinnerSortIndex } from '../utils/textUtils.js';
-import { getOwnedShards } from '../utils/limbusCalculator.js';
+import { getOwnedShards, getShardabilityStatus } from '../utils/limbusCalculator.js';
 
 export default function WantListPage() {
   const { wantList, toggleWantList, inventory, updateInventory, acquiredIds, acquiredEgos, identitiesData, egosData } = useStore();
@@ -85,6 +85,7 @@ export default function WantListPage() {
                   const req = getRequiredShards(item);
                   const have = getOwnedShards(inventory.shards, item.sinner);
                   const percent = Math.min(100, Math.round((have / req) * 100));
+                  const shardStatus = getShardabilityStatus(item);
                   return (
                     <div key={item.name} className="p-3 bg-[#111] rounded border border-[#333] relative overflow-hidden group">
                       <div className="absolute top-0 left-0 bottom-0 bg-[#c9a84c]/20" style={{ width: `${percent}%` }} />
@@ -95,7 +96,20 @@ export default function WantListPage() {
                               <div className="hidden w-full h-full bg-[#222] text-xs text-gray-500 items-center justify-center font-bold">?</div>
                             </div>
                             <div>
-                              <p className="font-bold text-sm leading-tight max-w-[200px] truncate">{item.name}</p>
+                              <div className="flex items-center gap-2">
+                                <p className="font-bold text-sm leading-tight max-w-[200px] truncate">{item.name}</p>
+                                <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold uppercase ${
+                                  shardStatus.reason === 'walpurgis'
+                                    ? 'bg-purple-950/80 text-purple-300 border border-purple-800'
+                                    : shardStatus.reason === 'previous_season'
+                                    ? 'bg-zinc-800 text-zinc-300 border border-zinc-600'
+                                    : shardStatus.reason === 'current_season'
+                                    ? 'bg-amber-950/80 text-amber-300 border border-amber-600'
+                                    : 'bg-[#222] text-gray-400 border border-gray-700'
+                                }`}>
+                                  {shardStatus.badge}
+                                </span>
+                              </div>
                               <p className="text-xs text-[#737373] capitalize">{item.sinner} {item.type.toUpperCase()}</p>
                             </div>
                           </div>
@@ -114,6 +128,27 @@ export default function WantListPage() {
                           </button>
                         </div>
                       </div>
+
+                      {/* Shardability Warning Notice */}
+                      {!shardStatus.shardable && (
+                        <div className={`mt-2 pt-2 border-t border-white/5 flex items-center gap-1.5 text-xs font-semibold px-1 relative z-10 ${
+                          shardStatus.reason === 'walpurgis'
+                            ? 'text-purple-300'
+                            : 'text-amber-400'
+                        }`}>
+                          {shardStatus.reason === 'walpurgis' ? (
+                            <>
+                              <span>🌙</span>
+                              <span>Walpurgisnacht Exclusive: Cannot be sharded until Walpurgisnacht (Date TBA)</span>
+                            </>
+                          ) : (
+                            <>
+                              <span>🔒</span>
+                              <span>Season 7 Locked: Unshardable in Dispenser during Season 8 (Extraction Only)</span>
+                            </>
+                          )}
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -147,7 +182,20 @@ export default function WantListPage() {
                   className="flex justify-between items-center p-3 bg-[#111] hover:bg-[#1a1a1a] rounded border border-[#333] transition-colors mb-2"
                 >
                   <div>
-                    <p className="font-bold text-sm">{item.name}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="font-bold text-sm">{item.name}</p>
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${
+                        item.season === null
+                          ? 'bg-purple-950/80 text-purple-300 border border-purple-800'
+                          : item.season === 7
+                          ? 'bg-zinc-800 text-zinc-300 border border-zinc-600'
+                          : item.season === 8
+                          ? 'bg-amber-950/80 text-amber-300 border border-amber-600'
+                          : 'bg-[#222] text-gray-400 border border-gray-700'
+                      }`}>
+                        {item.season === null ? '🌙 Walpurgis' : item.season === 7 ? 'S7 (Locked)' : item.season === 8 ? 'Season 8' : item.season === 0 ? 'Standard' : `Season ${item.season}`}
+                      </span>
+                    </div>
                     <p className="text-xs text-[#737373] capitalize">{item.sinner} • {'★'.repeat(item.rarity)}</p>
                   </div>
                   <button onClick={() => toggleWantList(item.name)} className="p-2 bg-[#c9a84c] text-black rounded hover:bg-white transition-colors">
@@ -168,7 +216,20 @@ export default function WantListPage() {
                   className="flex justify-between items-center p-3 bg-[#111] hover:bg-[#1a1a1a] rounded border border-[#333] transition-colors mb-2"
                 >
                   <div>
-                    <p className="font-bold text-sm">{item.name}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="font-bold text-sm">{item.name}</p>
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${
+                        item.season === null
+                          ? 'bg-purple-950/80 text-purple-300 border border-purple-800'
+                          : item.season === 7
+                          ? 'bg-zinc-800 text-zinc-300 border border-zinc-600'
+                          : item.season === 8
+                          ? 'bg-amber-950/80 text-amber-300 border border-amber-600'
+                          : 'bg-[#222] text-gray-400 border border-gray-700'
+                      }`}>
+                        {item.season === null ? '🌙 Walpurgis' : item.season === 7 ? 'S7 (Locked)' : item.season === 8 ? 'Season 8' : item.season === 0 ? 'Standard' : `Season ${item.season}`}
+                      </span>
+                    </div>
                     <p className="text-xs text-[#737373] capitalize">{item.sinner} • {item.grade}</p>
                   </div>
                   <button onClick={() => toggleWantList(item.name)} className="p-2 bg-[#c9a84c] text-black rounded hover:bg-white transition-colors">
