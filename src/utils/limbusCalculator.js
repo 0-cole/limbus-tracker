@@ -282,22 +282,41 @@ export function generateRoadmap(
   // 1. Prepare Target Items & Progress for Egoshard Milestones
   const shardsInventory = inventory?.shards || {};
   const wishlistArr = Array.isArray(wishlist) ? wishlist : Array.from(wishlist || []);
-  let targetProgress = wishlistArr.map(item => {
-    const sinnerId = normalizeSinnerId(item.sinnerId || item.sinner);
+
+  // Track remaining available inventory shards per Sinner so duplicate Sinners cascade properly in priority order
+  const availableShards = {};
+  for (const item of wishlistArr) {
+    const sinnerKey = item.sinner || item.sinnerId;
+    const normSinner = normalizeSinnerId(sinnerKey);
+    if (!(normSinner in availableShards)) {
+      availableShards[normSinner] = getOwnedShards(shardsInventory, sinnerKey || normSinner);
+    }
+  }
+
+  let targetProgress = wishlistArr.map((item, index) => {
+    const sinnerKey = item.sinner || item.sinnerId;
+    const sinnerId = normalizeSinnerId(sinnerKey);
     const cost = item.rarity === '00' ? 150 : 400;
-    const owned = getOwnedShards(shardsInventory, item.sinner || item.sinnerId || sinnerId);
-    const remaining = Math.max(0, cost - owned);
-    const alreadyCraftable = owned >= cost;
+
+    // Allocate available shards strictly in priority order
+    const curAvail = availableShards[sinnerId] || 0;
+    const allocatedFromOwned = Math.min(cost, curAvail);
+    availableShards[sinnerId] = Math.max(0, curAvail - allocatedFromOwned);
+
+    const remaining = Math.max(0, cost - allocatedFromOwned);
+    const alreadyCraftable = allocatedFromOwned >= cost;
     const shardStatus = getShardabilityStatus(item);
+
     return {
+      priority: index + 1,
       name: item.name || sinnerId,
       sinnerId,
       sinnerName: item.sinner || sinnerId,
       rarity: item.rarity || '000',
       cost,
-      startingShards: owned,
-      ownedShards: owned,
-      currentShards: owned,
+      startingShards: allocatedFromOwned,
+      ownedShards: allocatedFromOwned,
+      currentShards: allocatedFromOwned,
       remainingDeficit: remaining,
       alreadyCraftable,
       completed: alreadyCraftable,
@@ -307,8 +326,7 @@ export function generateRoadmap(
     };
   });
 
-  // Sort targets: items with lowest remaining deficit (closest to completion) come first!
-  targetProgress.sort((a, b) => a.remainingDeficit - b.remainingDeficit);
+  // Preserve wishlist priority order (do NOT sort by remaining deficit)
 
   let activeTargetIdx = 0;
   // Advance past already completed targets
@@ -321,6 +339,10 @@ export function generateRoadmap(
   const initialInventoryCompletedTargets = [];
   while (activeTargetIdx < targetProgress.length && initialNominableCrates > 0) {
     const cur = targetProgress[activeTargetIdx];
+    if (cur.completed) {
+      activeTargetIdx++;
+      continue;
+    }
     const needed = cur.cost - cur.currentShards;
     const cratesToUse = Math.min(initialNominableCrates, Math.ceil(needed / R_crate));
     const shardYield = cratesToUse * R_crate;
@@ -333,6 +355,7 @@ export function generateRoadmap(
       cur.completedDate = `Day 1 (Using ${cur.cratesUsedFromInventory} Inventory Crates)`;
       cur.isInventoryCraft = true;
       initialInventoryCompletedTargets.push({
+        priority: cur.priority,
         name: cur.name,
         sinnerId: cur.sinnerId,
         sinnerName: cur.sinnerName,
@@ -478,6 +501,10 @@ export function generateRoadmap(
 
     while (activeTargetIdx < targetProgress.length && shardsToAlloc > 0) {
       const cur = targetProgress[activeTargetIdx];
+      if (cur.completed) {
+        activeTargetIdx++;
+        continue;
+      }
       const needed = cur.cost - cur.currentShards;
       const alloc = Math.min(shardsToAlloc, needed);
       cur.currentShards += alloc;
@@ -487,6 +514,7 @@ export function generateRoadmap(
         cur.completedDay = i + 1;
         cur.completedDate = `${weekdayStr}, ${dateStr}`;
         milestonesReachedToday.push({
+          priority: cur.priority,
           name: cur.name,
           sinnerId: cur.sinnerId,
           sinnerName: cur.sinnerName,
@@ -524,6 +552,7 @@ export function generateRoadmap(
       totalCratesGenerated,
       milestonesReachedToday,
       activeFarmingTarget: currentActiveTarget ? {
+        priority: currentActiveTarget.priority,
         name: currentActiveTarget.name,
         sinnerId: currentActiveTarget.sinnerId,
         sinnerName: currentActiveTarget.sinnerName,

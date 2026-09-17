@@ -144,21 +144,31 @@ async function checkForUpdates(baseIds, baseEgos) {
     const bannerHtml = await fetchWikiAPI('Extraction/Banner_History');
     if (bannerHtml) {
       const $ = cheerio.load(bannerHtml);
-      // Get first row of first lcbtable2
-      const firstRow = $('.lcbtable2').first().find('tr').first();
-      if (firstRow.length) {
-         let text = firstRow.text().replace(/\s+/g, ' ').trim();
-         // Parse date range: "2026.9.3 12:00 - 2026.9.17 10:00 Target Name"
-         const dateMatch = text.match(/(\d{4}\.\d{1,2}\.\d{1,2} \d{1,2}:\d{2}) - (\d{4}\.\d{1,2}\.\d{1,2} \d{1,2}:\d{2})\s+(.+)/);
-         if (dateMatch) {
+      const tables = $('.lcbtable2');
+      for (let t = 0; t < tables.length; t++) {
+        const trs = $(tables[t]).find('tr');
+        for (let i = 0; i < trs.length; i++) {
+          const row = $(trs[i]);
+          const img = row.find('th img, td img').first();
+          const text = row.text().replace(/\s+/g, ' ').trim();
+          const dateMatch = text.match(/(\d{4}\.\d{1,2}\.\d{1,2} \d{1,2}:\d{2})\s*-\s*(\d{4}\.\d{1,2}\.\d{1,2} \d{1,2}:\d{2})/);
+          if (dateMatch) {
+            const rawSrc = img.attr('src') || '';
+            const imgSrc = rawSrc.startsWith('http') ? rawSrc : (rawSrc ? `https://limbuscompany.wiki.gg${rawSrc.split('?')[0]}` : null);
+            const alt = img.attr('alt') || '';
+            const bannerTitle = alt ? alt.replace(/\.png$/i, '').replace(/^Target Extraction - /i, '').replace(/&amp;/g, '&') : text;
             dynamicData.activeBanner = {
-               text: dateMatch[3],
-               rawString: text
+              text: bannerTitle,
+              title: bannerTitle,
+              imageUrl: imgSrc,
+              dateRange: `${dateMatch[1]} - ${dateMatch[2]}`,
+              rawString: text
             };
-            console.log(`[AutoUpdater] Found active banner: ${dateMatch[3]}`);
-         } else {
-            dynamicData.activeBanner = { text: text, rawString: text };
-         }
+            console.log(`[AutoUpdater] Found active banner: ${bannerTitle}`);
+            break;
+          }
+        }
+        if (dynamicData.activeBanner) break;
       }
     }
   } catch(e) { console.error('Banner scrape failed', e); }

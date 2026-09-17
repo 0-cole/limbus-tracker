@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../stores/useStore.js';
-import { Search, Plus, Trash2, Calculator } from 'lucide-react';
+import { Search, Plus, Trash2, Calculator, ChevronUp, ChevronDown } from 'lucide-react';
 import { getEntityImageUrl } from '../utils/imageUtils.js';
 import { normalizeText, getSinnerSortIndex } from '../utils/textUtils.js';
 import { getOwnedShards, getShardabilityStatus } from '../utils/limbusCalculator.js';
 
 export default function WantListPage() {
-  const { wantList, toggleWantList, inventory, updateInventory, acquiredIds, acquiredEgos, identitiesData, egosData } = useStore();
+  const { wantList, toggleWantList, moveWantListPriority, inventory, updateInventory, acquiredIds, acquiredEgos, identitiesData, egosData } = useStore();
   const [search, setSearch] = useState('');
   
   const GRADE_ORDER = { ZAYIN: 1, TETH: 2, HE: 3, WAW: 4, ALEPH: 5 };
@@ -53,15 +53,43 @@ export default function WantListPage() {
       return a.name.localeCompare(b.name);
     });
 
-  const wantedItems = [...wantList].map(name => {
-    return unownedItems.find(item => item.name === name) || { name, type: 'unknown', sinner: 'unknown', rarity: 3 };
-  });
-
   const getRequiredShards = (item) => {
     if (item.type === 'ego') return 400;
     if (item.type === 'id') return item.rarity === 3 ? 400 : 150;
     return 400; // default
   };
+
+  // Compute shard allocation cascading by priority order
+  const availableShardsMap = {};
+  const sinnerCounts = {};
+  const rawWantedItems = [...wantList].map((name, index) => {
+    const item = unownedItems.find(i => i.name === name) || { name, type: 'unknown', sinner: 'unknown', rarity: 3 };
+    const normSinner = normalizeText(item.sinner);
+    sinnerCounts[normSinner] = (sinnerCounts[normSinner] || 0) + 1;
+    return { ...item, priority: index + 1 };
+  });
+
+  const wantedItems = rawWantedItems.map(item => {
+    const normSinner = normalizeText(item.sinner);
+    const totalOwned = getOwnedShards(inventory?.shards, item.sinner);
+    if (!(normSinner in availableShardsMap)) {
+      availableShardsMap[normSinner] = totalOwned;
+    }
+    const req = getRequiredShards(item);
+    const curAvail = availableShardsMap[normSinner] || 0;
+    const allocated = Math.min(req, curAvail);
+    availableShardsMap[normSinner] = Math.max(0, curAvail - allocated);
+    const isSharedSinner = (sinnerCounts[normSinner] || 0) > 1;
+
+    return {
+      ...item,
+      req,
+      totalOwned,
+      allocated,
+      percent: Math.min(100, Math.round((allocated / req) * 100)),
+      isSharedSinner
+    };
+  });
 
   return (
       <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="p-6 text-[#e5e5e5] h-full overflow-y-auto">
@@ -73,31 +101,65 @@ export default function WantListPage() {
         {/* Left Column: Shard Calculator & Current Want List */}
         <div className="space-y-6">
           <div className="glass-card p-6">
-            <h2 className="text-xl font-bold mb-4 font-limbus flex items-center gap-2 text-[#c9a84c]">
-              <Calculator size={20} /> Target Calculator
-            </h2>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold font-limbus flex items-center gap-2 text-[#c9a84c]">
+                <Calculator size={20} /> Target Calculator & Priority
+              </h2>
+              {wantedItems.length > 1 && (
+                <span className="text-[11px] text-gray-400 font-mono">
+                  Priority determines shard & crate allocation
+                </span>
+              )}
+            </div>
             
             {wantedItems.length === 0 ? (
               <p className="text-[#737373] text-sm">Add IDs or EGOs to your want list to see shard requirements.</p>
             ) : (
               <div className="space-y-4">
-                {wantedItems.map(item => {
-                  const req = getRequiredShards(item);
-                  const have = getOwnedShards(inventory.shards, item.sinner);
-                  const percent = Math.min(100, Math.round((have / req) * 100));
+                {wantedItems.map((item, idx) => {
+                  const req = item.req;
+                  const allocated = item.allocated;
+                  const totalOwned = item.totalOwned;
+                  const percent = item.percent;
                   const shardStatus = getShardabilityStatus(item);
+                  const isFirst = idx === 0;
+                  const isLast = idx === wantedItems.length - 1;
+
                   return (
                     <div key={item.name} className="p-3 bg-[#111] rounded border border-[#333] relative overflow-hidden group">
                       <div className="absolute top-0 left-0 bottom-0 bg-[#c9a84c]/20" style={{ width: `${percent}%` }} />
                         <div className="relative flex justify-between items-center z-10">
                           <div className="flex items-center gap-3">
+                            {/* Priority Controls & Badge */}
+                            <div className="flex flex-col items-center justify-center shrink-0 pr-1.5 border-r border-[#333]/80">
+                              <button
+                                onClick={() => moveWantListPriority(item.name, 'up')}
+                                disabled={isFirst}
+                                className={`p-0.5 rounded transition-colors ${isFirst ? 'text-gray-600 opacity-30 cursor-not-allowed' : 'text-gray-400 hover:text-[#c9a84c] hover:bg-white/5'}`}
+                                title={isFirst ? 'Highest Priority' : 'Increase Priority'}
+                              >
+                                <ChevronUp size={14} />
+                              </button>
+                              <span className="text-[11px] font-black font-mono text-[#c9a84c] px-1.5 py-0.5 rounded bg-black/70 border border-[#c9a84c]/40 my-0.5 shadow-sm">
+                                #{item.priority}
+                              </span>
+                              <button
+                                onClick={() => moveWantListPriority(item.name, 'down')}
+                                disabled={isLast}
+                                className={`p-0.5 rounded transition-colors ${isLast ? 'text-gray-600 opacity-30 cursor-not-allowed' : 'text-gray-400 hover:text-[#c9a84c] hover:bg-white/5'}`}
+                                title={isLast ? 'Lowest Priority' : 'Decrease Priority'}
+                              >
+                                <ChevronDown size={14} />
+                              </button>
+                            </div>
+
                             <div className="w-10 h-10 bg-black rounded overflow-hidden border border-gray-700 flex-shrink-0 flex items-center justify-center">
                               <img src={getEntityImageUrl(item)} onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }} className="w-full h-full object-cover opacity-70" alt="" />
                               <div className="hidden w-full h-full bg-[#222] text-xs text-gray-500 items-center justify-center font-bold">?</div>
                             </div>
                             <div>
                               <div className="flex items-center gap-2">
-                                <p className="font-bold text-sm leading-tight max-w-[200px] truncate">{item.name}</p>
+                                <p className="font-bold text-sm leading-tight max-w-[180px] sm:max-w-[220px] truncate">{item.name}</p>
                                 <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold uppercase ${
                                   shardStatus.reason === 'walpurgis'
                                     ? 'bg-purple-950/80 text-purple-300 border border-purple-800'
@@ -110,20 +172,33 @@ export default function WantListPage() {
                                   {shardStatus.badge}
                                 </span>
                               </div>
-                              <p className="text-xs text-[#737373] capitalize">{item.sinner} {item.type.toUpperCase()}</p>
+                              <div className="flex items-center gap-2 text-xs text-[#737373] mt-0.5">
+                                <span className="capitalize">{item.sinner} {item.type.toUpperCase()}</span>
+                                {item.isSharedSinner && (
+                                  <span className="text-[10px] text-amber-400/90 font-mono bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-800/40">
+                                    {allocated} allocated ({totalOwned} total owned)
+                                  </span>
+                                )}
+                              </div>
                             </div>
                           </div>
                           <div className="flex items-center gap-3">
                           <div className="text-right">
-                            <input 
-                              type="number" 
-                              value={have} 
-                              onChange={(e) => updateInventory({ shards: { ...inventory.shards, [item.sinner]: parseInt(e.target.value) || 0 } })}
-                              className="w-16 bg-[#0a0a0a] border border-[#333] rounded px-2 py-1 text-xs text-right focus:border-[#c9a84c] outline-none"
-                            />
-                            <span className="text-xs text-[#737373] ml-1">/ {req}</span>
+                            <div className="flex items-center justify-end gap-1">
+                              <span className="text-xs font-mono font-bold text-white">{allocated}</span>
+                              <span className="text-xs text-[#737373]">/ {req}</span>
+                            </div>
+                            <div className="flex items-center gap-1 mt-0.5" title="Total owned shards in inventory for this Sinner">
+                              <span className="text-[10px] text-gray-400">Total:</span>
+                              <input 
+                                type="number" 
+                                value={totalOwned} 
+                                onChange={(e) => updateInventory({ shards: { ...inventory.shards, [item.sinner]: parseInt(e.target.value) || 0 } })}
+                                className="w-14 bg-[#0a0a0a] border border-[#333] rounded px-1 py-0.5 text-[11px] text-right focus:border-[#c9a84c] outline-none"
+                              />
+                            </div>
                           </div>
-                          <button onClick={() => toggleWantList(item.name)} className="text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button onClick={() => toggleWantList(item.name)} className="text-red-400 opacity-60 hover:opacity-100 transition-opacity p-1" title="Remove from Want List">
                             <Trash2 size={16} />
                           </button>
                         </div>

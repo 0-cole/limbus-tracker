@@ -325,6 +325,19 @@ export const useStore = create((set, get) => ({
           loadedBpState.paceMode = 'relaxed';
         }
 
+        const DEFAULT_S8_BANNER = {
+          text: "Haute Couture Boutique du Rouge Ishmael & Haute Couture Le Noir Footwear Hall Ryōshū",
+          title: "Haute Couture Boutique du Rouge Ishmael & Haute Couture Le Noir Footwear Hall Ryōshū",
+          imageUrl: "https://limbuscompany.wiki.gg/images/Target_Extraction_-_Haute_Couture_Boutique_du_Rouge_Ishmael_%26_Haute_Couture_Le_Noir_Footwear_Hall_Ry%C5%8Dsh%C5%AB.png",
+          dateRange: "2026.9.17 12:00 - 2026.10.1 10:00",
+          rawString: "2026.9.17 12:00 - 2026.10.1 10:00 Haute Couture::Boutique du Rouge Ishmael Haute Couture::Le Noir Footwear Hall Ryōshū"
+        };
+
+        let resolvedBanner = dynamicData.activeBanner;
+        if (!resolvedBanner || !resolvedBanner.text || resolvedBanner.text.includes('Season 7') || resolvedBanner.text.includes('Kumo no ito') || resolvedBanner.text === 'Season 8: PUNCTUM') {
+          resolvedBanner = DEFAULT_S8_BANNER;
+        }
+
         set({
           onboardingCompleted: data.onboardingCompleted || false,
           tutorialCompleted: data.tutorialCompleted || false,
@@ -340,17 +353,30 @@ export const useStore = create((set, get) => ({
           customMetadata: data.customMetadata || {},
           identitiesData: mergedIds,
           egosData: mergedEgos,
-          activeBanner: dynamicData.activeBanner || null,
+          activeBanner: resolvedBanner,
           managerProfile: { ...defaultState.managerProfile, ...(data.managerProfile || {}) },
           appSettings: { ...defaultState.appSettings, ...(data.appSettings || {}) },
           isLoaded: true,
         });
       } else {
+        const DEFAULT_S8_BANNER = {
+          text: "Haute Couture Boutique du Rouge Ishmael & Haute Couture Le Noir Footwear Hall Ryōshū",
+          title: "Haute Couture Boutique du Rouge Ishmael & Haute Couture Le Noir Footwear Hall Ryōshū",
+          imageUrl: "https://limbuscompany.wiki.gg/images/Target_Extraction_-_Haute_Couture_Boutique_du_Rouge_Ishmael_%26_Haute_Couture_Le_Noir_Footwear_Hall_Ry%C5%8Dsh%C5%AB.png",
+          dateRange: "2026.9.17 12:00 - 2026.10.1 10:00",
+          rawString: "2026.9.17 12:00 - 2026.10.1 10:00 Haute Couture::Boutique du Rouge Ishmael Haute Couture::Le Noir Footwear Hall Ryōshū"
+        };
+
+        let resolvedBanner = dynamicData.activeBanner;
+        if (!resolvedBanner || !resolvedBanner.text || resolvedBanner.text.includes('Season 7') || resolvedBanner.text.includes('Kumo no ito') || resolvedBanner.text === 'Season 8: PUNCTUM') {
+          resolvedBanner = DEFAULT_S8_BANNER;
+        }
+
         set({ 
           inventory: defaultState.inventory,
           identitiesData: mergedIds, 
           egosData: mergedEgos, 
-          activeBanner: dynamicData.activeBanner || null,
+          activeBanner: resolvedBanner,
           managerProfile: defaultState.managerProfile,
           appSettings: defaultState.appSettings,
           isLoaded: true 
@@ -487,6 +513,40 @@ export const useStore = create((set, get) => ({
     if (newList.has(name)) newList.delete(name);
     else newList.add(name);
     set({ wantList: newList });
+    saveStore();
+  },
+
+  reorderWantList: (newOrderedNames) => {
+    const { saveStore } = get();
+    const newList = new Set(newOrderedNames);
+    set({ wantList: newList });
+    saveStore();
+  },
+
+  moveWantListPriority: (name, direction) => {
+    const { wantList, saveStore } = get();
+    const arr = Array.from(wantList);
+    const idx = arr.indexOf(name);
+    if (idx === -1) return;
+    const targetIdx = direction === 'up' ? idx - 1 : idx + 1;
+    if (targetIdx < 0 || targetIdx >= arr.length) return;
+    const temp = arr[idx];
+    arr[idx] = arr[targetIdx];
+    arr[targetIdx] = temp;
+    set({ wantList: new Set(arr) });
+    saveStore();
+  },
+
+  setWantListPriority: (name, targetRank) => {
+    const { wantList, saveStore } = get();
+    const arr = Array.from(wantList);
+    const currentIdx = arr.indexOf(name);
+    if (currentIdx === -1) return;
+    const newIdx = Math.max(0, Math.min(arr.length - 1, targetRank - 1));
+    if (newIdx === currentIdx) return;
+    arr.splice(currentIdx, 1);
+    arr.splice(newIdx, 0, name);
+    set({ wantList: new Set(arr) });
     saveStore();
   },
 

@@ -108,15 +108,14 @@ export default function SchedulePage() {
   ), [calcResult.daysLeft, calcResult.plannedRuns, scheduleState, bpState, canto, preferHardMd, hasMdHard, safeMath, targetItems, inventory]);
 
   // Find banner image URL if active banner text is known
-  let bannerImageUrl = null;
-  if (activeBanner?.text) {
-     // A generic fallback pattern since we just scrape the text, we can build a URL for the wiki
+  let bannerImageUrl = activeBanner?.imageUrl || null;
+  if (!bannerImageUrl && activeBanner?.text) {
      bannerImageUrl = `https://limbuscompany.wiki.gg/images/thumb/${encodeURIComponent(activeBanner.text.replace(/ /g, '_'))}_Banner.png/600px-img.png`;
   }
 
   return (
     <div className="p-4 sm:p-6 md:p-8 pb-32 max-w-[1600px] w-full mx-auto">
-      <div className="flex justify-between items-end mb-8 border-b-2 border-[#333] pb-4">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-4 mb-8 border-b-2 border-[#333] pb-4">
         <div className="flex items-center gap-3">
           <h1 className="text-4xl font-black uppercase tracking-wider text-[#c9a84c]">
             Mirror Dungeon Schedule
@@ -126,14 +125,32 @@ export default function SchedulePage() {
           </span>
         </div>
         {activeBanner && (
-          <div className="text-right">
-            <div className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-2">Active Banner Detected</div>
-            <div className="relative group rounded overflow-hidden border border-[#c9a84c] shadow-[0_0_10px_rgba(201,168,76,0.2)]">
-               <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                 <span className="text-white font-bold text-sm px-2 text-center">{activeBanner.text}</span>
+          <div className="sm:text-right">
+            <div className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-2 flex items-center sm:justify-end gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              Active Banner Detected
+            </div>
+            <div className="relative group rounded overflow-hidden border border-[#c9a84c] shadow-[0_0_12px_rgba(201,168,76,0.25)] bg-black/60 inline-block" title={activeBanner.title || activeBanner.text}>
+               <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity p-2 z-10">
+                 <span className="text-white font-bold text-xs text-center line-clamp-2">{activeBanner.title || activeBanner.text}</span>
+                 {activeBanner.dateRange && (
+                   <span className="text-[10px] text-[#c9a84c] font-mono mt-1">{activeBanner.dateRange}</span>
+                 )}
                </div>
-               <img src={bannerImageUrl} onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='block'; }} className="h-16 w-auto object-cover" alt="Banner" />
-               <div className="hidden h-16 px-4 bg-black flex items-center justify-center text-sm font-bold text-white">{activeBanner.text}</div>
+               {bannerImageUrl ? (
+                 <img 
+                   src={bannerImageUrl} 
+                   onError={(e) => { e.target.style.display='none'; if (e.target.nextSibling) e.target.nextSibling.style.display='flex'; }} 
+                   className="h-16 w-auto max-w-[320px] object-cover" 
+                   alt={activeBanner.title || activeBanner.text} 
+                 />
+               ) : null}
+               <div className={`${bannerImageUrl ? 'hidden' : 'flex'} h-16 px-4 bg-black flex-col items-center justify-center text-xs font-bold text-white text-center max-w-[280px]`}>
+                 <span className="truncate max-w-full">{activeBanner.title || activeBanner.text}</span>
+                 {activeBanner.dateRange && (
+                   <span className="text-[10px] text-gray-400 font-mono mt-0.5">{activeBanner.dateRange}</span>
+                 )}
+               </div>
             </div>
           </div>
         )}
@@ -501,7 +518,7 @@ export default function SchedulePage() {
                 <Target size={24} className="text-[#c9a84c]" /> Egoshard Allocation Plan & Milestones
               </h2>
               <p className="text-xs text-gray-400 mt-1">
-                Nominable Egocrates are prioritized towards your closest goal first, then automatically rollover to subsequent targets once crafted.
+                Nominable Egocrates and Mirror Dungeon runs are allocated strictly in Priority order (#1 first, then cascading down).
               </p>
             </div>
             <button 
@@ -532,8 +549,8 @@ export default function SchedulePage() {
                       : 'bg-[#111] border-[#333]'
                 }`}>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-[#c9a84c] text-black">
-                      Step {idx + 1} Target
+                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-[#c9a84c] text-black font-mono">
+                      Priority #{target.priority || (idx + 1)}
                     </span>
                     <div className="flex items-center gap-1.5">
                       {target.shardStatus && (
@@ -947,6 +964,11 @@ export default function SchedulePage() {
                                    } font-black text-[10px] px-2 py-1 rounded shadow flex items-center gap-1.5 break-words`} title={m.name}>
                                      <span className="shrink-0">{m.isInventoryCraft ? '✨' : (m.shardStatus && !m.shardStatus.shardable ? '⏳' : '🏆')}</span>
                                      <span className="break-words">
+                                       {m.priority && (
+                                         <span className="bg-black/40 text-black px-1 py-0.5 rounded font-mono mr-1 text-[9px] font-bold">
+                                           #{m.priority}
+                                         </span>
+                                       )}
                                        {m.isInventoryCraft 
                                          ? (m.shardStatus && !m.shardStatus.shardable
                                              ? `SHARDS READY: ${m.name} (${m.shardStatus.badge})`
@@ -962,6 +984,11 @@ export default function SchedulePage() {
                                <div className="text-gray-300 flex flex-col gap-0.5">
                                  <span className="text-[11px] text-[#c9a84c] font-bold flex items-center gap-1 break-words">
                                    <span className="shrink-0">🎯</span>
+                                   {row.activeFarmingTarget.priority && (
+                                     <span className="bg-black/60 text-[#c9a84c] border border-[#c9a84c]/40 text-[9px] px-1 py-0.2 rounded font-mono font-bold">
+                                       #{row.activeFarmingTarget.priority}
+                                     </span>
+                                   )}
                                    <span className="break-words">{row.activeFarmingTarget.name}</span>
                                  </span>
                                  <span className="text-[10px] text-gray-400 font-mono">

@@ -15,6 +15,7 @@ import SettingsPage from './pages/SettingsPage';
 import OnboardingModal from './components/OnboardingModal';
 import TutorialTour from './components/TutorialTour';
 import UpdateNotification from './components/UpdateNotification';
+import Season8NoticeModal from './components/Season8NoticeModal';
 import MephistophelesBorderTrack from './components/MephistophelesBorderTrack';
 import { useStore } from './stores/useStore';
 
@@ -212,6 +213,7 @@ export default function App() {
       <UpdateNotification />
       <OnboardingModal />
       <TutorialTour />
+      <Season8NoticeModal />
       {showTrumpetAlert && <SecondTrumpetModal onClose={() => setShowTrumpetAlert(false)} />}
       <div 
         data-theme={appSettings?.activeTheme || 'gold'}
