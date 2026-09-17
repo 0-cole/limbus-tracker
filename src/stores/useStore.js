@@ -8,6 +8,7 @@ import { checkResets, getLimbusCycleInfo } from '../utils/timeUtils.js';
 import { getEnkephalinCapForLevel, recalculateEnkephalin } from '../utils/enkephalinLevels.js';
 import { syncEngine } from '../services/syncEngine.js';
 import { imagePreloader } from '../utils/imagePreloader.js';
+import { detectKeywords } from '../utils/identityTactics.js';
 
 // Initial state values
 const defaultState = {
@@ -119,6 +120,23 @@ const defaultState = {
     showWhenGameStarts: true,
     notifyEnkephalinCap: true,
     defaultExpLuxTier: 3 // 2 or 3
+  },
+
+  // Deck Builder & Squad Presets
+  savedDecks: [
+    {
+      id: 'default-deck',
+      name: 'Main Squad',
+      fieldedCount: 6,
+      slots: {} // { [sinnerId]: identityName }
+    }
+  ],
+  activeDeckId: 'default-deck',
+  activeDeck: {
+    id: 'default-deck',
+    name: 'Main Squad',
+    fieldedCount: 6,
+    slots: {}
   }
 };
 
@@ -340,6 +358,12 @@ export const useStore = create((set, get) => ({
           resolvedBanner = DEFAULT_S8_BANNER;
         }
 
+        const loadedSavedDecks = Array.isArray(data.savedDecks) && data.savedDecks.length > 0
+          ? data.savedDecks
+          : defaultState.savedDecks;
+        const loadedActiveDeckId = data.activeDeckId || loadedSavedDecks[0]?.id || 'default-deck';
+        const loadedActiveDeck = data.activeDeck || loadedSavedDecks.find(d => d.id === loadedActiveDeckId) || loadedSavedDecks[0] || defaultState.activeDeck;
+
         set({
           onboardingCompleted: data.onboardingCompleted || false,
           tutorialCompleted: data.tutorialCompleted || false,
@@ -358,6 +382,9 @@ export const useStore = create((set, get) => ({
           activeBanner: resolvedBanner,
           managerProfile: { ...defaultState.managerProfile, ...(data.managerProfile || {}) },
           appSettings: { ...defaultState.appSettings, ...(data.appSettings || {}) },
+          savedDecks: loadedSavedDecks,
+          activeDeckId: loadedActiveDeckId,
+          activeDeck: loadedActiveDeck,
           isLoaded: true,
         });
       } else {
@@ -381,6 +408,9 @@ export const useStore = create((set, get) => ({
           activeBanner: resolvedBanner,
           managerProfile: defaultState.managerProfile,
           appSettings: defaultState.appSettings,
+          savedDecks: defaultState.savedDecks,
+          activeDeckId: defaultState.activeDeckId,
+          activeDeck: defaultState.activeDeck,
           isLoaded: true 
         });
       }
@@ -502,6 +532,9 @@ export const useStore = create((set, get) => ({
       scheduleState: state.scheduleState,
       managerProfile: state.managerProfile,
       appSettings: state.appSettings,
+      savedDecks: state.savedDecks || [],
+      activeDeckId: state.activeDeckId || 'default-deck',
+      activeDeck: state.activeDeck || defaultState.activeDeck,
       lastUpdated: now
     };
     if (window.electronAPI) {
@@ -1278,7 +1311,10 @@ export const useStore = create((set, get) => ({
       bpState: state.bpState,
       scheduleState: state.scheduleState,
       managerProfile: state.managerProfile,
-      appSettings: state.appSettings
+      appSettings: state.appSettings,
+      savedDecks: state.savedDecks || [],
+      activeDeckId: state.activeDeckId || 'default-deck',
+      activeDeck: state.activeDeck || defaultState.activeDeck
     };
     return JSON.stringify(backup, null, 2);
   },
@@ -1302,12 +1338,139 @@ export const useStore = create((set, get) => ({
         bpState: { ...defaultState.bpState, ...(data.bpState || {}) },
         scheduleState: { ...defaultState.scheduleState, ...(data.scheduleState || {}) },
         managerProfile: { ...defaultState.managerProfile, ...(data.managerProfile || {}) },
-        appSettings: { ...defaultState.appSettings, ...(data.appSettings || {}) }
+        appSettings: { ...defaultState.appSettings, ...(data.appSettings || {}) },
+        savedDecks: Array.isArray(data.savedDecks) && data.savedDecks.length > 0 ? data.savedDecks : defaultState.savedDecks,
+        activeDeckId: data.activeDeckId || defaultState.activeDeckId,
+        activeDeck: data.activeDeck || defaultState.activeDeck
       });
       get().saveStore();
       return { success: true };
     } catch (e) {
       return { success: false, error: e.message };
     }
+  },
+
+  // Deck Builder Actions
+  setDeckSlot: (sinnerId, identityName) => {
+    const { activeDeck, savedDecks, saveStore } = get();
+    const updatedSlots = { ...(activeDeck?.slots || {}) };
+    if (identityName) {
+      updatedSlots[sinnerId] = identityName;
+    } else {
+      delete updatedSlots[sinnerId];
+    }
+    const updatedDeck = { ...activeDeck, slots: updatedSlots, updatedAt: Date.now() };
+    const updatedDecks = (savedDecks || []).map(d => d.id === updatedDeck.id ? updatedDeck : d);
+    if (!updatedDecks.some(d => d.id === updatedDeck.id)) {
+      updatedDecks.push(updatedDeck);
+    }
+    set({ activeDeck: updatedDeck, savedDecks: updatedDecks });
+    saveStore();
+  },
+
+  clearDeckSlot: (sinnerId) => {
+    get().setDeckSlot(sinnerId, null);
+  },
+
+  clearAllDeckSlots: () => {
+    const { activeDeck, savedDecks, saveStore } = get();
+    const updatedDeck = { ...activeDeck, slots: {}, updatedAt: Date.now() };
+    const updatedDecks = (savedDecks || []).map(d => d.id === updatedDeck.id ? updatedDeck : d);
+    set({ activeDeck: updatedDeck, savedDecks: updatedDecks });
+    saveStore();
+  },
+
+  setDeckFieldedCount: (count) => {
+    const { activeDeck, savedDecks, saveStore } = get();
+    const clamped = Math.max(1, Math.min(12, parseInt(count) || 6));
+    const updatedDeck = { ...activeDeck, fieldedCount: clamped, updatedAt: Date.now() };
+    const updatedDecks = (savedDecks || []).map(d => d.id === updatedDeck.id ? updatedDeck : d);
+    set({ activeDeck: updatedDeck, savedDecks: updatedDecks });
+    saveStore();
+  },
+
+  setDeckName: (name) => {
+    const { activeDeck, savedDecks, saveStore } = get();
+    const updatedDeck = { ...activeDeck, name: name.trim() || 'Custom Squad', updatedAt: Date.now() };
+    const updatedDecks = (savedDecks || []).map(d => d.id === updatedDeck.id ? updatedDeck : d);
+    set({ activeDeck: updatedDeck, savedDecks: updatedDecks });
+    saveStore();
+  },
+
+  createDeckPreset: (name) => {
+    const { savedDecks, saveStore } = get();
+    const newId = `deck-${Date.now()}`;
+    const newDeck = {
+      id: newId,
+      name: name || `Squad ${(savedDecks || []).length + 1}`,
+      fieldedCount: 6,
+      slots: {},
+      updatedAt: Date.now()
+    };
+    const updatedDecks = [...(savedDecks || []), newDeck];
+    set({ savedDecks: updatedDecks, activeDeckId: newId, activeDeck: newDeck });
+    saveStore();
+    return newDeck;
+  },
+
+  loadDeckPreset: (deckId) => {
+    const { savedDecks, saveStore } = get();
+    const target = (savedDecks || []).find(d => d.id === deckId);
+    if (target) {
+      set({ activeDeckId: target.id, activeDeck: { ...target } });
+      saveStore();
+    }
+  },
+
+  deleteDeckPreset: (deckId) => {
+    const { savedDecks, activeDeckId, saveStore } = get();
+    if ((savedDecks || []).length <= 1) return; // Keep at least one
+    const remaining = (savedDecks || []).filter(d => d.id !== deckId);
+    let nextActive = remaining[0];
+    if (activeDeckId === deckId) {
+      set({ savedDecks: remaining, activeDeckId: nextActive.id, activeDeck: { ...nextActive } });
+    } else {
+      set({ savedDecks: remaining });
+    }
+    saveStore();
+  },
+
+  autoFillKeywordDeck: (keyword, onlyOwned = false) => {
+    const { identitiesData, acquiredIds, activeDeck, savedDecks, saveStore } = get();
+    const newSlots = { ...(activeDeck?.slots || {}) };
+    
+    sinnersData.forEach(sinner => {
+      const sinnerKey = sinner.id;
+      // Get all identities for this sinner
+      const sinnerIds = identitiesData.filter(id => {
+        if (normalizeSinnerId(id.sinner) !== sinnerKey) return false;
+        if (onlyOwned && !acquiredIds.has(id.name)) return false;
+        return true;
+      });
+
+      // Filter and rank by keyword match
+      const matchingIds = sinnerIds.filter(id => {
+        const kws = detectKeywords(id);
+        return kws.includes(keyword);
+      });
+
+      if (matchingIds.length > 0) {
+        // Sort by rarity desc (3 > 2 > 1), then max power of skills
+        matchingIds.sort((a, b) => {
+          if ((b.rarity || 0) !== (a.rarity || 0)) {
+            return (b.rarity || 0) - (a.rarity || 0);
+          }
+          const aMax = (a.skills || []).reduce((max, s) => Math.max(max, (s.basePower || 0) + (s.coinPower || 0) * (s.coins || 1)), 0);
+          const bMax = (b.skills || []).reduce((max, s) => Math.max(max, (s.basePower || 0) + (s.coinPower || 0) * (s.coins || 1)), 0);
+          return bMax - aMax;
+        });
+        newSlots[sinnerKey] = matchingIds[0].name;
+      }
+    });
+
+    const updatedDeck = { ...activeDeck, slots: newSlots, updatedAt: Date.now() };
+    const updatedDecks = (savedDecks || []).map(d => d.id === updatedDeck.id ? updatedDeck : d);
+    set({ activeDeck: updatedDeck, savedDecks: updatedDecks });
+    saveStore();
   }
 }));

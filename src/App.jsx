@@ -5,6 +5,7 @@ import { Siren, AlertOctagon, X, ShieldAlert, Radio } from 'lucide-react';
 import GasterCrackScene from './components/GasterCrackScene.jsx';
 import Sidebar from './components/Sidebar';
 import DashboardPage from './pages/DashboardPage';
+import DeckBuilderPage from './pages/DeckBuilderPage.jsx';
 import IdentitiesPage from './pages/IdentitiesPage';
 import EgoPage from './pages/EgoPage';
 import WantListPage from './pages/WantListPage';
@@ -239,6 +240,7 @@ export default function App() {
               >
                 <Routes location={location}>
                   <Route path="/" element={<DashboardPage />} />
+                  <Route path="/deckbuilder" element={<DeckBuilderPage />} />
                   <Route path="/schedule" element={<SchedulePage />} />
                   <Route path="/inventory" element={<InventoryPage />} />
                   <Route path="/identities" element={<IdentitiesPage />} />

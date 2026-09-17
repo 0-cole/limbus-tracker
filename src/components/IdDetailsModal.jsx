@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getShardabilityStatus } from '../utils/limbusCalculator.js';
+import { getIdentityTactics, KEYWORD_THEMES } from '../utils/identityTactics.js';
 
 const KEYWORD_COLORS = { Burn: '#ef4444', Bleed: '#dc2626', Tremor: '#eab308', Poise: '#22c55e', Charge: '#a855f7', Rupture: '#0ea5e9', Sinking: '#3b82f6' };
 const SIN_COLORS = { Wrath: '#dc2626', Lust: '#ea580c', Sloth: '#ca8a04', Gluttony: '#16a34a', Gloom: '#0ea5e9', Pride: '#4f46e5', Envy: '#9333ea' };
@@ -16,7 +17,8 @@ function generateSlug(name) {
 
 export default function IdDetailsModal({ idData, onClose }) {
   const [activeTab, setActiveTab] = useState(0);
-  const [navSection, setNavSection] = useState('skills');
+  const [navSection, setNavSection] = useState('tactics');
+  const tactics = React.useMemo(() => getIdentityTactics(idData), [idData]);
 
   const slug = idData.slug || generateSlug(idData.name);
   const rarity = idData.rarity || 3;
@@ -75,12 +77,30 @@ export default function IdDetailsModal({ idData, onClose }) {
              </div>
              <span className="text-[#333]">|</span>
              <span className="text-sm font-bold text-gray-300">{skill.type || 'Unknown'}</span>
+             {(() => {
+               const st = tactics?.skillsTactical?.[idx];
+               if (!st || isAlt) return null;
+               return (
+                 <span className="ml-2 text-[10px] font-bold text-[#c9a84c] bg-[#c9a84c]/10 border border-[#c9a84c]/30 px-2 py-0.5 rounded shadow-sm">
+                   {st.roleTag}
+                 </span>
+               );
+             })()}
           </div>
         </div>
 
         <div className="p-4 border-b border-[#333] bg-gradient-to-r from-[#111] to-black">
            <div className="flex justify-between items-center">
-             <h4 className="text-2xl font-black text-white tracking-wide">{skill.name}</h4>
+             <div>
+               <h4 className="text-2xl font-black text-white tracking-wide">{skill.name}</h4>
+               {(() => {
+                 const st = tactics?.skillsTactical?.[idx];
+                 if (!st || isAlt) return null;
+                 return (
+                   <p className="text-xs text-gray-400 mt-1 italic">{st.tacticalSummary}</p>
+                 );
+               })()}
+             </div>
              
              <div className="flex items-center gap-4 bg-black/80 px-4 py-2 rounded-lg border border-[#333] shadow-inner">
                  <div className="flex flex-col items-center">
@@ -185,15 +205,40 @@ export default function IdDetailsModal({ idData, onClose }) {
             </div>
 
             <div className="p-4 flex flex-col gap-4">
-                <div className="bg-[#111] border border-[#333] rounded-lg p-4">
-                   <h3 className="text-[10px] text-[#c9a84c] uppercase tracking-widest font-bold mb-3">Base Stats</h3>
-                   <div className="flex justify-between items-center mb-2 pb-2 border-b border-[#222]">
+                <div className="bg-[#111] border border-[#333] rounded-lg p-4 space-y-2.5">
+                   <h3 className="text-[10px] text-[#c9a84c] uppercase tracking-widest font-bold mb-1">Combat Profile</h3>
+                   <div className="flex justify-between items-center pb-2 border-b border-[#222]">
                        <span className="text-xs text-gray-500 font-medium">HP</span>
                        <span className="text-green-400 font-bold text-sm">{idData.hp || '?'}</span>
                    </div>
-                   <div className="flex justify-between items-center">
+                   <div className="flex justify-between items-center pb-2 border-b border-[#222]">
                        <span className="text-xs text-gray-500 font-medium">Speed</span>
                        <span className="text-yellow-400 font-bold text-sm">{idData.speed || '?'}</span>
+                   </div>
+                   <div className="flex justify-between items-center pb-2 border-b border-[#222]">
+                       <span className="text-xs text-gray-500 font-medium">Defense</span>
+                       <span className="text-gray-200 font-bold text-xs">
+                         {defenseSkill ? `${defenseSkill.type || 'Guard'} (${defenseSkill.affinity || 'None'})` : 'None'}
+                       </span>
+                   </div>
+                   <div className="flex justify-between items-center pb-2 border-b border-[#222]">
+                       <span className="text-xs text-gray-500 font-medium">Max Clash</span>
+                       <span className="text-amber-400 font-black text-sm">
+                         {skills.reduce((max, s) => Math.max(max, (s.basePower || 0) + (s.coinPower || 0) * (s.coins || 1)), 0)}
+                       </span>
+                   </div>
+                   <div>
+                       <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider block mb-1">Archetype</span>
+                       <div className="flex flex-wrap gap-1">
+                         {tactics.primaryKeywords.map(kw => {
+                           const theme = KEYWORD_THEMES[kw];
+                           return (
+                             <span key={kw} className={`text-[10px] font-bold px-2 py-0.5 rounded ${theme?.bg || 'bg-white/10'} ${theme?.text || 'text-white'} border ${theme?.border || 'border-white/20'}`}>
+                               {theme?.icon || '✦'} {kw}
+                             </span>
+                           );
+                         })}
+                       </div>
                    </div>
                 </div>
             </div>
@@ -201,19 +246,19 @@ export default function IdDetailsModal({ idData, onClose }) {
 
         <div className="flex-1 flex flex-col relative z-10 bg-[#0a0a0a]/90 overflow-hidden">
             
-            <div className="flex justify-between items-center p-6 border-b border-[#333] bg-black/60">
+            <div className="flex justify-between items-center p-6 border-b border-[#333] bg-black/60 flex-wrap gap-3">
                 <h3 className="text-xl font-black text-white uppercase tracking-wider">
-                   {navSection === 'skills' ? 'Combat Skills' : navSection === 'defense' ? 'Defense Skill' : 'Passives'}
+                   {navSection === 'tactics' ? 'Tactical Dossier' : navSection === 'skills' ? 'Combat Skills' : navSection === 'defense' ? 'Defense Skill' : 'Passives'}
                 </h3>
                 
                 <div className="flex bg-[#111] p-1 rounded-lg border border-[#333] shadow-md">
-                   {['skills', 'defense', 'passives'].map(sec => (
+                   {['tactics', 'skills', 'defense', 'passives'].map(sec => (
                      <button 
                         key={sec}
                         onClick={() => setNavSection(sec)}
                         className={`px-4 py-1.5 text-xs font-bold rounded-md uppercase tracking-widest transition-all ${navSection === sec ? 'bg-[#c9a84c] text-black shadow-sm' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}
                      >
-                        {sec}
+                        {sec === 'tactics' ? '⚔️ Tactics' : sec}
                      </button>
                    ))}
                 </div>
@@ -221,6 +266,152 @@ export default function IdDetailsModal({ idData, onClose }) {
 
             <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
                 <AnimatePresence mode="wait">
+                   {navSection === 'tactics' && tactics && (
+                     <motion.div key="tactics" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
+                       
+                       {/* Archetype & Role Overview Banner */}
+                       <div className="p-5 rounded-xl border border-[#c9a84c]/40 bg-gradient-to-br from-[#1a1815] via-[#111] to-black shadow-lg relative overflow-hidden">
+                         <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+                           <div className="flex items-center gap-2">
+                             <span className="text-[10px] uppercase font-black tracking-widest text-[#c9a84c] bg-[#c9a84c]/20 px-2 py-0.5 rounded border border-[#c9a84c]/40">
+                               Combat Strategy
+                             </span>
+                             <span className="text-xs text-gray-400 font-mono">
+                               {tactics.isCurated ? '★ Specialized Tactical Analysis' : '● General Combat Evaluation'}
+                             </span>
+                           </div>
+                           <div className="flex gap-1.5 flex-wrap">
+                             {tactics.primaryKeywords.map(kw => {
+                               const theme = KEYWORD_THEMES[kw] || { text: 'text-gray-300', bg: 'bg-white/10', border: 'border-white/20', icon: '✦' };
+                               return (
+                                 <span key={kw} className={`text-xs font-bold px-2.5 py-1 rounded-full border ${theme.border} ${theme.bg} ${theme.text} flex items-center gap-1 shadow-sm`}>
+                                   <span>{theme.icon}</span> {kw}
+                                 </span>
+                               );
+                             })}
+                           </div>
+                         </div>
+
+                         <h3 className="text-2xl font-black text-white mb-1 tracking-wide">{tactics.archetype}</h3>
+                         <p className="text-sm text-gray-300 font-medium leading-relaxed mb-4">
+                           Primary Combat Role: <strong className="text-[#c9a84c]">{tactics.role}</strong>
+                         </p>
+
+                          {/* Custom Status Effects & Kit Mechanics Decoded */}
+                          <div className="space-y-3 pt-4 border-t border-white/10">
+                            <div className="flex items-center justify-between">
+                              <h4 className="text-xs uppercase tracking-widest font-black text-[#c9a84c] flex items-center gap-1.5">
+                                <span>⚡</span> Custom Status Effects & Kit Mechanics
+                              </h4>
+                              <span className="text-[10px] text-gray-400 font-mono">
+                                {tactics.uniqueMechanics.length} Active System{tactics.uniqueMechanics.length > 1 ? 's' : ''}
+                              </span>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                              {tactics.uniqueMechanics.map((mech, i) => (
+                                <div key={i} className="p-4 rounded-xl bg-black/70 border border-[#333] hover:border-[#c9a84c]/50 transition-all flex flex-col justify-between space-y-2 shadow-md">
+                                  <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                                    <span className="font-bold text-white text-sm tracking-wide">{mech.title}</span>
+                                    <span className="text-[9px] font-black uppercase tracking-wider bg-[#c9a84c]/10 text-[#c9a84c] border border-[#c9a84c]/30 px-2 py-0.5 rounded">
+                                      {mech.badge}
+                                    </span>
+                                  </div>
+
+                                  {mech.trigger && (
+                                    <div className="text-[11px] text-[#c9a84c]/90 font-mono flex items-start gap-1.5 bg-white/[0.02] p-2 rounded-lg border border-white/5">
+                                      <span className="font-bold flex-shrink-0 text-[#c9a84c]">⚡ Trigger:</span>
+                                      <span>{mech.trigger}</span>
+                                    </div>
+                                  )}
+
+                                  <div className="text-xs text-gray-300 leading-relaxed font-sans">
+                                    <span className="text-gray-400 font-bold block mb-0.5 text-[10px] uppercase tracking-wider">Combat Application:</span>
+                                    {mech.explanation}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                       {/* Turn-by-Turn Combat Rotation */}
+                       <div className="p-5 rounded-xl border border-[#333] bg-[#111] space-y-4 shadow-md">
+                         <h4 className="text-xs uppercase tracking-widest font-black text-[#c9a84c] flex items-center gap-2">
+                           <span>⚔️</span> How to Play in Battle (Turn Rotation)
+                         </h4>
+                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                           <div className="p-3.5 rounded-lg bg-black/50 border border-[#222]">
+                             <div className="flex items-center gap-2 mb-2">
+                               <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 text-xs font-black flex items-center justify-center border border-amber-500/40">1</span>
+                               <span className="text-xs font-bold text-white uppercase tracking-wider">Turn 1: Opener</span>
+                             </div>
+                             <p className="text-xs text-gray-300 leading-relaxed">{tactics.combatRotation.opener}</p>
+                           </div>
+                           <div className="p-3.5 rounded-lg bg-black/50 border border-[#222]">
+                             <div className="flex items-center gap-2 mb-2">
+                               <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 text-xs font-black flex items-center justify-center border border-amber-500/40">2</span>
+                               <span className="text-xs font-bold text-white uppercase tracking-wider">Mid-Fight: Clash & Engine</span>
+                             </div>
+                             <p className="text-xs text-gray-300 leading-relaxed">{tactics.combatRotation.midGame}</p>
+                           </div>
+                           <div className="p-3.5 rounded-lg bg-black/50 border border-[#222]">
+                             <div className="flex items-center gap-2 mb-2">
+                               <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 text-xs font-black flex items-center justify-center border border-amber-500/40">3</span>
+                               <span className="text-xs font-bold text-white uppercase tracking-wider">Finisher: Win Condition</span>
+                             </div>
+                             <p className="text-xs text-gray-300 leading-relaxed">{tactics.combatRotation.finisher}</p>
+                           </div>
+                         </div>
+                       </div>
+
+                       {/* Skills Tactical Summary */}
+                       <div className="p-5 rounded-xl border border-[#333] bg-[#111] space-y-3">
+                         <h4 className="text-xs uppercase tracking-widest font-black text-gray-400 flex items-center gap-2">
+                           <span>📋</span> Skill Tactical Breakdown
+                         </h4>
+                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                           {tactics.skillsTactical.map((st, i) => (
+                             <div key={i} className="p-3 rounded-lg bg-black/50 border border-[#333] flex flex-col justify-between gap-2">
+                               <div>
+                                 <div className="flex items-center justify-between mb-1">
+                                   <span className="text-[10px] font-bold text-gray-500 uppercase">Skill {st.slot}</span>
+                                   <span className="text-[10px] font-bold text-[#c9a84c] bg-[#c9a84c]/10 px-1.5 py-0.5 rounded border border-[#c9a84c]/30">
+                                     {st.roleTag}
+                                   </span>
+                                 </div>
+                                 <div className="text-sm font-bold text-white truncate" title={st.name}>{st.name}</div>
+                                 <p className="text-[11px] text-gray-300 mt-1 leading-snug">{st.tacticalSummary}</p>
+                               </div>
+                               <div className="flex items-center justify-between text-[10px] font-mono text-gray-400 pt-2 border-t border-[#222]">
+                                 <span>Max Clash: <strong className="text-yellow-400">{st.maxPower}</strong></span>
+                                 <span>{st.coins} Coin{st.coins > 1 ? 's' : ''}</span>
+                               </div>
+                             </div>
+                           ))}
+                         </div>
+                       </div>
+
+                       {/* Synergy & Best Partners */}
+                       <div className="p-4 rounded-xl border border-[#333] bg-black/50 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                         <div className="space-y-1">
+                           <span className="text-[10px] uppercase font-bold tracking-wider text-[#c9a84c]">Recommended Teammates</span>
+                           <div className="flex flex-wrap gap-1.5 pt-0.5">
+                             {tactics.teamSynergies.bestPartners.map((partner, i) => (
+                               <span key={i} className="text-xs bg-[#1a1a1a] text-gray-200 border border-[#444] px-2 py-0.5 rounded font-medium">
+                                 {partner}
+                               </span>
+                             ))}
+                           </div>
+                         </div>
+                         <p className="text-xs text-gray-400 italic max-w-sm">
+                           💡 {tactics.teamSynergies.tip}
+                         </p>
+                       </div>
+
+                     </motion.div>
+                   )}
+
                    {navSection === 'skills' && (
                      <motion.div key="skills" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
                         <div className="flex border-b border-[#333] mb-6">
