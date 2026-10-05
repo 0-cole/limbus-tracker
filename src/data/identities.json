@@ -15243,5 +15243,151 @@
     },
     "alternateSkills": [],
     "slug": "haute-couture-boutique-du-rouge-ishmael"
+  },
+  {
+    "name": "Haute Couture::Le Noir Brand Manager Don Quixote",
+    "sinner": "Don Quixote",
+    "rarity": 3,
+    "season": 8,
+    "hp": 86,
+    "speed": "4~7",
+    "passives": [
+      {
+        "name": "Preservation Script",
+        "affinity": "Pride",
+        "req": "3 Res",
+        "effects": [
+          "When gaining Charge Count, gain +1 additional Charge Count. Combat Start: Grant 2 Sanctum of Conservation to 1 ally with the lowest HP percentage."
+        ]
+      },
+      {
+        "name": "Atelier Brand Manager",
+        "affinity": "Envy",
+        "req": "4 Owned",
+        "effects": [
+          "Combat Start: The ally with the highest Max HP deals +15% Tremor damage."
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "name": "Cometh the Nail",
+        "affinity": "Pride",
+        "type": "Pierce",
+        "basePower": 4,
+        "coinPower": 4,
+        "coins": 2,
+        "effects": [
+          "[On Use] Gain +4 Charge Count  [On Hit] Inflict 2 Tremor  [On Hit] Apply 1 Promised Nail"
+        ]
+      },
+      {
+        "name": "Judgment!",
+        "affinity": "Envy",
+        "type": "Blunt",
+        "basePower": 6,
+        "coinPower": 4,
+        "coins": 3,
+        "effects": [
+          "[Before Attack] Unclashable. Cannot trigger Defense skills  [On Use] Spend 5 Charge Count to gain Coin Power +2  [On Hit] Inflict 3 Tremor Count  [On Hit] Target's HP cannot fall below 1 until Skill ends  [After Attack] Trigger Tremor Burst"
+        ]
+      },
+      {
+        "name": "Execution: Le Noir Atelier",
+        "affinity": "Pride",
+        "type": "Pierce",
+        "basePower": 5,
+        "coinPower": 3,
+        "coins": 4,
+        "effects": [
+          "[Before Attack] At 10+ Charge Count, spend 10 Charge Count to gain Coin Power +2 and Atk Weight +1  [On Hit] Inflict 4 Tremor Potency and 3 Tremor Count  [On Hit] Trigger Tremor Reverb and Tremor Burst  [Clash Win] Grant 3 Charge Count to 2 other Le Noir allies"
+        ]
+      }
+    ],
+    "defense": {
+      "name": "Witness Ye in Silence",
+      "type": "Counter",
+      "basePower": 10,
+      "coinPower": 5,
+      "coins": 1,
+      "effects": [
+        "[On Use] Gain 2 Sanctum of Conservation. Heal 10 SP for self and the Le Noir ally with lowest SP."
+      ]
+    },
+    "alternateSkills": [],
+    "slug": "haute-couture-le-noir-brand-manager-don-quixote"
+  },
+  {
+    "name": "Haute Couture::Alteration Shop Rodion",
+    "sinner": "Rodion",
+    "rarity": 3,
+    "season": 8,
+    "hp": 88,
+    "speed": "3~6",
+    "passives": [
+      {
+        "name": "Inertia of Drifting",
+        "affinity": "Sloth",
+        "req": "3 Res",
+        "effects": [
+          "Combat Start: 1 ally with the lowest Speed gains +1 Haste and +2 Tremor Count. Whenever this unit targets an ally with a Skill, gain 1 Duality."
+        ]
+      },
+      {
+        "name": "Duality of Haute Couture",
+        "affinity": "Gloom",
+        "req": "4 Owned",
+        "effects": [
+          "Turn End: If 1 or more allies were buffed this turn, grant 1 Offense Level Up to self and the buffed allies next turn."
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "name": "Retouche",
+        "affinity": "Sloth",
+        "type": "Blunt",
+        "basePower": 4,
+        "coinPower": 4,
+        "coins": 2,
+        "effects": [
+          "[Before Attack] Unclashable. Can target an ally  [Ally Target] Grant 4 Charge Count, 1 Offense Level Up, and Shield equal to 10% of Target's Max HP  [On Hit] If targeting enemy, inflict 2 Tremor"
+        ]
+      },
+      {
+        "name": "Patterning",
+        "affinity": "Gloom",
+        "type": "Slash",
+        "basePower": 5,
+        "coinPower": 4,
+        "coins": 3,
+        "effects": [
+          "[On Use] Gain 2 Inertia of Drifting  [On Hit] Inflict 2 Tremor and 1 Mark of Shearing  [Heads Hit] If target has 6+ Tremor, reuse this Coin (1 time max)"
+        ]
+      },
+      {
+        "name": "Master Shear Alteration",
+        "affinity": "Sloth",
+        "type": "Slash",
+        "basePower": 6,
+        "coinPower": 3,
+        "coins": 4,
+        "effects": [
+          "[Before Attack] At 8+ Tremor Count on target or 2+ Duality on self, Coin Power +2  [On Hit] Trigger Tremor Reverb and Tremor Burst  [On Hit] Grant 3 Charge Count and 1 Damage Up to the ally with highest Offense Level"
+        ]
+      }
+    ],
+    "defense": {
+      "name": "Measuring Tape",
+      "type": "Guard",
+      "basePower": 12,
+      "coinPower": 4,
+      "coins": 1,
+      "effects": [
+        "[On Use] Gain Shield equal to 15% of Max HP. Grant 1 Protection to the lowest HP ally next turn."
+      ]
+    },
+    "alternateSkills": [],
+    "slug": "haute-couture-alteration-shop-rodion"
   }
 ]

@@ -346,15 +346,15 @@ export const useStore = create((set, get) => ({
         }
 
         const DEFAULT_S8_BANNER = {
-          text: "Haute Couture Boutique du Rouge Ishmael & Haute Couture Le Noir Footwear Hall Ryōshū",
-          title: "Haute Couture Boutique du Rouge Ishmael & Haute Couture Le Noir Footwear Hall Ryōshū",
-          imageUrl: "https://limbuscompany.wiki.gg/images/Target_Extraction_-_Haute_Couture_Boutique_du_Rouge_Ishmael_%26_Haute_Couture_Le_Noir_Footwear_Hall_Ry%C5%8Dsh%C5%AB.png",
-          dateRange: "2026.9.17 12:00 - 2026.10.1 10:00",
-          rawString: "2026.9.17 12:00 - 2026.10.1 10:00 Haute Couture::Boutique du Rouge Ishmael Haute Couture::Le Noir Footwear Hall Ryōshū"
+          text: "Haute Couture::Le Noir Brand Manager Don Quixote & Haute Couture::Alteration Shop Rodion",
+          title: "Haute Couture::Le Noir Brand Manager Don Quixote & Haute Couture::Alteration Shop Rodion",
+          imageUrl: "https://limbuscompany.wiki.gg/images/Target_Extraction_-_Haute_Couture_Le_Noir_Brand_Manager_Don_Quixote.png",
+          dateRange: "2026.10.1 12:00 - 2026.10.15 10:00",
+          rawString: "2026.10.1 12:00 - 2026.10.15 10:00 Haute Couture::Le Noir Brand Manager Don Quixote Haute Couture::Alteration Shop Rodion"
         };
 
         let resolvedBanner = dynamicData.activeBanner;
-        if (!resolvedBanner || !resolvedBanner.text || resolvedBanner.text.includes('Season 7') || resolvedBanner.text.includes('Kumo no ito') || resolvedBanner.text === 'Season 8: PUNCTUM') {
+        if (!resolvedBanner || !resolvedBanner.text || resolvedBanner.text.includes('Season 7') || resolvedBanner.text.includes('Kumo no ito') || resolvedBanner.text === 'Season 8: PUNCTUM' || resolvedBanner.text.includes('Ishmael') && resolvedBanner.text.includes('Ryōshū')) {
           resolvedBanner = DEFAULT_S8_BANNER;
         }
 
@@ -389,15 +389,15 @@ export const useStore = create((set, get) => ({
         });
       } else {
         const DEFAULT_S8_BANNER = {
-          text: "Haute Couture Boutique du Rouge Ishmael & Haute Couture Le Noir Footwear Hall Ryōshū",
-          title: "Haute Couture Boutique du Rouge Ishmael & Haute Couture Le Noir Footwear Hall Ryōshū",
-          imageUrl: "https://limbuscompany.wiki.gg/images/Target_Extraction_-_Haute_Couture_Boutique_du_Rouge_Ishmael_%26_Haute_Couture_Le_Noir_Footwear_Hall_Ry%C5%8Dsh%C5%AB.png",
-          dateRange: "2026.9.17 12:00 - 2026.10.1 10:00",
-          rawString: "2026.9.17 12:00 - 2026.10.1 10:00 Haute Couture::Boutique du Rouge Ishmael Haute Couture::Le Noir Footwear Hall Ryōshū"
+          text: "Haute Couture::Le Noir Brand Manager Don Quixote & Haute Couture::Alteration Shop Rodion",
+          title: "Haute Couture::Le Noir Brand Manager Don Quixote & Haute Couture::Alteration Shop Rodion",
+          imageUrl: "https://limbuscompany.wiki.gg/images/Target_Extraction_-_Haute_Couture_Le_Noir_Brand_Manager_Don_Quixote.png",
+          dateRange: "2026.10.1 12:00 - 2026.10.15 10:00",
+          rawString: "2026.10.1 12:00 - 2026.10.15 10:00 Haute Couture::Le Noir Brand Manager Don Quixote Haute Couture::Alteration Shop Rodion"
         };
 
         let resolvedBanner = dynamicData.activeBanner;
-        if (!resolvedBanner || !resolvedBanner.text || resolvedBanner.text.includes('Season 7') || resolvedBanner.text.includes('Kumo no ito') || resolvedBanner.text === 'Season 8: PUNCTUM') {
+        if (!resolvedBanner || !resolvedBanner.text || resolvedBanner.text.includes('Season 7') || resolvedBanner.text.includes('Kumo no ito') || resolvedBanner.text === 'Season 8: PUNCTUM' || resolvedBanner.text.includes('Ishmael') && resolvedBanner.text.includes('Ryōshū')) {
           resolvedBanner = DEFAULT_S8_BANNER;
         }
 
@@ -541,9 +541,6 @@ export const useStore = create((set, get) => ({
       await window.electronAPI.saveData(dataToSave);
     } else {
       localStorage.setItem('limbus-tracker-data', JSON.stringify(dataToSave));
-    }
-    if (isUserAction) {
-      syncEngine.queuePush();
     }
   },
 
@@ -694,6 +691,8 @@ export const useStore = create((set, get) => ({
       if (window.electronAPI && window.electronAPI.wipeData) {
         await window.electronAPI.wipeData();
       }
+      // Also wipe the cloud save so stale data can't be re-downloaded after reset
+      await syncEngine.wipeCloudSave();
     } catch(e) {
       console.error('Error wiping data:', e);
     }

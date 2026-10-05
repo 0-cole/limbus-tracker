@@ -1671,8 +1671,17 @@ export function detectSynergyPairs(team = []) {
     pairs.push({
       title: 'Debuff Roulette & Coin Re-Use',
       duo: ['The Ring Pointillist Student Yi Sang', 'Multi-Status Squad'],
-      tag: 'Coin Re-Use Grinder',
-      desc: 'When attacking any target with 3+ distinct negative status effects, Yi Sang rolls bonus Coin Power and re-uses Skill 2 coins.'
+        desc: 'When attacking any target with 3+ distinct negative status effects, Yi Sang rolls bonus Coin Power and re-uses Skill 2 coins.'
+    });
+  }
+
+  // Haute Couture Le Noir Atelier
+  if (has('Le Noir Brand Manager Don Quixote') && (has('Le Noir Footwear Hall Ryōshū') || has('Alteration Shop Rodion'))) {
+    pairs.push({
+      title: 'Haute Couture Le Noir Atelier',
+      duo: ['Brand Manager Don Quixote', has('Le Noir Footwear Hall Ryōshū') ? 'Ryōshū (Footwear Hall)' : 'Rodion (Alteration Shop)'],
+      tag: 'Charge & Tremor Resonance',
+      desc: 'Don Quixote distributes Sanctum of Conservation and Charge to Le Noir allies while detonating Tremor bursts in tandem.'
     });
   }
 

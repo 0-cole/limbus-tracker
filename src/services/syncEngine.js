@@ -37,8 +37,6 @@ export function setLocalDeviceName(name) {
   } catch (e) {}
 }
 
-let syncTimeout = null;
-let autoInterval = null;
 let isSyncing = false;
 let isHydrating = false;
 let lastLocalUserEdit = 0;
@@ -541,16 +539,6 @@ export const syncEngine = {
     }
   },
 
-  queuePush: () => {
-    if (isHydrating || activeConflictState) return;
-    syncEngine.notifyLocalEdit();
-    if (syncTimeout) clearTimeout(syncTimeout);
-    syncTimeout = setTimeout(() => {
-      if (!isHydrating && !activeConflictState) {
-        syncEngine.pushSaveToCloud();
-      }
-    }, 1500);
-  },
 
   pushLocalToCloud: async () => {
     try {
@@ -572,21 +560,18 @@ export const syncEngine = {
     }
   },
 
-  start15sInterval: () => {
-    if (autoInterval) clearInterval(autoInterval);
-    autoInterval = setInterval(async () => {
-      const user = await syncEngine.getUser();
+  // Wipes the cloud save row entirely — used on data reset so stale cloud data
+  // can't be re-downloaded after the user nukes their local save.
+  wipeCloudSave: async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
-      if (activeConflictState) {
-        // Fast-poll cloud save to see if the conflict was resolved on the other device
-        await syncEngine.pullSaveFromCloud(false);
-      } else if (lastLocalUserEdit > lastCloudSync) {
-        await syncEngine.pushSaveToCloud();
-      } else {
-        await syncEngine.pullSaveFromCloud(false);
-      }
-    }, 10000);
-  }
+      await supabase.from('user_saves').delete().eq('id', user.id);
+      lastCloudSync = 0;
+      lastLocalUserEdit = 0;
+      emitStatus('idle', 'Cloud save wiped');
+    } catch (e) {
+      console.warn('Failed to wipe cloud save:', e);
+    }
+  },
 };
-
-syncEngine.start15sInterval();

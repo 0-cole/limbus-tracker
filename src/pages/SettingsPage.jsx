@@ -121,9 +121,7 @@ export default function SettingsPage() {
       avatarYOffset,
       avatarXOffset,
     });
-    // Immediately push profile to cloud save
-    syncEngine.pushSaveToCloud();
-    triggerToast('Manager Profile saved & synced to cloud!');
+    triggerToast('Manager Profile saved!');
   };
 
   // Reset Avatar Cropping
@@ -227,6 +225,8 @@ export default function SettingsPage() {
     }
     localStorage.removeItem('limbus-tracker-data');
     localStorage.removeItem('limbus_mephi_border_progress');
+    // Wipe cloud save too so stale data can't be re-downloaded
+    await syncEngine.wipeCloudSave();
     setWipeModalOpen(false);
     window.location.reload();
   };
@@ -1079,15 +1079,15 @@ export default function SettingsPage() {
       ───────────────────────────────────────────────────────────── */}
       {activeTab === 'vault' && (
         <div className="space-y-8 animate-fadeIn">
-          {/* Cloud Sync Status */}
+          {/* Cloud Sync — Manual Control */}
           <div className="p-6 rounded-2xl bg-[#141414] border border-neutral-800 space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <h3 className="text-base font-bold font-limbus text-[#c9a84c] flex items-center gap-2">
-                  <Cloud size={18} /> Supabase Cloud Synchronization
+                  <Cloud size={18} /> Cloud Save Sync
                 </h3>
                 <p className="text-xs text-neutral-400 mt-0.5">
-                  Seamless multi-device cloud synchronization for cross-platform managers.
+                  Your data saves automatically to this device. Use the buttons below to manually upload or load from the cloud — like Geometry Dash's save system.
                 </p>
               </div>
               <button
@@ -1099,6 +1099,15 @@ export default function SettingsPage() {
               </button>
             </div>
 
+            {/* Info banner explaining the save model */}
+            <div className="p-3 rounded-xl bg-blue-950/30 border border-blue-800/40 flex items-start gap-2.5">
+              <HelpCircle size={15} className="text-blue-400 flex-shrink-0 mt-0.5" />
+              <p className="text-[11px] text-neutral-300 font-mono leading-relaxed">
+                <span className="text-blue-300 font-bold">How it works: </span>
+                All changes save instantly to this device. Cloud sync is <span className="text-white font-bold">manual only</span> — click <span className="text-[#c9a84c] font-bold">Upload to Cloud</span> to back up, or <span className="text-[#c9a84c] font-bold">Load from Cloud</span> to restore. On app launch, the newest save (local vs. cloud) is loaded automatically.
+              </p>
+            </div>
+
             <div className="p-4 rounded-xl bg-black/40 border border-neutral-800 flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl bg-emerald-950/40 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
@@ -1106,10 +1115,10 @@ export default function SettingsPage() {
                 </div>
                 <div>
                   <div className="text-xs font-bold text-white">
-                    {currentUser ? `Authenticated as: ${currentUser.email}` : 'Guest Session (Local Storage)'}
+                    {currentUser ? `Authenticated as: ${currentUser.email}` : 'Guest Session (Local Storage Only)'}
                   </div>
                   <div className="text-[11px] text-neutral-400 font-mono">
-                    Sync Status: {syncState.status} {syncState.error ? `(${syncState.error})` : ''}
+                    Cloud Status: {syncState.status} {syncState.error ? `(${syncState.error})` : ''}
                   </div>
                 </div>
               </div>
@@ -1120,9 +1129,9 @@ export default function SettingsPage() {
                     type="button"
                     disabled={isSyncing}
                     onClick={handleForceCloudPush}
-                    className="px-3.5 py-2 rounded-xl bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-xs font-bold text-neutral-300 hover:text-white transition-colors cursor-pointer flex items-center gap-1.5"
+                    className="px-3.5 py-2 rounded-xl bg-[#c9a84c]/10 hover:bg-[#c9a84c]/20 border border-[#c9a84c]/40 text-xs font-bold text-[#c9a84c] hover:text-white transition-colors cursor-pointer flex items-center gap-1.5"
                   >
-                    <Upload size={14} /> Force Push
+                    <Upload size={14} /> Upload to Cloud
                   </button>
                   <button
                     type="button"
@@ -1130,7 +1139,7 @@ export default function SettingsPage() {
                     onClick={handleForceCloudPull}
                     className="px-3.5 py-2 rounded-xl bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-xs font-bold text-neutral-300 hover:text-white transition-colors cursor-pointer flex items-center gap-1.5"
                   >
-                    <Download size={14} /> Force Pull
+                    <Download size={14} /> Load from Cloud
                   </button>
                 </div>
               )}
@@ -1180,7 +1189,7 @@ export default function SettingsPage() {
               <AlertTriangle size={18} /> Danger Zone: Factory Reset
             </h3>
             <p className="text-xs text-neutral-300 leading-relaxed">
-              Permanently purges all locally stored identities, shard progress, archives, and custom manager preferences. This action cannot be undone unless you possess an exported JSON backup.
+              Permanently purges all locally stored identities, shard progress, archives, and custom manager preferences — <span className="text-red-300 font-bold">including your cloud save</span>. This action cannot be undone unless you possess an exported JSON backup.
             </p>
             <button
               type="button"
@@ -1190,11 +1199,12 @@ export default function SettingsPage() {
               }}
               className="px-4 py-2.5 rounded-xl bg-red-900/40 hover:bg-red-900/70 border border-red-600 text-red-300 font-bold text-xs uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2"
             >
-              <Trash2 size={16} /> Wipe All Local Data
+              <Trash2 size={16} /> Wipe All Data (Local + Cloud)
             </button>
           </div>
         </div>
       )}
+
 
       {/* Confirmation Modal for Data Wipe */}
       {wipeModalOpen && (
@@ -1205,7 +1215,7 @@ export default function SettingsPage() {
               <h2 className="text-lg font-bold font-limbus tracking-wider">Confirm Total System Wipe</h2>
             </div>
             <p className="text-xs text-neutral-300 font-mono leading-relaxed">
-              This will completely delete your local saves, reset all want-lists, and clear your manager profile.
+              This will completely delete your local saves, cloud save, all want-lists, and your manager profile. <span className="text-red-300 font-bold">This cannot be undone.</span>
             </p>
             <div>
               <label className="block text-[11px] font-mono text-neutral-400 mb-1">
