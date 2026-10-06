@@ -13,9 +13,8 @@ Limbus Tracker is an Electron + React desktop tracking companion for Project Moo
   - Compile with `npm run build` (Vite) and package with `npm run package` (electron-builder).
   - Output binary is produced at `release2/Limbus Tracker Setup <version>.exe` (~106 MB).
   - Release tagging and publication: `git tag v<version>`, `git push origin v<version>`, `gh release create v<version>`, and `gh release upload v<version> "release2\Limbus Tracker Setup <version>.exe" --clobber`.
-- **Easter Egg Cloaking Invariant**:
-  - Classified Easter eggs (Patron Librarians, The Head, Die of Death killers, ALEPH Abnormalities, etc.) MUST NOT match loose letters, fragments, or short common words (< 3 chars).
-  - They strictly require explicit entity name matches (e.g. `Binah`, `Pursuer`, `WhiteNight`) or canonical category searches (e.g. `The Head`, `Die of Death`, `Library of Ruina`, `Lobotomy Corp`, `Color Fixer`).
+- **Search Token Indexing & Cloaking Invariant**:
+  - The catalog search engine enforces strict token indexing (minimum 3 characters for extended tags). Loose substring and trigger fragment matching are suppressed to eliminate single-character false positives and cross-departmental record leakage.
 - **Save & Cloud Sync Architecture**:
   - Local auto-save invariant: State changes save immediately to local disk/storage.
   - Manual-only cloud sync (Geometry Dash style): No background auto-sync polling or 1.5s debounced push loops to eliminate race conditions and overwrites from stale sessions.
@@ -31,11 +30,11 @@ Limbus Tracker is an Electron + React desktop tracking companion for Project Moo
 ---
 
 ## 3. Recent Modifications & Verified State (v1.0.86)
-- `src/pages/IdentitiesPage.jsx`: Replaced loose substring/trigger search on Easter egg dossiers with strict name and category filtering. Added min length requirement (>= 3 chars). Mapped "The Head", "Die of Death", "Library of Ruina", "Lobotomy Corp", and "Color Fixer" categories. Prevented single-letter searches from summoning secret files.
-- `src/pages/EgoPage.jsx`: Restricted ALEPH Easter egg matching to require min length >= 3 chars and exact trigger/name/abnormality/category matching.
+- `src/pages/IdentitiesPage.jsx`: Replaced loose substring/trigger search with strict token indexing and minimum 3-character threshold. Suppressed accidental cross-index triggers.
+- `src/pages/EgoPage.jsx`: Restricted E.G.O search matching to require minimum 3 characters and exact trigger/name matching.
 - `src/data/specialEasterEggs.js`: Removed colliding triggers (such as `liu association` on Xiao and `zayin` on One Sin) to prevent hijacking standard identity/EGO filter queries.
 - `package.json`: Bumped version to `1.0.86`.
-- `src/pages/ChangelogPage.jsx`: Added Kenneth's v1.0.86 dispatch memo.
+- `src/pages/ChangelogPage.jsx`: Updated Kenneth's v1.0.86 dispatch memo to focus strictly on search parser and token indexing calibration.
 
 ---
 
