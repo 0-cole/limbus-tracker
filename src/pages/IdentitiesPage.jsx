@@ -370,68 +370,110 @@ export default function IdentitiesPage() {
       {/* Easter Egg Flags */}
       {(() => {
         const cleanSearch = search.trim().toLowerCase();
-        const isVergilius = cleanSearch === 'vergilius';
-        const isDante = cleanSearch === 'dante' || cleanSearch === 'clock';
-        const isCharon = cleanSearch === 'charon' || cleanSearch === 'vroom';
+        const hasMinLen = cleanSearch.length >= 3;
+
+        const isVergilius = hasMinLen && cleanSearch === 'vergilius';
+        const isDante = hasMinLen && (cleanSearch === 'dante' || cleanSearch === 'clockhead' || cleanSearch === 'manager dante');
+        const isCharon = hasMinLen && (cleanSearch === 'charon' || cleanSearch === 'vroom vroom');
         const isRoachEmperor = 
-          cleanSearch === 'roach emperor' || 
-          cleanSearch === 'the roach emperor' || 
-          cleanSearch === 'roach king' || 
-          cleanSearch === 'the roach king' || 
-          cleanSearch === 'roachking' || 
-          cleanSearch.includes('roach emperor') || 
-          cleanSearch.includes('roach king') || 
-          (cleanSearch.includes('roach') && cleanSearch.includes('gregor'));
+          hasMinLen && (
+            cleanSearch === 'roach emperor' || 
+            cleanSearch === 'the roach emperor' || 
+            cleanSearch === 'roach king' || 
+            cleanSearch === 'the roach king' || 
+            cleanSearch === 'roachking'
+          );
         const isMuga = 
-          cleanSearch === 'muga' || 
-          cleanSearch === 'muga ryoshu' || 
-          cleanSearch === 'muga ryōshū' || 
-          (cleanSearch.includes('muga') && cleanSearch.includes('ryoshu'));
+          hasMinLen && (
+            cleanSearch === 'muga' || 
+            cleanSearch === 'muga ryoshu' || 
+            cleanSearch === 'muga ryōshū'
+          );
         const isRoland = 
-          cleanSearch === 'roland' || 
-          cleanSearch === 'black silence' || 
-          cleanSearch === 'the black silence' || 
-          cleanSearch === 'hamhampangpang' || 
-          cleanSearch === 'popcorn' || 
-          cleanSearch === 'boohoo' || 
-          cleanSearch === 'thats that';
+          hasMinLen && (
+            cleanSearch === 'roland' || 
+            cleanSearch === 'black silence' || 
+            cleanSearch === 'the black silence' || 
+            cleanSearch === 'hamhampangpang'
+          );
         const isAngela = 
-          cleanSearch === 'angela' || 
-          cleanSearch === 'library' || 
-          cleanSearch === 'the library' || 
-          cleanSearch === 'librarian';
+          hasMinLen && (
+            cleanSearch === 'angela' || 
+            cleanSearch === 'head librarian'
+          );
         const isGebura = 
-          cleanSearch === 'gebura' || 
-          cleanSearch === 'red mist' || 
-          cleanSearch === 'the red mist' || 
-          cleanSearch === 'kali';
-        const isErlkonig = cleanSearch === 'erlkonig' || cleanSearch === 'erlkönig' || cleanSearch === 'erlking' || cleanSearch === 'every heathcliff';
-        const isSancho = cleanSearch === 'sancho' || cleanSearch === 'bloodfiend' || cleanSearch === 'second kindred';
-        const isCarmen = cleanSearch === 'carmen' || cleanSearch === 'distortion' || cleanSearch === 'the light' || cleanSearch === 'the voice';
-        const isChesed = cleanSearch === 'chesed' || cleanSearch === 'coffee' || cleanSearch === 'welfare';
-        const isNetzach = cleanSearch === 'netzach' || cleanSearch === 'beer' || cleanSearch === 'floor of art' || cleanSearch === 'sloth';
-        const isHod = cleanSearch === 'hod' || cleanSearch === 'counseling' || cleanSearch === 'training team' || cleanSearch === 'a better person';
-        const isArtful = cleanSearch === 'artful' || cleanSearch === 'die of death' || cleanSearch === 'dieofdeath';
-        const isHacklord = cleanSearch === 'hacklord' || cleanSearch === 'hack lord';
+          hasMinLen && (
+            cleanSearch === 'gebura' || 
+            cleanSearch === 'red mist' || 
+            cleanSearch === 'the red mist' || 
+            cleanSearch === 'kali'
+          );
+        const isErlkonig = hasMinLen && (cleanSearch === 'erlkonig' || cleanSearch === 'erlkönig' || cleanSearch === 'erlking' || cleanSearch === 'every heathcliff');
+        const isSancho = hasMinLen && (cleanSearch === 'sancho' || cleanSearch === 'second kindred');
+        const isCarmen = hasMinLen && cleanSearch === 'carmen';
+        const isChesed = hasMinLen && (cleanSearch === 'chesed' || cleanSearch === 'floor of social sciences');
+        const isNetzach = hasMinLen && (cleanSearch === 'netzach' || cleanSearch === 'floor of art');
+        const isHod = hasMinLen && (cleanSearch === 'hod' || cleanSearch === 'floor of literature');
+        const isArtful = hasMinLen && (cleanSearch === 'artful' || cleanSearch === 'die of death' || cleanSearch === 'dieofdeath' || cleanSearch === 'dod');
+        const isHacklord = hasMinLen && (cleanSearch === 'hacklord' || cleanSearch === 'hack lord');
         const isGasterTriggered = localStorage.getItem('limbus_gaster_triggered') === 'true';
         const isUserWhitelisted = currentUser?.email === 'cdblair418@gmail.com';
         const canShowGaster = !isGasterTriggered || isUserWhitelisted;
-        const isGaster = (cleanSearch === 'gaster' || cleanSearch === 'wd gaster' || cleanSearch === 'w.d. gaster' || cleanSearch === 'entry number seventeen') && canShowGaster;
+        const isGaster = hasMinLen && (cleanSearch === 'gaster' || cleanSearch === 'wd gaster' || cleanSearch === 'w.d. gaster' || cleanSearch === 'entry number seventeen') && canShowGaster;
 
-        const matchedSpecialEasterEggs = !cleanSearch ? [] : SPECIAL_EASTER_EGGS.filter(egg => {
-          if (egg.id === cleanSearch) return true;
-          if (egg.name.toLowerCase().includes(cleanSearch)) return true;
-          if (egg.subtitle && egg.subtitle.toLowerCase().includes(cleanSearch)) return true;
-          if (egg.triggers && egg.triggers.some(t => cleanSearch === t || cleanSearch.includes(t) || (t.length > 3 && t.includes(cleanSearch)))) return true;
-          if (cleanSearch === 'library of ruina' || cleanSearch === 'ruina' || cleanSearch === 'library') {
-            return ['binah', 'malkuth', 'yesod', 'tiphereth', 'hokma', 'purple_tear', 'argalia', 'xiao'].includes(egg.id);
+        const matchedSpecialEasterEggs = (!hasMinLen) ? [] : SPECIAL_EASTER_EGGS.filter(egg => {
+          // Category 1: The Head / Arbiters / Claws
+          const isTheHeadCategory = ['the head', 'head', 'the arbiter', 'arbiter', 'arbiters', 'the claw', 'claw', 'claws'].includes(cleanSearch);
+          if (isTheHeadCategory) {
+            return ['binah', 'zena', 'claw'].includes(egg.id);
           }
-          if (cleanSearch === 'lobotomy' || cleanSearch === 'lobotomy corp' || cleanSearch === 'abnormality' || cleanSearch === 'abnormalities' || cleanSearch === 'abno') {
-            return ['ayin', 'whitenight', 'apocalypse_bird', 'nothing_there', 'mountain_of_smiling_bodies', 'one_sin', 'censored', 'silent_orchestra', 'blue_star'].includes(egg.id);
-          }
-          if (cleanSearch === 'die of death' || cleanSearch === 'dieofdeath' || cleanSearch === 'dod' || cleanSearch === 'killer' || cleanSearch === 'killers') {
+
+          // Category 2: Die of Death / Killers
+          const isDieOfDeathCategory = ['die of death', 'dieofdeath', 'dod', 'killer', 'killers', 'dod killer', 'die of death killer', 'die of death killers'].includes(cleanSearch);
+          if (isDieOfDeathCategory) {
             return ['badware', 'killdroid', 'pursuer', 'harken', 'pretence', 'paranoy'].includes(egg.id);
           }
+
+          // Category 3: Library of Ruina / Patron Librarians
+          const isRuinaCategory = ['library of ruina', 'ruina', 'library', 'the library', 'patron librarian', 'patron librarians', 'librarian', 'librarians'].includes(cleanSearch);
+          if (isRuinaCategory) {
+            return ['binah', 'malkuth', 'yesod', 'tiphereth', 'hokma', 'purple_tear', 'argalia', 'xiao'].includes(egg.id);
+          }
+
+          // Category 4: Lobotomy Corporation / Abnormalities / ALEPH
+          const isLobotomyCategory = ['lobotomy', 'lobotomy corp', 'lobotomy corporation', 'abnormality', 'abnormalities', 'abno', 'abnos', 'aleph', 'aleph abnormality'].includes(cleanSearch);
+          if (isLobotomyCategory) {
+            return ['ayin', 'whitenight', 'apocalypse_bird', 'nothing_there', 'mountain_of_smiling_bodies', 'one_sin', 'censored', 'silent_orchestra', 'blue_star'].includes(egg.id);
+          }
+
+          // Category 5: Color Fixers
+          const isColorFixerCategory = ['color fixer', 'color fixers', 'the color fixers'].includes(cleanSearch);
+          if (isColorFixerCategory) {
+            return ['purple_tear', 'argalia'].includes(egg.id);
+          }
+
+          // Exact ID Match (e.g. 'binah', 'purple_tear', 'purple tear', 'pursuer', 'badware')
+          if (egg.id === cleanSearch || egg.id.replace(/_/g, ' ') === cleanSearch) {
+            return true;
+          }
+
+          // Exact Trigger Match from defined triggers
+          if (egg.triggers && egg.triggers.some(t => t.toLowerCase() === cleanSearch)) {
+            return true;
+          }
+
+          // Exact Full Name Match
+          const lowerName = egg.name.toLowerCase();
+          if (lowerName === cleanSearch) {
+            return true;
+          }
+
+          // Primary Name Segment Match (e.g. 'An Arbiter — Binah' -> 'binah', 'Director Xiao — Iron Lotus' -> 'xiao' / 'director xiao')
+          const parts = lowerName.split(/—|-/).map(p => p.trim());
+          if (parts.some(p => p === cleanSearch)) {
+            return true;
+          }
+
           return false;
         });
 

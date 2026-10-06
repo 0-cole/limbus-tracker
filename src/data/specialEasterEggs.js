@@ -288,7 +288,7 @@ export const SPECIAL_EASTER_EGGS = [
       badgeBg: 'bg-orange-950',
       badgeBorder: 'border-orange-700/60'
     },
-    triggers: ['xiao', 'iron lotus', 'liu association', 'nine children', 'lowell']
+    triggers: ['xiao', 'iron lotus', 'director xiao', 'nine children', 'lowell']
   },
   {
     id: 'ayin',
@@ -460,7 +460,7 @@ export const SPECIAL_EASTER_EGGS = [
       badgeBg: 'bg-amber-950',
       badgeBorder: 'border-amber-600/50'
     },
-    triggers: ['one sin', 'one sin and hundreds of good deeds', 'skull', 'zayin']
+    triggers: ['one sin', 'one sin and hundreds of good deeds', 'skull']
   },
   {
     id: 'censored',

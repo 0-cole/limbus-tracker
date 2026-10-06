@@ -306,11 +306,13 @@ export default function EgoPage() {
 
   const matchedAlephs = useMemo(() => {
     const norm = normalizeText(search);
-    if (!norm) return [];
+    if (!norm || norm.length < 3) return [];
+    const isAlephCategory = ['aleph', 'restricted', 'forbidden', 'lobotomy'].includes(norm);
+    if (isAlephCategory) return ALEPH_EGOS;
     return ALEPH_EGOS.filter(egg => {
-      const matchTrigger = egg.triggers.some(t => norm.includes(t) || t.includes(norm));
-      const matchName = normalizeText(egg.name).includes(norm);
-      const matchAbnormality = normalizeText(egg.abnormality).includes(norm);
+      const matchTrigger = egg.triggers.some(t => normalizeText(t) === norm);
+      const matchName = normalizeText(egg.name) === norm;
+      const matchAbnormality = normalizeText(egg.abnormality) === norm;
       return matchTrigger || matchName || matchAbnormality;
     });
   }, [search]);
