@@ -36,28 +36,31 @@
 }
 
 body {
-  background: #0a0a0a;
-  color: #e5e5e5;
+  background: var(--bg-window, #0a0a0a);
+  color: var(--text-primary, #e5e5e5);
   overflow: hidden;
 }
 
 /* ========================================
-   Glassmorphism Card
+   Tactile Keycap Card (High-Performance Matte)
+   Replaces expensive backdrop-filter: blur(12px)
+   with crisp, buttery matte keycap surfaces.
+   Eliminates GPU raster thrash and RAM spikes.
    ======================================== */
 .glass-card {
-  background: rgba(26, 26, 26, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: var(--bg-card, #16181b);
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+  border-radius: 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease, background-color 0.15s ease;
+  will-change: transform;
 }
 
 .glass-card:hover {
-  background: rgba(30, 30, 30, 0.85);
-  border-color: rgba(201, 168, 76, 0.2);
-  box-shadow: 0 8px 32px rgba(201, 168, 76, 0.08),
-              0 0 0 1px rgba(201, 168, 76, 0.05);
+  background: var(--bg-card-hover, #1d2126);
+  border-color: rgba(var(--theme-primary-rgb, 201, 168, 76), 0.35);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3),
+              0 0 0 1px rgba(var(--theme-primary-rgb, 201, 168, 76), 0.12);
   transform: translateY(-2px);
 }
 
@@ -207,6 +210,14 @@ body {
   --theme-accent: #eab308;
   --theme-primary-rgb: 201, 168, 76;
   --theme-glow: rgba(201, 168, 76, 0.35);
+  --bg-window: #0e0d0b;
+  --bg-panel: #151310;
+  --bg-surface: #1b1814;
+  --bg-card: #221e19;
+  --bg-card-hover: #29241e;
+  --border-subtle: #332d24;
+  --text-primary: #f3efe6;
+  --text-muted: #968c7e;
 }
 
 [data-theme="crimson"] {
@@ -214,6 +225,14 @@ body {
   --theme-accent: #f87171;
   --theme-primary-rgb: 239, 68, 68;
   --theme-glow: rgba(239, 68, 68, 0.4);
+  --bg-window: #100a0a;
+  --bg-panel: #160d0d;
+  --bg-surface: #1d1111;
+  --bg-card: #251616;
+  --bg-card-hover: #2e1b1b;
+  --border-subtle: #3a2020;
+  --text-primary: #fceeee;
+  --text-muted: #a38585;
 }
 
 [data-theme="amber"] {
@@ -221,6 +240,14 @@ body {
   --theme-accent: #fbbf24;
   --theme-primary-rgb: 245, 158, 11;
   --theme-glow: rgba(245, 158, 11, 0.4);
+  --bg-window: #100c08;
+  --bg-panel: #161009;
+  --bg-surface: #1d160d;
+  --bg-card: #251c11;
+  --bg-card-hover: #2e2316;
+  --border-subtle: #3a2d1a;
+  --text-primary: #fcf4e8;
+  --text-muted: #a4937a;
 }
 
 [data-theme="cyan"] {
@@ -228,6 +255,14 @@ body {
   --theme-accent: #22d3ee;
   --theme-primary-rgb: 6, 182, 212;
   --theme-glow: rgba(6, 182, 212, 0.4);
+  --bg-window: #080f12;
+  --bg-panel: #0c161b;
+  --bg-surface: #101c22;
+  --bg-card: #15242c;
+  --bg-card-hover: #1b2e38;
+  --border-subtle: #203945;
+  --text-primary: #eaf6f8;
+  --text-muted: #769299;
 }
 
 [data-theme="violet"] {
@@ -235,6 +270,14 @@ body {
   --theme-accent: #a78bfa;
   --theme-primary-rgb: 139, 92, 246;
   --theme-glow: rgba(139, 92, 246, 0.4);
+  --bg-window: #0d0a14;
+  --bg-panel: #130e1d;
+  --bg-surface: #1a1226;
+  --bg-card: #211732;
+  --bg-card-hover: #2b1f40;
+  --border-subtle: #362650;
+  --text-primary: #f5f0fb;
+  --text-muted: #8c7c9e;
 }
 
 [data-theme="monochrome"] {
@@ -242,6 +285,14 @@ body {
   --theme-accent: #e5e5e5;
   --theme-primary-rgb: 163, 163, 163;
   --theme-glow: rgba(163, 163, 163, 0.25);
+  --bg-window: #0e0e10;
+  --bg-panel: #131316;
+  --bg-surface: #19191d;
+  --bg-card: #202025;
+  --bg-card-hover: #28282e;
+  --border-subtle: #33333a;
+  --text-primary: #f0f0f2;
+  --text-muted: #86868c;
 }
 
 [data-theme="tcorp"] {
@@ -249,6 +300,14 @@ body {
   --theme-accent: #f59e0b;
   --theme-primary-rgb: 217, 119, 6;
   --theme-glow: rgba(217, 119, 6, 0.4);
+  --bg-window: #100c07;
+  --bg-panel: #171109;
+  --bg-surface: #1e170d;
+  --bg-card: #261d11;
+  --bg-card-hover: #2f2415;
+  --border-subtle: #3d2f1b;
+  --text-primary: #f8f2ea;
+  --text-muted: #9f8c77;
 }
 
 [data-theme="kcorp"] {
@@ -256,6 +315,14 @@ body {
   --theme-accent: #34d399;
   --theme-primary-rgb: 16, 185, 129;
   --theme-glow: rgba(16, 185, 129, 0.4);
+  --bg-window: #08120e;
+  --bg-panel: #0b1913;
+  --bg-surface: #10211a;
+  --bg-card: #152a21;
+  --bg-card-hover: #1b352a;
+  --border-subtle: #224536;
+  --text-primary: #ebf8f2;
+  --text-muted: #759987;
 }
 
 [data-theme="liu"] {
@@ -263,6 +330,14 @@ body {
   --theme-accent: #f97316;
   --theme-primary-rgb: 234, 88, 12;
   --theme-glow: rgba(234, 88, 12, 0.4);
+  --bg-window: #120a06;
+  --bg-panel: #1a0d08;
+  --bg-surface: #22120b;
+  --bg-card: #2c170e;
+  --bg-card-hover: #371d12;
+  --border-subtle: #462517;
+  --text-primary: #fbf1ea;
+  --text-muted: #9f8173;
 }
 
 [data-theme="zwei"] {
@@ -270,6 +345,14 @@ body {
   --theme-accent: #60a5fa;
   --theme-primary-rgb: 37, 99, 235;
   --theme-glow: rgba(37, 99, 235, 0.4);
+  --bg-window: #080c14;
+  --bg-panel: #0b111c;
+  --bg-surface: #0f1624;
+  --bg-card: #141c2d;
+  --bg-card-hover: #192439;
+  --border-subtle: #21304c;
+  --text-primary: #ebf2fb;
+  --text-muted: #778a9f;
 }
 
 [data-theme="seven"] {
@@ -277,6 +360,14 @@ body {
   --theme-accent: #a3e635;
   --theme-primary-rgb: 132, 204, 22;
   --theme-glow: rgba(132, 204, 22, 0.4);
+  --bg-window: #0c1208;
+  --bg-panel: #11190a;
+  --bg-surface: #16210e;
+  --bg-card: #1d2a12;
+  --bg-card-hover: #243517;
+  --border-subtle: #2f451e;
+  --text-primary: #f1f7eb;
+  --text-muted: #879977;
 }
 
 [data-theme="blacksilence"] {
@@ -284,6 +375,14 @@ body {
   --theme-accent: #f43f5e;
   --theme-primary-rgb: 226, 232, 240;
   --theme-glow: rgba(244, 63, 94, 0.4);
+  --bg-window: #0a0a0c;
+  --bg-panel: #0f0f12;
+  --bg-surface: #151518;
+  --bg-card: #1b1b20;
+  --bg-card-hover: #232328;
+  --border-subtle: #2d2d34;
+  --text-primary: #f3f3f5;
+  --text-muted: #83838c;
 }
 
 [data-theme="dieci"] {
@@ -291,6 +390,14 @@ body {
   --theme-accent: #60a5fa;
   --theme-primary-rgb: 59, 130, 246;
   --theme-glow: rgba(59, 130, 246, 0.4);
+  --bg-window: #080d16;
+  --bg-panel: #0b121e;
+  --bg-surface: #0f1827;
+  --bg-card: #141f32;
+  --bg-card-hover: #19273e;
+  --border-subtle: #223452;
+  --text-primary: #eaf1fa;
+  --text-muted: #75879e;
 }
 
 [data-theme="cinq"] {
@@ -298,6 +405,174 @@ body {
   --theme-accent: #fb7185;
   --theme-primary-rgb: 244, 63, 94;
   --theme-glow: rgba(244, 63, 94, 0.4);
+  --bg-window: #12090c;
+  --bg-panel: #190c10;
+  --bg-surface: #200f16;
+  --bg-card: #29141c;
+  --bg-card-hover: #331923;
+  --border-subtle: #43212e;
+  --text-primary: #fcf0f3;
+  --text-muted: #9f7985;
+}
+
+/* Spotifast (Velvet Obsidian - Ultra-Light Low CPU) */
+[data-theme="spotifast"] {
+  --theme-primary: #1ed760;
+  --theme-accent: #22c55e;
+  --theme-primary-rgb: 30, 215, 96;
+  --theme-glow: rgba(30, 215, 96, 0.35);
+  --bg-window: #0c0e11;
+  --bg-panel: #111418;
+  --bg-surface: #161a20;
+  --bg-card: #1c2128;
+  --bg-card-hover: #232932;
+  --border-subtle: #2b333e;
+  --text-primary: #f1f4f8;
+  --text-muted: #828c9b;
+}
+
+/* Creamy Keycap (Warm Ivory, Beige & Soyamilk) */
+[data-theme="creamy"] {
+  --theme-primary: #a06a3e;
+  --theme-accent: #c48b55;
+  --theme-primary-rgb: 160, 106, 62;
+  --theme-glow: rgba(160, 106, 62, 0.25);
+  --bg-window: #f6f2e9;
+  --bg-panel: #ede6d8;
+  --bg-surface: #e3dac8;
+  --bg-card: #d9cfbb;
+  --bg-card-hover: #d2c6b0;
+  --border-subtle: #c5b9a2;
+  --text-primary: #282420;
+  --text-muted: #6b6155;
+}
+
+/* Espresso (Mocha & Roasted Coffee) */
+[data-theme="espresso"] {
+  --theme-primary: #c89666;
+  --theme-accent: #deb887;
+  --theme-primary-rgb: 200, 150, 102;
+  --theme-glow: rgba(200, 150, 102, 0.35);
+  --bg-window: #130f0d;
+  --bg-panel: #1a1512;
+  --bg-surface: #221c18;
+  --bg-card: #2c241f;
+  --bg-card-hover: #352c26;
+  --border-subtle: #41352d;
+  --text-primary: #f3ebe4;
+  --text-muted: #9a8a7e;
+}
+
+/* Nordic (Nord Frost Slate) */
+[data-theme="nordic"] {
+  --theme-primary: #88c0d0;
+  --theme-accent: #81a1c1;
+  --theme-primary-rgb: 136, 192, 208;
+  --theme-glow: rgba(136, 192, 208, 0.35);
+  --bg-window: #121418;
+  --bg-panel: #171b21;
+  --bg-surface: #1e232b;
+  --bg-card: #252b35;
+  --bg-card-hover: #2e3542;
+  --border-subtle: #394252;
+  --text-primary: #eceff4;
+  --text-muted: #8892b0;
+}
+
+/* Creamy Theme Light Surface & Inversion Adaptation */
+[data-theme="creamy"] body,
+[data-theme="creamy"].bg-\[\#0a0a0a\],
+[data-theme="creamy"] .bg-\[\#0a0a0a\],
+[data-theme="creamy"] .bg-limbus-bg {
+  background-color: var(--bg-window) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="creamy"] .bg-\[\#141414\],
+[data-theme="creamy"] .bg-limbus-surface,
+[data-theme="creamy"] aside {
+  background-color: var(--bg-surface) !important;
+}
+
+[data-theme="creamy"] .bg-\[\#1a1a1a\],
+[data-theme="creamy"] .bg-limbus-card,
+[data-theme="creamy"] .glass-card {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-subtle) !important;
+}
+
+[data-theme="creamy"] .glass-card:hover {
+  background-color: var(--bg-card-hover) !important;
+}
+
+[data-theme="creamy"] .bg-black\/20,
+[data-theme="creamy"] .bg-black\/30,
+[data-theme="creamy"] .bg-black\/40,
+[data-theme="creamy"] .bg-black\/50,
+[data-theme="creamy"] .bg-black\/60,
+[data-theme="creamy"] .bg-black\/70,
+[data-theme="creamy"] .bg-black\/80 {
+  background-color: rgba(215, 204, 188, 0.45) !important;
+}
+
+[data-theme="creamy"] .bg-neutral-900,
+[data-theme="creamy"] .bg-neutral-950 {
+  background-color: #d8ceb8 !important;
+}
+
+[data-theme="creamy"] .border-neutral-800,
+[data-theme="creamy"] .border-neutral-900,
+[data-theme="creamy"] .border-neutral-700,
+[data-theme="creamy"] .border-white\/10,
+[data-theme="creamy"] .border-white\/5,
+[data-theme="creamy"] .border-limbus-border {
+  border-color: var(--border-subtle) !important;
+}
+
+[data-theme="creamy"] .text-white,
+[data-theme="creamy"] .text-neutral-100,
+[data-theme="creamy"] .text-neutral-200,
+[data-theme="creamy"] .text-gray-100,
+[data-theme="creamy"] .text-gray-200 {
+  color: #24201c !important;
+}
+
+[data-theme="creamy"] .text-neutral-300,
+[data-theme="creamy"] .text-gray-300,
+[data-theme="creamy"] .text-limbus-text {
+  color: #3b352e !important;
+}
+
+[data-theme="creamy"] .text-neutral-400,
+[data-theme="creamy"] .text-neutral-500,
+[data-theme="creamy"] .text-gray-400,
+[data-theme="creamy"] .text-gray-500,
+[data-theme="creamy"] .text-limbus-muted {
+  color: #6d6255 !important;
+}
+
+[data-theme="creamy"] input,
+[data-theme="creamy"] select,
+[data-theme="creamy"] textarea {
+  color: #24201c !important;
+  background-color: #f0e9dc !important;
+  border-color: #c5b9a2 !important;
+}
+
+[data-theme="creamy"] * {
+  scrollbar-color: #baa991 #ece5d7;
+}
+
+[data-theme="creamy"] *::-webkit-scrollbar-track {
+  background: #ece5d7;
+}
+
+[data-theme="creamy"] *::-webkit-scrollbar-thumb {
+  background: #baa991;
+}
+
+[data-theme="creamy"] *::-webkit-scrollbar-thumb:hover {
+  background: #9f8c72;
 }
 
 /* Dynamic Theme Overrides for all active non-default themes */

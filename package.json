@@ -1,6 +1,6 @@
 {
   "name": "limbus-tracker",
-  "version": "1.0.87",
+  "version": "1.0.88",
   "description": "Limbus Company Companion App — Track IDs, EGOs, Schedules, Shards & Weeklies",
   "type": "module",
   "main": "electron/main.cjs",
@@ -46,11 +46,12 @@
       "dist",
       "electron",
       "package.json",
+      "build/**/*",
+      "public/**/*",
       "src/data/**/*"
     ],
     "win": {
       "icon": "build/icon.ico",
-      "signAndEditExecutable": false,
       "target": [
         {
           "target": "nsis",
@@ -59,6 +60,17 @@
           ]
         }
       ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "Limbus Tracker",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "deleteAppDataOnUninstall": false
     }
   }
 }

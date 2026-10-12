@@ -79,7 +79,7 @@ const IdCard = React.memo(function IdCard({ id, meta, acquired, onToggleAcquired
           <div className="flex text-[#c9a84c] drop-shadow-md">
             {Array.from({length: id.rarity || 1}).map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
           </div>
-          <span className={`text-[9px] font-black px-1.5 py-0.5 rounded shadow-sm uppercase tracking-wider backdrop-blur-md ${
+          <span className={`text-[9px] font-black px-1.5 py-0.5 rounded shadow-sm uppercase tracking-wider ${
             id.season === null || id.season === undefined
               ? 'bg-purple-950/90 text-purple-300 border border-purple-600/60 shadow-[0_0_8px_rgba(168,85,247,0.3)]'
               : id.season === 7
@@ -113,10 +113,10 @@ const IdCard = React.memo(function IdCard({ id, meta, acquired, onToggleAcquired
         </div>
 
         <div className="flex justify-between items-center pt-2 border-t border-white/20">
-          <button onClick={(e) => { e.stopPropagation(); onEdit(); }} className="text-xs flex items-center gap-1 text-gray-300 hover:text-white transition-colors bg-black/40 px-2 py-1 rounded backdrop-blur-sm">
+          <button onClick={(e) => { e.stopPropagation(); onEdit(); }} className="text-xs flex items-center gap-1 text-gray-300 hover:text-white transition-colors bg-black/60 hover:bg-black/80 px-2 py-1 rounded border border-white/10">
             <Edit3 size={12}/> Edit
           </button>
-          <button onClick={(e) => { e.stopPropagation(); onToggleAcquired(id.name); }} className={`text-xs px-2 py-1 rounded font-bold transition-colors flex items-center gap-1 backdrop-blur-sm ${acquired ? 'bg-[#c9a84c] text-black' : 'bg-black/60 text-white border border-white/20 hover:bg-white/20'}`}>
+          <button onClick={(e) => { e.stopPropagation(); onToggleAcquired(id.name); }} className={`text-xs px-2 py-1 rounded font-bold transition-colors flex items-center gap-1 ${acquired ? 'bg-[#c9a84c] text-black shadow-sm' : 'bg-black/70 text-white border border-white/20 hover:bg-white/20'}`}>
             {acquired ? <><CheckCircle size={12}/> Acquired</> : 'Acquire'}
           </button>
         </div>

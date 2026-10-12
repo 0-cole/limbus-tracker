@@ -257,7 +257,7 @@ const EgoCard = React.memo(function EgoCard({ ego, meta, acquired, onToggleAcqui
 
       {/* Top Section */}
       <div className="relative flex justify-between items-start p-3 z-10">
-        <span className="text-xs font-bold px-2 py-0.5 rounded backdrop-blur-md bg-black/40 border border-white/10 shadow-sm" style={{ color: GRADE_COLORS[ego.grade] || '#fff' }}>
+        <span className="text-xs font-bold px-2 py-0.5 rounded bg-black/70 border border-white/10 shadow-sm" style={{ color: GRADE_COLORS[ego.grade] || '#fff' }}>
           {ego.grade}
         </span>
         <p className="text-sm font-bold drop-shadow-md" style={{ color: sinnerInfo?.color || '#fff' }}>
@@ -280,10 +280,10 @@ const EgoCard = React.memo(function EgoCard({ ego, meta, acquired, onToggleAcqui
         </div>
 
         <div className="flex justify-between items-center pt-2 border-t border-white/20">
-          <button onClick={(e) => { e.stopPropagation(); onEdit(); }} className="text-xs flex items-center gap-1 text-gray-300 hover:text-white transition-colors bg-black/40 px-2 py-1 rounded backdrop-blur-sm">
+          <button onClick={(e) => { e.stopPropagation(); onEdit(); }} className="text-xs flex items-center gap-1 text-gray-300 hover:text-white transition-colors bg-black/60 hover:bg-black/80 px-2 py-1 rounded border border-white/10">
             <Edit3 size={12}/> Edit
           </button>
-          <button onClick={(e) => { e.stopPropagation(); onToggleAcquired(ego.name); }} className={`text-xs px-2 py-1 rounded font-bold transition-colors flex items-center gap-1 backdrop-blur-sm ${acquired ? 'bg-[#c9a84c] text-black' : 'bg-black/60 text-white border border-white/20 hover:bg-white/20'}`}>
+          <button onClick={(e) => { e.stopPropagation(); onToggleAcquired(ego.name); }} className={`text-xs px-2 py-1 rounded font-bold transition-colors flex items-center gap-1 ${acquired ? 'bg-[#c9a84c] text-black shadow-sm' : 'bg-black/70 text-white border border-white/20 hover:bg-white/20'}`}>
             {acquired ? <><CheckCircle size={12}/> Acquired</> : 'Acquire'}
           </button>
         </div>
@@ -544,8 +544,8 @@ export default function EgoPage() {
                           return next;
                         });
                       }} 
-                      className={`text-xs px-2 py-1 rounded font-bold transition-colors flex items-center gap-1 backdrop-blur-sm cursor-pointer ${
-                        isAcquired ? 'bg-yellow-400 text-black shadow-[0_0_10px_rgba(250,204,21,0.6)]' : 'bg-black/60 text-white border border-white/20 hover:bg-white/20'
+                      className={`text-xs px-2 py-1 rounded font-bold transition-colors flex items-center gap-1 cursor-pointer ${
+                        isAcquired ? 'bg-yellow-400 text-black shadow-[0_0_10px_rgba(250,204,21,0.6)]' : 'bg-black/70 text-white border border-white/20 hover:bg-white/20'
                       }`}
                     >
                       {isAcquired ? <><CheckCircle size={12}/> Synchronized</> : 'Synchronize'}

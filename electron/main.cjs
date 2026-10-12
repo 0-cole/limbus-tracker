@@ -180,8 +180,21 @@ function saveUserData(data) {
   }
 }
 
+function getAppIconPath() {
+  const candidates = [
+    path.join(__dirname, '..', 'build', 'icon.ico'),
+    path.join(__dirname, '..', 'public', 'icon.png'),
+    path.join(__dirname, '..', 'dist', 'icon.png')
+  ];
+  for (const c of candidates) {
+    if (fs.existsSync(c)) return c;
+  }
+  return undefined;
+}
+
 function createWindow() {
   const isHidden = process.argv.includes('--hidden');
+  const appIcon = getAppIconPath();
 
   mainWindow = new BrowserWindow({
     width: 1400,
@@ -190,6 +203,7 @@ function createWindow() {
     minHeight: 700,
     backgroundColor: '#0a0a0a',
     title: 'Limbus Tracker',
+    icon: appIcon,
     show: !isHidden,
     webPreferences: {
       nodeIntegration: false,
@@ -459,6 +473,9 @@ function cleanupOldTempInstallers() {
         }
       });
     });
+  } catch (e) {}
+}
+
 // Mirror Dungeon Grinder IPC handlers
 const { mirrorGrinder } = require('./mirrorGrinderEngine.cjs');
 

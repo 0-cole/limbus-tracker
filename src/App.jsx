@@ -222,7 +222,7 @@ export default function App() {
       <div 
         data-theme={appSettings?.activeTheme || 'gold'}
         data-compact={Boolean(appSettings?.compactMode)}
-        className={`flex h-screen bg-[#0a0a0a] overflow-hidden ${appSettings?.compactMode ? 'compact-density' : ''}`}
+        className={`flex h-screen bg-limbus-bg text-limbus-text overflow-hidden ${appSettings?.compactMode ? 'compact-density' : ''}`}
       >
         <Sidebar />
         <div className="flex-1 relative overflow-hidden flex flex-col">
