@@ -28,6 +28,8 @@ import {
 } from 'lucide-react';
 import sinnersData from '../data/sinners.json';
 
+const getChargeGrinderAsset = (filePath) => `./assets/charge_grinder/${String(filePath).replace(/^\/+/, '')}`;
+
 const ALL_PACKS_LIST = [
   "TheForgotten", "TheOutcast", "FlatbrokeGamblers", "AutomatedFactory", "TheUnloving",
   "NagelundHammer", "FaithErosion", "HellsChicken", "TobeCrushed", "TheNoonofViolet",
@@ -295,7 +297,7 @@ export default function MirrorGrinderPage() {
             onClick={() => setShowGuideModal(true)}
             className="flex items-center gap-2 px-3 py-1.5 rounded bg-[#10242e] hover:bg-[#183543] border border-[#00d0ff] text-[#00d0ff] font-bold text-sm transition shadow-[0_0_12px_rgba(0,208,255,0.3)]"
           >
-            <img src="/assets/charge_grinder/guide_icon.png" alt="Guide" className="w-6 h-6 object-contain" />
+            <img src={getChargeGrinderAsset('guide_icon.png')} alt="Guide" className="w-6 h-6 object-contain" />
             <span>GUIDE</span>
           </button>
 
@@ -574,7 +576,7 @@ export default function MirrorGrinderPage() {
                   }`}
                 >
                   <img
-                    src={`/assets/charge_grinder/selected/${sinner.file}`}
+                    src={getChargeGrinderAsset(`selected/${sinner.file}`)}
                     alt={sinner.name}
                     className="w-full h-32 object-cover object-top bg-black/60"
                   />
@@ -647,7 +649,7 @@ export default function MirrorGrinderPage() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               style={{
-                backgroundImage: 'url(/assets/charge_grinder/guide.png)',
+                backgroundImage: `url(${getChargeGrinderAsset('guide.png')})`,
                 backgroundSize: '100% 100%'
               }}
               className="w-full max-w-lg h-[620px] rounded-lg shadow-2xl relative p-8 flex flex-col justify-between text-[#2c1d11]"
@@ -1098,7 +1100,7 @@ export default function MirrorGrinderPage() {
 
                       {/* Gift PNG Icon from extracted assets */}
                       <img
-                        src={`/assets/charge_grinder/keywordless/${gift.file}`}
+                        src={getChargeGrinderAsset(`keywordless/${gift.file}`)}
                         alt={gift.name}
                         className="w-14 h-14 object-contain my-1"
                         onError={(e) => {

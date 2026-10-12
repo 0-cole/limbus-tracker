@@ -12,7 +12,7 @@
 
 @font-face {
   font-family: 'ExcelsiorSans';
-  src: url('/assets/charge_grinder/font/ExcelsiorSans.ttf') format('truetype');
+  src: url('/fonts/ExcelsiorSans.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
