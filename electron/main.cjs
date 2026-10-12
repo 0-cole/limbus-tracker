@@ -459,8 +459,34 @@ function cleanupOldTempInstallers() {
         }
       });
     });
-  } catch (e) {}
-}
+// Mirror Dungeon Grinder IPC handlers
+const { mirrorGrinder } = require('./mirrorGrinderEngine.cjs');
+
+mirrorGrinder.on('telemetry', (status) => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send('mirror-grinder-telemetry', status);
+  }
+});
+
+mirrorGrinder.on('log', (logEntry) => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send('mirror-grinder-log', logEntry);
+  }
+});
+
+ipcMain.handle('mirror-grinder-get-status', () => {
+  return mirrorGrinder.getStatus();
+});
+
+ipcMain.handle('mirror-grinder-start', (_, config) => {
+  mirrorGrinder.start(config);
+  return mirrorGrinder.getStatus();
+});
+
+ipcMain.handle('mirror-grinder-stop', () => {
+  mirrorGrinder.stop();
+  return mirrorGrinder.getStatus();
+});
 
 app.whenReady().then(() => {
   cleanupOldTempInstallers();

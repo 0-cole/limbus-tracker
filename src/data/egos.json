@@ -229,6 +229,63 @@
     "maxThreadspin": 5,
     "keywords": [
       "Burn"
+    ],
+    "gameId": 20902,
+    "clientName": "4th Match Flame",
+    "clientDesc": "Rodion’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2090211,
+        "name": "4th Match Flame",
+        "desc": "<style=\"highlight\">Deal +5% damage for every highest Reson. (max 30%)\n[EndSkill] Gain 1 [CrimsonResultUp] and 1 [CrimsonDamageUp] next turn</style>",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "<style=\"highlight\">[SuperCoin]</style>"
+              },
+              {
+                "desc": "<style=\"highlight\">[UnBrokenCoinOnSucceedAttack]</style> Inflict 6 [Combustion]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [CrimsonTakeDamageUp] next turn<style=\"highlight\"></style>"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2090221,
+        "name": "4th Match Flame",
+        "desc": "[CantIdentify]\nTargets randomly\n<style=\"highlight\">Deal +5% damage for every highest Reson. (max 30%)\n[DefeatDuel] Base Power -18\n[EndSkill] Gain 2 [CrimsonResultUp] and 1 [CrimsonDamageUp] next turn</style>",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "<style=\"highlight\">[SuperCoin]</style>"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict <style=\"highlight\">10</style> [Combustion]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [CrimsonTakeDamageUp] next turn<style=\"highlight\"></style>"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2090211,
+        "name": "Spark of Flame",
+        "desc": "After defeating an enemy that has [Combustion], heal (Wrath A-Reson.)% HP"
+      },
+      {
+        "passiveId": 2090212,
+        "name": "Spark of Flame",
+        "desc": "<style=\"highlight\">Combat Start: If Wrath A-Reson. was activated, inflict 1 [CrimsonTakeDamageUp] on the main target on Clash Win (once per turn)</style>\n\nAfter defeating an enemy that has [Combustion], heal <style=\"highlight\">(Wrath Reson.)</style>% HP <style=\"highlight\">(max 12%)</style>"
+      }
     ]
   },
   {
@@ -484,6 +541,60 @@
     "maxThreadspin": 5,
     "keywords": [
       "Burn"
+    ],
+    "gameId": 20402,
+    "clientName": "4th Match Flame",
+    "clientDesc": "Ryōshū’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2040211,
+        "name": "4th Match Flame",
+        "desc": "Skill Power +2 against units that have [Combustion]\n<style=\"highlight\">[BeforeAttack]</style> Deal +5% damage for every <style=\"highlight\">1 total sum of [Combustion] on all targets</style> (max 100%)\n[EnemyKill] Gain 2 [Enhancement] next turn",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "<style=\"highlight\">[OnSucceedAttack] Deal (([Combustion] on target x 2)% of this Coin's final damage) Wrath damage (max 20%)</style>"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 4 [Combustion]<style=\"highlight\"></style>"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2040221,
+        "name": "4th Match Flame",
+        "desc": "[CantIdentify]\nTargets randomly\nSkill Power +4 against units that have [Combustion]\n<style=\"highlight\">[BeforeAttack]</style> Deal +5% damage for every <style=\"highlight\">1 total sum of [Combustion] on all targets</style> (max 100%)\n<style=\"highlight\">[DefeatDuel] Base Power -16</style>\n[EnemyKill] Gain 3 [Enhancement] next turn\n[EnemyKillFail] Gain 3 [Enhancement] and 10 [Combustion] next turn",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "<style=\"highlight\">[SuperCoin]</style>"
+              },
+              {
+                "desc": "<style=\"highlight\">[OnSucceedAttack] Deal (([Combustion] on target x 3)% of this Coin's final damage) Wrath damage (max 30%)</style>"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 4 [Combustion]<style=\"highlight\"></style>"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2040211,
+        "name": "4th Match Flame",
+        "desc": "Every 4th Skill this unit uses gains Final Power +4 and inflicts 4 [Combustion] On Hit"
+      },
+      {
+        "passiveId": 2040212,
+        "name": "4th Match Flame",
+        "desc": "Every 4th Skill this unit uses gains Final Power +4 and inflicts 4 [Combustion] On Hit\n- If the said Skill is a Wrath Skill, deal +([Combustion] Potency on all targets / 2)% additional damage (max 20%)\n- If the said Skill is an E.G.O Skill, apply the following effects at Coin Start of the first Coin:\n· If the said Coin is a Plus Coin, heal 10 SP\n· If the said Coin is a Minus Coin, lose 15 SP (this effect cannot reduce this unit's SP below -40)"
+      }
     ]
   },
   {
@@ -718,6 +829,60 @@
     "maxThreadspin": 5,
     "keywords": [
       "Burn"
+    ],
+    "gameId": 20102,
+    "clientName": "4th Match Flame",
+    "clientDesc": "Yi Sang’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2010211,
+        "name": "4th Match Flame",
+        "desc": "<style=\"highlight\">[BeforeAttack] Apply the following effects:\n- Final Power +1 for every 6 [Combustion] on all targets (max 4)\n- Deal +1% damage for every 1 [Combustion] on all targets (max 30%)</style>",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 4 [Combustion]<style=\"highlight\"></style>"
+              },
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 6 [Combustion]<style=\"highlight\"></style>"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2010221,
+        "name": "4th Match Flame",
+        "desc": "[CantIdentify]\nTargets randomly\n<style=\"highlight\">[BeforeAttack] Apply the following effects:\n- Final Power +1 for every 6 [Combustion] on all targets (max 6)\n- Deal +1.5% damage for every 1 [Combustion] on all targets (max 45%)\n[DefeatDuel] Base Power -12\n[EndSkill] Gain [MatchesPersonality] next turn (once per turn)</style>",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "<style=\"highlight\">[SuperCoin]</style>"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 4 [Combustion]<style=\"highlight\"></style>"
+              },
+              {
+                "desc": "<style=\"highlight\">[UnBrokenCoinOnSucceedAttack]</style> Inflict 6 [Combustion]"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2010211,
+        "name": "Ember",
+        "desc": "On Clash Win, inflict (Wrath A-Reson. / 2) [Combustion] (once per Skill)"
+      },
+      {
+        "passiveId": 2010212,
+        "name": "Ember",
+        "desc": "<style=\"highlight\">On Use of a Wrath Skill or a Skill that inflicts [Combustion] Potency or Count: At 6+ total sum of [Combustion] on all targets, Clash Power +1</style>\n\nOn Clash Win, inflict (Wrath <style=\"highlight\">Reson. x 2</style>) [Combustion] <style=\"highlight\">on the main target</style> (<style=\"highlight\">max 8</style> per Skill)"
+      }
     ]
   },
   {
@@ -978,6 +1143,21 @@
     "maxThreadspin": 5,
     "keywords": [
       "Burn"
+    ],
+    "gameId": 20205,
+    "clientName": "9:2",
+    "clientDesc": "Faust’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2020511,
+        "name": "Flamebrand",
+        "desc": "On Heads Hit using a Lust affinity Skill, inflict 1 [Combustion] on target (6 times per turn)"
+      },
+      {
+        "passiveId": 2020512,
+        "name": "Flamebrand",
+        "desc": "On Heads Hit using a <style=\"highlight\">Wrath or</style> a Lust Skill, inflict 1 [Combustion] (6 times per turn)\n<style=\"highlight\">- If target has max [Combustion] Potency, inflict 1 [DefenseDown] instead\n\nOn Gluttony Base Skill Use, gain 1 Gluttony E.G.O resource (once per turn)</style>"
+      }
     ]
   },
   {
@@ -1185,6 +1365,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Burn"
+    ],
+    "gameId": 21005,
+    "clientName": "9:2",
+    "clientDesc": "Sinclair’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2100511,
+        "name": "Prophecy of Ruin",
+        "desc": "On Heads Hit with a Lust affinity Skill, lower this unit and the target's SP by 4.\n(Does not work against targets that are Non-SP Units)\nGain 5 Lust E.G.O resources On Kill with a Lust affinity Skill"
+      }
     ]
   },
   {
@@ -1376,6 +1566,46 @@
     "maxThreadspin": 4,
     "keywords": [
       "Charge"
+    ],
+    "gameId": 21204,
+    "clientName": "AEDD",
+    "clientDesc": "Gregor’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2120411,
+        "name": "AEDD",
+        "desc": "[BeforeAttack] Gain +10 [Charge] Count",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 15 [EmittedCurrent]"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2120421,
+        "name": "AEDD",
+        "desc": "[CantIdentify]\nPrioritizes units with [Charge]\n[BeforeAttack] Gain +10 [Charge] Count",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 15 [EmittedCurrent] and +7 [Charge] Count"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2120411,
+        "name": "Alternating Discharge",
+        "desc": "On Heads Hit, consume 2 [Charge] Count to apply +1 [Charge] Count on the [Charge]-possessing ally that has the lowest [Charge] Count"
+      }
     ]
   },
   {
@@ -1584,6 +1814,52 @@
     "maxThreadspin": 4,
     "keywords": [
       "Charge"
+    ],
+    "gameId": 20703,
+    "clientName": "AEDD",
+    "clientDesc": "Heathcliff’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2070311,
+        "name": "AEDD",
+        "desc": "[BeforeAttack] Gain +1 [Charge] Count for every 10% of missing HP (Max 7)\nGain 2 [Agility] next turn",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [Paralysis] and 1 Gloom Fragility"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2070321,
+        "name": "AEDD",
+        "desc": "[CantIdentify]\nTargets randomly\n[BeforeAttack] Gain +1 [Charge] Count for every 10% of missing HP (Max 7)\nGain 2 [Agility] next turn",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Spend all [Charge] Count to deal bonus Gloom damage by ([Charge] Count * 2.5)% of damage dealt (Max 50%)"
+              },
+              {
+                "desc": "[EndSkill] Spend all [Charge] Count"
+              },
+              {
+                "desc": "[EndSkillTail] Lose HP by 10% of Max HP to gain +10 [Charge] Count"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2070311,
+        "name": "Temperamental Discharge",
+        "desc": "When hit, consume 1 [Charge] Count to heal 2.5% HP\nAt less than 40% HP, gain +1 [Charge] Count before activating the healing effect (can gain up to 10 [Charge] Count per turn)"
+      }
     ]
   },
   {
@@ -1811,6 +2087,55 @@
     "maxThreadspin": 4,
     "keywords": [
       "Burn"
+    ],
+    "gameId": 20210,
+    "clientName": "Ardor Blossom Star",
+    "clientDesc": "Faust’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2080311,
+        "name": "Ardor Blossom Star",
+        "desc": "Targets the rearmost unit (In regular encounters)",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttackHead] Raise Stagger Threshold by 40% of damage dealt"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict [Combustion] by Wrath Reson."
+              },
+              {
+                "desc": "[EndSkillHead] Inflict 5 [Combustion] on 3 random enemies"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2080321,
+        "name": "Ardor Blossom Star",
+        "desc": "[CantIdentify]\nTargets randomly\n[WhenUse] Lose HP by 10% of Max HP",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[EndSkill] Inflict [Combustion] by (2 * Wrath Reson.) on all units"
+              },
+              {
+                "desc": "[OnSucceedAttack] Raise Stagger Threshold by 60% of damage dealt"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2021011,
+        "name": "Unsnuffed Embers",
+        "desc": "This effect triggers immediately after using E.G.O Skill\n\nFor every 10 [Combustion] on self, increase [Combustion] Potency inflicted on enemies with this unit's Base Attack Skill effects and Coin effects by 1 (max 2, excluding 'Unique Burn')\n\nWhen this unit uses 'A.B.S Max Attunement 【Degraded Corrosion】'  Skill, this unit does not die at the Skill's Attack End; instead, heal 40% HP and gain 2 [HitDamageUp] and 1 [CrimsonDamageUp] next turn (once per Encounter)"
+      }
     ]
   },
   {
@@ -2014,6 +2339,55 @@
     "maxThreadspin": 4,
     "keywords": [
       "Burn"
+    ],
+    "gameId": 20803,
+    "clientName": "Ardor Blossom Star",
+    "clientDesc": "Ishmael’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2080311,
+        "name": "Ardor Blossom Star",
+        "desc": "Targets the rearmost unit (In regular encounters)",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttackHead] Raise Stagger Threshold by 40% of damage dealt"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict [Combustion] by Wrath Reson."
+              },
+              {
+                "desc": "[EndSkillHead] Inflict 5 [Combustion] on 3 random enemies"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2080321,
+        "name": "Ardor Blossom Star",
+        "desc": "[CantIdentify]\nTargets randomly\n[WhenUse] Lose HP by 10% of Max HP",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[EndSkill] Inflict [Combustion] by (2 * Wrath Reson.) on all units"
+              },
+              {
+                "desc": "[OnSucceedAttack] Raise Stagger Threshold by 60% of damage dealt"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2080311,
+        "name": "Shower of Fire",
+        "desc": "On hit, if the target has [Combustion], inflict 1 [Combustion] on 3 random enemies"
+      }
     ]
   },
   {
@@ -2262,6 +2636,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Tremor"
+    ],
+    "gameId": 20708,
+    "clientName": "Asymmetrical Inertia",
+    "clientDesc": "Heathcliff’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2070811,
+        "name": "Broken Bell",
+        "desc": "Inflict [Vulnerable] this turn on enemies who were hit by [VibrationExplosion] from Skill, Coin, or Passive effects.\n- Does not stack with E.G.O Gifts that inflict [Vulnerable] upon triggering [VibrationExplosion]. (If the said E.G.O Gifts have been enhanced, subtract this effect's value from the final value before inflicting it.)"
+      }
     ]
   },
   {
@@ -2499,6 +2883,16 @@
     "keywords": [
       "Tremor",
       "Sinking"
+    ],
+    "gameId": 20706,
+    "clientName": "Binds",
+    "clientDesc": "Heathcliff’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2070611,
+        "name": "Chains of Binding",
+        "desc": "- Combat Start: At 4+ highest Reson. that includes this unit's Skills, apply 3 [AttackUp] and 3 [DefenseUp] to self and all allies who were a part of that Reson.\n- If the said Reson. was an A-Reson., apply 2 additional [AttackUp] and [DefenseUp]"
+      }
     ]
   },
   {
@@ -2733,6 +3127,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Tremor"
+    ],
+    "gameId": 21106,
+    "clientName": "Binds",
+    "clientDesc": "Outis’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2110611,
+        "name": "Grand Welcome",
+        "desc": "Attack End: If the target this unit attacked is Staggered or defeated, gain +1 Pride E.G.O resource and +1 E.G.O resource for 1 other random Affinity (3 times per turn)"
+      }
     ]
   },
   {
@@ -2941,6 +3345,16 @@
     "keywords": [
       "Poise",
       "Charge"
+    ],
+    "gameId": 20805,
+    "clientName": "Blind Obsession",
+    "clientDesc": "Ishmael’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2080511,
+        "name": "Temeritous Voyage",
+        "desc": "At the end of the turn, inflict 5 [Sinking] to 1 other ally with the lowest HP; Apply 1 [Agility] and 3 [AttackUp] next turn"
+      }
     ]
   },
   {
@@ -3149,6 +3563,16 @@
     "keywords": [
       "Poise",
       "Charge"
+    ],
+    "gameId": 20406,
+    "clientName": "Blind Obsession",
+    "clientDesc": "Ryōshū’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2040611,
+        "name": "Dream Devouring",
+        "desc": "On Crit with a Pride affinity Skill, gain 1 [Breath] Count (3 times per turn)"
+      }
     ]
   },
   {
@@ -3254,7 +3678,39 @@
       ]
     },
     "maxThreadspin": 4,
-    "keywords": []
+    "keywords": [],
+    "gameId": 20701,
+    "clientName": "Bodysack",
+    "clientDesc": "Heathcliff’s Base E.G.O",
+    "clientSkills": [
+      {
+        "skillId": 2070111,
+        "name": "Bodysack",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Gain 1 [Enhancement] next turn"
+              },
+              {
+                "desc": "[OnSucceedAttack] Gain 3 [Agility] next turn"
+              },
+              {
+                "desc": "[EnemyKill] Gain 2 [Enhancement] next turn"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2070111,
+        "name": "Vying Spirit",
+        "desc": "When another ally defeats an enemy, gain 1 [Enhancement] and 1 [Agility] at the next Turn Start (max 3)"
+      }
+    ]
   },
   {
     "name": "Branch of Knowledge Sinclair",
@@ -3362,6 +3818,40 @@
     "maxThreadspin": 4,
     "keywords": [
       "Rupture"
+    ],
+    "gameId": 21001,
+    "clientName": "Branch of Knowledge",
+    "clientDesc": "Sinclair’s Base E.G.O",
+    "clientSkills": [
+      {
+        "skillId": 2100111,
+        "name": "Branch of Knowledge",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 12 [Burst]"
+              },
+              {
+                "desc": "[OnSucceedAttackHead] Lose 10 SP. <style=\"highlight\">Gain 1 [Enhancement] next turn</style>"
+              },
+              {},
+              {
+                "desc": "[OnSucceedAttackTail] Gain 10 SP. <style=\"highlight\">Gain 1 Protection next turn</style>"
+              },
+              {}
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2100111,
+        "name": "Unstable",
+        "desc": "If a Coin hits with a different side from the previous Coin of the same Skill, lose 5 SP and gain 1 [AttackDmgUp] this turn (3 times per turn)"
+      }
     ]
   },
   {
@@ -3570,6 +4060,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Sinking"
+    ],
+    "gameId": 21206,
+    "clientName": "Bygone Days",
+    "clientDesc": "Gregor’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2120611,
+        "name": "If I Could Go Back...",
+        "desc": "Attack End: If the target is defeated after this unit's attack, gain 1 E.G.O resource for the least-owned E.G.O resource.\nGain 1 additional E.G.O resource for every 5 ([Sinking] Potency + Count) (max 3)\n(If there are 2 or more \"least-owned E.G.O resource\", select 1 of those Affinities at random to gain an E.G.O resource)"
+      }
     ]
   },
   {
@@ -3820,6 +4320,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Sinking"
+    ],
+    "gameId": 20807,
+    "clientName": "Bygone Days",
+    "clientDesc": "Ishmael’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2080711,
+        "name": "Interloper Reception",
+        "desc": "If the target has [UninvitedGuestPersonality] or any of the Panic Type changing effects, Clash Power +1.\nOn Hit against the said target, heal 1 ally with the least SP for 5 SP. (once per turn)"
+      }
     ]
   },
   {
@@ -4016,6 +4526,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Sinking"
+    ],
+    "gameId": 20106,
+    "clientName": "Bygone Days",
+    "clientDesc": "Yi Sang’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2010611,
+        "name": "Fractured Yesterday",
+        "desc": "If the target has 6+ [Sinking] Potency, Clash Power +1\nIf the target has 4+ [Sinking] Count, Clash Power +1"
+      }
     ]
   },
   {
@@ -4224,6 +4744,55 @@
     "keywords": [
       "Burn",
       "Tremor"
+    ],
+    "gameId": 20804,
+    "clientName": "Capote",
+    "clientDesc": "Ishmael’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2080411,
+        "name": "Capote",
+        "desc": "[EndSkill] Apply 1 Wrath DMG Up to all allies next turn",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 4 [Combustion]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Deal 15 SP damage"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2080421,
+        "name": "Capote",
+        "desc": "[CantIdentify]\nTargets randomly\n[EndSkill] Give 1 Wrath Fragility, and 1 Wrath DMG Up to all units next turn",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 5 [Combustion]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Deal 15 SP damage"
+              },
+              {
+                "desc": "[OnSucceedAttack] Trigger [VibrationExplosion], then reduce [Vibration] Count by 2; if the [VibrationExplosion] Staggered the target, inflict +2 [Combustion] Count on 3 random units"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2080411,
+        "name": "Slaying Amid Cheers",
+        "desc": "When attacking a target that has less than 30% HP, Wrath Skills deal +20% damage"
+      }
     ]
   },
   {
@@ -4443,6 +5012,64 @@
     "keywords": [
       "Burn",
       "Tremor"
+    ],
+    "gameId": 20504,
+    "clientName": "Capote",
+    "clientDesc": "Meursault’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2050411,
+        "name": "Capote",
+        "desc": "[EndSkill] Gain 2 [Agility], 1 Wrath Power Up, and 1 Blunt Power Up next turn",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 10 [Combustion]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict [Vibration] by [Combustion] on target"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [Combustion] on 5 random enemies"
+              },
+              {
+                "desc": "[OnSucceedAttack] Trigger [VibrationExplosion], then reduce [Vibration] Count by 2; if the [VibrationExplosion] Staggered the target, inflict +3 [Combustion] Count on 5 random enemies"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2050421,
+        "name": "Capote",
+        "desc": "[CantIdentify]\nTargets randomly\n[EndSkill] Gain 2 [Agility], 1 Wrath Power Up, and 1 Blunt Power Up next turn",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 12 [Combustion]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict [Vibration] by [Combustion] on target"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [Combustion] on 5 random units"
+              },
+              {
+                "desc": "[OnSucceedAttack] Trigger [VibrationExplosion], then reduce [Vibration] Count by 2; if the [VibrationExplosion] Staggered the target, inflict +4 [Combustion] Count on 5 random units"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2050411,
+        "name": "Untempered Agitation",
+        "desc": "Combat Start: If this unit is targeted by 2 or more Skills, this unit’s Skills gain +1 Base Power; when hit, inflict 1 [Combustion] on the attacker (5 times per turn)"
+      }
     ]
   },
   {
@@ -4662,6 +5289,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Tremor"
+    ],
+    "gameId": 20606,
+    "clientName": "Cavernous Wailing",
+    "clientDesc": "Hong Lu’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2060611,
+        "name": "Gloominess",
+        "desc": "When this unit uses a Skill to trigger [VibrationExplosion] on an enemy, inflict 1 [AttackDown] and 2 [DefenseDown] on the enemy next turn. (3 times per turn, including E.G.O Skills)"
+      }
     ]
   },
   {
@@ -4896,6 +5533,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Sinking"
+    ],
+    "gameId": 21006,
+    "clientName": "Cavernous Wailing",
+    "clientDesc": "Sinclair’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2100611,
+        "name": "Tear Film",
+        "desc": "Turn Start: If this unit has Shield, gain 1 [Protection]\nIf this unit is under [ShieldManagerCryingToad]'s effect, gain 1 additional [Protection]"
+      }
     ]
   },
   {
@@ -5018,7 +5665,45 @@
       ]
     },
     "maxThreadspin": 4,
-    "keywords": []
+    "keywords": [],
+    "gameId": 20501,
+    "clientName": "Chains of Others",
+    "clientDesc": "Meursault’s Base E.G.O",
+    "clientSkills": [
+      {
+        "skillId": 2050111,
+        "name": "Chains of Others",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 5 [Binding] next turn"
+              },
+              {
+                "desc": "[OnSucceedAttack] Gain 3 [Binding] next turn"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 4 [Reduction] next turn"
+              },
+              {
+                "desc": "[OnSucceedAttack] Gain 3 [Reduction] next turn"
+              },
+              {
+                "desc": "[OnSucceedAttack] Gain 2 Protection next turn"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2050111,
+        "name": "Refusal to Judge",
+        "desc": "Combat Start: Gain 3 [Protection] if this unit is targeted by 3 or more Skills"
+      }
+    ]
   },
   {
     "name": "Christmas Nightmare Gregor",
@@ -5249,6 +5934,16 @@
     "keywords": [
       "Tremor",
       "Sinking"
+    ],
+    "gameId": 21208,
+    "clientName": "Christmas Nightmare",
+    "clientDesc": "Gregor’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2120811,
+        "name": "Insomniac Night",
+        "desc": "Combat Start: against all enemies, inflict 1 [AttackDown] or 1 [DefenseDown] to all enemies (# of enemies in Staggered, Low Morale, or Panic states) times. (2 times per turn)\n- Effect does not stack with E.G.O Gifts with the same effect."
+      }
     ]
   },
   {
@@ -5475,6 +6170,16 @@
     "keywords": [
       "Tremor",
       "Sinking"
+    ],
+    "gameId": 20808,
+    "clientName": "Christmas Nightmare",
+    "clientDesc": "Ishmael’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2080811,
+        "name": "A Gaze in the Shadows",
+        "desc": "Allies gain +1 more [Vibration] Count from Skill or Coin effects (2 times per turn)\n- If the ally's target is in Staggered, Low Morale, or Panic states, gain +2 more instead\n- Effect does not stack with E.G.O Gifts of an identical effect."
+      }
     ]
   },
   {
@@ -5729,6 +6434,16 @@
     "keywords": [
       "Burn",
       "Rupture"
+    ],
+    "gameId": 20209,
+    "clientName": "Command : Meltdown",
+    "clientDesc": "Faust’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2020911,
+        "name": "Doctor",
+        "desc": "Turn Start: heal self and 1 ally with the lowest HP percentage by ([CuredFilm] Stack)% of this unit's max HP\n- If this unit is at max HP, heal 2 other allies with the lowest HP percentages instead\n- If the heal-receiving units are at 25% or lower HP, or are Staggered, multiply this effect's healing by 1.5\n\nTurn End: if the last E.G.O Skill Faust used during this Encounter was Command : Meltdown, lose only 1 Stack of [CuredFilm] at Turn End instead\n- This effect activates in the same turn the E.G.O Skill is used"
+      }
     ]
   },
   {
@@ -5946,6 +6661,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Bleed"
+    ],
+    "gameId": 20407,
+    "clientName": "Contempt, Awe",
+    "clientDesc": "Ryōshū’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2040711,
+        "name": "Mark of the Gaze",
+        "desc": "Whenever this unit uses a base Attack Skill against an enemy, gain 1 additional E.G.O resource for a random, least-owned Affinity that doesn't correspond to the Affinity of the Attack Skill used (2 times per turn)"
+      }
     ]
   },
   {
@@ -6056,7 +6781,39 @@
       ]
     },
     "maxThreadspin": 4,
-    "keywords": []
+    "keywords": [],
+    "gameId": 20101,
+    "clientName": "Crow’s Eye View",
+    "clientDesc": "Yi Sang’s Base E.G.O",
+    "clientSkills": [
+      {
+        "skillId": 2010111,
+        "name": "Crow’s Eye View",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 2 [Reduction]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Apply 3 [Agility] to all allies next turn"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 2 [Binding] next turn"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2010111,
+        "name": "Silence",
+        "desc": "When hit: Next turn, gain 3 [Binding] and deal +20% damage when attacking with an Attack Type or Affinity the target is Weak or Fatal against (once per turn)"
+      }
+    ]
   },
   {
     "name": "Crushbound Past Meursault",
@@ -6325,6 +7082,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Tremor"
+    ],
+    "gameId": 20508,
+    "clientName": "Crushbound Past",
+    "clientDesc": "Meursault’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2050811,
+        "name": "Metronome",
+        "desc": "Turn Start: in odd-numbered turns, gain 1 [AttackDmgUp]; in even-numbered turns, gain 1 [Protection]\n- Does not stack with the Metronome E.G.O Gift. (If the said E.G.O Gift is at an enhanced state, its effect subtracts the values gained from this effect)\n- Does not affect the instances of its effect applied to other allies\n\nWhen using E.G.O Skill, gain 1 [AccumulatedPastSinner] next turn (once per Encounter)\n- Gain 1 [AccumulatedPastSinner] at every subsequent Turn End"
+      }
     ]
   },
   {
@@ -6526,6 +7293,46 @@
     "maxThreadspin": 4,
     "keywords": [
       "Charge"
+    ],
+    "gameId": 20603,
+    "clientName": "Dimension Shredder",
+    "clientDesc": "Hong Lu’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2060311,
+        "name": "Dimension Shredder",
+        "desc": "Targets the rearmost unit (In regular encounters)\n\n[BeforeAttack] Gain +5 [Charge] Count; Gain 2 [Agility] next turn",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 1 [Vulnerable] and 4 [DimensionRift]"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2060321,
+        "name": "Dimension Shredder",
+        "desc": "[CantIdentify]\nTargets the unit with the most HP\n\n[BeforeAttack] Gain <style=\"highlight\">3</style> [Agility] next turn\nSpend 10 [Charge] Count to inflict <style=\"highlight\">+2</style> more [Vulnerable] and [DimensionRift] On Hit with this Skill",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 1 [Vulnerable] and 4 [DimensionRift]"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2060311,
+        "name": "Entangled Phenomena Restoration",
+        "desc": "On Hit against an enemy that has negative status effects, gain +1 [Charge] Count (4 times per turn).\nWhen HP falls to 0, consume all [Charge] Count and heal HP based on Stacks consumed (once per Encounter; max 25% HP)"
+      }
     ]
   },
   {
@@ -6759,6 +7566,55 @@
     "maxThreadspin": 4,
     "keywords": [
       "Charge"
+    ],
+    "gameId": 21107,
+    "clientName": "Dimension Shredder",
+    "clientDesc": "Outis’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2010411,
+        "name": "Dimension Shredder",
+        "desc": "Targets the rearmost unit (In regular encounters)\n\n[BeforeAttack] Spend [Charge] Count to deal more damage (Max 75%)<style=\"highlight\"></style>",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] If [Charge] Count was spent, inflict <style=\"highlight\">5</style> [DimensionRift]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Deal bonus Pride damage by (Target’s [Burst] x 10)% of the damage dealt, and reduce [Burst] Count by 5 (Max 100)<style=\"highlight\"></style>"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2010421,
+        "name": "Dimension Shredder",
+        "desc": "[CantIdentify]\nTargets a random unit\n\n[BeforeAttack] Spend [Charge] Count to deal more damage (Max 75%)<style=\"highlight\"></style>",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] If [Charge] Count was spent, inflict <style=\"highlight\">5</style> [DimensionRift]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 6 [Burst]<style=\"highlight\"></style>"
+              },
+              {
+                "desc": "[OnSucceedAttack] Deal bonus Pride damage by (Target’s [Burst] x 10)% of the damage dealt, and reduce [Burst] Count by 5 (Max 100)<style=\"highlight\"></style>"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2110711,
+        "name": "Rambling Man",
+        "desc": "Max [Charge] Count +5\nSkills that consume [Charge] Count deal +2% damage for every ([Charge] - 1) (max 10%)"
+      }
     ]
   },
   {
@@ -6967,6 +7823,55 @@
     "keywords": [
       "Charge",
       "Rupture"
+    ],
+    "gameId": 20104,
+    "clientName": "Dimension Shredder",
+    "clientDesc": "Yi Sang’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2010411,
+        "name": "Dimension Shredder",
+        "desc": "Targets the rearmost unit (In regular encounters)\n\n[BeforeAttack] Spend [Charge] Count to deal more damage (Max 75%)<style=\"highlight\"></style>",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] If [Charge] Count was spent, inflict <style=\"highlight\">5</style> [DimensionRift]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Deal bonus Pride damage by (Target’s [Burst] x 10)% of the damage dealt, and reduce [Burst] Count by 5 (Max 100)<style=\"highlight\"></style>"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2010421,
+        "name": "Dimension Shredder",
+        "desc": "[CantIdentify]\nTargets a random unit\n\n[BeforeAttack] Spend [Charge] Count to deal more damage (Max 75%)<style=\"highlight\"></style>",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] If [Charge] Count was spent, inflict <style=\"highlight\">5</style> [DimensionRift]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 6 [Burst]<style=\"highlight\"></style>"
+              },
+              {
+                "desc": "[OnSucceedAttack] Deal bonus Pride damage by (Target’s [Burst] x 10)% of the damage dealt, and reduce [Burst] Count by 5 (Max 100)<style=\"highlight\"></style>"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2010411,
+        "name": "Rambling Man",
+        "desc": "Turn Start: If this unit took no damage last turn, gain +4 [Charge] Count.\nOn Hit against an enemy that has a slower Speed, inflict +1 [Burst] Count (3 times per turn)."
+      }
     ]
   },
   {
@@ -7165,6 +8070,58 @@
     "keywords": [
       "Bleed",
       "Rupture"
+    ],
+    "gameId": 21102,
+    "clientName": "Ebony Stem",
+    "clientDesc": "Outis’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2110211,
+        "name": "Ebony Stem",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 2 [Burst]"
+              },
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 2 [Laceration]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 2 Gluttony Fragility"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2110221,
+        "name": "Ebony Stem",
+        "desc": "[CantIdentify]\nTargets randomly",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 5 [Burst]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 5 [Laceration]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 Gluttony Fragility"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2110211,
+        "name": "Stem of Distrust",
+        "desc": "Gain 1 [PenetrateDamageUp] every turn\nHeads Hit: Inflict 1 [Binding] and +1 [Burst] Count next turn"
+      }
     ]
   },
   {
@@ -7374,6 +8331,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Rupture"
+    ],
+    "gameId": 20605,
+    "clientName": "Effervescent Corrosion",
+    "clientDesc": "Hong Lu’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2060511,
+        "name": "Green Slime",
+        "desc": "If struck at less than 50% HP, inflict 1 [Burst] on the attacker. (Activates (Highest Gluttony A-Reson) times per turn)"
+      }
     ]
   },
   {
@@ -7582,6 +8549,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Tremor"
+    ],
+    "gameId": 20904,
+    "clientName": "Effervescent Corrosion",
+    "clientDesc": "Rodion’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2090411,
+        "name": "Sticky Filth",
+        "desc": "On Heads Hit with a Pierce Skill, inflict 1 [Binding] (2 times per turn)"
+      }
     ]
   },
   {
@@ -7796,6 +8773,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Charge"
+    ],
+    "gameId": 20306,
+    "clientName": "Electric Screaming",
+    "clientDesc": "Don Quixote’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2030611,
+        "name": "Tempestuous Screaming",
+        "desc": "If the target is defeated at this unit's Slash or Envy Affinity Skill End, gain 1 [Enhancement] next turn (once per turn)"
+      }
     ]
   },
   {
@@ -8015,6 +9002,16 @@
     "keywords": [
       "Charge",
       "Rupture"
+    ],
+    "gameId": 20506,
+    "clientName": "Electric Screaming",
+    "clientDesc": "Meursault’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2050611,
+        "name": "Overloading Cables",
+        "desc": "Combat Start: At 4+ Reson., gain 2 [AttackUp] and 2 [DefenseUp].\nIf the Reson. was an Envy Reson., apply the above effects to the 2 units adjacent to this unit on the Dashboard as well"
+      }
     ]
   },
   {
@@ -8263,6 +9260,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Tremor"
+    ],
+    "gameId": 20206,
+    "clientName": "Everlasting",
+    "clientDesc": "Faust’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2020611,
+        "name": "Running Time",
+        "desc": "When this unit uses a Skill to trigger [VibrationExplosion] on an enemy, gain 1 [Agility] next turn. (4 times per turn, including E.G.O Skills)"
+      }
     ]
   },
   {
@@ -8522,6 +9529,16 @@
       "Bleed",
       "Poise",
       "Sinking"
+    ],
+    "gameId": 20707,
+    "clientName": "Fell Bullet",
+    "clientDesc": "Heathcliff’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2070711,
+        "name": "Crushed Pendant",
+        "desc": "Combat Start: At 3+ highest Reson., gain 3 [Breath]."
+      }
     ]
   },
   {
@@ -8828,6 +9845,16 @@
     "keywords": [
       "Bleed",
       "Poise"
+    ],
+    "gameId": 20107,
+    "clientName": "Fell Bullet",
+    "clientDesc": "Yi Sang’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2010711,
+        "name": "Next",
+        "desc": "Attack End: If the target is killed, gain +2 [Breath] Count (2 times per turn)"
+      }
     ]
   },
   {
@@ -9027,6 +10054,61 @@
     "keywords": [
       "Tremor",
       "Sinking"
+    ],
+    "gameId": 20302,
+    "clientName": "Fluid Sac",
+    "clientDesc": "Don Quixote’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2030211,
+        "name": "Fluid Sac",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Trigger [VibrationExplosion]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Deal 25 SP damage"
+              },
+              {
+                "desc": "If target is Staggered, in Low Morale, or in Panic, deal 30% of damage dealt as bonus damage"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 2 [Sinking]"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2030221,
+        "name": "Fluid Sac",
+        "desc": "[CantIdentify]\nTargets randomly",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 10 [Vibration]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 10 [Sinking]"
+              },
+              {
+                "desc": "If target is NOT Staggered, in Low Morale, nor in Panic, deal 50% of damage dealt as bonus damage"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2030211,
+        "name": "Wave of Depression",
+        "desc": "The target of the rightmost Skill on the Dashboard loses (2 x Gloom A-Reson.) SP at the Skill's Attack End (targets that are Non-SP Units take Gloom damage instead)"
+      }
     ]
   },
   {
@@ -9229,7 +10311,59 @@
       ]
     },
     "maxThreadspin": 4,
-    "keywords": []
+    "keywords": [],
+    "gameId": 20202,
+    "clientName": "Fluid Sac",
+    "clientDesc": "Faust’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2020211,
+        "name": "Fluid Sac",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[EndSkill] Heal 15 SP for all allies"
+              },
+              {
+                "desc": "[EndSkill] Heal all allies for 15% of Max HP"
+              },
+              {
+                "desc": "[EndSkillHead] Heal 10 SP for all allies"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2020221,
+        "name": "Fluid Sac",
+        "desc": "[CantIdentify]\nTargets randomly",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Deal 20 SP damage"
+              },
+              {
+                "desc": "[OnSucceedAttackTail] Deal 10 SP damage"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 2 [Reduction] next turn"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2020211,
+        "name": "Liquid Veil",
+        "desc": "Turn Start: Apply 2 [Protection] to the ally that has the least HP (including this unit)"
+      }
+    ]
   },
   {
     "name": "Forest for the Flames Ryōshū",
@@ -9334,6 +10468,38 @@
     "maxThreadspin": 4,
     "keywords": [
       "Burn"
+    ],
+    "gameId": 20401,
+    "clientName": "Forest for the Flames",
+    "clientDesc": "Ryōshū’s Base E.G.O",
+    "clientSkills": [
+      {
+        "skillId": 2040111,
+        "name": "Forest for the Flames",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 6 [Combustion]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 1 [Vulnerable] next turn"
+              },
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 1 [Vulnerable] next turn"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2040111,
+        "name": "Art",
+        "desc": "Deal and take +5% damage for every enemy this unit defeated last turn"
+      }
     ]
   },
   {
@@ -9563,7 +10729,17 @@
       ]
     },
     "maxThreadspin": 4,
-    "keywords": []
+    "keywords": [],
+    "gameId": 21205,
+    "clientName": "Garden of Thorns",
+    "clientDesc": "Gregor’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2120511,
+        "name": "Crown of Roses",
+        "desc": "Turn Start: Inflict 2 [Burst] Potency on a random enemy(In Focused Encounters, all parts)\nWhen activating Absolute Resonance, inflict 2 [Burst] Potency on all enemies at Combat Start"
+      }
+    ]
   },
   {
     "name": "Harmony Sinclair",
@@ -9883,6 +11059,16 @@
     "keywords": [
       "Burn",
       "Bleed"
+    ],
+    "gameId": 21009,
+    "clientName": "Harmony",
+    "clientDesc": "Sinclair’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2100911,
+        "name": "That... was Indeed a Rhythm",
+        "desc": "Turn Start: Gain 2 [ThatIsRhythm]\n\nOn Target Kill: This unit heals 5% HP and 5 SP (once per turn)\n- If target was killed by E.G.O Skill - Harmony, double the amount this effect heals\n\nTurn End: If this unit lost SP this turn, heal (4 + sum of [Combustion] and [Laceration] on all enemies / 10) SP (max 10; rounded down)"
+      }
     ]
   },
   {
@@ -10083,7 +11269,71 @@
       ]
     },
     "maxThreadspin": 4,
-    "keywords": []
+    "keywords": [],
+    "gameId": 20203,
+    "clientName": "Hex Nail",
+    "clientDesc": "Faust’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2020311,
+        "name": "Hex Nail",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [PenetrateTakeDamageUp]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 1 [VioletTakeDamageUp]"
+              },
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 3 [Curse]"
+              },
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 3 Nails"
+              },
+              {
+                "desc": "[OnSucceedAttack] If target has [Curse], deal +50% damage"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2020321,
+        "name": "Hex Nail",
+        "desc": "[CantIdentify]\nTargets randomly",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 1 [PenetrateTakeDamageUp]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [VioletTakeDamageUp]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [Curse]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 Nails"
+              },
+              {
+                "desc": "[OnSucceedAttack] If target has [Curse], deal +50% damage"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2020311,
+        "name": "It Hurts!",
+        "desc": "Deal +10% damage for every type of negative effect on this unit (max 50%)"
+      }
+    ]
   },
   {
     "name": "Hex Nail Rodion",
@@ -10305,6 +11555,70 @@
     "maxThreadspin": 4,
     "keywords": [
       "Bleed"
+    ],
+    "gameId": 20907,
+    "clientName": "Hex Nail",
+    "clientDesc": "Rodion’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2020311,
+        "name": "Hex Nail",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [PenetrateTakeDamageUp]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 1 [VioletTakeDamageUp]"
+              },
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 3 [Curse]"
+              },
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 3 Nails"
+              },
+              {
+                "desc": "[OnSucceedAttack] If target has [Curse], deal +50% damage"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2020321,
+        "name": "Hex Nail",
+        "desc": "[CantIdentify]\nTargets randomly",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 1 [PenetrateTakeDamageUp]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [VioletTakeDamageUp]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [Curse]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 Nails"
+              },
+              {
+                "desc": "[OnSucceedAttack] If target has [Curse], deal +50% damage"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2090711,
+        "name": "Iron Stake against the Heart",
+        "desc": "When inflicting [Laceration] or 'Unique Bleed' against an enemy with Base Attack Skills, inflict 1 [DefenseDown] (once per turn)\n- If the target has [Laceration] or 'Unique Bleed', inflict additional 2 [Laceration] (once per turn)\n\nIf an ally, including this unit, takes direct HP damage from the enemy, inflict 1 [Curse] against the target enemy (2 times per turn)"
+      }
     ]
   },
   {
@@ -10527,6 +11841,70 @@
     "maxThreadspin": 4,
     "keywords": [
       "Bleed"
+    ],
+    "gameId": 21007,
+    "clientName": "Hex Nail",
+    "clientDesc": "Sinclair’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2020311,
+        "name": "Hex Nail",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [PenetrateTakeDamageUp]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 1 [VioletTakeDamageUp]"
+              },
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 3 [Curse]"
+              },
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 3 Nails"
+              },
+              {
+                "desc": "[OnSucceedAttack] If target has [Curse], deal +50% damage"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2020321,
+        "name": "Hex Nail",
+        "desc": "[CantIdentify]\nTargets randomly",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 1 [PenetrateTakeDamageUp]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [VioletTakeDamageUp]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [Curse]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 Nails"
+              },
+              {
+                "desc": "[OnSucceedAttack] If target has [Curse], deal +50% damage"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2100711,
+        "name": "Grimy Hide",
+        "desc": "Combat Start: if this unit has a negative effect, gain 1 [ParryingResultUp] and 1 [Endurance]\n- Gain 1 [Protection] for every 3 negative effect on self (max 2)"
+      }
     ]
   },
   {
@@ -10732,6 +12110,16 @@
       "Sinking",
       "Charge",
       "Rupture"
+    ],
+    "gameId": 20705,
+    "clientName": "Holiday",
+    "clientDesc": "Heathcliff’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2070511,
+        "name": "Infinite Hatred",
+        "desc": "When this unit has a status effect or a negative effect, and if the main target or the attacker has a positive effect:\n- Inflict +1 more [Combustion], [Laceration], [Vibration], [Burst], and [Sinking] Potency to self and enemies with Skill effects or Coin effects\n- Gain +1 more [Breath] and [Charge] Count with Skill effects or Coin effects"
+      }
     ]
   },
   {
@@ -10946,6 +12334,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Tremor"
+    ],
+    "gameId": 21105,
+    "clientName": "Holiday",
+    "clientDesc": "Outis’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2110511,
+        "name": "Fair Presents",
+        "desc": "When applying positive effects to other allies with Skill effects or Coin effects, randomly select one of the following effects: [Combustion], [Laceration], [Vibration], [Burst], or [Sinking].\nThen, inflict 1 Potency of the selected effect to 1 random enemy. (Activates 5 times per Turn. Can be applied up to 5 times per enemy. For abnormalities, applied to a random Part.)"
+      }
     ]
   },
   {
@@ -11181,6 +12579,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Bleed"
+    ],
+    "gameId": 20310,
+    "clientName": "I'll Go fer Scissors. How 'Bout You?",
+    "clientDesc": "Don Quixote’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2031011,
+        "name": "'Tis Thy Turn to Swallow the Needle!",
+        "desc": "Envy Skills deal +10% damage\n- Said Skills deal +1% more damage for every 1 Envy Reson. (max 7%)\n\nTurn Start: Gain [AttackUp] equal to (cumulative HP damage taken by this unit in this Encounter (including Shield damage) / 20) (max 3)\n\nCombat Start: On Envy A-Reson., inflict 1 [NiddleEGO] to all enemies (in Focused Encounters, all Parts)"
+      }
     ]
   },
   {
@@ -11431,7 +12839,17 @@
       ]
     },
     "maxThreadspin": 4,
-    "keywords": []
+    "keywords": [],
+    "gameId": 21109,
+    "clientName": "I'll Go fer Scissors. How 'Bout You?",
+    "clientDesc": "Outis’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2110911,
+        "name": "Loser's Penalty: Voodoo",
+        "desc": "On Clash Win, deal 4 Envy damage to target\n- At less than 33% HP, or if target has less than 33% HP, inflict 1 [ResultReduction] next turn (once per turn)\n- This Passive's effect does not inflict [ResultReduction] in the same turn the E.G.O Gift <noparse>Voodoo Doll</noparse> activated"
+      }
+    ]
   },
   {
     "name": "Impending Day Sinclair",
@@ -11628,6 +13046,52 @@
     "maxThreadspin": 4,
     "keywords": [
       "Bleed"
+    ],
+    "gameId": 21002,
+    "clientName": "Impending Day",
+    "clientDesc": "Sinclair’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2100211,
+        "name": "Impending Day",
+        "desc": "If target’s HP is below 25%, +40% Damage",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[EnemyKill] Gain 1 [Enhancement] next turn"
+              },
+              {
+                "desc": "[EnemyKill] Heal all allies for 15% of their Max HP"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2100221,
+        "name": "Impending Day",
+        "desc": "[CantIdentify]\nTargets randomly\nIf target’s HP is below 25%, +50% Damage",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[EnemyKillFail] Gain 10 [Laceration] next turn"
+              },
+              {
+                "desc": "[EnemyKillFail] Gain 3 [Enhancement] next turn"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2100211,
+        "name": "Live Offering",
+        "desc": "After defeating an enemy with an attack or counter skill, gain 5 E.G.O resources of that skill’s Affinity."
+      }
     ]
   },
   {
@@ -11854,6 +13318,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Burn"
+    ],
+    "gameId": 20908,
+    "clientName": "Indicant's Trial",
+    "clientDesc": "Rodion’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2090811,
+        "name": "Blazing Amusement",
+        "desc": "When a target that has 10+ [Combustion] Count is defeated, inflict the [Combustion] Count on target between all enemies and heal 8 SP on self (in Focused Encounters, between all Parts; 3 max per target, 2 times per turn)\n- At max SP, heal 5 SP for 1 ally that has the least SP instead"
+      }
     ]
   },
   {
@@ -12112,6 +13586,16 @@
     "keywords": [
       "Burn",
       "Bleed"
+    ],
+    "gameId": 20909,
+    "clientName": "Into the Sunset",
+    "clientDesc": "Rodion’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2090911,
+        "name": "What Distinguishes Moths from Butterflies",
+        "desc": "If this unit's leftmost Base Attack Skill on the Dashboard is a Wrath or a Lust Skill, at Attack End, deal 30% of the damage dealt against the main target with that Skill as its corresponding Affinity damage to a random enemy (max 30 damage; for Focused Encounters, a Part)\n\nIf this unit dealt the maximum possible damage with the above effect, gain 1 Affinity DMG Up for the corresponding Affinity next turn, and disable the above effect from triggering for 2 turns"
+      }
     ]
   },
   {
@@ -12392,6 +13876,16 @@
       "Sinking",
       "Charge",
       "Rupture"
+    ],
+    "gameId": 20309,
+    "clientName": "In the Name of Love and Hate",
+    "clientDesc": "Don Quixote’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2030911,
+        "name": "Arcana Aptitude Circuit",
+        "desc": "Gain 1 [Charge] every time this unit consumes 10 cumulative [Charge] Count\n- If this unit already gains [Charge] by consuming [Charge] Count on self, this effect does not stack with that effect\n- This unit's Base Attack Skills that consume [Charge] Count: deal +5% damage for every [Charge] on self (max 25%)\n\nIf this unit is Lobotomy E.G.O::In the Name of Love and Hate Don Quixote, gain 1 additional Skill 3 use"
+      }
     ]
   },
   {
@@ -12499,6 +13993,35 @@
     "maxThreadspin": 4,
     "keywords": [
       "Sinking"
+    ],
+    "gameId": 20601,
+    "clientName": "Land of Illusion",
+    "clientDesc": "Hong Lu’s Base E.G.O",
+    "clientSkills": [
+      {
+        "skillId": 2060111,
+        "name": "Land of Illusion",
+        "desc": "[EndSkill] Heal 15 SP",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 5 [Sinking]"
+              },
+              {
+                "desc": "[EndSkill] Next turn: -2 SP Loss Efficiency to all allies; -2 to amount of SP lost from E.G.O use"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2060111,
+        "name": "Ripple",
+        "desc": "Combat Start: Heal (this unit's highest A-Reson.) SP for the ally that has the least SP, excluding allies in Panic"
+      }
     ]
   },
   {
@@ -12693,6 +14216,49 @@
     "maxThreadspin": 4,
     "keywords": [
       "Rupture"
+    ],
+    "gameId": 21203,
+    "clientName": "Lantern",
+    "clientDesc": "Gregor’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2120311,
+        "name": "Lantern",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Heal 60% of damage dealt"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2120321,
+        "name": "Lantern",
+        "desc": "[CantIdentify] \nTargets the unit with the most HP",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Heal 30% of damage dealt"
+              },
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 5 [Burst]"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2120311,
+        "name": "Nutrient Absorption",
+        "desc": "After defeating an enemy that has [Burst], heal (Gluttony A-Reson.)% HP."
+      }
     ]
   },
   {
@@ -12899,6 +14465,49 @@
     "maxThreadspin": 4,
     "keywords": [
       "Rupture"
+    ],
+    "gameId": 21004,
+    "clientName": "Lantern",
+    "clientDesc": "Sinclair’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2120311,
+        "name": "Lantern",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Heal 60% of damage dealt"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2120321,
+        "name": "Lantern",
+        "desc": "[CantIdentify] \nTargets the unit with the most HP",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Heal 30% of damage dealt"
+              },
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 5 [Burst]"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2100411,
+        "name": "Fairy Lure",
+        "desc": "After defeating an enemy that main-targets this unit at Combat Start, heal (3 + (Gluttony A-Reson.))% HP"
+      }
     ]
   },
   {
@@ -13113,6 +14722,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Rupture"
+    ],
+    "gameId": 20207,
+    "clientName": "Lasso",
+    "clientDesc": "Faust’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2020711,
+        "name": "Sprawling Lasso",
+        "desc": "Attack End: If the target is Staggered or defeated, inflict +1 [Burst] Count against 2 random enemies (once per turn; cannot stack; in Focused Encounters, against 2 random Parts)"
+      }
     ]
   },
   {
@@ -13339,6 +14958,16 @@
     "keywords": [
       "Bleed",
       "Rupture"
+    ],
+    "gameId": 20607,
+    "clientName": "Lasso",
+    "clientDesc": "Hong Lu’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2060711,
+        "name": "Time to Hunt",
+        "desc": "If an enemy or an ally is killed due to [Burst] or [Laceration] damage, inflict 2 [Snare] against a random enemy, and gain 1 [Agility] next turn (once per turn)"
+      }
     ]
   },
   {
@@ -13442,6 +15071,35 @@
     "maxThreadspin": 4,
     "keywords": [
       "Bleed"
+    ],
+    "gameId": 20301,
+    "clientName": "La Sangre de Sancho",
+    "clientDesc": "Don Quixote’s Base E.G.O",
+    "clientSkills": [
+      {
+        "skillId": 2030111,
+        "name": "La Sangre de Sancho",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 8 [Laceration]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Heal by 50% of damage dealt"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2030111,
+        "name": "Immoderate Passion",
+        "desc": "On Hit, if target has [Laceration], heal 3 HP"
+      }
     ]
   },
   {
@@ -13648,6 +15306,58 @@
     "keywords": [
       "Bleed",
       "Tremor"
+    ],
+    "gameId": 21202,
+    "clientName": "Legerdemain",
+    "clientDesc": "Gregor’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2120211,
+        "name": "Legerdemain",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Trigger [VibrationExplosion]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 6 [Vibration]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 4 [Paralysis]"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2120221,
+        "name": "Legerdemain",
+        "desc": "[CantIdentify]\nTargets randomly",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 4 [Laceration]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 4 [Paralysis]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 6 [Muckworm]"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2120211,
+        "name": "Maggots",
+        "desc": "On Hit, inflict 5 [Muckworm] with a (Gluttony A-Reson. x 8)% chance"
+      }
     ]
   },
   {
@@ -13895,6 +15605,60 @@
     "keywords": [
       "Burn",
       "Bleed"
+    ],
+    "gameId": 20304,
+    "clientName": "Lifetime Stew",
+    "clientDesc": "Don Quixote’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2030411,
+        "name": "Lifetime Stew",
+        "desc": "<style=\"highlight\">Final Power +1 for every 4 ([Combustion] + [Laceration]) on the main target (max 3)\n[BeforeAttack] Apply 1 [ScarletResultUp] next turn to allies according to their Deployment Order for every 6 Lust E.G.O resource owned (max 5 units)\n[BeforeAttack] Deal +6% damage for every 1 Lust E.G.O resource owned (max 120%)</style>",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict +3 [Combustion] Count<style=\"highlight\"></style>"
+              },
+              {
+                "desc": "<style=\"highlight\">[OnSucceedAttack] Inflict +3 [Laceration] Count</style>"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2030421,
+        "name": "Lifetime Stew",
+        "desc": "[CantIdentify]\nTargets the unit with the most HP\n\n<style=\"highlight\">Final Power +1 for every 4 ([Combustion] + [Laceration]) on the main target (max 3)\n[BeforeAttack] Apply 1 [ScarletResultUp] and 1 [ScarletDamageUp] next turn to allies according to their Deployment Order for every 6 Lust E.G.O resource owned (max 5 units)\n[BeforeAttack]\n- Deal +5% damage for every 1 Lust E.G.O resource owned (max 100%)\n- Then, consume (Lust Reson. x 2) Lust E.G.O resource (max 8)\n- Deal +20% damage for every 1 Lust E.G.O resource consumed (max 160%)</style>",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "<style=\"highlight\">[SuperCoin]</style>"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict +4 [Combustion] Count<style=\"highlight\"></style>"
+              },
+              {
+                "desc": "<style=\"highlight\">[OnSucceedAttack] Inflict +4 [Laceration] Count</style>"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2030411,
+        "name": "Cauldron of Gorging",
+        "desc": "Turn Start: Convert 2 random non-Lust E.G.O resources into 1 Lust resource"
+      },
+      {
+        "passiveId": 2030412,
+        "name": "Cauldron of Gorging",
+        "desc": "Turn Start: Convert <style=\"highlight\">1</style> random non-Lust E.G.O resource into 1 Lust E.G.O resource\n<style=\"highlight\">- At 20+ Lust E.G.O resource, this effect does not activate and this unit gains 1 [ScarletResultUp] instead\n\nLust Base Skills deal +1% damage for every Lust Resource owned Before Attack (max 10%)</style>"
+      }
     ]
   },
   {
@@ -14171,6 +15935,72 @@
     "maxThreadspin": 5,
     "keywords": [
       "Burn"
+    ],
+    "gameId": 21003,
+    "clientName": "Lifetime Stew",
+    "clientDesc": "Sinclair’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2100311,
+        "name": "Lifetime Stew",
+        "desc": "[CantIdentify]\nTargets the unit with the least HP\n<style=\"highlight\">Required Gluttony E.G.O resource to use this Skill is reduced to 0\nIf target is an ally, this Skill deals 0 damage and does not trigger Defense Skills (including Clashable Defense Skills)\n[DefeatDuel] Base Power -8\n[EndSkill] If this Skill hit an ally, this unit heals SP equal to the number of allies targeted by this Skill\n[EndSkill] Heal this unit for (5 x number of allies targeted by this Skill)% Max HP (min 5%, max 20%)\n[EndSkill] Gain 1 [GainSinStockAdder] and 2 [Agility] next turn</style>",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "<style=\"highlight\">[SuperCoin]</style>"
+              },
+              {
+                "desc": "<style=\"highlight\">[OnSucceedAttack] If target is an ally,</style>"
+              },
+              {
+                "desc": "<style=\"highlight\">- Heal target for (5 x number of allies targeted by this Skill)% of user's Max HP (max 20%)</style>"
+              },
+              {
+                "desc": "<style=\"highlight\">- Apply 1 [GainSinStockAdder] and 2 [Agility] next turn</style>"
+              },
+              {
+                "desc": "[OnSucceedAttackTail] Inflict 7 [Combustion]<style=\"highlight\"></style>"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2100321,
+        "name": "Lifetime Stew",
+        "desc": "[CantIdentify]\nTargets the unit with the least HP\n<style=\"highlight\">Required Gluttony E.G.O resource to use this Skill is reduced to 0\n[DefeatDuel] Base Power -12\n[BeforeAttack] Deal +15% damage for every 4 ([Combustion] Potency on all targets) (max 60%)\n[BeforeAttack] Consume up to 3 of the most-owned E.G.O resource, and deal +10% damage for every 1 of the said E.G.O resource consumed (max 30%)</style>",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "<style=\"highlight\">[SuperCoin]</style>"
+              },
+              {
+                "desc": "<style=\"highlight\">[OnSucceedAttack] Inflict 2 [Combustion]</style>"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict +2 [Combustion] Count<style=\"highlight\"></style>"
+              },
+              {
+                "desc": "<style=\"highlight\">[UnBrokenCoinOnSucceedAttack] If E.G.O resource was spent due to this Skill's effect, deal Lust damage equal to 50% of this Coin's final damage</style>"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2100311,
+        "name": "Stew Spewage",
+        "desc": "On Tails Hit, inflict 1 [Combustion] if target is an enemy"
+      },
+      {
+        "passiveId": 2100312,
+        "name": "Stew Spewage",
+        "desc": "On Tails Hit, inflict 1 [Combustion] if target is an enemy\n\n<style=\"highlight\">When using Base Attack Skills that inflict [Combustion] Potency or Count against enemies,\n\n- For Plus Coin Skills:\n· At lower than 40 SP, heal 4 SP\n· At 40 or higher SP, deal +10% damage\n\n- For Minus Coin Skills:\n· At higher than -25 SP, lose 4 SP (this effect cannot reduce this unit's SP below -40)\n· At -25 or lower SP, deal +10% damage</style>"
+      }
     ]
   },
   {
@@ -14486,6 +16316,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Burn"
+    ],
+    "gameId": 21108,
+    "clientName": "Magic Bullet",
+    "clientDesc": "Outis’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2110811,
+        "name": "Seven Bullets",
+        "desc": "- On Hit with Base Attack Skills: inflict ([FreischutzShotCount] / 3) [Combustion] (3 times per turn)\n- For Lobotomy E.G.O::Magic Bullet[TabExplain] Outis Identity, inflict ([FreischutzShotCount]) [Combustion] instead (3 times per turn)\n- If the target has 30+ [Combustion], inflict 1 [DarkFlame] instead of the above effect (2 times per turn)"
+      }
     ]
   },
   {
@@ -14746,6 +16586,16 @@
     "keywords": [
       "Burn",
       "Charge"
+    ],
+    "gameId": 20709,
+    "clientName": "Move-in Reg.",
+    "clientDesc": "Heathcliff’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2070911,
+        "name": "Circuit Wiring",
+        "desc": "On Hit with Skills that apply [Combustion] Potency or 'Unique Burn[TabExplain]', or On Hit with Envy Skills: Inflict additional [Combustion] Potency on target by half of the Skill's total Coins (rounded up; max 3 times per turn)"
+      }
     ]
   },
   {
@@ -14948,6 +16798,46 @@
     "maxThreadspin": 4,
     "keywords": [
       "Tremor"
+    ],
+    "gameId": 20503,
+    "clientName": "Pursuance",
+    "clientDesc": "Meursault’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2050311,
+        "name": "Pursuance",
+        "desc": "[EndSkill] Heal 2 other allies with the least HP for 30% of Max HP; Apply 2 Protection next turn",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Trigger [VibrationExplosion]"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2050321,
+        "name": "Pursuance",
+        "desc": "[CantIdentify] Targets randomly\n[EndSkill] Apply 2 [Vulnerable] and 3 [AttackDmgUp] next turn to 2 other allies with the least HP",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Trigger [VibrationExplosion]"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2050311,
+        "name": "Revelation from Above",
+        "desc": "After winning a Clash with the leftmost Skill on the Dashboard, apply 1 [Enhancement] or [Endurance] to a random ally next turn"
+      }
     ]
   },
   {
@@ -15156,6 +17046,46 @@
     "maxThreadspin": 4,
     "keywords": [
       "Tremor"
+    ],
+    "gameId": 20905,
+    "clientName": "Pursuance",
+    "clientDesc": "Rodion’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2050311,
+        "name": "Pursuance",
+        "desc": "[EndSkill] Heal 2 other allies with the least HP for 30% of Max HP; Apply 2 Protection next turn",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Trigger [VibrationExplosion]"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2050321,
+        "name": "Pursuance",
+        "desc": "[CantIdentify] Targets randomly\n[EndSkill] Apply 2 [Vulnerable] and 3 [AttackDmgUp] next turn to 2 other allies with the least HP",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Trigger [VibrationExplosion]"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2090511,
+        "name": "Sentencing from Above",
+        "desc": "Whenever an enemy is Staggered, the ally with the least HP percentage heals 4% of their Max HP. (Once per turn)"
+      }
     ]
   },
   {
@@ -15352,7 +17282,59 @@
       ]
     },
     "maxThreadspin": 4,
-    "keywords": []
+    "keywords": [],
+    "gameId": 20403,
+    "clientName": "Red Eyes",
+    "clientDesc": "Ryōshū’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2040311,
+        "name": "Red Eyes",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [Binding] next turn"
+              },
+              {
+                "desc": "[OnSucceedAttack] If target has 3+ [Binding], inflict 1 Plus Coin Drop next turn"
+              },
+              {
+                "desc": "[OnSucceedAttack] If target's Speed is slower than user's, inflict 2 Slash Fragility next turn"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2040321,
+        "name": "Red Eyes",
+        "desc": "[CantIdentify]\nTargets randomly",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [Binding] next turn"
+              },
+              {
+                "desc": "[OnSucceedAttack] If target has 3+ [Binding], inflict 2 Plus Coin Drop next turn"
+              },
+              {
+                "desc": "[OnSucceedAttack] If target's Speed is slower than user's, inflict 1-3 Slash Fragility next turn"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2040311,
+        "name": "Spider's Webs",
+        "desc": "On Clash Win, inflict 1 [Binding] next turn (3 times per turn)"
+      }
+    ]
   },
   {
     "name": "Red Eyes Ryōshū",
@@ -15546,7 +17528,59 @@
       ]
     },
     "maxThreadspin": 4,
-    "keywords": []
+    "keywords": [],
+    "gameId": 20403,
+    "clientName": "Red Eyes",
+    "clientDesc": "Ryōshū’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2040311,
+        "name": "Red Eyes",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [Binding] next turn"
+              },
+              {
+                "desc": "[OnSucceedAttack] If target has 3+ [Binding], inflict 1 Plus Coin Drop next turn"
+              },
+              {
+                "desc": "[OnSucceedAttack] If target's Speed is slower than user's, inflict 2 Slash Fragility next turn"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2040321,
+        "name": "Red Eyes",
+        "desc": "[CantIdentify]\nTargets randomly",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [Binding] next turn"
+              },
+              {
+                "desc": "[OnSucceedAttack] If target has 3+ [Binding], inflict 2 Plus Coin Drop next turn"
+              },
+              {
+                "desc": "[OnSucceedAttack] If target's Speed is slower than user's, inflict 1-3 Slash Fragility next turn"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2040311,
+        "name": "Spider's Webs",
+        "desc": "On Clash Win, inflict 1 [Binding] next turn (3 times per turn)"
+      }
+    ]
   },
   {
     "name": "Red Sheet Don Quixote",
@@ -15745,6 +17779,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Rupture"
+    ],
+    "gameId": 20308,
+    "clientName": "Red Sheet",
+    "clientDesc": "Don Quixote’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2030811,
+        "name": "Enfeebling Talisman",
+        "desc": "On Hit with this unit's Skills: if the target either has 15+ [Burst], or if this unit dealt a Critical Hit, inflict 1 [DefenseDown] (max 6)\n- When this Passive activates, its effects do not stack with the effects of E.G.O Gift \"Old Wooden Doll\"."
+      }
     ]
   },
   {
@@ -15968,6 +18012,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Tremor"
+    ],
+    "gameId": 20505,
+    "clientName": "Regret",
+    "clientDesc": "Meursault’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2050511,
+        "name": "Bound Wrath",
+        "desc": "Base Power -1 and Coin Power +2 to the leftmost Skill on this unit's Dashboard\nTurn Start: At 4- Speed, Gain 1 [HitResultUp]"
+      }
     ]
   },
   {
@@ -16071,7 +18125,33 @@
       ]
     },
     "maxThreadspin": 4,
-    "keywords": []
+    "keywords": [],
+    "gameId": 20201,
+    "clientName": "Representation Emitter",
+    "clientDesc": "Faust’s Base E.G.O",
+    "clientSkills": [
+      {
+        "skillId": 2020111,
+        "name": "Representation Emitter",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[EndSkill] Heal 12 SP for 4 allies with the least SP"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2020111,
+        "name": "Ennui",
+        "desc": "If the enemy is Staggered during this unit's attack, apply +2 [MentalSystemResultIncrease_Typo] next turn on the ally that has the least SP (3 times per turn)"
+      }
+    ]
   },
   {
     "name": "Rime Shank Rodion",
@@ -16277,6 +18357,52 @@
     "keywords": [
       "Tremor",
       "Sinking"
+    ],
+    "gameId": 20903,
+    "clientName": "Rime Shank",
+    "clientDesc": "Rodion’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2090311,
+        "name": "Rime Shank",
+        "desc": "If target’s HP is above 50%, deal +30% damage",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Trigger [VibrationExplosion]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 5 [Sinking]\n[OnSucceedAttack] Inflict +5 [Sinking] Count"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2090321,
+        "name": "Rime Shank",
+        "desc": "[CantIdentify]\nTargets the unit with the most HP\nIf target’s HP is above 50%, +30% Damage",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Trigger [VibrationExplosion]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 10 [Sinking]\n[OnSucceedAttack] Inflict +8 [Sinking] Count"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2090311,
+        "name": "Coldness",
+        "desc": "On hit, if the target has 5+ [Sinking], inflict 1 [Binding] and [Reduction] next turn\n(3 times per unit)"
+      }
     ]
   },
   {
@@ -16469,7 +18595,56 @@
       ]
     },
     "maxThreadspin": 4,
-    "keywords": []
+    "keywords": [],
+    "gameId": 20602,
+    "clientName": "Roseate Desire",
+    "clientDesc": "Hong Lu’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2060211,
+        "name": "Roseate Desire",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 2 Defense Power Down"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 5 [DefenseDown]"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2060221,
+        "name": "Roseate Desire",
+        "desc": "[CantIdentify]\nTargets the unit with the fastest Speed",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 2 Defense Power Down"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 5 [DefenseDown]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 4 [Binding] next turn"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2060211,
+        "name": "Binding Ribbons",
+        "desc": "Inflict (Lust A-Reson. / 4) [ScarletTakeDamageUp] next turn on the target of the leftmost Skill on the Dashboard at the Skill's Attack End"
+      }
+    ]
   },
   {
     "name": "Roseate Desire Ishmael",
@@ -16670,7 +18845,59 @@
       ]
     },
     "maxThreadspin": 4,
-    "keywords": []
+    "keywords": [],
+    "gameId": 20802,
+    "clientName": "Roseate Desire",
+    "clientDesc": "Ishmael’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2080211,
+        "name": "Roseate Desire",
+        "desc": "Targets the rearmost unit (In regular encounters)",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 10 Offense Level Down"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [Paralysis]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [Binding] next turn"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2080221,
+        "name": "Roseate Desire",
+        "desc": "[CantIdentify]\nTargets the unit with the fastest Speed",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 10 Offense Level Down"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 5 [Paralysis]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 5 [Binding] next turn"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2080211,
+        "name": "Pink Ribbons",
+        "desc": "On Clash Win, inflict 1 [PinkRibbon_Ishmael]"
+      }
+    ]
   },
   {
     "name": "Sanguine Desire Rodion",
@@ -16899,6 +19126,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Bleed"
+    ],
+    "gameId": 20906,
+    "clientName": "Sanguine Desire",
+    "clientDesc": "Rodion’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2090611,
+        "name": "Obsession",
+        "desc": "This unit's leftmost Skill on the Dashboard inflicts double the [Laceration] Potency (once per turn)"
+      }
     ]
   },
   {
@@ -17085,7 +19322,50 @@
       ]
     },
     "maxThreadspin": 4,
-    "keywords": []
+    "keywords": [],
+    "gameId": 20502,
+    "clientName": "Screwloose Wallop",
+    "clientDesc": "Meursault’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2050211,
+        "name": "Screwloose Wallop",
+        "desc": "[EndSkill] Gain 3 Protection\n[EndSkill] Gain 1 Surgery next turn",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 3 [Paralysis]"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2050221,
+        "name": "Screwloose Wallop",
+        "desc": "[EndSkill] Gain 2 Surgery next turn",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 3 [Paralysis]"
+              },
+              {
+                "desc": "Raise Stagger Threshold by 30% of damage dealt"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2050211,
+        "name": "Final Augment",
+        "desc": "If the E.G.O Skill <Screwloose Wallop> is used when this unit is at less than 25% HP, this unit gains 3 [Enhancement], [Endurance], and [Agility] every turn, but dies in 3 turns"
+      }
+    ]
   },
   {
     "name": "Snagharpoon Ishmael",
@@ -17204,6 +19484,38 @@
     "maxThreadspin": 4,
     "keywords": [
       "Tremor"
+    ],
+    "gameId": 20801,
+    "clientName": "Snagharpoon",
+    "clientDesc": "Ishmael’s Base E.G.O",
+    "clientSkills": [
+      {
+        "skillId": 2080111,
+        "name": "Snagharpoon",
+        "desc": "Targets the rearmost unit (In regular encounters)",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 6 [Binding] next turn"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [Vibration]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Trigger [VibrationExplosion]"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2080111,
+        "name": "Compulsion",
+        "desc": "In a Clash:\n- If win rate is Favored or above, Clash Power +2\n- If win rate is Struggling or below, Clash Power -2"
+      }
     ]
   },
   {
@@ -17402,6 +19714,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Tremor"
+    ],
+    "gameId": 20604,
+    "clientName": "Soda",
+    "clientDesc": "Hong Lu’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2060411,
+        "name": "Seagull Squawking Of The Distant Seas",
+        "desc": "When an enemy is defeated, the ally that has the least SP heals 1 SP\nWhenever an enemy is defeated, the amount of SP healed increases by 2 (max 9)\nThe amount above is reset at the start of a new wave"
+      }
     ]
   },
   {
@@ -17649,6 +19971,21 @@
     "keywords": [
       "Tremor",
       "Sinking"
+    ],
+    "gameId": 20405,
+    "clientName": "Soda",
+    "clientDesc": "Ryōshū’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2040511,
+        "name": "Opened Can",
+        "desc": "On Hit, if target has 5+ [Sinking], inflict 1 [Disarming] (5 times per turn)"
+      },
+      {
+        "passiveId": 2040512,
+        "name": "Opened Can",
+        "desc": "On Hit, if target has 5+ [Sinking], inflict 1 [Disarming] (5 times per turn)\n\n<style=\"highlight\">On Hit against an enemy in Staggered or Panic states, gain 1 [AttackUp] next turn (3 times per turn; in Focused Encounters, the Core)</style>"
+      }
     ]
   },
   {
@@ -17890,6 +20227,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Sinking"
+    ],
+    "gameId": 21207,
+    "clientName": "Solemn Lament",
+    "clientDesc": "Gregor’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2120711,
+        "name": "Lament",
+        "desc": "Turn End: if this unit has a negative effect, gain 1 [Enhancement] next turn\nWhen attacking targets that are either in Panic or in E.G.O Corrosion: deal +15% damage"
+      }
     ]
   },
   {
@@ -18210,6 +20557,16 @@
     "keywords": [
       "Tremor",
       "Sinking"
+    ],
+    "gameId": 20109,
+    "clientName": "Solemn Lament",
+    "clientDesc": "Yi Sang’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2010911,
+        "name": "TheWilt-wingedButterflyFeedsUpon\nThePauperDewInMistedBreath",
+        "desc": "If target has [SinkingWhite], Clash Power +1\n\nOn Hit against targets that have 15+ ([Sinking] + both [SinkingWhite]), inflict 1 [SinkingWhite](The Living) and 1 [SinkingWhite](The Departed) (once per turn; for Focused Encounters, the Part)\n\n[AlwaysUseEGOPassive2010911]\n\nOn Hit, Base Skills inflict 2 [Vibration] on target (once per Skill)\n\nThis Identity counts as an \"Identity that inflicts [Vibration] and [Sinking]\"\n- This Identity's Base Skills count as \"Skills that inflict [Vibration] and [Sinking]\"\n\n\n[WhenUseEGOPassive2010911]\n\nMaximum cap +10 for the sum of [BulletLament] Potency and Count\nAfter [ReloadLament]ing, heal 10 SP and [Discard] 1 Base Attack Skill of the lowest rank in all of this unit's Skill Slots (except \"Goodbye Now, a Sorrow in You\") (2 times per turn)\nTurn End: If this unit had a Defense Skill equipped this turn, heal 10 SP\nTurn End: When Staggered, recover from Stagger, then [ReloadLament] (once per Encounter; excluding forced Staggers)"
+      }
     ]
   },
   {
@@ -18319,6 +20676,32 @@
       "Tremor",
       "Sinking",
       "Rupture"
+    ],
+    "gameId": 21201,
+    "clientName": "Suddenly, One Day",
+    "clientDesc": "Gregor’s Base E.G.O",
+    "clientSkills": [
+      {
+        "skillId": 2120111,
+        "name": "Suddenly, One Day",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 10 of a random status, chosen from [Combustion], [Laceration], [Vibration], [Burst], and [Sinking]"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2120111,
+        "name": "Uncontrolled Morph",
+        "desc": "Turn Start: At less than 25% HP, heal 15 HP and gain 2 [Protection]\nWhen the above effect activates, inflict +2 [MentalSystemResultDecrease_Typo] on 1 random other ally and 1 random enemy"
+      }
     ]
   },
   {
@@ -18533,6 +20916,61 @@
       "Poise",
       "Sinking",
       "Rupture"
+    ],
+    "gameId": 21104,
+    "clientName": "Sunshower",
+    "clientDesc": "Outis’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2110411,
+        "name": "Sunshower",
+        "desc": "[BeforeAttack] Gain +7 [Breath] Count",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 6 [Sinking]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [Binding] next turn"
+              },
+              {
+                "desc": "[CriticalOnSucceedAttack] Trigger [VibrationExplosion]; Inflict +3 [Sinking] Count"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2110421,
+        "name": "Sunshower",
+        "desc": "[CantIdentify]\nTargets the unit with the least HP\n[BeforeAttack] Gain +7 [Breath] Count",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 6 [Sinking]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 6 [Burst]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [Binding] next turn"
+              },
+              {
+                "desc": "[CriticalOnSucceedAttack] Trigger [VibrationExplosion]; Inflict +3 [Sinking] Count and [Burst] Count"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2110411,
+        "name": "Breath of the Hunt",
+        "desc": "After a clash, gain 2 [Breath]\nWhen staggered, gain 2 [Protection]; when recovering from stagger, gain 5 [Breath]"
+      }
     ]
   },
   {
@@ -18727,7 +21165,47 @@
       ]
     },
     "maxThreadspin": 4,
-    "keywords": []
+    "keywords": [],
+    "gameId": 20105,
+    "clientName": "Sunshower",
+    "clientDesc": "Yi Sang’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2010511,
+        "name": "Sunshower",
+        "desc": "[BeforeAttack] Give 1 Sloth Power Up, 2 Sloth DMG Up, and 3 Protection to all allies this turn and next turn",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttackHead] Heal 15 SP"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2010521,
+        "name": "Sunshower",
+        "desc": "[CantIdentify]\nTargets randomly\n[BeforeAttack] Gain 2 Sloth Power Up and 2 Sloth DMG Up this turn and the next 2 turns",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 2 [AmberTakeDamageUp] and 2 [PenetrateTakeDamageUp] this turn and next turn"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2010511,
+        "name": "Ray of Sun After Rain",
+        "desc": "Turn Start: All allies heal 3 SP"
+      }
+    ]
   },
   {
     "name": "Telepole Don Quixote",
@@ -18902,6 +21380,52 @@
     "keywords": [
       "Charge",
       "Rupture"
+    ],
+    "gameId": 20303,
+    "clientName": "Telepole",
+    "clientDesc": "Don Quixote’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2030311,
+        "name": "Telepole",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Gain +10 [Charge] Count"
+              },
+              {
+                "desc": "[EndSkill] Give [Charge] Count to all allies by Envy Reson."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2030321,
+        "name": "Telepole",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Gain +10 [Charge] Count and 10 [Burst]"
+              },
+              {
+                "desc": "[EndSkill] Give 5 [Vulnerable], 10 [Burst], and +12 [Charge] Count to all allies"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2030311,
+        "name": "Haphazard Discharge",
+        "desc": "Combat Start: A random ally that has [Charge] gains +(Envy A-Reson. / 2) [Charge] Count"
+      }
     ]
   },
   {
@@ -19098,6 +21622,58 @@
     "maxThreadspin": 4,
     "keywords": [
       "Charge"
+    ],
+    "gameId": 20204,
+    "clientName": "Telepole",
+    "clientDesc": "Faust’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2020411,
+        "name": "Telepole",
+        "desc": "",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [Paralysis]"
+              },
+              {
+                "desc": "[EndSkill] Gain +7 [Charge] Count"
+              },
+              {
+                "desc": "[EndSkillHead] Apply 1 Envy Power Up and 1 [Agility] to 2 random allies next turn, and this unit gains +3 [Charge] Count"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2020421,
+        "name": "Telepole",
+        "desc": "[CantIdentify]\nTargets randomly",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 5 [Paralysis]"
+              },
+              {
+                "desc": "[EndSkill] Gain +10 [Charge] Count"
+              },
+              {
+                "desc": "[EndSkillTail] Inflict 2 [Paralysis] and 2 [Binding] on 2 random units next turn, gain +3 [Charge] Count"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2020411,
+        "name": "Adaptive Release",
+        "desc": "If this unit has [Charge], deal +2% damage for every [Charge] Count.\nSkills consume -2 [Charge] Count."
+      }
     ]
   },
   {
@@ -19291,6 +21867,46 @@
     "maxThreadspin": 4,
     "keywords": [
       "Charge"
+    ],
+    "gameId": 20702,
+    "clientName": "Telepole",
+    "clientDesc": "Heathcliff’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2070211,
+        "name": "Telepole",
+        "desc": "[WhenUse] Gain [Charge] Count by Envy Reson.\nSpend 5 [Charge] Count to gain +3 Skill Power (Max 12)",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttackTail] Gain +5 [Charge] Count"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2070221,
+        "name": "Telepole",
+        "desc": "[CantIdentify] Targets randomly\n[WhenUse] Gain [Charge] Count by Envy Reson.\nSpend all [Charge] Count to gain +15 Skill Power",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttackHead] Gain 3 [Vulnerable] next turn"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2070211,
+        "name": "Roar",
+        "desc": "On Enemy Kill, gain +(the turn's Envy A-Reson. / 2) [Charge] Count"
+      }
     ]
   },
   {
@@ -19499,6 +22115,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Poise"
+    ],
+    "gameId": 20208,
+    "clientName": "Thoracalgia",
+    "clientDesc": "Faust’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2020811,
+        "name": "Breath",
+        "desc": "Next Turn Start after using this E.G.O Skill: gain 1 [NebulizerExhale] (once per turn)\n- This value Stacks throughout the Encounter\n\nCombat Start: gain 1 [NebulizerExhale] every time this unit applies 10 [Breath] Count to allies that have [NebulizerExhale] effects\n\nTurn End: starting from allies with the lowest HP percentages, heal ([NebulizerExhale] Stack)% HP for (highest Reson.) allies (max 6)\n- If the unit receiving healing has 20+ [Breath] Potency, activate healing 1 more time"
+      }
     ]
   },
   {
@@ -19743,6 +22369,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Poise"
+    ],
+    "gameId": 20408,
+    "clientName": "Thoracalgia",
+    "clientDesc": "Ryōshū’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2040811,
+        "name": "Breath",
+        "desc": "Next Turn Start after using this E.G.O Skill: gain 1 [NebulizerInhale] (once per turn)\n- If this Skill defeated enemies, gain additional [NebulizerInhale] equal to the number of targets defeated\n- If this Skill defeated allies, gain (targets defeated x 2) additional [NebulizerInhale]\n- This value Stacks over this Encounter's duration"
+      }
     ]
   },
   {
@@ -20016,6 +22652,16 @@
     "keywords": [
       "Tremor",
       "Sinking"
+    ],
+    "gameId": 20810,
+    "clientName": "Tidal Elegy",
+    "clientDesc": "Ishmael’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2081011,
+        "name": "Abyssal Dance",
+        "desc": "- Combat Start: if there is just a single enemy, this unit's leftmost Attack Skill on the Dashboard gains Clash Power +1, and deals +11.5% damage on Hit after Clash Win (including E.G.O Skills)\n- For the turns in which this unit Returned or Substituted in: Min & Max Speed +1, Clash Power +1"
+      }
     ]
   },
   {
@@ -20125,6 +22771,35 @@
     "maxThreadspin": 4,
     "keywords": [
       "Rupture"
+    ],
+    "gameId": 21101,
+    "clientName": "To Páthos Máthos",
+    "clientDesc": "Outis’s Base E.G.O",
+    "clientSkills": [
+      {
+        "skillId": 2110111,
+        "name": "To Páthos Máthos",
+        "desc": "If target has less than 50% HP, deal +30% damage",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 4 [Burst]"
+              },
+              {
+                "desc": "[EnemyKill] Give 1 [AttackDmgUp] to a random ally"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2110111,
+        "name": "Tactical Perfection",
+        "desc": "Gain 1 [AttackDmgUp] next turn if this unit isn't hit during a turn. Gain 1 more [AttackDmgUp] with every consecutive turn this unit isn't hit (max 3)"
+      }
     ]
   },
   {
@@ -20534,6 +23209,16 @@
     "keywords": [
       "Burn",
       "Tremor"
+    ],
+    "gameId": 21209,
+    "clientName": "Unbrilliant Glory",
+    "clientDesc": "Gregor’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2120911,
+        "name": "Wanderer",
+        "desc": "Gain [MlynarWaiting] when meeting one of the following conditions:\n- Gain 1 for every 3 HP damage taken\n- Gain 1 for every 5 Shield HP damage taken\n- Gain 10 per Staggered ally when other allies become Staggered\n- Gain 20 per dead ally when other allies are killed\n\nTurn Start: if this unit is Staggered due to damage, and if this unit has 40+ [MlynarWaiting], fix all of this unit's Resistance values to 2 for the turn and recover from Stagger (once per Encounter; excluding forced Staggers)"
+      }
     ]
   },
   {
@@ -20645,6 +23330,38 @@
     "maxThreadspin": 4,
     "keywords": [
       "Bleed"
+    ],
+    "gameId": 20901,
+    "clientName": "What is Cast",
+    "clientDesc": "Rodion’s Base E.G.O",
+    "clientSkills": [
+      {
+        "skillId": 2090111,
+        "name": "What is Cast",
+        "desc": "If target has 50%+ HP, deal +30% damage",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 4 [Laceration]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Gain +2 SP Heal Efficiency next turn"
+              },
+              {
+                "desc": "[OnSucceedAttack] Gain -2 SP Loss Efficiency next turn"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2090111,
+        "name": "Severance",
+        "desc": "+1 [MentalSystemResultIncrease_Typo], -1 [MentalSystemResultDecrease_Typo]"
+      }
     ]
   },
   {
@@ -20883,6 +23600,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Bleed"
+    ],
+    "gameId": 20806,
+    "clientName": "Wingbeat",
+    "clientDesc": "Ishmael’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2080611,
+        "name": "Gluttony",
+        "desc": "If the main target took HP damage this turn and isn't at max HP at Skill Use:\nOn Hit,\n- When this unit is at max HP, deal +5~+10% damage.\n- When this unit isn't at max HP, heal 2~5 HP. \n(7 times per turn)"
+      }
     ]
   },
   {
@@ -21097,6 +23824,55 @@
     "keywords": [
       "Bleed",
       "Tremor"
+    ],
+    "gameId": 20305,
+    "clientName": "Wishing Cairn",
+    "clientDesc": "Don Quixote’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2010311,
+        "name": "Wishing Cairn",
+        "desc": "Targets the rearmost unit (In regular encounters)",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 2 [AmberTakeDamageUp]"
+              },
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 3 [Paralysis]"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2010321,
+        "name": "Wishing Cairn",
+        "desc": "[CantIdentify]\nTargets randomly",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 1 [AmberTakeDamageUp]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 2 [Paralysis]"
+              },
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 3 [Binding] next turn"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2030511,
+        "name": "Fallen Stone Pagoda",
+        "desc": "Gain 2 [Breath] and +2 [Breath] Count when defeating an enemy that has [Laceration] (3 times per turn)"
+      }
     ]
   },
   {
@@ -21304,7 +24080,56 @@
       ]
     },
     "maxThreadspin": 4,
-    "keywords": []
+    "keywords": [],
+    "gameId": 20103,
+    "clientName": "Wishing Cairn",
+    "clientDesc": "Yi Sang’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2010311,
+        "name": "Wishing Cairn",
+        "desc": "Targets the rearmost unit (In regular encounters)",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 2 [AmberTakeDamageUp]"
+              },
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 3 [Paralysis]"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2010321,
+        "name": "Wishing Cairn",
+        "desc": "[CantIdentify]\nTargets randomly",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 1 [AmberTakeDamageUp]"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 2 [Paralysis]"
+              },
+              {
+                "desc": "[OnSucceedAttackHead] Inflict 3 [Binding] next turn"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2010311,
+        "name": "Dol Hareubang",
+        "desc": "Gain 3 [HitTakeDamageDown] and [AmberTakeDamageDown] every turn"
+      }
+    ]
   },
   {
     "name": "Ya Śūnyatā Tad Rūpam Heathcliff",
@@ -21521,7 +24346,62 @@
       ]
     },
     "maxThreadspin": 4,
-    "keywords": []
+    "keywords": [],
+    "gameId": 20704,
+    "clientName": "Ya Śūnyatā Tad Rūpam",
+    "clientDesc": "Heathcliff’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2070411,
+        "name": "Ya Śūnyatā Tad Rūpam",
+        "desc": "[BeforeAttack] At 15+ SP, gain +2 Atk Weight",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 2 [Reduction] next turn"
+              },
+              {
+                "desc": "[EndSkill] Heal 25 SP for 4 other allies with the least SP"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2070421,
+        "name": "Ya Śūnyatā Tad Rūpam",
+        "desc": "[CantIdentify]\nTargets Randomly\n[BeforeAttack] At -15 or lower SP, gain +2 Atk Weight",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 3 [DefenseDown] to 1 random other ally"
+              },
+              {
+                "desc": "[OnSucceedAttack] Gain 2 [DefenseUp] next turn."
+              },
+              {
+                "desc": "[OnSucceedAttack] Gain 1 [AttackDmgUp] next turn."
+              },
+              {
+                "desc": "[OnSucceedAttackTail] Heal 4 SP on self"
+              },
+              {
+                "desc": "[OnSucceedAttackTail] Inflict 1 [Vulnerable]"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2070411,
+        "name": "Dhyāna",
+        "desc": "Raise Max HP equal to 15% of this Identity's base Max HP when recovering from Stagger.\nThen, heal 15% of current Max HP. If this unit has less than 30% of its current Max HP, heal 25% of current Max HP instead (3 times per Encounter. At Encounter End, revert to base Max HP. Current HP value will be adjusted to reflect the HP percentage at the time of Encounter End)"
+      }
+    ]
   },
   {
     "name": "Ya Śūnyatā Tad Rūpam Outis",
@@ -21732,7 +24612,53 @@
       ]
     },
     "maxThreadspin": 4,
-    "keywords": []
+    "keywords": [],
+    "gameId": 21103,
+    "clientName": "Ya Śūnyatā Tad Rūpam",
+    "clientDesc": "Outis’s E.G.O Gear",
+    "clientSkills": [
+      {
+        "skillId": 2110311,
+        "name": "Ya Śūnyatā Tad Rūpam",
+        "desc": "[EndSkill] Heal 18 SP\n[EndSkill] Apply 1 [Enhancement] to 2 random other allies",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 2 Lust Fragility"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 2110321,
+        "name": "Ya Śūnyatā Tad Rūpam",
+        "desc": "[CantIdentify]\nTargets randomly\n[EndSkill] Apply 1 [Enhancement] to 2 random other allies",
+        "coinlist": [
+          {
+            "coindescs": [
+              {
+                "desc": "[OnSucceedAttack] Inflict 2 Lust Fragility"
+              },
+              {
+                "desc": "[OnSucceedAttack] Inflict 2 [Vulnerable]"
+              },
+              {
+                "desc": "[OnSucceedAttackTail] Gain 2 [Vulnerable]"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "clientPassives": [
+      {
+        "passiveId": 2110311,
+        "name": "Emptying",
+        "desc": "Gain 1 [ScarletDamageUp] every turn\nGain 1 more when this unit has less than 0 SP"
+      }
+    ]
   },
   {
     "name": "Yearning-Mircalla Don Quixote",
@@ -22001,6 +24927,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Bleed"
+    ],
+    "gameId": 20307,
+    "clientName": "Yearning-Mircalla",
+    "clientDesc": "Don Quixote’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2030711,
+        "name": "Spiring Crimson Blossom",
+        "desc": "Every time 10+ [Laceration] damage occurs, heal 1 SP on self (10 per turn)"
+      }
     ]
   },
   {
@@ -22253,6 +25189,16 @@
     "maxThreadspin": 4,
     "keywords": [
       "Bleed"
+    ],
+    "gameId": 20507,
+    "clientName": "Yearning-Mircalla",
+    "clientDesc": "Meursault’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2050711,
+        "name": "Bloodthirsty Banquet",
+        "desc": "When this unit deals or takes [Laceration] damage, heal HP equal to the [Laceration] damage (max 10 per turn)\n- When activating a Skill/Coin effect that inflicts [Laceration], if the target has [RoseWedge], inflict 1 [Laceration] against the target. (2 times per turn)"
+      }
     ]
   },
   {
@@ -22522,7 +25468,17 @@
         }
       ]
     },
-    "maxThreadspin": 4
+    "maxThreadspin": 4,
+    "gameId": 20509,
+    "clientName": "Shadow-vested Bladesinger [着影揮刀]",
+    "clientDesc": "Meursault’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2050911,
+        "name": "Beads of Liquor at Bladepoint",
+        "desc": "[AlwaysUseEGOPassive2050911]\n\nOn Hit with a Base Skill, inflict 2 [Laceration] on target (once per Skill)\n\nThis Identity counts as an \"Identity that applies [Laceration] and [Breath]\"\n- This Identity's Base Skills count as \"Skills that apply [Laceration] and [Breath]\"\n\n[WhenUseEGOPassive]\n\nWhen an ally is defeated, gain 1 [AlcoholKimPersonal] next turn\n- If the defeated ally is in Blade Lineage, gain 2 [AlcoholKimPersonal] instead\n\nTurn Start: If this unit has [AlcoholKimPersonal], enter [GhostKimPersonal] state\n- Blade Lineage Mentor Meursault gains [RootSoupKimPersonal] as well when the above effect activates\n\nTurn Start: If this unit does not have [AlcoholKimPersonal], the following effects expire - [GhostKimPersonal], [GrudgePersonal], and [RootSoupKimPersonal]\n\nWhen this unit has [AlcoholKimPersonal]: When this unit takes damage that brings its HP down to 0, heal ([AlcoholKimPersonal] Stack x 25)% HP; then, [AlcoholKimPersonal] expires (once per Encounter; this effect activates after Identity Passives with similar effects)\n- When Staggered, recover from Stagger (excluding forced Staggers)"
+      }
+    ]
   },
   {
     "slug": "great-trichiliocosm-[三千大世界]-yi-sang",
@@ -22775,7 +25731,17 @@
         }
       ]
     },
-    "maxThreadspin": 4
+    "maxThreadspin": 4,
+    "gameId": 20108,
+    "clientName": "Great Trichiliocosm [三千大世界]",
+    "clientDesc": "Yi Sang’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2010811,
+        "name": "Skyweaving",
+        "desc": "If target has [ThreeMirrorpartYiSang], inflict +1 more [Combustion] Potency and [Sinking] Potency with this unit's Base Attack Skills (up to a total of 8 additional Potency per turn)\nFor every enemy killed due to [Combustion] damage, gain a \"DMG Up\" next turn for a random Attack Type (3 per turn; randomized for each instance)"
+      }
+    ]
   },
   {
     "slug": "great-trichiliocosm-[三千大世界]-ryoshu",
@@ -23043,7 +26009,17 @@
         }
       ]
     },
-    "maxThreadspin": 4
+    "maxThreadspin": 4,
+    "gameId": 20409,
+    "clientName": "Great Trichiliocosm [三千大世界]",
+    "clientDesc": "Ryōshū’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2040911,
+        "name": "Sanzu [三途]",
+        "desc": "After using an Attack Skill, if the enemy is Staggered or defeated, gain 1 [CriticalDamageUp] next turn (3 times per turn)"
+      }
+    ]
   },
   {
     "slug": "to-remain-oneself-[宁作吾]-hong-lu",
@@ -23289,7 +26265,17 @@
         }
       ]
     },
-    "maxThreadspin": 4
+    "maxThreadspin": 4,
+    "gameId": 20609,
+    "clientName": "To Remain Oneself [宁作吾]",
+    "clientDesc": "Hong Lu’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2060911,
+        "name": "So is Writ, an Ode to Wine",
+        "desc": "Turn End: among the E.G.O resources consumed to use To Remain Oneself Hong Lu(Sloth, Gloom, Pride), gain 1 E.G.O resource of the least-owned Affinity.\n\nDeal +1% damage for every [Cianjing] or [SeniorCianjing] Stack lost or consumed in this Encounter (max 15%)"
+      }
+    ]
   },
   {
     "slug": "tears-of-the-tarnished-blood-[汚血泣淚]-hong-lu",
@@ -23593,7 +26579,17 @@
         }
       ]
     },
-    "maxThreadspin": 4
+    "maxThreadspin": 4,
+    "gameId": 21008,
+    "clientName": "Tears of the Tarnished Blood [汚血泣淚]",
+    "clientDesc": "Sinclair’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2100811,
+        "name": "Crying Tears",
+        "desc": "- Turn End: If this unit had a negative effect or lost its HP or SP, heal 5 SP.\n- If this unit or an ally is defeated, inflict 1 [Vulnerable] to all enemies next turn (once per turn)"
+      }
+    ]
   },
   {
     "slug": "tears-of-the-tarnished-blood-[汚血泣淚]-sinclair",
@@ -23821,7 +26817,17 @@
         }
       ]
     },
-    "maxThreadspin": 4
+    "maxThreadspin": 4,
+    "gameId": 21008,
+    "clientName": "Tears of the Tarnished Blood [汚血泣淚]",
+    "clientDesc": "Sinclair’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2100811,
+        "name": "Crying Tears",
+        "desc": "- Turn End: If this unit had a negative effect or lost its HP or SP, heal 5 SP.\n- If this unit or an ally is defeated, inflict 1 [Vulnerable] to all enemies next turn (once per turn)"
+      }
+    ]
   },
   {
     "slug": "hundred-footed-death-maggot-[蝍蛆殺]-ishmael",
@@ -23995,7 +27001,17 @@
         }
       ]
     },
-    "maxThreadspin": 4
+    "maxThreadspin": 4,
+    "gameId": 20809,
+    "clientName": "Hundred-Footed Death Maggot [蝍蛆殺]",
+    "clientDesc": "Ishmael’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2080911,
+        "name": "Reversal Death by Gu Poison",
+        "desc": "Whenever this unit inflicts [Sinking] Potency, [Sinking] Count, or 'Unique Sinking' using its Attack Skills, gain 1 [AttackUp] next turn (max 2)\n- At 3+ A-Reson., with the same conditionals, gain 1 [AttackUp] next turn instead (max 3)"
+      }
+    ]
   },
   {
     "name": "Repudiation Hong Lu",
@@ -24028,7 +27044,17 @@
       ]
     },
     "corrosion": null,
-    "skills": []
+    "skills": [],
+    "gameId": 20610,
+    "clientName": "Repudiation",
+    "clientDesc": "Hong Lu’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2061011,
+        "name": "The City Where No One Can Hurt Another",
+        "desc": "Max [Charge] Count +5\n\nSkill 3 (except E.G.O Skills) that consume [Charge] Count or Unique [Charge] deals +10% damage\n\nTurn End: If this unit was not hit this turn, heal 4 SP\n- If this unit has 2+ Minus Coin Base Attack Skills, lose 4 SP instead (this effect cannot reduce this unit's SP below -40)"
+      }
+    ]
   },
   {
     "name": "Mirror-Touch Rodion",
@@ -24070,7 +27096,17 @@
         "[Indiscriminate] [On Hit] Inflict 8 Tremor. Trigger Tremor Burst twice."
       ]
     },
-    "skills": []
+    "skills": [],
+    "gameId": 20910,
+    "clientName": "Mirror-touch",
+    "clientDesc": "Rodion’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2091011,
+        "name": "Schismatic Stereognosis",
+        "desc": "When this unit gains [Breath] Potency or Count, gain +1 [Breath] Count (2 times per turn)\n\nIf this unit is a [PersonalityBreath] or a [PersonalityVibration], Base Skills that have 1 base Atk Weight or are [WideAreaRampage] deal +10% damage\n\nAt Attack End, if target is Staggered or defeated, randomly inflict 1/3 of [Vibration] Potency on target between other random enemies next turn (rounded up; for Focused Encounters, Parts)\n- This effect does not stack with the effects of the E.G.O Gift \"Mirror Tactile Synaesthesia\""
+      }
+    ]
   },
   {
     "name": "Hollow Faust",
@@ -24113,7 +27149,17 @@
         "[Indiscriminate] [On Hit] Inflict 10 Bleed. Consume 15 Charge to deal +50% Gloom damage."
       ]
     },
-    "skills": []
+    "skills": [],
+    "gameId": 20211,
+    "clientName": "Hollow",
+    "clientDesc": "Faust’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2021111,
+        "name": "Le Trou de Vidange",
+        "desc": "If this unit has 5 [BulletHole], does not consume E.G.O Resource when using \"Hollow\" E.G.O's Skills (both Awakening and Corrosion)\n\nTurn Start: Gain 1 [BulletHole] and 1 [BlackWingHole]\n\nWhen an ally defeats an enemy, the said ally heals 5 SP and gains 1 [Enhancement] next turn (once per turn)\n\n[Charge] Count max cap +5\n\nIf this unit gains [Charge] Count past the max [Charge] Count Cap, this unit randomly gains [Breath] Potency or Count equal to the surplus [Charge] Count gained (max 6 [Charge] Count converted per turn)"
+      }
+    ]
   },
   {
     "name": "Hollow Meursault",
@@ -24156,6 +27202,16 @@
         "[Indiscriminate] [On Hit] Trigger Tremor Burst 3 times. Inflict 3 Fragile next turn."
       ]
     },
-    "skills": []
+    "skills": [],
+    "gameId": 20510,
+    "clientName": "Hollow",
+    "clientDesc": "Meursault’s E.G.O Gear",
+    "clientPassives": [
+      {
+        "passiveId": 2051011,
+        "name": "L'Hémorragie interne",
+        "desc": "[AlwaysUseEGOPassive]\nIf this unit has 5 [BulletHole], does not consume E.G.O Resource when using \"Hollow\" E.G.O's Skills (both Awakening and Corrosion)\n\nTurn Start: Gain 1 [BulletHole]\n\n[WhenUseEGOPassive]\nTurn Start: Gain 1 [BlackWingHole]\n\nHeal 5 SP every time this unit consumes or loses 3 cumulative [Bullet], and gain 1 [ResultEnhancement] next turn (including Unique [Bullet]; counts up to 9 [Bullet] per turn)"
+      }
+    ]
   }
 ]

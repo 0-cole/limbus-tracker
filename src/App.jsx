@@ -12,6 +12,7 @@ import WantListPage from './pages/WantListPage';
 import InventoryPage from './pages/InventoryPage';
 import SchedulePage from './pages/SchedulePage';
 import ChangelogPage from './pages/ChangelogPage';
+import MirrorGrinderPage from './pages/MirrorGrinderPage.jsx';
 import SettingsPage from './pages/SettingsPage';
 import OnboardingModal from './components/OnboardingModal';
 import TutorialTour from './components/TutorialTour';
@@ -241,6 +242,7 @@ export default function App() {
                 <Routes location={location}>
                   <Route path="/" element={<DashboardPage />} />
                   <Route path="/deckbuilder" element={<DeckBuilderPage />} />
+                  <Route path="/mirror-grinder" element={<MirrorGrinderPage />} />
                   <Route path="/schedule" element={<SchedulePage />} />
                   <Route path="/inventory" element={<InventoryPage />} />
                   <Route path="/identities" element={<IdentitiesPage />} />

@@ -20,4 +20,12 @@ contextBridge.exposeInMainWorld('electronAPI', {
   finishGasterWindowCrack: () => ipcRenderer.invoke('finish-gaster-window-crack'),
   onGasterComplete: (cb) => ipcRenderer.on('gaster-sequence-complete', cb),
   removeGasterComplete: () => ipcRenderer.removeAllListeners('gaster-sequence-complete'),
+  // Mirror Dungeon Grinder
+  getMirrorGrinderStatus: () => ipcRenderer.invoke('mirror-grinder-get-status'),
+  startMirrorGrinder: (config) => ipcRenderer.invoke('mirror-grinder-start', config),
+  stopMirrorGrinder: () => ipcRenderer.invoke('mirror-grinder-stop'),
+  onMirrorGrinderTelemetry: (cb) => ipcRenderer.on('mirror-grinder-telemetry', (_, data) => cb(data)),
+  removeMirrorGrinderTelemetry: () => ipcRenderer.removeAllListeners('mirror-grinder-telemetry'),
+  onMirrorGrinderLog: (cb) => ipcRenderer.on('mirror-grinder-log', (_, log) => cb(log)),
+  removeMirrorGrinderLog: () => ipcRenderer.removeAllListeners('mirror-grinder-log'),
 });

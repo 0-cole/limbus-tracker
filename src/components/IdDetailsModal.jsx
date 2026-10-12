@@ -139,6 +139,37 @@ export default function IdDetailsModal({ idData, onClose }) {
         {skill.effects && skill.effects.length > 0 && (
           <div className="p-4 flex flex-col gap-3 bg-[#0a0a0a]">
             {skill.effects.map((eff, i) => renderEffectLine(eff, i))}
+            {(() => {
+              const clientSkill = idData.clientSkills?.find(cs => cs.name?.toLowerCase() === skill.name?.toLowerCase()) || idData.clientSkills?.[idx];
+              if (!clientSkill?.coinlist || !clientSkill.coinlist.some(c => c.coindescs && c.coindescs.length > 0)) return null;
+              return (
+                <div className="mt-3 pt-3 border-t border-[#222] space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[#c9a84c] bg-[#c9a84c]/10 px-2 py-0.5 rounded border border-[#c9a84c]/30">
+                      Authoritative Uptie IV Coins
+                    </span>
+                    <span className="text-[10px] text-gray-500 font-mono">Game Client Dossier</span>
+                  </div>
+                  <div className="grid grid-cols-1 gap-2 pt-1">
+                    {clientSkill.coinlist.map((c, coinIdx) => {
+                      if (!c.coindescs || c.coindescs.length === 0) return null;
+                      return (
+                        <div key={coinIdx} className="flex items-start gap-2 text-xs bg-black/60 p-2 rounded border border-[#222]">
+                          <span className="w-5 h-5 rounded-full bg-[#c9a84c]/20 border border-[#c9a84c] text-[#c9a84c] flex items-center justify-center font-black text-[10px] shrink-0">
+                            {coinIdx + 1}
+                          </span>
+                          <div className="space-y-1 text-gray-300">
+                            {c.coindescs.map((cd, cdIdx) => (
+                              <div key={cdIdx}>{cd.desc}</div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         )}
       </div>
@@ -197,6 +228,12 @@ export default function IdDetailsModal({ idData, onClose }) {
                          }`}>
                            {shardStatus.fullBadge}
                          </span>
+                         {idData.gameId && (
+                           <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded shadow-sm bg-blue-950/80 text-blue-300 border border-blue-600/50 flex items-center gap-1">
+                             <span>💎 ID #{idData.gameId}</span>
+                             <span className="text-blue-400">• Official Data</span>
+                           </span>
+                         )}
                          <span className={`text-xs font-semibold ${
                            shardStatus.shardable ? 'text-green-400' : 'text-amber-400'
                          }`}>
