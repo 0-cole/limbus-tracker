@@ -505,6 +505,10 @@ ipcMain.handle('mirror-grinder-stop', () => {
   return mirrorGrinder.getStatus();
 });
 
+ipcMain.handle('mirror-grinder-test-webhook', async (_, { url, roleId }) => {
+  return await mirrorGrinder.testWebhook(url, roleId);
+});
+
 app.whenReady().then(() => {
   cleanupOldTempInstallers();
   app.setAppUserModelId('com.limbustracker.app');

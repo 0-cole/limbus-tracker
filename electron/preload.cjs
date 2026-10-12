@@ -28,4 +28,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   removeMirrorGrinderTelemetry: () => ipcRenderer.removeAllListeners('mirror-grinder-telemetry'),
   onMirrorGrinderLog: (cb) => ipcRenderer.on('mirror-grinder-log', (_, log) => cb(log)),
   removeMirrorGrinderLog: () => ipcRenderer.removeAllListeners('mirror-grinder-log'),
+  testDiscordWebhook: (data) => ipcRenderer.invoke('mirror-grinder-test-webhook', data),
 });
