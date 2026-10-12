@@ -9,7 +9,7 @@
   - Autonomous **Mirror Dungeon & Luxcavation Engine** completely reverse-engineered from Walpth's *Charge-Grinder v3.5.3* via REA (Reverse Engineer Anything).
   - 100% authentic ChargeGrinder UI fidelity: 12-Sinner portrait grid, Guide modal with parchment backdrop, 24 Keywordless EGO gifts Customization Panel, Luxcavation console, and live telemetry log terminal.
 - **Repository**: [0-cole/limbus-tracker](https://github.com/0-cole/limbus-tracker)
-- **Current Deployed Release**: `v1.0.91`
+- **Current Deployed Release**: `v1.0.92`
 
 ---
 
@@ -36,26 +36,33 @@
 - **Source**: Reverse engineered from Charge-Grinder v3.5.3 (Walpth) using REA.
 - **Attribution**: Walpth is credited in the UI header and documentation.
 - **Supported Resolutions**: 1920x1080 and 1280x720 (16:9).
-- **Subsystems**:
-  - Humanized mouse movement (cubic spline with Fitts easing and micro-jitter).
-  - Mirror Dungeon state machine with Win Rate clash pulsing, struggle mitigation, and reward card priority.
-  - Luxcavation mode with automated Enkephalin crafting and Defeat recovery.
-  - 24 Keywordless EGO gifts with 3-stage cycling (Keep, Buy, Uptie).
-  - Discord webhook notifications with thread ID and live test pings.
+- **Subsystems & Click Abilities**:
+  - **Team Selection & Scrolling**: Moves to `(196, 480)`, scrolls up `(21)` to list top, scrolls down `(-10)` per page to click target affinity team slot in `REG["teams"]`.
+  - **Sinner Order & Deployment**: Clicks `(1713, 712)` ("Confirm_alt") to clear deployed roster, then sequentially clicks each sinner in user's saved turn order using exact `SINNERS` coordinates.
+  - **Sinner Check Selection**: Scans `REG["probs"]` across `["VeryHigh", "High", "Normal", "Low", "VeryLow"]`, selects the highest success rate Sinner, and clicks `Commence` at `(1539, 906)`.
+  - **Clash Struggle Mitigation & EGO Radials**: Holds skill for 1.5s to open radial menu, selects best EGO (Fluid Sac, etc.), double-clicks, and re-engages Win Rate `P`.
+  - **Humanized Mouse Control**: Arc-length cubic spline with Fitts easing, micro-jitter, and mouse-wheel scrolling via user32 `mouse_event` (`0x0800`).
+  - **24 Keywordless EGO Gifts**: 3-stage cycling (Keep, Buy, Uptie) via `config_panel.png`.
+  - **Roster Flexibility**: Default is 0 selected (none), with persistent per-team order saving in `localStorage`.
 
 ---
 
-## 3. Recent Verified Changes (v1.0.91)
-1. **Eliminated Installer Wizard**: Converted NSIS installer to pure one-click mode.
-2. **Prevented Taskbar Unpinning**: Added `build/installer.nsh` so Windows Explorer retains taskbar pins across updates.
-3. **Fixed Image Assets**: Corrected asset resolution paths so all 12 Sinner cards, the chibi guide icon, the parchment guide, and 24 Keywordless EGO gifts render properly.
-4. **Added Kenneth Memo**: Added stressed records keeper Kenneth memo for v1.0.91 in `src/pages/ChangelogPage.jsx`.
-5. **Packaged & Released**: Compiled, code-signed, pushed to `origin/master`, and released `v1.0.91` with standalone installer on GitHub Releases.
+## 3. Recent Verified Changes (v1.0.92)
+1. **0 Default Sinners & Freedom of Selection**: Removed the 1-sinner minimum lock. Default is now empty/none (`[]`), allowing deselecting all sinners down to 0.
+2. **Persistent Team Orders**: Sinner selections and turn orders are saved per-keyword (Burn, Bleed, Tremor, etc.) in `localStorage`. Switching teams auto-saves current and loads the new team's order.
+3. **Turn Order Badges (#1 to #12)**: Displayed exact turn-order badges on Sinner portrait cards and an active turn-order preview strip. Added `Clear (0)`, `Preset (1-6)`, and `Save Team Order` buttons.
+4. **All ChargeGrinder Click Abilities Integrated**:
+   - `selectTeam`: Auto-scrolling team list via mouse wheel.
+   - `selectSinnersOrder`: Clear roster + sequential click deployment.
+   - `selectCheckSinner`: Probability scan and optimal Sinner check selection.
+   - `openSinnerEgoRadial`: 1.5s long-press for EGO wheel clash mitigation.
+5. **Packaged & Released**: Tested, committed, pushed to `origin/master`, and published `v1.0.92` GitHub Release with signed installer.
 
 ---
 
 ## 4. Key File Locations
 - Main page for ChargeGrinder engine: `src/pages/MirrorGrinderPage.jsx`
+- Automation backend: `electron/mirrorGrinderEngine.cjs`
 - Assets directory: `public/assets/charge_grinder/` and `dist/assets/charge_grinder/`
 - Installer include script: `build/installer.nsh`
 - Package config: `package.json`

@@ -158,8 +158,27 @@ export default function MirrorGrinderPage() {
   const [webhookTesting, setWebhookTesting] = useState(false);
   const [webhookTestStatus, setWebhookTestStatus] = useState(null);
 
-  // 12 Sinners selection (1-indexed matching sel1.png to sel12.png)
-  const [selectedSinners, setSelectedSinners] = useState([1, 2, 3, 4, 5, 6]);
+  // Per-Team Sinners deployment & order mapping (saved in localStorage)
+  const [teamSinners, setTeamSinners] = useState(() => {
+    try {
+      const saved = localStorage.getItem('chargegrinder_team_sinners');
+      return saved ? JSON.parse(saved) : {};
+    } catch (e) {
+      return {};
+    }
+  });
+
+  // Active Sinner selection order (default is empty/none, or loaded from team)
+  const [selectedSinners, setSelectedSinners] = useState(() => {
+    try {
+      const saved = localStorage.getItem('chargegrinder_team_sinners');
+      const parsed = saved ? JSON.parse(saved) : {};
+      return parsed['BURN'] || [];
+    } catch (e) {
+      return [];
+    }
+  });
+  const [saveTeamNotice, setSaveTeamNotice] = useState(false);
 
   // Telemetry state
   const [telemetry, setTelemetry] = useState({
@@ -250,14 +269,78 @@ export default function MirrorGrinderPage() {
     }
   };
 
+  const handleSelectKeyword = (kwId) => {
+    // Save current selection to active keyword
+    const updatedTeams = {
+      ...teamSinners,
+      [selectedKeyword]: selectedSinners
+    };
+    setTeamSinners(updatedTeams);
+    try {
+      localStorage.setItem('chargegrinder_team_sinners', JSON.stringify(updatedTeams));
+    } catch (e) {}
+
+    setSelectedKeyword(kwId);
+    // Load new team's saved sinner selection (default to empty/none [] if not previously saved)
+    setSelectedSinners(updatedTeams[kwId] || []);
+  };
+
   const toggleSinner = (id) => {
+    let updated;
     if (selectedSinners.includes(id)) {
-      if (selectedSinners.length > 1) {
-        setSelectedSinners(selectedSinners.filter(s => s !== id));
-      }
+      // Allow deselecting all the way down to none (0 sinners)
+      updated = selectedSinners.filter(s => s !== id);
     } else {
-      setSelectedSinners([...selectedSinners, id]);
+      // Append sinner to the deployment order
+      updated = [...selectedSinners, id];
     }
+    setSelectedSinners(updated);
+
+    const updatedTeams = {
+      ...teamSinners,
+      [selectedKeyword]: updated
+    };
+    setTeamSinners(updatedTeams);
+    try {
+      localStorage.setItem('chargegrinder_team_sinners', JSON.stringify(updatedTeams));
+    } catch (e) {}
+  };
+
+  const handleClearSinners = () => {
+    setSelectedSinners([]);
+    const updatedTeams = {
+      ...teamSinners,
+      [selectedKeyword]: []
+    };
+    setTeamSinners(updatedTeams);
+    try {
+      localStorage.setItem('chargegrinder_team_sinners', JSON.stringify(updatedTeams));
+    } catch (e) {}
+  };
+
+  const handleSaveTeamOrder = () => {
+    const updatedTeams = {
+      ...teamSinners,
+      [selectedKeyword]: selectedSinners
+    };
+    setTeamSinners(updatedTeams);
+    try {
+      localStorage.setItem('chargegrinder_team_sinners', JSON.stringify(updatedTeams));
+    } catch (e) {}
+    setSaveTeamNotice(true);
+    setTimeout(() => setSaveTeamNotice(false), 2000);
+  };
+
+  const handleApplyPreset = (presetList) => {
+    setSelectedSinners(presetList);
+    const updatedTeams = {
+      ...teamSinners,
+      [selectedKeyword]: presetList
+    };
+    setTeamSinners(updatedTeams);
+    try {
+      localStorage.setItem('chargegrinder_team_sinners', JSON.stringify(updatedTeams));
+    } catch (e) {}
   };
 
   const cycleGiftState = (giftId, maxState) => {
@@ -494,7 +577,7 @@ export default function MirrorGrinderPage() {
               return (
                 <button
                   key={kw.id}
-                  onClick={() => setSelectedKeyword(kw.id)}
+                  onClick={() => handleSelectKeyword(kw.id)}
                   disabled={isRunning}
                   style={{
                     backgroundColor: active ? kw.color : 'rgba(0,0,0,0.5)',
@@ -542,14 +625,78 @@ export default function MirrorGrinderPage() {
           </div>
         </div>
 
-        {/* 12 Sinners Grid with Authentic Image Portraits (User Request 2.1) */}
+        {/* 12 Sinners Grid with Authentic Image Portraits & Order Badges */}
         <div className="space-y-2 pt-2 border-t border-[#483824]">
-          <div className="flex items-center justify-between text-xs font-bold">
-            <span className="text-[#b09670]">SINNERS DEPLOYMENT ROSTER</span>
-            <span className="text-[#c9a84c]">Selected: {selectedSinners.length} / 12 Sinners</span>
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-bold">
+            <div className="flex items-center gap-2">
+              <span className="text-[#b09670]">SINNERS DEPLOYMENT ROSTER</span>
+              <span className="px-2 py-0.5 rounded bg-[#2b2217] border border-[#7b6240] text-amber-300 font-mono text-[11px]">
+                TEAM: {selectedKeyword}
+              </span>
+              <span className="text-[#c9a84c]">
+                ({selectedSinners.length} / 12 selected{selectedSinners.length === 0 ? ' — None by default' : ''})
+              </span>
+            </div>
+
+            {/* Team Order Actions */}
+            <div className="flex items-center gap-2">
+              {saveTeamNotice && (
+                <span className="text-emerald-400 text-xs font-bold animate-pulse">
+                  ✓ Team Order Saved!
+                </span>
+              )}
+              <button
+                onClick={handleClearSinners}
+                disabled={isRunning || selectedSinners.length === 0}
+                className="px-2 py-1 rounded bg-[#2a1a1a] hover:bg-[#3d2424] text-red-300 border border-red-900/60 text-[11px] font-bold transition disabled:opacity-40"
+              >
+                Clear (0)
+              </button>
+              <button
+                onClick={() => handleApplyPreset([1, 2, 3, 4, 5, 6])}
+                disabled={isRunning}
+                className="px-2 py-1 rounded bg-[#1e282d] hover:bg-[#283840] text-cyan-300 border border-cyan-800/60 text-[11px] font-bold transition disabled:opacity-40"
+              >
+                Preset (1-6)
+              </button>
+              <button
+                onClick={handleSaveTeamOrder}
+                disabled={isRunning}
+                className="px-2.5 py-1 rounded bg-[#2b2217] hover:bg-[#3d3121] text-amber-300 border border-[#7b6240] text-[11px] font-black transition disabled:opacity-40"
+              >
+                Save Team Order
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+          {/* Active Deployment Order Sequence Preview */}
+          {selectedSinners.length > 0 ? (
+            <div className="flex flex-wrap items-center gap-1.5 p-2 rounded bg-black/50 border border-[#3d2f1f] text-[11px]">
+              <span className="text-gray-400 font-bold uppercase tracking-wider text-[10px] mr-1">Turn Order:</span>
+              {selectedSinners.map((sinnerId, idx) => {
+                const SINNER_NAMES = {
+                  1: "Yi Sang", 2: "Faust", 3: "Don Quixote", 4: "Ryoshu",
+                  5: "Meursault", 6: "Hong Lu", 7: "Heathcliff", 8: "Ishmael",
+                  9: "Rodion", 10: "Sinclair", 11: "Outis", 12: "Gregor"
+                };
+                return (
+                  <span
+                    key={sinnerId}
+                    className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#13222a] border border-[#00d0ff]/50 text-[#00e5ff] font-bold"
+                  >
+                    <span className="text-[10px] text-amber-300 font-mono">#{idx + 1}</span>
+                    <span>{SINNER_NAMES[sinnerId]}</span>
+                  </span>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="p-2 rounded bg-black/40 border border-[#3d2f1f] text-gray-500 text-xs italic text-center">
+              No sinners currently selected for {selectedKeyword}. Click any sinner card below to add them to this team's turn order (1st click = Slot #1, 2nd click = Slot #2, etc.).
+            </div>
+          )}
+
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 pt-1">
             {[
               { id: 1, name: "Yi Sang", file: "sel1.png" },
               { id: 2, name: "Faust", file: "sel2.png" },
@@ -564,7 +711,9 @@ export default function MirrorGrinderPage() {
               { id: 11, name: "Outis", file: "sel11.png" },
               { id: 12, name: "Gregor", file: "sel12.png" },
             ].map(sinner => {
-              const isSelected = selectedSinners.includes(sinner.id);
+              const orderIndex = selectedSinners.indexOf(sinner.id);
+              const isSelected = orderIndex !== -1;
+              const orderNumber = orderIndex + 1;
               return (
                 <div
                   key={sinner.id}
@@ -586,9 +735,14 @@ export default function MirrorGrinderPage() {
                     </span>
                   </div>
                   {isSelected && (
-                    <div className="absolute top-1 right-1 bg-[#00e5ff] text-black font-black text-[9px] px-1.5 py-0.5 rounded shadow">
-                      ACTIVE
-                    </div>
+                    <>
+                      <div className="absolute top-1 right-1 bg-[#00e5ff] text-black font-black text-[10px] px-1.5 py-0.5 rounded shadow-[0_0_8px_rgba(0,229,255,0.8)]">
+                        #{orderNumber}
+                      </div>
+                      <div className="absolute top-1 left-1 bg-black/80 border border-[#00e5ff]/50 text-[#edd1ac] font-mono text-[9px] px-1 rounded">
+                        {orderIndex < 7 ? `SLOT ${orderNumber}` : `BENCH`}
+                      </div>
+                    </>
                   )}
                 </div>
               );

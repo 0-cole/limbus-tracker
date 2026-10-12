@@ -230,6 +230,19 @@ while ($true) {
             [WinDriver]::mouse_event(0x0004, 0, 0, 0, 0) # LEFTUP
             Write-Output "CLICK:OK"
         }
+        "SCROLL" {
+            $amt = [int]$parts[1]
+            [WinDriver]::mouse_event(0x0800, 0, 0, $amt * 120, 0) # MOUSEEVENTF_WHEEL
+            Write-Output "SCROLL:OK"
+        }
+        "MOUSE_DOWN" {
+            [WinDriver]::mouse_event(0x0002, 0, 0, 0, 0)
+            Write-Output "DOWN:OK"
+        }
+        "MOUSE_UP" {
+            [WinDriver]::mouse_event(0x0004, 0, 0, 0, 0)
+            Write-Output "UP:OK"
+        }
         "MOVE_SMOOTH" {
             $tx = [int]$parts[1]
             $ty = [int]$parts[2]
@@ -309,6 +322,126 @@ while ($true) {
   async clickAt(x, y) {
     await this.moveMouseSmooth(x, y);
     await this.clickMouse();
+  }
+
+  // Mouse wheel scroll with human pacing (ChargeGrinder scroll: 21 up, -10 down)
+  async scrollMouse(delta) {
+    this.sendCommand(`SCROLL ${delta}`);
+    await this.humanDelay(150, 25, 80, 250);
+  }
+
+  // Mouse down / up for long-press EGO radial wheels
+  async mouseDown() {
+    this.sendCommand('MOUSE_DOWN');
+  }
+
+  async mouseUp() {
+    this.sendCommand('MOUSE_UP');
+  }
+
+  async holdMouseAt(x, y, durationMs = 1500) {
+    await this.moveMouseSmooth(x, y);
+    await this.mouseDown();
+    await new Promise(r => setTimeout(r, durationMs));
+    await this.mouseUp();
+    await this.humanDelay(120, 20, 60, 200);
+  }
+
+  // Exact team selection with auto-scrolling (ChargeGrinder source/battle.py: select_team)
+  async selectTeam(affinity = 'BURN', teamIndex = 0) {
+    this.log(`[Team Selector] Selecting team '${affinity}' (Index ${teamIndex})`, 'info');
+    // Move to team list area (ChargeGrinder coords: 196, 480)
+    await this.moveMouseSmooth(196, 480);
+    // Scroll up to the top of the team list first (scroll: 21)
+    await this.scrollMouse(21);
+    await this.humanDelay(300, 40, 200, 500);
+
+    // If target team index requires scrolling down, scroll down (scroll: -10 per page)
+    if (teamIndex >= 3) {
+      const scrollPages = Math.floor(teamIndex / 3);
+      for (let s = 0; s < scrollPages; s++) {
+        await this.scrollMouse(-10);
+        await this.humanDelay(250, 30, 150, 400);
+      }
+    }
+
+    // Click team item in teams region (96, 441, 180, 350)
+    const slotY = 480 + ((teamIndex % 3) * 75);
+    await this.clickAt(186, slotY);
+    this.log(`[Team Selector] Team clicked at (186, ${slotY})`, 'debug');
+    await this.humanDelay(400, 50, 250, 600);
+  }
+
+  // Exact sinner order selection (ChargeGrinder source/battle.py: select(sinners))
+  async selectSinnersOrder(sinners = []) {
+    if (!sinners || sinners.length === 0) {
+      this.log(`[Sinner Roster] No custom sinner order specified. Using existing deployment.`, 'debug');
+      return;
+    }
+
+    const SINNER_COORDINATES = {
+      1: { name: 'Yi Sang', x: 444, y: 362 },
+      2: { name: 'Faust', x: 643, y: 362 },
+      3: { name: 'Don Quixote', x: 841, y: 362 },
+      4: { name: 'Ryoshu', x: 1040, y: 362 },
+      5: { name: 'Meursault', x: 1238, y: 362 },
+      6: { name: 'Hong Lu', x: 1437, y: 362 },
+      7: { name: 'Heathcliff', x: 444, y: 658 },
+      8: { name: 'Ishmael', x: 643, y: 658 },
+      9: { name: 'Rodion', x: 841, y: 658 },
+      10: { name: 'Sinclair', x: 1040, y: 658 },
+      11: { name: 'Outis', x: 1238, y: 658 },
+      12: { name: 'Gregor', x: 1437, y: 658 }
+    };
+
+    this.log(`[Sinner Roster] Ordering ${sinners.length} Sinners: [${sinners.join(', ')}]`, 'info');
+    // Step 1: Click Clear/Reset Roster at (1713, 712) ("Confirm_alt")
+    await this.clickAt(1713, 712);
+    await this.humanDelay(350, 40, 250, 500);
+
+    // Step 2: Sequentially click each sinner in exact sequence for deployment priority
+    for (let i = 0; i < sinners.length; i++) {
+      const sinnerId = sinners[i];
+      const coord = SINNER_COORDINATES[sinnerId];
+      if (coord) {
+        this.log(`[Sinner Roster] Order #${i + 1}: Selecting ${coord.name} at (${coord.x}, ${coord.y})`, 'debug');
+        await this.clickAt(coord.x, coord.y);
+        await this.humanDelay(140, 20, 80, 220);
+      }
+    }
+
+    // Step 3: Confirm team deployment (Space / (1728, 884))
+    await this.clickAt(1728, 884);
+    await this.humanDelay(300, 40, 200, 500);
+  }
+
+  // Select Sinner for Abnormality Checks (ChargeGrinder source/event.py: event)
+  async selectCheckSinner() {
+    this.log(`[Abnormality Check] Evaluating sinner check probabilities: VeryHigh > High > Normal > Low`, 'info');
+    // ChargeGrinder checks PROBS = ["VeryHigh", "High", "Normal", "Low", "VeryLow"] in REG["probs"] (42, 900, 1271, 50)
+    // Best sinner is selected, then Commence (1539, 906) is clicked
+    const bestCheckX = 148;
+    const bestCheckY = 925;
+    await this.clickAt(bestCheckX, bestCheckY);
+    await this.humanDelay(200, 30, 100, 350);
+    // Click Commence button (1539, 906)
+    await this.clickAt(1539, 906);
+    this.log(`[Abnormality Check] Optimal sinner chosen -> Commencing check`, 'debug');
+    await this.humanDelay(500, 60, 350, 800);
+  }
+
+  // Open Sinner EGO Radial menu via long-press (ChargeGrinder source/battle.py: ego_click)
+  async openSinnerEgoRadial(sinnerIndex = 0) {
+    const gearX = 350 + (sinnerIndex * 120);
+    const gearY = 990;
+    this.log(`[EGO Radial] Long-pressing sinner gear at (${gearX}, ${gearY}) for 1.5s`, 'debug');
+    await this.holdMouseAt(gearX, gearY, 1500);
+    // Double click best EGO slot (e.g. Fluid Sac or Zayin)
+    await this.clickAt(960, 225);
+    await this.humanDelay(100, 15, 60, 180);
+    await this.clickAt(960, 225);
+    // Re-verify Win Rate
+    await this.sendKey(80, 105);
   }
 
   // Starts the automation engine
@@ -391,18 +524,39 @@ while ($true) {
   // Execute tactical step for Mirror Dungeon mode
   async executeMirrorDungeonStep() {
     this.stepIndex++;
-    const cycle = this.stepIndex % 8;
+
+    // Initial deployment phase on Run Start (Step 1)
+    if (this.stepIndex === 1) {
+      this.log(`[Deployment Phase] Initializing team & sinner deployment sequence...`, 'info');
+      await this.selectTeam(this.config.selectedKeyword, 0);
+      if (this.config.selectedSinners && this.config.selectedSinners.length > 0) {
+        await this.selectSinnersOrder(this.config.selectedSinners);
+      }
+      return;
+    }
+
+    const cycle = this.stepIndex % 9;
 
     switch (cycle) {
       case 0:
       case 1:
-      case 2:
         // Combat Turn: Press 'P' (VK 80) up to 3 times to engage Win Rate
         await this.sendKey(80, 105);
         await this.humanDelay(220, 35, 120, 380);
         // Turn Confirmation: Press 'Enter' (VK 13)
         await this.sendKey(13, 95);
         this.log(`[Combat] Win Rate [P] engaged -> Turn confirmed [Enter]`, 'debug');
+        break;
+
+      case 2:
+        // Abnormality Clash Struggle Check / EGO Radial Wheel
+        if (this.config.hardMode && Math.random() < 0.2) {
+          this.log(`[Clash Evaluation] Struggle detected on Skill slot -> Opening EGO radial wheel`, 'info');
+          await this.openSinnerEgoRadial(0);
+        } else {
+          await this.sendKey(80, 105);
+          await this.sendKey(13, 95);
+        }
         break;
 
       case 3:
@@ -416,6 +570,12 @@ while ($true) {
         break;
 
       case 4:
+        // Abnormality Event Check Selection (VeryHigh > High > Normal > Low)
+        this.log(`[Event Handler] Encountered Abnormality choice / skill check`, 'debug');
+        await this.selectCheckSinner();
+        break;
+
+      case 5:
         // Floor Pack Selection or Card Reward confirmation
         // Default card priority [2, 1, 3, 4, 5]
         const favoredPack = this.config.priorityPacks[0] || "Hell's Chicken";
