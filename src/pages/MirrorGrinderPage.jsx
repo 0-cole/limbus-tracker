@@ -698,18 +698,18 @@ export default function MirrorGrinderPage() {
 
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 pt-1">
             {[
-              { id: 1, name: "Yi Sang", file: "sel1.png" },
-              { id: 2, name: "Faust", file: "sel2.png" },
-              { id: 3, name: "Don Quixote", file: "sel3.png" },
-              { id: 4, name: "Ryoshu", file: "sel4.png" },
-              { id: 5, name: "Meursault", file: "sel5.png" },
-              { id: 6, name: "Hong Lu", file: "sel6.png" },
-              { id: 7, name: "Heathcliff", file: "sel7.png" },
-              { id: 8, name: "Ishmael", file: "sel8.png" },
-              { id: 9, name: "Rodion", file: "sel9.png" },
-              { id: 10, name: "Sinclair", file: "sel10.png" },
-              { id: 11, name: "Outis", file: "sel11.png" },
-              { id: 12, name: "Gregor", file: "sel12.png" },
+              { id: 1, name: "Yi Sang", slug: "lcb-sinner-yi-sang", color: "#4a90d9" },
+              { id: 2, name: "Faust", slug: "lcb-sinner-faust", color: "#c084fc" },
+              { id: 3, name: "Don Quixote", slug: "lcb-sinner-don-quixote", color: "#fbbf24" },
+              { id: 4, name: "Ryōshū", slug: "lcb-sinner-ryoshu", color: "#f87171" },
+              { id: 5, name: "Meursault", slug: "lcb-sinner-meursault", color: "#a3a3a3" },
+              { id: 6, name: "Hong Lu", slug: "lcb-sinner-hong-lu", color: "#34d399" },
+              { id: 7, name: "Heathcliff", slug: "lcb-sinner-heathcliff", color: "#fb923c" },
+              { id: 8, name: "Ishmael", slug: "lcb-sinner-ishmael", color: "#38bdf8" },
+              { id: 9, name: "Rodion", slug: "lcb-sinner-rodion", color: "#f472b6" },
+              { id: 10, name: "Sinclair", slug: "lcb-sinner-sinclair", color: "#a78bfa" },
+              { id: 11, name: "Outis", slug: "lcb-sinner-outis", color: "#6ee7b7" },
+              { id: 12, name: "Gregor", slug: "lcb-sinner-gregor", color: "#fca5a5" },
             ].map(sinner => {
               const orderIndex = selectedSinners.indexOf(sinner.id);
               const isSelected = orderIndex !== -1;
@@ -718,28 +718,38 @@ export default function MirrorGrinderPage() {
                 <div
                   key={sinner.id}
                   onClick={() => !isRunning && toggleSinner(sinner.id)}
-                  className={`relative group rounded-lg overflow-hidden border-2 cursor-pointer transition-all transform hover:scale-[1.02] ${
+                  className={`relative group rounded-lg overflow-hidden border-2 cursor-pointer transition-all transform hover:scale-[1.03] ${
                     isSelected
-                      ? 'border-[#00e5ff] shadow-[0_0_12px_rgba(0,229,255,0.4)] brightness-105'
-                      : 'border-[#483824] opacity-40 hover:opacity-75 grayscale'
+                      ? 'border-[#00e5ff] shadow-[0_0_15px_rgba(0,229,255,0.5)] brightness-110'
+                      : 'border-[#483824] opacity-50 hover:opacity-90 grayscale hover:grayscale-0'
                   }`}
                 >
                   <img
-                    src={getChargeGrinderAsset(`selected/${sinner.file}`)}
+                    src={`./assets/sinners/${sinner.id}.webp`}
                     alt={sinner.name}
-                    className="w-full h-32 object-cover object-top bg-black/60"
+                    loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = `https://assets.limbusdeck.com/identities/full/${sinner.slug}.webp`;
+                    }}
+                    className="w-full h-36 object-cover object-top bg-[#120e0a]"
                   />
-                  <div className="absolute bottom-0 inset-x-0 bg-black/80 py-1 text-center border-t border-[#7b6240]/60">
-                    <span className="text-[11px] font-black text-[#edd1ac] tracking-wide block truncate">
+                  <div className="absolute bottom-0 inset-x-0 bg-black/85 py-1 px-1.5 flex items-center justify-between border-t border-[#7b6240]/60">
+                    <span className="text-[11px] font-black text-[#edd1ac] tracking-wide truncate">
                       {sinner.name}
                     </span>
+                    <span
+                      className="w-2 h-2 rounded-full shrink-0 shadow-sm"
+                      style={{ backgroundColor: sinner.color }}
+                      title={sinner.name}
+                    />
                   </div>
                   {isSelected && (
                     <>
-                      <div className="absolute top-1 right-1 bg-[#00e5ff] text-black font-black text-[10px] px-1.5 py-0.5 rounded shadow-[0_0_8px_rgba(0,229,255,0.8)]">
+                      <div className="absolute top-1 right-1 bg-[#00e5ff] text-black font-black text-[10px] px-1.5 py-0.5 rounded shadow-[0_0_10px_rgba(0,229,255,0.9)]">
                         #{orderNumber}
                       </div>
-                      <div className="absolute top-1 left-1 bg-black/80 border border-[#00e5ff]/50 text-[#edd1ac] font-mono text-[9px] px-1 rounded">
+                      <div className="absolute top-1 left-1 bg-black/85 border border-[#00e5ff]/60 text-[#edd1ac] font-mono text-[9px] px-1 py-0.5 rounded shadow">
                         {orderIndex < 7 ? `SLOT ${orderNumber}` : `BENCH`}
                       </div>
                     </>
