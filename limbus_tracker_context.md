@@ -6,10 +6,10 @@
   - Full Identity & EGO library with advanced multi-attribute filtering, tier lists, and shard expense calculator.
   - Interactive schedule & weekly checklist tracker.
   - Spotifast-inspired lightweight UI architecture (ultra-low CPU/RAM footprint, tactile mechanical keyboard palettes).
-  - Autonomous **Mirror Dungeon & Luxcavation Engine** completely reverse-engineered from Walpth's *Charge-Grinder v3.5.3* via REA (Reverse Engineer Anything).
-  - 100% authentic ChargeGrinder UI fidelity: 12-Sinner portrait grid, Guide modal with parchment backdrop, 24 Keywordless EGO gifts Customization Panel, Luxcavation console, and live telemetry log terminal.
+  - Dedicated **Walpth Charge Grinder Tribute Hub** (`/mirror-grinder`): A hilarious, over-the-top, late-night BTV infomercial celebrating Walpth's [Charge-Grinder](https://github.com/Walpth/Charge-Grinder/) repository.
+  - **Spamton / Tenna Style TV Broadcast**: Unskippable retro CRT variety show presentation locking onto the screen, featuring Toby Fox's *Tenna Introduction* theme, animated dancing TV sprites (`tennadancing.gif`, `tennaflying.png`, `tennamaxup.png`, etc.), and explosive pitch scenes.
 - **Repository**: [0-cole/limbus-tracker](https://github.com/0-cole/limbus-tracker)
-- **Current Deployed Release**: `v1.0.93`
+- **Current Deployed Release**: `v1.0.94`
 
 ---
 
@@ -21,36 +21,32 @@
 - **Routing**: `HashRouter` (required for Electron's `file://` protocol).
 
 ### 2.2 Sinner Character Portraits
-- In ChargeGrinder's upstream repository, `sel1.png` through `sel12.png` are literally transparent PNGs containing plain grey number boxes (1 to 12).
-- In Limbus Tracker v1.0.93+, all 12 official, full-color LCB character portraits (Yi Sang, Faust, Don Quixote, Ryōshū, Meursault, Hong Lu, Heathcliff, Ishmael, Rodion, Sinclair, Outis, Gregor) are bundled locally in `public/assets/sinners/{id}.webp` and packaged into `dist/assets/sinners/`, with high-res CDN fallback.
+- All 12 official, full-color LCB character portraits (Yi Sang, Faust, Don Quixote, Ryōshū, Meursault, Hong Lu, Heathcliff, Ishmael, Rodion, Sinclair, Outis, Gregor) are bundled locally in `public/assets/sinners/{id}.webp` and packaged into `dist/assets/sinners/`, with high-res CDN fallback.
 
 ### 2.3 Updater & NSIS Configuration
-- **One-Click Updates**: `oneClick: true`, `perMachine: false`, `allowToChangeInstallationDirectory: false` in `package.json`. Eliminates prompt wizards requesting destination folder or installation mode.
+- **One-Click Updates**: `oneClick: true`, `perMachine: false`, `allowToChangeInstallationDirectory: false` in `package.json`.
 - **Taskbar Pin Preservation**: Custom NSIS script in `build/installer.nsh` prevents shortcut deletion during in-place updates.
 
-### 2.4 ChargeGrinder Mirror & Luxcavation Engine
-- **Source**: Reverse engineered from Charge-Grinder v3.5.3 (Walpth) using REA.
-- **Attribution**: Walpth is credited in the UI header and documentation.
-- **Subsystems & Click Abilities**:
-  - `selectTeam`: Auto-scrolling team list via mouse wheel (`SCROLL_WHEEL` user32 `mouse_event 0x0800`).
-  - `selectSinnersOrder`: Reset deployed roster at `(1713, 712)` and sequentially click sinners in user's saved turn order.
-  - `selectCheckSinner`: Probability scan across `VeryHigh > High > Normal > Low` and click `(1539, 906)` Commence.
-  - `openSinnerEgoRadial`: 1.5s long-press for EGO wheel clash struggle mitigation.
-  - Realistic smooth cursor movements via cubic Bezier arc with Fitts's Law smootherstep velocity and ±1.5px micro-jitter.
+### 2.4 Walpth's Charge Grinder Tribute & Tenna Infomercial
+- **Attribution**: Full creator attribution and promotion for Walpth's Charge Grinder.
+- **Components**:
+  - `src/components/TennaInfomercialModal.jsx`: Fullscreen CRT television simulation, scanline overlays, channel bugs (`CH-77 BTV LIVE`), audio synchronization (`tenna_intro.mp3` & `tenna_explosion.mp3`), and Spamton/Tenna style dialogue cards.
+  - `src/pages/MirrorGrinderPage.jsx`: The billboard hub with copyable `git clone` command, Project Moon customer testimonials (Vergilius, Faust, Don Quixote, Ryōshū, Meursault, Heathcliff, Charon), Dante's clock-head panic soundboard, and replay TV broadcast controls.
 
 ---
 
-## 3. Recent Verified Changes (v1.0.93)
-1. **Bundled Real Character Portraits**: Downloaded and packaged all 12 official full-color LCB character portraits into `public/assets/sinners/` and `dist/assets/sinners/`.
-2. **Replaced Number Placeholder Art**: Sinner cards now display the authentic character artwork, signature sin color indicator, and deployment order badges (`#1` to `#12`).
-3. **Packaged & Released**: Tested, committed, pushed to `origin/master`, and published `v1.0.93` GitHub Release with signed installer.
+## 3. Recent Verified Changes (v1.0.94)
+1. **Tenna Infomercial Broadcast**: Integrated unskippable page-locking variety show TV sequence matching Deltarune Chapter 3's Tenna theme, using user-provided sprites and audio.
+2. **Charge Grinder Page Conversion**: Converted the automation engine tab into an over-the-top tribute advertisement hub for [Walpth's Charge-Grinder](https://github.com/Walpth/Charge-Grinder/).
+3. **Kenneth's v1.0.94 Memo**: Added humorous resignation and retirement announcement to `src/pages/ChangelogPage.jsx`.
+4. **Sidebar Update**: Updated sidebar navigation description to "Walpth's Masterpiece".
 
 ---
 
 ## 4. Key File Locations
-- Main page for ChargeGrinder engine: `src/pages/MirrorGrinderPage.jsx`
+- Tenna commercial modal: `src/components/TennaInfomercialModal.jsx`
+- Charge Grinder tribute page: `src/pages/MirrorGrinderPage.jsx`
 - Sinner portraits: `public/assets/sinners/` and `dist/assets/sinners/`
-- Automation backend: `electron/mirrorGrinderEngine.cjs`
-- Installer include script: `build/installer.nsh`
-- Package config: `package.json`
+- Tenna assets: `src/assets/tenna*`, `src/assets/anttennas.png`, `public/assets/tenna*`
 - Changelog memos: `src/pages/ChangelogPage.jsx`
+- Package config: `package.json`

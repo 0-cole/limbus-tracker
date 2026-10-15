@@ -27,7 +27,7 @@ import { useStore } from '../stores/useStore';
 const navItems = [
   { path: '/', icon: LayoutDashboard, label: 'Dashboard', description: 'Overview' },
   { path: '/deckbuilder', icon: Swords, label: 'Deck Builder', description: 'Squad & Synergies' },
-  { path: '/mirror-grinder', icon: Zap, label: 'Charge Grinder', description: 'MD Automation Hub' },
+  { path: '/mirror-grinder', icon: Zap, label: 'Charge Grinder', description: "Walpth's Masterpiece" },
   { path: '/schedule', icon: Calendar, label: 'Schedule', description: 'Mirror Dungeon' },
   { path: '/inventory', icon: Battery, label: 'Inventory', description: 'Economy & Shards' },
   { path: '/want-list', icon: Heart, label: 'Wishlist', description: 'Targeted Goals' },
