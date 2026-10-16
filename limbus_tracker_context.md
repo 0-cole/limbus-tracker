@@ -9,7 +9,7 @@
   - Dedicated **Walpth Charge Grinder Tribute Hub** (`/mirror-grinder`): A hilarious, over-the-top, late-night BTV infomercial celebrating Walpth's [Charge-Grinder](https://github.com/Walpth/Charge-Grinder/) repository.
   - **Spamton / Tenna Style TV Broadcast**: Unskippable retro CRT variety show presentation locking onto the screen, featuring Toby Fox's *Tenna Introduction* theme, 8 sliced equal-proportion animated GIFs from the official Tenna sprite sheet (`tenna_anim1.gif` through `tenna_anim8.gif`), dancing animations, and 10 extended, comfortably-paced comedy scenes.
 - **Repository**: [0-cole/limbus-tracker](https://github.com/0-cole/limbus-tracker)
-- **Current Deployed Release**: `v1.0.95`
+- **Current Deployed Release**: `v1.0.96`
 
 ---
 
@@ -27,27 +27,33 @@
 - **One-Click Updates**: `oneClick: true`, `perMachine: false`, `allowToChangeInstallationDirectory: false` in `package.json`.
 - **Taskbar Pin Preservation**: Custom NSIS script in `build/installer.nsh` prevents shortcut deletion during in-place updates.
 
-### 2.4 Tenna Variety Show Infomercial & Animations
-- **Sprite Sheet Extraction**: Processed `PC _ Computer - Deltarune - Enemies & Bosses (Chapter 3) - Tenna.png` to generate 8 uniform, pixel-anchored, zero-jitter animation GIFs (`tenna_anim1.gif` through `tenna_anim8.gif`).
-- **Pacing**: Extended the broadcast to 10 distinct scenes (102 seconds total) with comfortable 10–12 second durations per scene and staggered typography animations for optimal reading enjoyment.
-- **Components**:
-  - `src/components/TennaInfomercialModal.jsx`: Fullscreen CRT television simulation, scanline overlays, channel bugs (`CH-77 BTV LIVE`), audio synchronization (`tenna_intro.mp3` & `tenna_explosion.mp3`), and Spamton/Tenna style dialogue cards.
-  - `src/pages/MirrorGrinderPage.jsx`: The billboard hub with copyable `git clone` command, Project Moon customer testimonials (Vergilius, Faust, Don Quixote, Ryōshū, Meursault, Heathcliff, Charon), Dante's clock-head panic soundboard, and replay TV broadcast controls.
+### 2.4 Tenna Variety Show Infomercial & LCCB Terminal
+- **Clean Tenna Assets**: Uses official 59-frame 256x256 Deltarune dance (`tennadancing.gif`), clean walk cycles (`tenna_walk_clean.gif`), high-res TV portrait (`tenna_listening.png`), flying TV zoom (`tennaflying.png`), and Anttennas studio logo (`anttennas.png`) with zero border artifacts or clipping.
+- **Punchy Pacing**: 5 focused, comedic acts (Emergency Bulletin -> The Wacky Pitch -> The Reveal -> The Price Inquiry -> Climax Explosion -> Grand Finale), perfectly synchronized with Toby Fox's *Tenna Introduction* theme and explosion SFX.
+- **Authentic LCCB Terminal Layout**: Stripped all "vibecoded" neon marketing banners. Restructured as a true, gritty Project Moon LCCB Department of Records & Automation terminal:
+  - `[LCCB ADVISORY: EXT-0353 // REF: WALPTH / CHARGE-GRINDER]` header with live clearance status.
+  - Tactical command deck with gold-bordered action cards (`Open Repository on GitHub`, `Download Latest Release`, `Star on GitHub`).
+  - Terminal bash/powershell clone strip with copy button (`git clone https://github.com/Walpth/Charge-Grinder.git`).
+  - Records Keeper Kenneth's official resignation & transition memorandum.
+  - Sinner field debrief cards featuring authentic portraits for Outis, Faust, Don Quixote, Ryōshū, Meursault, and Dante.
 
 ---
 
-## 3. Recent Verified Changes (v1.0.95)
-1. **Sprite Sheet Animation Slicing**: Sliced 8 equal-proportion, baseline-anchored animated GIFs from the Tenna sprite sheet with transparent backgrounds.
-2. **Extended Comfortable Pacing**: Expanded the commercial from 30s to 102s across 10 hilarious scenes, allowing users to comfortably read all jokes and pitch details without rushing.
-3. **Changelog & Version Bump**: Added Kenneth's `v1.0.95` memo and bumped `package.json` to `1.0.95`.
-4. **Packaged Windows Installer**: Compiled code-signed `release2/Limbus Tracker Setup 1.0.95.exe` (143.4 MB).
+## 3. Recent Verified Changes (v1.0.96)
+1. **Purged Technical Features**: Removed technical spline curves, event sniping, and config breakdowns from the infomercial to keep it purely funny, energetic, and focused.
+2. **Clean High-Res Tenna Animations**: Fixed sprite sheet cutoffs and white borders by using the official 256x256 59-frame Tenna dance and clean walk loops at a snappy 20-30 FPS.
+3. **Restrained CRT Effects**: Toned down the heavy chromatic aberration and dark VHS scanlines for a clean, legible broadcast container.
+4. **Automatic Commercial Playback**: The commercial plays automatically whenever the user navigates to `/mirror-grinder`.
+5. **Authentic Project Moon Terminal**: Replaced the neon marketing design with a genuine dark-metallic, gold-bordered LCCB records terminal.
+6. **Changelog & Version Bump**: Added Kenneth's `v1.0.96` memo in `src/pages/ChangelogPage.jsx` and bumped version to `1.0.96`.
+7. **Packaged Windows Installer**: Compiled code-signed `release2/Limbus Tracker Setup 1.0.96.exe` (143.5 MB).
 
 ---
 
 ## 4. Key File Locations
 - Tenna commercial modal: `src/components/TennaInfomercialModal.jsx`
 - Charge Grinder tribute page: `src/pages/MirrorGrinderPage.jsx`
-- Tenna animation GIFs: `src/assets/tenna_anim*.gif` and `public/assets/tenna_anim*.gif`
+- Packaged installer: `release2/Limbus Tracker Setup 1.0.96.exe`
 - Sinner portraits: `public/assets/sinners/` and `dist/assets/sinners/`
 - Changelog memos: `src/pages/ChangelogPage.jsx`
 - Package config: `package.json`
