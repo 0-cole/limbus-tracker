@@ -9,7 +9,7 @@
   - Dedicated **Walpth Charge Grinder Tribute Hub** (`/mirror-grinder`): A hilarious, over-the-top, late-night BTV infomercial celebrating Walpth's [Charge-Grinder](https://github.com/Walpth/Charge-Grinder/) repository.
   - **Spamton / Tenna Style TV Broadcast**: Unskippable retro CRT variety show presentation locking onto the screen, featuring Toby Fox's *Tenna Introduction* theme, 8 sliced equal-proportion animated GIFs from the official Tenna sprite sheet (`tenna_anim1.gif` through `tenna_anim8.gif`), dancing animations, and 10 extended, comfortably-paced comedy scenes.
 - **Repository**: [0-cole/limbus-tracker](https://github.com/0-cole/limbus-tracker)
-- **Current Deployed Release**: `v1.0.97`
+- **Current Deployed Release**: `v1.0.98`
 
 ---
 
@@ -39,16 +39,17 @@
 
 ---
 
-## 3. Recent Verified Changes (v1.0.97)
-1. **Added 7 New Design System Themes (`src/styles/themes.js` & `src/styles/globals.css`)**:
-   - **Frutiger Aero** (`frutiger_aero`): Glossy Web 2.0 aqua glass capsules, sky-blue gradients, and emerald aurora dew.
-   - **DORFic** (`dorfic`): Daylight white-silver surfaces, vector-black typography, and a high-visibility Signal Orange (`#ff5500`) & Laser Red (`#ff2a2a`) indicator bar.
-   - **Dark Aero** (`dark_aero`): Vista midnight obsidian acrylic, electric cyan-aurora mesh glows, and specular glass rims.
-   - **Y2K Futurism / Cybercore** (`y2k_cybercore`): Liquid chrome bevels, cybernetic navy-void backgrounds, and acid cyan + hyper-magenta neon.
-   - **Neo-Brutalism** (`neo_brutalism`): Raw architectural putty paper, thick `2px solid #111111` ink borders, sharp `4px` corners, and hard unblurred `4px 4px 0px #111111` offset drop shadows.
-   - **Vintage Editorial** (`vintage_editorial`): Archival cream broadsheet paper, aged parchment cards, oxblood crimson accents, and editorial serif headings.
-   - **Dark Corporate Zen** (`dark_corporate_zen`): Meditative monolith slate, quiet negative space, and Kyoto mineral sage (`#7fa99b`) & brushed champagne (`#c2b280`) accents.
-2. **Changelog & Version Bump**: Added Kenneth's `v1.0.97` memo in `src/pages/ChangelogPage.jsx` and bumped version to `1.0.97`.
+## 3. Recent Verified Changes (v1.0.98)
+1. **Full UI Style Architecture & Anatomy Transformation for All 7 Themes**:
+   - Integrated Google Fonts (`Space Grotesk`, `Orbitron`, `Playfair Display`, `Plus Jakarta Sans`) into `src/index.html`.
+   - **Frutiger Aero** (`frutiger_aero`): Skeuomorphic Web 2.0 overhaul — rounded glossy gel buttons with top specular reflections, convex glass bubble cards (`inset 0 2px 2px #fff`, `0 6px 20px #0088cc`), rounded pill filter chips, and sky-dew canvas gradient.
+   - **DORFic** (`dorfic`): Sharp architectural vector UI — bold uppercase typography, DIN/Grotesk headers, high-visibility Signal Orange (`#ff5500`) & Laser Red (`#ff2a2a`) rectangular buttons and 3px warning bars.
+   - **Dark Aero** (`dark_aero`): Vista Ultimate acrylic dark glass — midnight frosted backdrops with specular glass rims, glowing cyan neon button rims, and aurora mesh background.
+   - **Y2K Futurism / Cybercore** (`y2k_cybercore`): Year 2000 cybernetic HUD — `Orbitron` display typography, liquid chrome metallic pill buttons with cyan/magenta neon glow, and chrome-beveled cards.
+   - **Neo-Brutalism** (`neo_brutalism`): Bold Gumroad-style raw geometry — thick 3px black ink borders across cards and inputs, `Space Grotesk` font, and tactile hard unblurred 5px-to-8px offset drop shadows (`5px 5px 0px #000`) that bounce on press.
+   - **Vintage Editorial** (`vintage_editorial`): Broadsheet newspaper aesthetic — `Playfair Display` serif typography, double-rule borders, archival linen broadsheet parchment, and pressed-ink seal buttons.
+   - **Dark Corporate Zen** (`dark_corporate_zen`): Quiet luxury executive suite — `Plus Jakarta Sans` typography, matte charcoal monolith cards, and understated Kyoto mineral sage (`#7fa99b`) accents.
+2. **Changelog & Version Bump**: Added Kenneth's `v1.0.98` memo in `src/pages/ChangelogPage.jsx` and bumped version to `1.0.98`.
 
 ---
 

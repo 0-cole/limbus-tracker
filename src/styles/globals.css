@@ -709,104 +709,637 @@ body {
   background: var(--border-subtle);
 }
 
-/* ========================================
-   Bespoke Aesthetic Signatures (7 New Themes)
-   ======================================== */
+/* ==========================================================================
+   Comprehensive UI Style Transformations (The 7 Bespoke Themes)
+   Radically transforms typography, cards, buttons, sidebars, chips & inputs
+   ========================================================================== */
 
-/* 1. Frutiger Aero: Glossy Web 2.0 Aqua Gel & Sky Glass */
-[data-theme="frutiger_aero"].bg-limbus-bg {
-  background: linear-gradient(145deg, #dff3ff 0%, #c6ebff 50%, #d4f7e8 100%) !important;
+/* --------------------------------------------------------------------------
+   1. FRUTIGER AERO (Glossy Aqua Glass, Skeuomorphic Web 2.0 & Sky Pill UI)
+   -------------------------------------------------------------------------- */
+[data-theme="frutiger_aero"] {
+  font-family: 'Segoe UI', 'Frutiger', 'Lucida Grande', -apple-system, sans-serif !important;
 }
+
+[data-theme="frutiger_aero"].bg-limbus-bg,
+[data-theme="frutiger_aero"] .bg-limbus-bg {
+  background: linear-gradient(145deg, #d8f1ff 0%, #c1e8ff 45%, #daf7ea 100%) !important;
+}
+
+[data-theme="frutiger_aero"] aside {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(215, 240, 255, 0.85) 100%) !important;
+  border-right: 1px solid rgba(56, 189, 248, 0.45) !important;
+  box-shadow: 4px 0 20px rgba(0, 136, 204, 0.08) !important;
+}
+
 [data-theme="frutiger_aero"] .glass-card,
-[data-theme="frutiger_aero"] .bg-\[\#141414\] {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(226, 246, 255, 0.85) 48%, rgba(202, 237, 255, 0.92) 100%) !important;
+[data-theme="frutiger_aero"] .bg-\[\#141414\],
+[data-theme="frutiger_aero"] .bg-limbus-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(225, 246, 255, 0.88) 48%, rgba(198, 236, 255, 0.94) 100%) !important;
   border: 1px solid rgba(0, 145, 218, 0.38) !important;
-  border-radius: 18px !important;
-  box-shadow: 0 5px 15px rgba(0, 119, 190, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.98) !important;
+  border-radius: 20px !important;
+  box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.98), 0 6px 20px rgba(0, 119, 190, 0.14) !important;
 }
 
-/* 2. DORFic: Daylight White, Technical Silver & Signal Orange Vector Bar */
+[data-theme="frutiger_aero"] .glass-card:hover {
+  transform: translateY(-2px) scale(1.01) !important;
+  box-shadow: inset 0 2px 3px rgba(255, 255, 255, 1), 0 10px 28px rgba(0, 119, 190, 0.22) !important;
+  border-color: #0088cc !important;
+}
+
+/* Frutiger Aero Glossy Gel Buttons */
+[data-theme="frutiger_aero"] button:not(.sidebar-item):not(.filter-chip):not(.p-1) {
+  background: linear-gradient(180deg, #dcf4ff 0%, #38bdf8 46%, #0284c7 50%, #0369a1 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid #0284c7 !important;
+  border-radius: 9999px !important;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.95), 0 3px 8px rgba(2, 132, 199, 0.35) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45) !important;
+  font-weight: 700 !important;
+  transition: all 0.15s ease !important;
+}
+
+[data-theme="frutiger_aero"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):hover {
+  filter: brightness(1.1) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 1), 0 5px 14px rgba(2, 132, 199, 0.45) !important;
+}
+
+[data-theme="frutiger_aero"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):active {
+  transform: translateY(1px) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Frutiger Aero Pill Filter Chips */
+[data-theme="frutiger_aero"] .filter-chip {
+  border-radius: 9999px !important;
+  background: linear-gradient(180deg, #ffffff 0%, #e0f2fe 100%) !important;
+  border: 1px solid #7dd3fc !important;
+  color: #0369a1 !important;
+  box-shadow: inset 0 1px 1px #ffffff, 0 2px 5px rgba(2, 132, 199, 0.15) !important;
+}
+
+[data-theme="frutiger_aero"] .filter-chip.active {
+  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%) !important;
+  color: #ffffff !important;
+  border-color: #0369a1 !important;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 3px 8px rgba(2, 132, 199, 0.4) !important;
+}
+
+[data-theme="frutiger_aero"] .sidebar-item {
+  border-radius: 9999px !important;
+  margin-bottom: 2px !important;
+}
+
+[data-theme="frutiger_aero"] .sidebar-item.active {
+  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%) !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.9), 0 3px 10px rgba(2, 132, 199, 0.35) !important;
+}
+
+[data-theme="frutiger_aero"] input,
+[data-theme="frutiger_aero"] select {
+  border-radius: 9999px !important;
+  background: #ffffff !important;
+  border: 1px solid #7dd3fc !important;
+  box-shadow: inset 0 1px 3px rgba(0, 119, 190, 0.12) !important;
+  padding-left: 1rem !important;
+}
+
+/* --------------------------------------------------------------------------
+   2. DORFIC (Daylight, Orange, Red, Futurism & Vector Technical UI)
+   -------------------------------------------------------------------------- */
+[data-theme="dorfic"] {
+  font-family: 'Space Grotesk', 'DIN', 'Trebuchet MS', sans-serif !important;
+  letter-spacing: 0.02em;
+}
+
+[data-theme="dorfic"] h1,
+[data-theme="dorfic"] h2,
+[data-theme="dorfic"] h3,
+[data-theme="dorfic"] .font-limbus {
+  text-transform: uppercase !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+}
+
+[data-theme="dorfic"] aside {
+  background: #eaedf2 !important;
+  border-right: 2px solid #ff5500 !important;
+}
+
 [data-theme="dorfic"] .glass-card,
-[data-theme="dorfic"] .bg-\[\#141414\] {
-  background: linear-gradient(180deg, #ffffff 0%, #f7f8fa 100%) !important;
+[data-theme="dorfic"] .bg-\[\#141414\],
+[data-theme="dorfic"] .bg-limbus-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f6f8fb 100%) !important;
   border: 1px solid #cfd4e0 !important;
-  border-radius: 8px !important;
-  box-shadow: inset 3px 0 0 0 #ff5500, 0 3px 10px rgba(17, 19, 24, 0.07) !important;
+  border-top: 3px solid #ff5500 !important;
+  border-radius: 2px !important;
+  box-shadow: 0 4px 14px rgba(255, 85, 0, 0.08), 0 1px 4px rgba(17, 19, 24, 0.05) !important;
 }
 
-/* 3. Dark Aero: Vista Midnight Acrylic & Specular Glass Rim */
-[data-theme="dark_aero"].bg-limbus-bg {
-  background: radial-gradient(circle at 85% 12%, rgba(0, 216, 255, 0.14), transparent 45%),
-              radial-gradient(circle at 12% 88%, rgba(16, 185, 129, 0.11), transparent 45%),
+[data-theme="dorfic"] .glass-card:hover {
+  border-color: #ff5500 !important;
+  box-shadow: 0 8px 22px rgba(255, 85, 0, 0.16) !important;
+}
+
+/* DORFic High-Visibility Vector Buttons */
+[data-theme="dorfic"] button:not(.sidebar-item):not(.filter-chip):not(.p-1) {
+  background: #ff5500 !important;
+  color: #ffffff !important;
+  border: 2px solid #ff5500 !important;
+  border-radius: 2px !important;
+  text-transform: uppercase !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+  box-shadow: 0 2px 6px rgba(255, 85, 0, 0.3) !important;
+}
+
+[data-theme="dorfic"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):hover {
+  background: #ff2a2a !important;
+  border-color: #ff2a2a !important;
+  box-shadow: 0 4px 12px rgba(255, 42, 42, 0.4) !important;
+}
+
+[data-theme="dorfic"] .filter-chip {
+  border-radius: 2px !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  border: 1px solid #cfd4e0 !important;
+  background: #ffffff !important;
+  color: #111318 !important;
+}
+
+[data-theme="dorfic"] .filter-chip.active {
+  background: #ff5500 !important;
+  color: #ffffff !important;
+  border-color: #ff5500 !important;
+  box-shadow: 0 0 10px rgba(255, 85, 0, 0.35) !important;
+}
+
+[data-theme="dorfic"] .sidebar-item {
+  border-radius: 2px !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
+}
+
+[data-theme="dorfic"] .sidebar-item.active {
+  background: #ff5500 !important;
+  color: #ffffff !important;
+  border-left: 4px solid #111318 !important;
+  box-shadow: 0 2px 8px rgba(255, 85, 0, 0.3) !important;
+}
+
+[data-theme="dorfic"] input,
+[data-theme="dorfic"] select {
+  border-radius: 2px !important;
+  border: 1px solid #c5cad6 !important;
+  border-left: 3px solid #ff5500 !important;
+  background: #ffffff !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. DARK AERO (Vista Ultimate Obsidian Acrylic & Electric Aurora Glass)
+   -------------------------------------------------------------------------- */
+[data-theme="dark_aero"] {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+[data-theme="dark_aero"].bg-limbus-bg,
+[data-theme="dark_aero"] .bg-limbus-bg {
+  background: radial-gradient(circle at 85% 12%, rgba(0, 216, 255, 0.16), transparent 45%),
+              radial-gradient(circle at 12% 88%, rgba(16, 185, 129, 0.12), transparent 45%),
               #06090e !important;
 }
-[data-theme="dark_aero"] .glass-card,
-[data-theme="dark_aero"] .bg-\[\#141414\] {
-  background: linear-gradient(180deg, rgba(26, 42, 64, 0.88) 0%, rgba(13, 21, 33, 0.94) 48%, rgba(8, 13, 22, 0.98) 100%) !important;
-  border: 1px solid rgba(0, 216, 255, 0.24) !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+
+[data-theme="dark_aero"] aside {
+  background: rgba(8, 14, 22, 0.92) !important;
+  backdrop-filter: blur(16px) !important;
+  border-right: 1px solid rgba(0, 216, 255, 0.3) !important;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.8) !important;
 }
 
-/* 4. Y2K Futurism / Cybercore: Liquid Chrome Bevel & Matrix Wireframe */
-[data-theme="y2k_cybercore"].bg-limbus-bg {
-  background: radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.15), transparent 55%),
-              radial-gradient(circle at 90% 90%, rgba(255, 42, 133, 0.12), transparent 50%),
+[data-theme="dark_aero"] .glass-card,
+[data-theme="dark_aero"] .bg-\[\#141414\],
+[data-theme="dark_aero"] .bg-limbus-card {
+  background: linear-gradient(180deg, rgba(24, 40, 62, 0.82) 0%, rgba(11, 19, 31, 0.92) 48%, rgba(6, 10, 18, 0.96) 100%) !important;
+  backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(0, 216, 255, 0.28) !important;
+  border-radius: 14px !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.22), 0 8px 30px rgba(0, 0, 0, 0.7), 0 0 16px rgba(0, 216, 255, 0.12) !important;
+}
+
+[data-theme="dark_aero"] .glass-card:hover {
+  border-color: #00d8ff !important;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.35), 0 12px 36px rgba(0, 0, 0, 0.85), 0 0 24px rgba(0, 216, 255, 0.3) !important;
+}
+
+[data-theme="dark_aero"] button:not(.sidebar-item):not(.filter-chip):not(.p-1) {
+  background: linear-gradient(180deg, rgba(30, 58, 88, 0.9) 0%, rgba(12, 25, 42, 0.95) 48%, rgba(5, 12, 22, 0.98) 52%, rgba(10, 24, 40, 0.95) 100%) !important;
+  border: 1px solid #00d8ff !important;
+  border-radius: 8px !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 0 12px rgba(0, 216, 255, 0.35) !important;
+  font-weight: 700 !important;
+  text-shadow: 0 0 8px rgba(0, 216, 255, 0.6) !important;
+}
+
+[data-theme="dark_aero"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):hover {
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 0 20px rgba(0, 216, 255, 0.6) !important;
+  filter: brightness(1.15) !important;
+}
+
+[data-theme="dark_aero"] .filter-chip {
+  background: rgba(10, 18, 28, 0.85) !important;
+  border: 1px solid rgba(0, 216, 255, 0.3) !important;
+  color: #ecf8ff !important;
+  border-radius: 8px !important;
+}
+
+[data-theme="dark_aero"] .filter-chip.active {
+  background: rgba(0, 216, 255, 0.25) !important;
+  border-color: #00d8ff !important;
+  color: #00d8ff !important;
+  box-shadow: 0 0 12px rgba(0, 216, 255, 0.4) !important;
+}
+
+[data-theme="dark_aero"] .sidebar-item.active {
+  background: linear-gradient(90deg, rgba(0, 216, 255, 0.28) 0%, rgba(0, 216, 255, 0.05) 100%) !important;
+  border-left: 3px solid #00d8ff !important;
+  color: #00d8ff !important;
+  box-shadow: 0 0 15px rgba(0, 216, 255, 0.25) !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. Y2K FUTURISM / CYBERCORE (Liquid Chrome, Orbitron Font & Neon HUD)
+   -------------------------------------------------------------------------- */
+[data-theme="y2k_cybercore"] {
+  font-family: 'Space Grotesk', -apple-system, sans-serif !important;
+}
+
+[data-theme="y2k_cybercore"] h1,
+[data-theme="y2k_cybercore"] h2,
+[data-theme="y2k_cybercore"] h3,
+[data-theme="y2k_cybercore"] .font-limbus {
+  font-family: 'Orbitron', monospace !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.6) !important;
+}
+
+[data-theme="y2k_cybercore"].bg-limbus-bg,
+[data-theme="y2k_cybercore"] .bg-limbus-bg {
+  background: radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.16), transparent 55%),
+              radial-gradient(circle at 90% 90%, rgba(255, 42, 133, 0.14), transparent 50%),
               #050711 !important;
 }
-[data-theme="y2k_cybercore"] .glass-card,
-[data-theme="y2k_cybercore"] .bg-\[\#141414\] {
-  background: linear-gradient(160deg, #121c3b 0%, #090e20 60%, #190d2e 100%) !important;
-  border: 1px solid rgba(0, 240, 255, 0.32) !important;
-  box-shadow: 0 0 18px rgba(0, 240, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+
+[data-theme="y2k_cybercore"] aside {
+  background: #080c1e !important;
+  border-right: 1px solid rgba(0, 240, 255, 0.4) !important;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.15) !important;
 }
 
-/* 5. Neo-Brutalism: Thick Ink Borders, Sharp Corners & Hard Offset Shadows */
+[data-theme="y2k_cybercore"] .glass-card,
+[data-theme="y2k_cybercore"] .bg-\[\#141414\],
+[data-theme="y2k_cybercore"] .bg-limbus-card {
+  background: linear-gradient(160deg, #121c3b 0%, #080d1e 60%, #1a0f30 100%) !important;
+  border: 1px solid rgba(0, 240, 255, 0.35) !important;
+  border-radius: 12px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 18px rgba(0, 240, 255, 0.14), 0 0 32px rgba(255, 42, 133, 0.08) !important;
+}
+
+[data-theme="y2k_cybercore"] .glass-card:hover {
+  border-color: #00f0ff !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 25px rgba(0, 240, 255, 0.3), 0 0 40px rgba(255, 42, 133, 0.2) !important;
+}
+
+/* Y2K Liquid Chrome Pill Buttons */
+[data-theme="y2k_cybercore"] button:not(.sidebar-item):not(.filter-chip):not(.p-1) {
+  background: linear-gradient(180deg, #f1f5f9 0%, #94a3b8 42%, #475569 50%, #1e293b 100%) !important;
+  border: 1px solid #00f0ff !important;
+  border-radius: 9999px !important;
+  color: #00f0ff !important;
+  font-family: 'Orbitron', monospace !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  box-shadow: inset 0 1px 2px #ffffff, 0 0 12px rgba(0, 240, 255, 0.5) !important;
+  text-shadow: 0 0 6px rgba(0, 240, 255, 0.9) !important;
+}
+
+[data-theme="y2k_cybercore"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):hover {
+  border-color: #ff2a85 !important;
+  color: #ff2a85 !important;
+  box-shadow: inset 0 1px 2px #ffffff, 0 0 18px rgba(255, 42, 133, 0.7) !important;
+  text-shadow: 0 0 8px rgba(255, 42, 133, 0.9) !important;
+}
+
+[data-theme="y2k_cybercore"] .filter-chip {
+  border-radius: 9999px !important;
+  background: #0c1228 !important;
+  border: 1px solid rgba(0, 240, 255, 0.35) !important;
+  color: #eef6ff !important;
+  font-family: 'Space Grotesk', monospace !important;
+}
+
+[data-theme="y2k_cybercore"] .filter-chip.active {
+  background: rgba(0, 240, 255, 0.25) !important;
+  border-color: #00f0ff !important;
+  color: #00f0ff !important;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.5) !important;
+}
+
+[data-theme="y2k_cybercore"] .sidebar-item.active {
+  background: linear-gradient(90deg, rgba(0, 240, 255, 0.3) 0%, rgba(255, 42, 133, 0.15) 100%) !important;
+  border: 1px solid #00f0ff !important;
+  color: #00f0ff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.4) !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. NEO-BRUTALISM (Thick 3px Black Ink Borders, Offset Shadows & Pop Colors)
+   -------------------------------------------------------------------------- */
+[data-theme="neo_brutalism"] {
+  font-family: 'Space Grotesk', 'Inter', -apple-system, sans-serif !important;
+}
+
+[data-theme="neo_brutalism"] h1,
+[data-theme="neo_brutalism"] h2,
+[data-theme="neo_brutalism"] h3,
+[data-theme="neo_brutalism"] .font-limbus {
+  font-weight: 900 !important;
+  color: #000000 !important;
+  letter-spacing: -0.02em !important;
+}
+
+[data-theme="neo_brutalism"].bg-limbus-bg,
+[data-theme="neo_brutalism"] .bg-limbus-bg {
+  background: #f4f0e8 !important;
+}
+
 [data-theme="neo_brutalism"] aside {
-  border-right: 2px solid #111111 !important;
+  background: #faeedf !important;
+  border-right: 3px solid #000000 !important;
 }
+
 [data-theme="neo_brutalism"] .glass-card,
-[data-theme="neo_brutalism"] .bg-\[\#141414\] {
+[data-theme="neo_brutalism"] .bg-\[\#141414\],
+[data-theme="neo_brutalism"] .bg-limbus-card {
   background: #ffffff !important;
-  border: 2px solid #111111 !important;
-  border-radius: 4px !important;
-  box-shadow: 4px 4px 0px #111111 !important;
+  border: 3px solid #000000 !important;
+  border-radius: 6px !important;
+  box-shadow: 5px 5px 0px #000000 !important;
 }
+
 [data-theme="neo_brutalism"] .glass-card:hover {
-  transform: translate(-2px, -2px) !important;
-  border-color: #111111 !important;
-  box-shadow: 6px 6px 0px #111111 !important;
+  transform: translate(-3px, -3px) !important;
+  border-color: #000000 !important;
+  box-shadow: 8px 8px 0px #000000 !important;
 }
-[data-theme="neo_brutalism"] .filter-chip,
+
+/* Neo-Brutalist Tactile Pop Buttons */
+[data-theme="neo_brutalism"] button:not(.sidebar-item):not(.filter-chip):not(.p-1) {
+  background: #ff4d00 !important;
+  color: #000000 !important;
+  border: 3px solid #000000 !important;
+  border-radius: 6px !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.01em !important;
+  box-shadow: 4px 4px 0px #000000 !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease !important;
+}
+
+[data-theme="neo_brutalism"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):hover {
+  transform: translate(-2px, -2px) !important;
+  box-shadow: 6px 6px 0px #000000 !important;
+  background: #ffbe0b !important;
+}
+
+[data-theme="neo_brutalism"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):active {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 1px 1px 0px #000000 !important;
+}
+
+[data-theme="neo_brutalism"] .filter-chip {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  border-radius: 4px !important;
+  font-weight: 800 !important;
+  box-shadow: 3px 3px 0px #000000 !important;
+}
+
+[data-theme="neo_brutalism"] .filter-chip.active {
+  background: #ff4d00 !important;
+  color: #ffffff !important;
+  box-shadow: 1px 1px 0px #000000 !important;
+  transform: translate(2px, 2px) !important;
+}
+
+[data-theme="neo_brutalism"] .sidebar-item {
+  border-radius: 6px !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="neo_brutalism"] .sidebar-item.active {
+  background: #ffbe0b !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 4px 4px 0px #000000 !important;
+}
+
 [data-theme="neo_brutalism"] input,
 [data-theme="neo_brutalism"] select {
-  border: 2px solid #111111 !important;
-  border-radius: 4px !important;
-  box-shadow: 2px 2px 0px #111111 !important;
+  border: 3px solid #000000 !important;
+  border-radius: 6px !important;
+  box-shadow: 3px 3px 0px #000000 !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+  font-weight: 700 !important;
 }
 
-/* 6. Vintage Editorial: Archival Broadsheet Rules & High-Fashion Serif */
+/* --------------------------------------------------------------------------
+   6. VINTAGE EDITORIAL (Archival Broadsheet, Playfair Display & Pressed Ink)
+   -------------------------------------------------------------------------- */
+[data-theme="vintage_editorial"] {
+  font-family: Georgia, 'Playfair Display', serif !important;
+}
+
 [data-theme="vintage_editorial"] h1,
 [data-theme="vintage_editorial"] h2,
 [data-theme="vintage_editorial"] h3,
 [data-theme="vintage_editorial"] .font-limbus {
-  font-family: Georgia, 'Playfair Display', 'Times New Roman', serif !important;
-  letter-spacing: -0.01em;
-}
-[data-theme="vintage_editorial"] .glass-card,
-[data-theme="vintage_editorial"] .bg-\[\#141414\] {
-  background: #f6f1e6 !important;
-  border: 1px solid #cbbba0 !important;
-  border-radius: 3px !important;
-  box-shadow: 0 1px 3px rgba(26, 25, 24, 0.06) !important;
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.01em !important;
+  color: #1a1918 !important;
 }
 
-/* 7. Dark Corporate Zen: Meditative Negative Space & Matte Monolith */
+[data-theme="vintage_editorial"].bg-limbus-bg,
+[data-theme="vintage_editorial"] .bg-limbus-bg {
+  background: #fbf7ee !important;
+}
+
+[data-theme="vintage_editorial"] aside {
+  background: #f1ebdE !important;
+  border-right: 2px solid #cbbba0 !important;
+}
+
+[data-theme="vintage_editorial"] .glass-card,
+[data-theme="vintage_editorial"] .bg-\[\#141414\],
+[data-theme="vintage_editorial"] .bg-limbus-card {
+  background: #f8f4ec !important;
+  border: 1px solid #cbbba0 !important;
+  outline: 1px solid #d4c8b4 !important;
+  outline-offset: -3px !important;
+  border-radius: 2px !important;
+  box-shadow: 0 2px 6px rgba(26, 25, 24, 0.08) !important;
+}
+
+[data-theme="vintage_editorial"] .glass-card:hover {
+  border-color: #8c3b32 !important;
+  outline-color: #8c3b32 !important;
+  box-shadow: 0 4px 12px rgba(140, 59, 50, 0.12) !important;
+}
+
+/* Vintage Editorial Pressed Ink Buttons */
+[data-theme="vintage_editorial"] button:not(.sidebar-item):not(.filter-chip):not(.p-1) {
+  background: #1a1918 !important;
+  color: #fbf7ee !important;
+  border: 1px solid #8c3b32 !important;
+  border-radius: 2px !important;
+  font-family: 'Playfair Display', serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  box-shadow: 0 2px 4px rgba(26, 25, 24, 0.25) !important;
+}
+
+[data-theme="vintage_editorial"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):hover {
+  background: #8c3b32 !important;
+  color: #ffffff !important;
+  border-color: #8c3b32 !important;
+}
+
+[data-theme="vintage_editorial"] .filter-chip {
+  background: #fbf7ee !important;
+  border: 1px solid #cbbba0 !important;
+  color: #1a1918 !important;
+  border-radius: 2px !important;
+  font-family: 'Playfair Display', serif !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="vintage_editorial"] .filter-chip.active {
+  background: #8c3b32 !important;
+  color: #ffffff !important;
+  border-color: #8c3b32 !important;
+  box-shadow: 0 1px 4px rgba(140, 59, 50, 0.3) !important;
+}
+
+[data-theme="vintage_editorial"] .sidebar-item.active {
+  background: #8c3b32 !important;
+  color: #fbf7ee !important;
+  border-radius: 2px !important;
+  font-family: 'Playfair Display', serif !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="vintage_editorial"] input,
+[data-theme="vintage_editorial"] select {
+  background: #ffffff !important;
+  border: 1px solid #cbbba0 !important;
+  border-radius: 2px !important;
+  font-family: Georgia, serif !important;
+}
+
+/* --------------------------------------------------------------------------
+   7. DARK CORPORATE ZEN (Monolithic Slate, Plus Jakarta Sans & Kyoto Sage)
+   -------------------------------------------------------------------------- */
+[data-theme="dark_corporate_zen"] {
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+  letter-spacing: -0.01em;
+}
+
+[data-theme="dark_corporate_zen"] h1,
+[data-theme="dark_corporate_zen"] h2,
+[data-theme="dark_corporate_zen"] h3,
+[data-theme="dark_corporate_zen"] .font-limbus {
+  font-weight: 600 !important;
+  color: #e6e4df !important;
+  letter-spacing: -0.02em !important;
+}
+
+[data-theme="dark_corporate_zen"].bg-limbus-bg,
+[data-theme="dark_corporate_zen"] .bg-limbus-bg {
+  background: #0b0d0e !important;
+}
+
+[data-theme="dark_corporate_zen"] aside {
+  background: #0f1214 !important;
+  border-right: 1px solid #1e2428 !important;
+}
+
 [data-theme="dark_corporate_zen"] .glass-card,
-[data-theme="dark_corporate_zen"] .bg-\[\#141414\] {
-  background: #15191d !important;
-  border: 1px solid #242b31 !important;
-  border-radius: 10px !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+[data-theme="dark_corporate_zen"] .bg-\[\#141414\],
+[data-theme="dark_corporate_zen"] .bg-limbus-card {
+  background: #14181b !important;
+  border: 1px solid #23292e !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45) !important;
+}
+
+[data-theme="dark_corporate_zen"] .glass-card:hover {
+  border-color: #343e46 !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55) !important;
+}
+
+/* Zen Quiet Luxury Matte Buttons */
+[data-theme="dark_corporate_zen"] button:not(.sidebar-item):not(.filter-chip):not(.p-1) {
+  background: #1c2226 !important;
+  color: #e6e4df !important;
+  border: 1px solid #2c363d !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.2s ease !important;
+}
+
+[data-theme="dark_corporate_zen"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):hover {
+  background: #252d33 !important;
+  border-color: #7fa99b !important;
+  color: #7fa99b !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45) !important;
+}
+
+[data-theme="dark_corporate_zen"] .filter-chip {
+  background: #161b1f !important;
+  border: 1px solid #283138 !important;
+  color: #b0b8c0 !important;
+  border-radius: 8px !important;
+}
+
+[data-theme="dark_corporate_zen"] .filter-chip.active {
+  background: rgba(127, 169, 155, 0.15) !important;
+  border-color: #7fa99b !important;
+  color: #7fa99b !important;
+}
+
+[data-theme="dark_corporate_zen"] .sidebar-item.active {
+  background: rgba(127, 169, 155, 0.12) !important;
+  color: #7fa99b !important;
+  border-left: 3px solid #7fa99b !important;
+  border-radius: 6px !important;
+}
+
+[data-theme="dark_corporate_zen"] input,
+[data-theme="dark_corporate_zen"] select {
+  background: #121619 !important;
+  border: 1px solid #252c32 !important;
+  border-radius: 8px !important;
+  color: #e6e4df !important;
 }
 
 /* Dynamic Theme Overrides for all active non-default themes */
