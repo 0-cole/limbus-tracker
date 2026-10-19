@@ -487,100 +487,326 @@ body {
   --text-muted: #8892b0;
 }
 
-/* Creamy Theme Light Surface & Inversion Adaptation */
-[data-theme="creamy"] body,
-[data-theme="creamy"].bg-\[\#0a0a0a\],
-[data-theme="creamy"] .bg-\[\#0a0a0a\],
-[data-theme="creamy"] .bg-limbus-bg {
+/* 1. Frutiger Aero (Glossy Aqua Glass, Sky Blue & Lush Aurora Dew) */
+[data-theme="frutiger_aero"] {
+  --theme-primary: #0088cc;
+  --theme-accent: #10b981;
+  --theme-primary-rgb: 0, 136, 204;
+  --theme-glow: rgba(0, 168, 232, 0.35);
+  --bg-window: #e4f5ff;
+  --bg-panel: #d4effc;
+  --bg-surface: #c8e9fa;
+  --bg-card: #f0faff;
+  --bg-card-hover: #ffffff;
+  --border-subtle: #8ad0f2;
+  --text-primary: #052c42;
+  --text-muted: #3b6b85;
+}
+
+/* 2. DORFic (Daylight, Orange, Red, Futurism & Vector Graphic) */
+[data-theme="dorfic"] {
+  --theme-primary: #ff5500;
+  --theme-accent: #ff2a2a;
+  --theme-primary-rgb: 255, 85, 0;
+  --theme-glow: rgba(255, 85, 0, 0.35);
+  --bg-window: #f2f4f7;
+  --bg-panel: #e6e9ef;
+  --bg-surface: #dcdfe7;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fcfcfd;
+  --border-subtle: #c5cad6;
+  --text-primary: #111318;
+  --text-muted: #525866;
+}
+
+/* 3. Dark Aero (Vista Obsidian Glass, Electric Aurora & Midnight Acrylic) */
+[data-theme="dark_aero"] {
+  --theme-primary: #00d8ff;
+  --theme-accent: #10b981;
+  --theme-primary-rgb: 0, 216, 255;
+  --theme-glow: rgba(0, 216, 255, 0.4);
+  --bg-window: #06090e;
+  --bg-panel: #0a1018;
+  --bg-surface: #0e1622;
+  --bg-card: #131f30;
+  --bg-card-hover: #19293f;
+  --border-subtle: #213a56;
+  --text-primary: #ecf8ff;
+  --text-muted: #7aa0bc;
+}
+
+/* 4. Y2K Futurism / Cybercore (Liquid Chrome, Matrix Wireframe & Millennium Neon) */
+[data-theme="y2k_cybercore"] {
+  --theme-primary: #00f0ff;
+  --theme-accent: #ff2a85;
+  --theme-primary-rgb: 0, 240, 255;
+  --theme-glow: rgba(0, 240, 255, 0.45);
+  --bg-window: #050711;
+  --bg-panel: #080c1c;
+  --bg-surface: #0c1228;
+  --bg-card: #111936;
+  --bg-card-hover: #172247;
+  --border-subtle: #25386b;
+  --text-primary: #eef6ff;
+  --text-muted: #8499c4;
+}
+
+/* 5. Neo-Brutalism (Raw Structural Geometry, Thick Ink Borders & Offset Shadows) */
+[data-theme="neo_brutalism"] {
+  --theme-primary: #ff4d00;
+  --theme-accent: #7c3aed;
+  --theme-primary-rgb: 255, 77, 0;
+  --theme-glow: rgba(17, 17, 17, 0.45);
+  --bg-window: #f4f0e8;
+  --bg-panel: #eae4d7;
+  --bg-surface: #e2dbcc;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fffaf2;
+  --border-subtle: #111111;
+  --text-primary: #111111;
+  --text-muted: #4a4742;
+}
+
+/* 6. Vintage Editorial (Archival Cream Broadsheet, Pressed Ink & Oxblood Serif) */
+[data-theme="vintage_editorial"] {
+  --theme-primary: #8c3b32;
+  --theme-accent: #8f6b3e;
+  --theme-primary-rgb: 140, 59, 50;
+  --theme-glow: rgba(140, 59, 50, 0.25);
+  --bg-window: #fbf7ee;
+  --bg-panel: #f3ede0;
+  --bg-surface: #ece4d4;
+  --bg-card: #f6f1e6;
+  --bg-card-hover: #efe8d8;
+  --border-subtle: #cbbba0;
+  --text-primary: #1a1918;
+  --text-muted: #665f57;
+}
+
+/* 7. Dark Corporate Zen (Executive Monolith Slate, Meditative Space & Kyoto Sage) */
+[data-theme="dark_corporate_zen"] {
+  --theme-primary: #7fa99b;
+  --theme-accent: #c2b280;
+  --theme-primary-rgb: 127, 169, 155;
+  --theme-glow: rgba(127, 169, 155, 0.32);
+  --bg-window: #0b0d0e;
+  --bg-panel: #0f1214;
+  --bg-surface: #121619;
+  --bg-card: #161b1f;
+  --bg-card-hover: #1c2227;
+  --border-subtle: #252c32;
+  --text-primary: #e6e4df;
+  --text-muted: #7d858c;
+}
+
+/* Dark Theme Surface Synchronization */
+:is([data-theme="crimson"], [data-theme="amber"], [data-theme="cyan"], [data-theme="violet"], [data-theme="monochrome"], [data-theme="tcorp"], [data-theme="kcorp"], [data-theme="liu"], [data-theme="zwei"], [data-theme="seven"], [data-theme="blacksilence"], [data-theme="dieci"], [data-theme="cinq"], [data-theme="spotifast"], [data-theme="espresso"], [data-theme="nordic"], [data-theme="dark_aero"], [data-theme="y2k_cybercore"], [data-theme="dark_corporate_zen"]).bg-limbus-bg,
+:is([data-theme="crimson"], [data-theme="amber"], [data-theme="cyan"], [data-theme="violet"], [data-theme="monochrome"], [data-theme="tcorp"], [data-theme="kcorp"], [data-theme="liu"], [data-theme="zwei"], [data-theme="seven"], [data-theme="blacksilence"], [data-theme="dieci"], [data-theme="cinq"], [data-theme="spotifast"], [data-theme="espresso"], [data-theme="nordic"], [data-theme="dark_aero"], [data-theme="y2k_cybercore"], [data-theme="dark_corporate_zen"]) .bg-limbus-bg {
   background-color: var(--bg-window) !important;
   color: var(--text-primary) !important;
 }
 
-[data-theme="creamy"] .bg-\[\#141414\],
-[data-theme="creamy"] .bg-limbus-surface,
-[data-theme="creamy"] aside {
+:is([data-theme="crimson"], [data-theme="amber"], [data-theme="cyan"], [data-theme="violet"], [data-theme="monochrome"], [data-theme="tcorp"], [data-theme="kcorp"], [data-theme="liu"], [data-theme="zwei"], [data-theme="seven"], [data-theme="blacksilence"], [data-theme="dieci"], [data-theme="cinq"], [data-theme="spotifast"], [data-theme="espresso"], [data-theme="nordic"], [data-theme="dark_aero"], [data-theme="y2k_cybercore"], [data-theme="dark_corporate_zen"]) .bg-limbus-surface,
+:is([data-theme="crimson"], [data-theme="amber"], [data-theme="cyan"], [data-theme="violet"], [data-theme="monochrome"], [data-theme="tcorp"], [data-theme="kcorp"], [data-theme="liu"], [data-theme="zwei"], [data-theme="seven"], [data-theme="blacksilence"], [data-theme="dieci"], [data-theme="cinq"], [data-theme="spotifast"], [data-theme="espresso"], [data-theme="nordic"], [data-theme="dark_aero"], [data-theme="y2k_cybercore"], [data-theme="dark_corporate_zen"]) .bg-\[\#141414\],
+:is([data-theme="crimson"], [data-theme="amber"], [data-theme="cyan"], [data-theme="violet"], [data-theme="monochrome"], [data-theme="tcorp"], [data-theme="kcorp"], [data-theme="liu"], [data-theme="zwei"], [data-theme="seven"], [data-theme="blacksilence"], [data-theme="dieci"], [data-theme="cinq"], [data-theme="spotifast"], [data-theme="espresso"], [data-theme="nordic"], [data-theme="dark_aero"], [data-theme="y2k_cybercore"], [data-theme="dark_corporate_zen"]) aside {
   background-color: var(--bg-surface) !important;
 }
 
-[data-theme="creamy"] .bg-\[\#1a1a1a\],
-[data-theme="creamy"] .bg-limbus-card,
-[data-theme="creamy"] .glass-card {
+:is([data-theme="crimson"], [data-theme="amber"], [data-theme="cyan"], [data-theme="violet"], [data-theme="monochrome"], [data-theme="tcorp"], [data-theme="kcorp"], [data-theme="liu"], [data-theme="zwei"], [data-theme="seven"], [data-theme="blacksilence"], [data-theme="dieci"], [data-theme="cinq"], [data-theme="spotifast"], [data-theme="espresso"], [data-theme="nordic"], [data-theme="dark_aero"], [data-theme="y2k_cybercore"], [data-theme="dark_corporate_zen"]) .border-limbus-border {
+  border-color: var(--border-subtle) !important;
+}
+
+/* Light Surface & Inversion Adaptation (Creamy, Frutiger Aero, DORFic, Neo-Brutalism, Vintage Editorial) */
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) body,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]).bg-\[\#0a0a0a\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#0a0a0a\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]).bg-limbus-bg,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-limbus-bg {
+  background-color: var(--bg-window) !important;
+  color: var(--text-primary) !important;
+}
+
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#141414\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-limbus-surface,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) aside {
+  background-color: var(--bg-surface) !important;
+}
+
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#1a1a1a\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-limbus-card,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .glass-card {
   background-color: var(--bg-card) !important;
   border-color: var(--border-subtle) !important;
 }
 
-[data-theme="creamy"] .glass-card:hover {
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .glass-card:hover {
   background-color: var(--bg-card-hover) !important;
 }
 
-[data-theme="creamy"] .bg-black\/20,
-[data-theme="creamy"] .bg-black\/30,
-[data-theme="creamy"] .bg-black\/40,
-[data-theme="creamy"] .bg-black\/50,
-[data-theme="creamy"] .bg-black\/60,
-[data-theme="creamy"] .bg-black\/70,
-[data-theme="creamy"] .bg-black\/80 {
-  background-color: rgba(215, 204, 188, 0.45) !important;
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-black\/20,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-black\/30,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-black\/40,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-black\/50,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-black\/60,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-black\/70,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-black\/80 {
+  background-color: var(--bg-panel) !important;
 }
 
-[data-theme="creamy"] .bg-neutral-900,
-[data-theme="creamy"] .bg-neutral-950 {
-  background-color: #d8ceb8 !important;
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-neutral-900,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-neutral-950 {
+  background-color: var(--bg-card) !important;
 }
 
-[data-theme="creamy"] .border-neutral-800,
-[data-theme="creamy"] .border-neutral-900,
-[data-theme="creamy"] .border-neutral-700,
-[data-theme="creamy"] .border-white\/10,
-[data-theme="creamy"] .border-white\/5,
-[data-theme="creamy"] .border-limbus-border {
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-neutral-800,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-neutral-900,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-neutral-700,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-white\/10,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-white\/5,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-limbus-border {
   border-color: var(--border-subtle) !important;
 }
 
-[data-theme="creamy"] .text-white,
-[data-theme="creamy"] .text-neutral-100,
-[data-theme="creamy"] .text-neutral-200,
-[data-theme="creamy"] .text-gray-100,
-[data-theme="creamy"] .text-gray-200 {
-  color: #24201c !important;
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .text-white,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .text-neutral-100,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .text-neutral-200,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .text-gray-100,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .text-gray-200 {
+  color: var(--text-primary) !important;
 }
 
-[data-theme="creamy"] .text-neutral-300,
-[data-theme="creamy"] .text-gray-300,
-[data-theme="creamy"] .text-limbus-text {
-  color: #3b352e !important;
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .text-neutral-300,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .text-gray-300,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .text-limbus-text {
+  color: var(--text-primary) !important;
 }
 
-[data-theme="creamy"] .text-neutral-400,
-[data-theme="creamy"] .text-neutral-500,
-[data-theme="creamy"] .text-gray-400,
-[data-theme="creamy"] .text-gray-500,
-[data-theme="creamy"] .text-limbus-muted {
-  color: #6d6255 !important;
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .text-neutral-400,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .text-neutral-500,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .text-gray-400,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .text-gray-500,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .text-limbus-muted {
+  color: var(--text-muted) !important;
 }
 
-[data-theme="creamy"] input,
-[data-theme="creamy"] select,
-[data-theme="creamy"] textarea {
-  color: #24201c !important;
-  background-color: #f0e9dc !important;
-  border-color: #c5b9a2 !important;
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) input,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) select,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) textarea {
+  color: var(--text-primary) !important;
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-subtle) !important;
 }
 
-[data-theme="creamy"] * {
-  scrollbar-color: #baa991 #ece5d7;
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) * {
+  scrollbar-color: var(--border-subtle) var(--bg-panel);
 }
 
-[data-theme="creamy"] *::-webkit-scrollbar-track {
-  background: #ece5d7;
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) *::-webkit-scrollbar-track {
+  background: var(--bg-panel);
 }
 
-[data-theme="creamy"] *::-webkit-scrollbar-thumb {
-  background: #baa991;
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) *::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
 }
 
-[data-theme="creamy"] *::-webkit-scrollbar-thumb:hover {
-  background: #9f8c72;
+/* ========================================
+   Bespoke Aesthetic Signatures (7 New Themes)
+   ======================================== */
+
+/* 1. Frutiger Aero: Glossy Web 2.0 Aqua Gel & Sky Glass */
+[data-theme="frutiger_aero"].bg-limbus-bg {
+  background: linear-gradient(145deg, #dff3ff 0%, #c6ebff 50%, #d4f7e8 100%) !important;
+}
+[data-theme="frutiger_aero"] .glass-card,
+[data-theme="frutiger_aero"] .bg-\[\#141414\] {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(226, 246, 255, 0.85) 48%, rgba(202, 237, 255, 0.92) 100%) !important;
+  border: 1px solid rgba(0, 145, 218, 0.38) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 5px 15px rgba(0, 119, 190, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.98) !important;
+}
+
+/* 2. DORFic: Daylight White, Technical Silver & Signal Orange Vector Bar */
+[data-theme="dorfic"] .glass-card,
+[data-theme="dorfic"] .bg-\[\#141414\] {
+  background: linear-gradient(180deg, #ffffff 0%, #f7f8fa 100%) !important;
+  border: 1px solid #cfd4e0 !important;
+  border-radius: 8px !important;
+  box-shadow: inset 3px 0 0 0 #ff5500, 0 3px 10px rgba(17, 19, 24, 0.07) !important;
+}
+
+/* 3. Dark Aero: Vista Midnight Acrylic & Specular Glass Rim */
+[data-theme="dark_aero"].bg-limbus-bg {
+  background: radial-gradient(circle at 85% 12%, rgba(0, 216, 255, 0.14), transparent 45%),
+              radial-gradient(circle at 12% 88%, rgba(16, 185, 129, 0.11), transparent 45%),
+              #06090e !important;
+}
+[data-theme="dark_aero"] .glass-card,
+[data-theme="dark_aero"] .bg-\[\#141414\] {
+  background: linear-gradient(180deg, rgba(26, 42, 64, 0.88) 0%, rgba(13, 21, 33, 0.94) 48%, rgba(8, 13, 22, 0.98) 100%) !important;
+  border: 1px solid rgba(0, 216, 255, 0.24) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+}
+
+/* 4. Y2K Futurism / Cybercore: Liquid Chrome Bevel & Matrix Wireframe */
+[data-theme="y2k_cybercore"].bg-limbus-bg {
+  background: radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.15), transparent 55%),
+              radial-gradient(circle at 90% 90%, rgba(255, 42, 133, 0.12), transparent 50%),
+              #050711 !important;
+}
+[data-theme="y2k_cybercore"] .glass-card,
+[data-theme="y2k_cybercore"] .bg-\[\#141414\] {
+  background: linear-gradient(160deg, #121c3b 0%, #090e20 60%, #190d2e 100%) !important;
+  border: 1px solid rgba(0, 240, 255, 0.32) !important;
+  box-shadow: 0 0 18px rgba(0, 240, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+}
+
+/* 5. Neo-Brutalism: Thick Ink Borders, Sharp Corners & Hard Offset Shadows */
+[data-theme="neo_brutalism"] aside {
+  border-right: 2px solid #111111 !important;
+}
+[data-theme="neo_brutalism"] .glass-card,
+[data-theme="neo_brutalism"] .bg-\[\#141414\] {
+  background: #ffffff !important;
+  border: 2px solid #111111 !important;
+  border-radius: 4px !important;
+  box-shadow: 4px 4px 0px #111111 !important;
+}
+[data-theme="neo_brutalism"] .glass-card:hover {
+  transform: translate(-2px, -2px) !important;
+  border-color: #111111 !important;
+  box-shadow: 6px 6px 0px #111111 !important;
+}
+[data-theme="neo_brutalism"] .filter-chip,
+[data-theme="neo_brutalism"] input,
+[data-theme="neo_brutalism"] select {
+  border: 2px solid #111111 !important;
+  border-radius: 4px !important;
+  box-shadow: 2px 2px 0px #111111 !important;
+}
+
+/* 6. Vintage Editorial: Archival Broadsheet Rules & High-Fashion Serif */
+[data-theme="vintage_editorial"] h1,
+[data-theme="vintage_editorial"] h2,
+[data-theme="vintage_editorial"] h3,
+[data-theme="vintage_editorial"] .font-limbus {
+  font-family: Georgia, 'Playfair Display', 'Times New Roman', serif !important;
+  letter-spacing: -0.01em;
+}
+[data-theme="vintage_editorial"] .glass-card,
+[data-theme="vintage_editorial"] .bg-\[\#141414\] {
+  background: #f6f1e6 !important;
+  border: 1px solid #cbbba0 !important;
+  border-radius: 3px !important;
+  box-shadow: 0 1px 3px rgba(26, 25, 24, 0.06) !important;
+}
+
+/* 7. Dark Corporate Zen: Meditative Negative Space & Matte Monolith */
+[data-theme="dark_corporate_zen"] .glass-card,
+[data-theme="dark_corporate_zen"] .bg-\[\#141414\] {
+  background: #15191d !important;
+  border: 1px solid #242b31 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
 }
 
 /* Dynamic Theme Overrides for all active non-default themes */

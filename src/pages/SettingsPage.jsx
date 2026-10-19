@@ -882,16 +882,33 @@ export default function SettingsPage() {
                       updateAppSettings({ activeTheme: theme.id });
                       triggerToast(`Switched theme to ${theme.name}!`);
                     }}
-                    style={isActive ? { boxShadow: `0 0 25px ${theme.glow}` } : undefined}
+                    style={
+                      isActive
+                        ? {
+                            boxShadow:
+                              theme.id === 'neo_brutalism'
+                                ? '5px 5px 0px #111111'
+                                : `0 0 25px ${theme.glow}`,
+                          }
+                        : undefined
+                    }
                     className={`p-5 rounded-2xl border text-left transition-all relative overflow-hidden cursor-pointer group ${
                       isActive
-                        ? `bg-gradient-to-br ${theme.swatch} ${theme.border}`
+                        ? `bg-gradient-to-br ${theme.swatch} ${theme.border} ${
+                            theme.id === 'neo_brutalism' ? 'border-2 !rounded-md' : ''
+                          }`
                         : 'bg-black/40 border-neutral-800 hover:border-neutral-700'
                     }`}
                   >
                     {/* Active Ribbon */}
                     {isActive && (
-                      <span className="absolute top-3 right-3 text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-white font-bold border border-white/20">
+                      <span
+                        className={`absolute top-3 right-3 text-[10px] font-mono px-2 py-0.5 rounded-full font-bold border ${
+                          theme.isLight
+                            ? 'bg-black/10 text-white border-black/20'
+                            : 'bg-white/10 text-white border-white/20'
+                        }`}
+                      >
                         ACTIVE
                       </span>
                     )}
@@ -906,7 +923,7 @@ export default function SettingsPage() {
                         className="w-4 h-4 rounded-full border border-white/20 shadow-md"
                         style={{ backgroundColor: theme.accent }}
                       />
-                      <div className="h-1 flex-1 rounded-full bg-neutral-800 overflow-hidden ml-2">
+                      <div className="h-1 flex-1 rounded-full bg-neutral-800/40 overflow-hidden ml-2">
                         <div
                           className="h-full rounded-full"
                           style={{

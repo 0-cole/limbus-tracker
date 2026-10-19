@@ -9,7 +9,7 @@
   - Dedicated **Walpth Charge Grinder Tribute Hub** (`/mirror-grinder`): A hilarious, over-the-top, late-night BTV infomercial celebrating Walpth's [Charge-Grinder](https://github.com/Walpth/Charge-Grinder/) repository.
   - **Spamton / Tenna Style TV Broadcast**: Unskippable retro CRT variety show presentation locking onto the screen, featuring Toby Fox's *Tenna Introduction* theme, 8 sliced equal-proportion animated GIFs from the official Tenna sprite sheet (`tenna_anim1.gif` through `tenna_anim8.gif`), dancing animations, and 10 extended, comfortably-paced comedy scenes.
 - **Repository**: [0-cole/limbus-tracker](https://github.com/0-cole/limbus-tracker)
-- **Current Deployed Release**: `v1.0.96`
+- **Current Deployed Release**: `v1.0.97`
 
 ---
 
@@ -39,21 +39,24 @@
 
 ---
 
-## 3. Recent Verified Changes (v1.0.96)
-1. **Purged Technical Features**: Removed technical spline curves, event sniping, and config breakdowns from the infomercial to keep it purely funny, energetic, and focused.
-2. **Clean High-Res Tenna Animations**: Fixed sprite sheet cutoffs and white borders by using the official 256x256 59-frame Tenna dance and clean walk loops at a snappy 20-30 FPS.
-3. **Restrained CRT Effects**: Toned down the heavy chromatic aberration and dark VHS scanlines for a clean, legible broadcast container.
-4. **Automatic Commercial Playback**: The commercial plays automatically whenever the user navigates to `/mirror-grinder`.
-5. **Authentic Project Moon Terminal**: Replaced the neon marketing design with a genuine dark-metallic, gold-bordered LCCB records terminal.
-6. **Changelog & Version Bump**: Added Kenneth's `v1.0.96` memo in `src/pages/ChangelogPage.jsx` and bumped version to `1.0.96`.
-7. **Packaged Windows Installer**: Compiled code-signed `release2/Limbus Tracker Setup 1.0.96.exe` (143.5 MB).
+## 3. Recent Verified Changes (v1.0.97)
+1. **Added 7 New Design System Themes (`src/styles/themes.js` & `src/styles/globals.css`)**:
+   - **Frutiger Aero** (`frutiger_aero`): Glossy Web 2.0 aqua glass capsules, sky-blue gradients, and emerald aurora dew.
+   - **DORFic** (`dorfic`): Daylight white-silver surfaces, vector-black typography, and a high-visibility Signal Orange (`#ff5500`) & Laser Red (`#ff2a2a`) indicator bar.
+   - **Dark Aero** (`dark_aero`): Vista midnight obsidian acrylic, electric cyan-aurora mesh glows, and specular glass rims.
+   - **Y2K Futurism / Cybercore** (`y2k_cybercore`): Liquid chrome bevels, cybernetic navy-void backgrounds, and acid cyan + hyper-magenta neon.
+   - **Neo-Brutalism** (`neo_brutalism`): Raw architectural putty paper, thick `2px solid #111111` ink borders, sharp `4px` corners, and hard unblurred `4px 4px 0px #111111` offset drop shadows.
+   - **Vintage Editorial** (`vintage_editorial`): Archival cream broadsheet paper, aged parchment cards, oxblood crimson accents, and editorial serif headings.
+   - **Dark Corporate Zen** (`dark_corporate_zen`): Meditative monolith slate, quiet negative space, and Kyoto mineral sage (`#7fa99b`) & brushed champagne (`#c2b280`) accents.
+2. **Changelog & Version Bump**: Added Kenneth's `v1.0.97` memo in `src/pages/ChangelogPage.jsx` and bumped version to `1.0.97`.
 
 ---
 
 ## 4. Key File Locations
+- Theme registry: `src/styles/themes.js`
+- Global theme CSS variables & bespoke surface rules: `src/styles/globals.css`
+- Theme selector UI: `src/pages/SettingsPage.jsx`
 - Tenna commercial modal: `src/components/TennaInfomercialModal.jsx`
 - Charge Grinder tribute page: `src/pages/MirrorGrinderPage.jsx`
-- Packaged installer: `release2/Limbus Tracker Setup 1.0.96.exe`
-- Sinner portraits: `public/assets/sinners/` and `dist/assets/sinners/`
 - Changelog memos: `src/pages/ChangelogPage.jsx`
 - Package config: `package.json`
