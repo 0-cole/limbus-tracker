@@ -503,20 +503,20 @@ body {
   --text-muted: #3b6b85;
 }
 
-/* 2. DORFic (Daylight, Orange, Red, Futurism & Vector Graphic) */
+/* 2. DORFic (2000s Architectural Futurism, Glass Blocks & Luminous Amber Tubes) */
 [data-theme="dorfic"] {
-  --theme-primary: #ff5500;
-  --theme-accent: #ff2a2a;
-  --theme-primary-rgb: 255, 85, 0;
-  --theme-glow: rgba(255, 85, 0, 0.35);
-  --bg-window: #f2f4f7;
-  --bg-panel: #e6e9ef;
-  --bg-surface: #dcdfe7;
-  --bg-card: #ffffff;
-  --bg-card-hover: #fcfcfd;
-  --border-subtle: #c5cad6;
-  --text-primary: #111318;
-  --text-muted: #525866;
+  --theme-primary: #ff6600;
+  --theme-accent: #ff3811;
+  --theme-primary-rgb: 255, 102, 0;
+  --theme-glow: rgba(255, 102, 0, 0.45);
+  --bg-window: #fbf7f0;
+  --bg-panel: #f7eee2;
+  --bg-surface: #f2e4d2;
+  --bg-card: rgba(255, 255, 255, 0.96);
+  --bg-card-hover: #ffffff;
+  --border-subtle: #ffd8be;
+  --text-primary: #211611;
+  --text-muted: #755f52;
 }
 
 /* 3. Dark Aero (Vista Obsidian Glass, Electric Aurora & Midnight Acrylic) */
@@ -715,7 +715,7 @@ body {
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. FRUTIGER AERO (Glossy Aqua Glass, Skeuomorphic Web 2.0 & Sky Pill UI)
+   1. FRUTIGER AERO (2000s Bio-Tech Sky-Domes, Glowing Hydro-Tubes & Aqua Glass)
    -------------------------------------------------------------------------- */
 [data-theme="frutiger_aero"] {
   font-family: 'Segoe UI', 'Frutiger', 'Lucida Grande', -apple-system, sans-serif !important;
@@ -723,28 +723,89 @@ body {
 
 [data-theme="frutiger_aero"].bg-limbus-bg,
 [data-theme="frutiger_aero"] .bg-limbus-bg {
-  background: linear-gradient(145deg, #d8f1ff 0%, #c1e8ff 45%, #daf7ea 100%) !important;
+  background: 
+    radial-gradient(ellipse 90% 55% at 20% 0%, rgba(56, 189, 248, 0.32) 0%, transparent 60%),
+    radial-gradient(circle 800px at 85% 100%, rgba(52, 211, 153, 0.22) 0%, transparent 55%),
+    linear-gradient(155deg, #d8f1ff 0%, #c4e9ff 42%, #daf7ea 100%) !important;
+  color: #052c42 !important;
 }
 
+/* Frutiger Aero Hydro-Tube Sidebar Pillar with Rising Water Bubbles */
 [data-theme="frutiger_aero"] aside {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(215, 240, 255, 0.85) 100%) !important;
-  border-right: 1px solid rgba(56, 189, 248, 0.45) !important;
-  box-shadow: 4px 0 20px rgba(0, 136, 204, 0.08) !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(220, 244, 255, 0.88) 100%) !important;
+  border-right: 16px solid transparent !important;
+  border-image: linear-gradient(180deg, 
+    #bae6fd 0%, 
+    #38bdf8 30%, 
+    #0284c7 60%, 
+    #38bdf8 85%, 
+    #7dd3fc 100%
+  ) 1 100% !important;
+  box-shadow: 
+    8px 0 28px rgba(2, 132, 199, 0.25),
+    0 0 14px rgba(56, 189, 248, 0.4),
+    inset -1px 0 0 rgba(255, 255, 255, 0.9) !important;
+  position: relative !important;
+}
+
+[data-theme="frutiger_aero"] aside::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: -16px !important;
+  width: 16px !important;
+  bottom: 0 !important;
+  pointer-events: none !important;
+  z-index: 40 !important;
+  background-image: 
+    radial-gradient(circle at 35% 15%, rgba(255, 255, 255, 0.95) 2px, transparent 2.5px),
+    radial-gradient(circle at 65% 40%, rgba(255, 255, 255, 0.85) 3px, transparent 3.5px),
+    radial-gradient(circle at 40% 65%, rgba(255, 255, 255, 0.9) 2px, transparent 2.5px),
+    radial-gradient(circle at 60% 85%, rgba(255, 255, 255, 0.8) 1.5px, transparent 2px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.5) 0%, transparent 40%, rgba(2, 132, 199, 0.25) 100%) !important;
+  background-size: 16px 130px !important;
+  animation: fa-bubbles-rise 5s linear infinite !important;
+}
+
+@keyframes fa-bubbles-rise {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 -130px; }
+}
+
+[data-theme="frutiger_aero"] aside::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: -18px !important;
+  width: 20px !important;
+  height: 10px !important;
+  background: linear-gradient(90deg, #94a3b8 0%, #e2e8f0 40%, #ffffff 60%, #94a3b8 100%) !important;
+  border-radius: 3px 3px 0 0 !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+  z-index: 41 !important;
 }
 
 [data-theme="frutiger_aero"] .glass-card,
 [data-theme="frutiger_aero"] .bg-\[\#141414\],
 [data-theme="frutiger_aero"] .bg-limbus-card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(225, 246, 255, 0.88) 48%, rgba(198, 236, 255, 0.94) 100%) !important;
-  border: 1px solid rgba(0, 145, 218, 0.38) !important;
-  border-radius: 20px !important;
-  box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.98), 0 6px 20px rgba(0, 119, 190, 0.14) !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(228, 247, 255, 0.9) 45%, rgba(204, 240, 255, 0.95) 100%) !important;
+  border: 1.5px solid rgba(56, 189, 248, 0.45) !important;
+  border-radius: 24px !important;
+  box-shadow: 
+    inset 0 2px 2px rgba(255, 255, 255, 0.98),
+    0 8px 24px rgba(2, 132, 199, 0.14),
+    0 0 16px rgba(56, 189, 248, 0.12) !important;
+  backdrop-filter: blur(12px) !important;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
 
 [data-theme="frutiger_aero"] .glass-card:hover {
-  transform: translateY(-2px) scale(1.01) !important;
-  box-shadow: inset 0 2px 3px rgba(255, 255, 255, 1), 0 10px 28px rgba(0, 119, 190, 0.22) !important;
-  border-color: #0088cc !important;
+  transform: translateY(-3px) scale(1.008) !important;
+  box-shadow: 
+    inset 0 2px 3px rgba(255, 255, 255, 1), 
+    0 14px 34px rgba(2, 132, 199, 0.24),
+    0 0 22px rgba(56, 189, 248, 0.35) !important;
+  border-color: #0284c7 !important;
 }
 
 /* Frutiger Aero Glossy Gel Buttons */
@@ -753,37 +814,37 @@ body {
   color: #ffffff !important;
   border: 1px solid #0284c7 !important;
   border-radius: 9999px !important;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.95), 0 3px 8px rgba(2, 132, 199, 0.35) !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45) !important;
+  box-shadow: inset 0 1.5px 2px rgba(255, 255, 255, 0.95), 0 4px 12px rgba(2, 132, 199, 0.38) !important;
+  text-shadow: 0 1px 2px rgba(0, 50, 100, 0.55) !important;
   font-weight: 700 !important;
-  transition: all 0.15s ease !important;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
 
 [data-theme="frutiger_aero"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):hover {
   filter: brightness(1.1) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 1), 0 5px 14px rgba(2, 132, 199, 0.45) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: inset 0 1.5px 3px #ffffff, 0 8px 20px rgba(2, 132, 199, 0.5) !important;
 }
 
 [data-theme="frutiger_aero"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):active {
-  transform: translateY(1px) !important;
+  transform: translateY(1px) scale(0.98) !important;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25) !important;
 }
 
-/* Frutiger Aero Pill Filter Chips */
 [data-theme="frutiger_aero"] .filter-chip {
   border-radius: 9999px !important;
   background: linear-gradient(180deg, #ffffff 0%, #e0f2fe 100%) !important;
-  border: 1px solid #7dd3fc !important;
+  border: 1.5px solid #7dd3fc !important;
   color: #0369a1 !important;
-  box-shadow: inset 0 1px 1px #ffffff, 0 2px 5px rgba(2, 132, 199, 0.15) !important;
+  box-shadow: inset 0 1px 1px #ffffff, 0 2px 6px rgba(2, 132, 199, 0.12) !important;
+  transition: all 0.2s ease !important;
 }
 
 [data-theme="frutiger_aero"] .filter-chip.active {
   background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%) !important;
   color: #ffffff !important;
   border-color: #0369a1 !important;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 3px 8px rgba(2, 132, 199, 0.4) !important;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 3px 10px rgba(2, 132, 199, 0.45) !important;
 }
 
 [data-theme="frutiger_aero"] .sidebar-item {
@@ -794,110 +855,249 @@ body {
 [data-theme="frutiger_aero"] .sidebar-item.active {
   background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%) !important;
   color: #ffffff !important;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.9), 0 3px 10px rgba(2, 132, 199, 0.35) !important;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.9), 0 4px 14px rgba(2, 132, 199, 0.4) !important;
 }
 
 [data-theme="frutiger_aero"] input,
 [data-theme="frutiger_aero"] select {
   border-radius: 9999px !important;
   background: #ffffff !important;
-  border: 1px solid #7dd3fc !important;
+  border: 1.5px solid #7dd3fc !important;
   box-shadow: inset 0 1px 3px rgba(0, 119, 190, 0.12) !important;
-  padding-left: 1rem !important;
+  padding-left: 1.25rem !important;
 }
 
 /* --------------------------------------------------------------------------
-   2. DORFIC (Daylight, Orange, Red, Futurism & Vector Technical UI)
+   2. DORFIC (Daylight, Orange, Red, Futurism & 2000s Glass Architecture)
    -------------------------------------------------------------------------- */
 [data-theme="dorfic"] {
-  font-family: 'Space Grotesk', 'DIN', 'Trebuchet MS', sans-serif !important;
-  letter-spacing: 0.02em;
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  letter-spacing: 0.01em;
+}
+
+[data-theme="dorfic"].bg-limbus-bg,
+[data-theme="dorfic"] .bg-limbus-bg {
+  background: 
+    radial-gradient(ellipse 90% 55% at 8% 0%, rgba(255, 136, 0, 0.22) 0%, transparent 60%),
+    radial-gradient(circle 750px at 92% 95%, rgba(255, 77, 0, 0.16) 0%, transparent 55%),
+    radial-gradient(circle 600px at 50% 30%, rgba(255, 195, 80, 0.09) 0%, transparent 60%),
+    linear-gradient(180deg, #fefcf8 0%, #fcf5eb 50%, #f9eee0 100%) !important;
+  color: #211611 !important;
 }
 
 [data-theme="dorfic"] h1,
 [data-theme="dorfic"] h2,
 [data-theme="dorfic"] h3,
 [data-theme="dorfic"] .font-limbus {
-  text-transform: uppercase !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.06em !important;
+  color: #211611 !important;
+  letter-spacing: -0.01em !important;
 }
 
+[data-theme="dorfic"] .text-limbus-accent {
+  color: #ff5500 !important;
+  text-shadow: 0 0 16px rgba(255, 85, 0, 0.35) !important;
+}
+
+[data-theme="dorfic"] .text-limbus-muted {
+  color: #755f52 !important;
+}
+
+/* DORFic Architectural Chamber Sidebar with Vertical Bubble Column Pillar (Image 2) */
 [data-theme="dorfic"] aside {
-  background: #eaedf2 !important;
-  border-right: 2px solid #ff5500 !important;
+  background: 
+    radial-gradient(circle at 100% 50%, rgba(255, 120, 0, 0.14) 0%, transparent 75%),
+    linear-gradient(180deg, #fdf8f0 0%, #faf0e1 50%, #f6ebd8 100%) !important;
+  border-right: 16px solid transparent !important;
+  border-image: linear-gradient(180deg, 
+    #ffb870 0%, 
+    #ff7711 25%, 
+    #ff5500 50%, 
+    #ff6e14 75%, 
+    #ff9f40 100%
+  ) 1 100% !important;
+  box-shadow: 
+    10px 0 35px rgba(255, 95, 0, 0.35),
+    0 0 16px rgba(255, 136, 0, 0.45),
+    inset -1px 0 0 rgba(255, 255, 255, 0.9) !important;
+  position: relative !important;
 }
 
+[data-theme="dorfic"] aside::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: -16px !important;
+  width: 16px !important;
+  bottom: 0 !important;
+  pointer-events: none !important;
+  z-index: 40 !important;
+  background-image: 
+    radial-gradient(circle at 35% 15%, rgba(255, 255, 255, 0.95) 1.5px, transparent 2px),
+    radial-gradient(circle at 65% 35%, rgba(255, 255, 255, 0.85) 2.5px, transparent 3px),
+    radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.95) 2px, transparent 2.5px),
+    radial-gradient(circle at 60% 80%, rgba(255, 255, 255, 0.8) 1.5px, transparent 2px),
+    radial-gradient(circle at 45% 95%, rgba(255, 240, 200, 0.9) 2px, transparent 2.5px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.4) 0%, transparent 40%, rgba(120, 30, 0, 0.2) 100%) !important;
+  background-size: 16px 140px !important;
+  animation: dorfic-bubbles-rise 5s linear infinite !important;
+}
+
+@keyframes dorfic-bubbles-rise {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 -140px; }
+}
+
+[data-theme="dorfic"] aside::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: -18px !important;
+  width: 20px !important;
+  height: 10px !important;
+  background: linear-gradient(90deg, #666 0%, #eee 40%, #fff 60%, #777 100%) !important;
+  border-radius: 3px 3px 0 0 !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35) !important;
+  z-index: 41 !important;
+}
+
+/* Glass Block Masonry Motif for Headers & Dividers (Image 1) */
+[data-theme="dorfic"] .glass-block-header,
+[data-theme="dorfic"] thead,
+[data-theme="dorfic"] .border-b.border-limbus-border {
+  background: 
+    linear-gradient(rgba(255, 120, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 120, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(180deg, #fdf6ec 0%, #faeee0 100%) !important;
+  background-size: 20px 20px, 20px 20px, auto !important;
+  border-bottom: 2px solid rgba(255, 102, 0, 0.28) !important;
+}
+
+/* Molded Milk-Acrylic Blobitecture Cards with Amber Cove Lighting */
 [data-theme="dorfic"] .glass-card,
 [data-theme="dorfic"] .bg-\[\#141414\],
 [data-theme="dorfic"] .bg-limbus-card {
-  background: linear-gradient(180deg, #ffffff 0%, #f6f8fb 100%) !important;
-  border: 1px solid #cfd4e0 !important;
-  border-top: 3px solid #ff5500 !important;
-  border-radius: 2px !important;
-  box-shadow: 0 4px 14px rgba(255, 85, 0, 0.08), 0 1px 4px rgba(17, 19, 24, 0.05) !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 249, 242, 0.93) 100%) !important;
+  border: 1.5px solid rgba(255, 140, 50, 0.32) !important;
+  border-top: 4px solid #ff5500 !important;
+  border-radius: 22px !important;
+  box-shadow: 
+    0 8px 26px rgba(255, 102, 0, 0.09),
+    0 2px 8px rgba(100, 50, 0, 0.04),
+    0 -4px 14px rgba(255, 85, 0, 0.2),
+    inset 0 1px 1.5px #ffffff !important;
+  backdrop-filter: blur(10px) !important;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
 
 [data-theme="dorfic"] .glass-card:hover {
   border-color: #ff5500 !important;
-  box-shadow: 0 8px 22px rgba(255, 85, 0, 0.16) !important;
+  transform: translateY(-3px) scale(1.005) !important;
+  box-shadow: 
+    0 18px 40px rgba(255, 102, 0, 0.22),
+    0 4px 14px rgba(100, 50, 0, 0.08),
+    0 0 24px rgba(255, 140, 0, 0.35),
+    inset 0 1px 2px #ffffff !important;
 }
 
-/* DORFic High-Visibility Vector Buttons */
+/* Luminous Molded Tangerine Lucite Buttons (Image 2 - Mushroom Lamp & Bubble Chair) */
 [data-theme="dorfic"] button:not(.sidebar-item):not(.filter-chip):not(.p-1) {
-  background: #ff5500 !important;
+  background: linear-gradient(180deg, #ff8c3b 0%, #ff5d00 52%, #e64200 100%) !important;
   color: #ffffff !important;
-  border: 2px solid #ff5500 !important;
-  border-radius: 2px !important;
-  text-transform: uppercase !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  border-bottom: 2px solid #b83200 !important;
+  border-radius: 9999px !important;
   font-weight: 800 !important;
-  letter-spacing: 0.05em !important;
-  box-shadow: 0 2px 6px rgba(255, 85, 0, 0.3) !important;
+  letter-spacing: 0.04em !important;
+  text-shadow: 0 1px 2px rgba(120, 30, 0, 0.6) !important;
+  box-shadow: 
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.8),
+    inset 0 -1.5px 2px rgba(180, 40, 0, 0.4),
+    0 4px 16px rgba(255, 93, 0, 0.42),
+    0 1px 3px rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
 
 [data-theme="dorfic"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):hover {
-  background: #ff2a2a !important;
-  border-color: #ff2a2a !important;
-  box-shadow: 0 4px 12px rgba(255, 42, 42, 0.4) !important;
+  background: linear-gradient(180deg, #ffa055 0%, #ff6e1a 50%, #e64a00 100%) !important;
+  border-color: rgba(255, 255, 255, 0.75) !important;
+  transform: translateY(-2px) scale(1.025) !important;
+  box-shadow: 
+    inset 0 2px 2px #ffffff,
+    0 8px 24px rgba(255, 93, 0, 0.58),
+    0 0 18px rgba(255, 140, 0, 0.55) !important;
+}
+
+[data-theme="dorfic"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):active {
+  transform: translateY(1px) scale(0.98) !important;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.35),
+    0 2px 6px rgba(255, 93, 0, 0.3) !important;
 }
 
 [data-theme="dorfic"] .filter-chip {
-  border-radius: 2px !important;
-  text-transform: uppercase !important;
+  border-radius: 9999px !important;
   font-weight: 700 !important;
-  letter-spacing: 0.04em !important;
-  border: 1px solid #cfd4e0 !important;
-  background: #ffffff !important;
-  color: #111318 !important;
+  letter-spacing: 0.02em !important;
+  border: 1.5px solid rgba(255, 140, 50, 0.35) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #2b180d !important;
+  box-shadow: 0 2px 6px rgba(255, 102, 0, 0.08) !important;
+  transition: all 0.2s ease !important;
 }
 
 [data-theme="dorfic"] .filter-chip.active {
-  background: #ff5500 !important;
+  background: linear-gradient(180deg, #ff8533 0%, #ff5500 100%) !important;
   color: #ffffff !important;
   border-color: #ff5500 !important;
-  box-shadow: 0 0 10px rgba(255, 85, 0, 0.35) !important;
+  text-shadow: 0 1px 2px rgba(120, 30, 0, 0.5) !important;
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.7),
+    0 4px 14px rgba(255, 85, 0, 0.45) !important;
 }
 
 [data-theme="dorfic"] .sidebar-item {
-  border-radius: 2px !important;
-  text-transform: uppercase !important;
+  border-radius: 14px !important;
   font-weight: 700 !important;
-  letter-spacing: 0.03em !important;
+  letter-spacing: 0.01em !important;
+  color: #4a3629 !important;
+  transition: all 0.2s ease !important;
+}
+
+[data-theme="dorfic"] .sidebar-item:hover {
+  background: rgba(255, 120, 0, 0.12) !important;
+  color: #ff5500 !important;
+  transform: translateX(3px) !important;
 }
 
 [data-theme="dorfic"] .sidebar-item.active {
-  background: #ff5500 !important;
-  color: #ffffff !important;
-  border-left: 4px solid #111318 !important;
-  box-shadow: 0 2px 8px rgba(255, 85, 0, 0.3) !important;
+  background: linear-gradient(90deg, rgba(255, 102, 0, 0.22) 0%, rgba(255, 140, 40, 0.08) 100%) !important;
+  color: #d94400 !important;
+  border-left: 4px solid #ff5500 !important;
+  box-shadow: 
+    0 2px 10px rgba(255, 102, 0, 0.18),
+    inset 0 1px 1px rgba(255, 255, 255, 0.7) !important;
 }
 
 [data-theme="dorfic"] input,
 [data-theme="dorfic"] select {
-  border-radius: 2px !important;
-  border: 1px solid #c5cad6 !important;
-  border-left: 3px solid #ff5500 !important;
+  border-radius: 9999px !important;
+  border: 1.5px solid rgba(255, 140, 50, 0.4) !important;
   background: #ffffff !important;
+  color: #211611 !important;
+  padding-left: 1.25rem !important;
+  box-shadow: 
+    inset 0 1px 3px rgba(255, 102, 0, 0.08),
+    0 2px 6px rgba(255, 120, 0, 0.05) !important;
+  transition: all 0.2s ease !important;
+}
+
+[data-theme="dorfic"] input:focus,
+[data-theme="dorfic"] select:focus {
+  border-color: #ff5500 !important;
+  box-shadow: 
+    0 0 0 3px rgba(255, 102, 0, 0.25),
+    0 0 18px rgba(255, 120, 0, 0.35) !important;
+  outline: none !important;
 }
 
 /* --------------------------------------------------------------------------
@@ -909,71 +1109,128 @@ body {
 
 [data-theme="dark_aero"].bg-limbus-bg,
 [data-theme="dark_aero"] .bg-limbus-bg {
-  background: radial-gradient(circle at 85% 12%, rgba(0, 216, 255, 0.16), transparent 45%),
-              radial-gradient(circle at 12% 88%, rgba(16, 185, 129, 0.12), transparent 45%),
-              #06090e !important;
+  background: 
+    radial-gradient(circle at 85% 12%, rgba(0, 216, 255, 0.22), transparent 48%),
+    radial-gradient(circle at 12% 88%, rgba(16, 185, 129, 0.18), transparent 48%),
+    linear-gradient(180deg, #05080e 0%, #080f1a 100%) !important;
+  color: #ecf8ff !important;
 }
 
+/* Dark Aero Electric Aurora Glass Beam Sidebar */
 [data-theme="dark_aero"] aside {
-  background: rgba(8, 14, 22, 0.92) !important;
-  backdrop-filter: blur(16px) !important;
-  border-right: 1px solid rgba(0, 216, 255, 0.3) !important;
-  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.8) !important;
+  background: rgba(8, 14, 24, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+  border-right: 14px solid transparent !important;
+  border-image: linear-gradient(180deg, 
+    #00d8ff 0%, 
+    #0284c7 35%, 
+    #10b981 70%, 
+    #00d8ff 100%
+  ) 1 100% !important;
+  box-shadow: 
+    8px 0 32px rgba(0, 216, 255, 0.25),
+    0 0 16px rgba(16, 185, 129, 0.2) !important;
+  position: relative !important;
+}
+
+[data-theme="dark_aero"] aside::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: -14px !important;
+  width: 14px !important;
+  bottom: 0 !important;
+  pointer-events: none !important;
+  z-index: 40 !important;
+  background: linear-gradient(180deg, rgba(0, 216, 255, 0.8) 0%, rgba(16, 185, 129, 0.6) 50%, rgba(0, 216, 255, 0.8) 100%) !important;
+  opacity: 0.75 !important;
+  filter: blur(2px) !important;
+  animation: dark-aero-aurora 6s ease-in-out infinite alternate !important;
+}
+
+@keyframes dark-aero-aurora {
+  0% { filter: blur(2px) brightness(1); opacity: 0.6; }
+  100% { filter: blur(3px) brightness(1.3); opacity: 0.95; }
 }
 
 [data-theme="dark_aero"] .glass-card,
 [data-theme="dark_aero"] .bg-\[\#141414\],
 [data-theme="dark_aero"] .bg-limbus-card {
-  background: linear-gradient(180deg, rgba(24, 40, 62, 0.82) 0%, rgba(11, 19, 31, 0.92) 48%, rgba(6, 10, 18, 0.96) 100%) !important;
-  backdrop-filter: blur(14px) !important;
-  border: 1px solid rgba(0, 216, 255, 0.28) !important;
-  border-radius: 14px !important;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.22), 0 8px 30px rgba(0, 0, 0, 0.7), 0 0 16px rgba(0, 216, 255, 0.12) !important;
+  background: linear-gradient(180deg, rgba(20, 36, 56, 0.88) 0%, rgba(10, 18, 30, 0.95) 50%, rgba(5, 10, 18, 0.98) 100%) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(0, 216, 255, 0.35) !important;
+  border-top: 2px solid rgba(0, 216, 255, 0.8) !important;
+  border-radius: 18px !important;
+  box-shadow: 
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.3), 
+    0 10px 32px rgba(0, 0, 0, 0.8), 
+    0 0 20px rgba(0, 216, 255, 0.16) !important;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
 
 [data-theme="dark_aero"] .glass-card:hover {
   border-color: #00d8ff !important;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.35), 0 12px 36px rgba(0, 0, 0, 0.85), 0 0 24px rgba(0, 216, 255, 0.3) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 
+    inset 0 2px 2px rgba(255, 255, 255, 0.45), 
+    0 16px 42px rgba(0, 0, 0, 0.9), 
+    0 0 28px rgba(0, 216, 255, 0.4) !important;
 }
 
 [data-theme="dark_aero"] button:not(.sidebar-item):not(.filter-chip):not(.p-1) {
-  background: linear-gradient(180deg, rgba(30, 58, 88, 0.9) 0%, rgba(12, 25, 42, 0.95) 48%, rgba(5, 12, 22, 0.98) 52%, rgba(10, 24, 40, 0.95) 100%) !important;
-  border: 1px solid #00d8ff !important;
-  border-radius: 8px !important;
+  background: linear-gradient(180deg, rgba(32, 64, 96, 0.92) 0%, rgba(12, 28, 48, 0.95) 48%, rgba(6, 14, 24, 0.98) 52%, rgba(10, 26, 44, 0.95) 100%) !important;
+  border: 1.5px solid #00d8ff !important;
+  border-radius: 12px !important;
   color: #ffffff !important;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 0 12px rgba(0, 216, 255, 0.35) !important;
+  box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.5), 0 0 16px rgba(0, 216, 255, 0.4) !important;
   font-weight: 700 !important;
-  text-shadow: 0 0 8px rgba(0, 216, 255, 0.6) !important;
+  text-shadow: 0 0 8px rgba(0, 216, 255, 0.7) !important;
+  transition: all 0.2s ease !important;
 }
 
 [data-theme="dark_aero"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):hover {
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 0 20px rgba(0, 216, 255, 0.6) !important;
-  filter: brightness(1.15) !important;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.7), 0 0 24px rgba(0, 216, 255, 0.7) !important;
+  transform: translateY(-1.5px) !important;
 }
 
 [data-theme="dark_aero"] .filter-chip {
   background: rgba(10, 18, 28, 0.85) !important;
   border: 1px solid rgba(0, 216, 255, 0.3) !important;
   color: #ecf8ff !important;
-  border-radius: 8px !important;
+  border-radius: 9999px !important;
 }
 
 [data-theme="dark_aero"] .filter-chip.active {
-  background: rgba(0, 216, 255, 0.25) !important;
+  background: rgba(0, 216, 255, 0.3) !important;
   border-color: #00d8ff !important;
   color: #00d8ff !important;
-  box-shadow: 0 0 12px rgba(0, 216, 255, 0.4) !important;
+  box-shadow: 0 0 14px rgba(0, 216, 255, 0.5) !important;
 }
 
 [data-theme="dark_aero"] .sidebar-item.active {
-  background: linear-gradient(90deg, rgba(0, 216, 255, 0.28) 0%, rgba(0, 216, 255, 0.05) 100%) !important;
-  border-left: 3px solid #00d8ff !important;
+  background: linear-gradient(90deg, rgba(0, 216, 255, 0.32) 0%, rgba(0, 216, 255, 0.06) 100%) !important;
+  border-left: 4px solid #00d8ff !important;
   color: #00d8ff !important;
-  box-shadow: 0 0 15px rgba(0, 216, 255, 0.25) !important;
+  box-shadow: 0 0 18px rgba(0, 216, 255, 0.3) !important;
+  border-radius: 10px !important;
+}
+
+[data-theme="dark_aero"] input,
+[data-theme="dark_aero"] select {
+  border-radius: 12px !important;
+  background: rgba(10, 18, 30, 0.9) !important;
+  border: 1.5px solid rgba(0, 216, 255, 0.35) !important;
+  color: #ecf8ff !important;
+}
+
+[data-theme="dark_aero"] input:focus,
+[data-theme="dark_aero"] select:focus {
+  border-color: #00d8ff !important;
+  box-shadow: 0 0 0 3px rgba(0, 216, 255, 0.25), 0 0 18px rgba(0, 216, 255, 0.35) !important;
 }
 
 /* --------------------------------------------------------------------------
-   4. Y2K FUTURISM / CYBERCORE (Liquid Chrome, Orbitron Font & Neon HUD)
+   4. Y2K FUTURISM / CYBERCORE (Millennium Sci-Fi Matrix, Liquid Chrome & HUD)
    -------------------------------------------------------------------------- */
 [data-theme="y2k_cybercore"] {
   font-family: 'Space Grotesk', -apple-system, sans-serif !important;
@@ -986,81 +1243,140 @@ body {
   font-family: 'Orbitron', monospace !important;
   letter-spacing: 0.08em !important;
   text-transform: uppercase !important;
-  text-shadow: 0 0 10px rgba(0, 240, 255, 0.6) !important;
+  text-shadow: 0 0 12px rgba(0, 240, 255, 0.7) !important;
 }
 
 [data-theme="y2k_cybercore"].bg-limbus-bg,
 [data-theme="y2k_cybercore"] .bg-limbus-bg {
-  background: radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.16), transparent 55%),
-              radial-gradient(circle at 90% 90%, rgba(255, 42, 133, 0.14), transparent 50%),
-              #050711 !important;
+  background: 
+    linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+    radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.18), transparent 55%),
+    radial-gradient(circle at 90% 90%, rgba(255, 42, 133, 0.16), transparent 50%),
+    #050711 !important;
+  background-size: 32px 32px, 32px 32px, auto, auto, auto !important;
 }
 
+/* Y2K Holographic Matrix Wireframe Pillar */
 [data-theme="y2k_cybercore"] aside {
   background: #080c1e !important;
-  border-right: 1px solid rgba(0, 240, 255, 0.4) !important;
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.15) !important;
+  border-right: 14px solid transparent !important;
+  border-image: linear-gradient(180deg, 
+    #00f0ff 0%, 
+    #1d4ed8 35%, 
+    #ff2a85 70%, 
+    #00f0ff 100%
+  ) 1 100% !important;
+  box-shadow: 0 0 24px rgba(0, 240, 255, 0.25) !important;
+  position: relative !important;
+}
+
+[data-theme="y2k_cybercore"] aside::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: -14px !important;
+  width: 14px !important;
+  bottom: 0 !important;
+  pointer-events: none !important;
+  z-index: 40 !important;
+  background: repeating-linear-gradient(180deg, 
+    rgba(0, 240, 255, 0.9) 0px, 
+    rgba(0, 240, 255, 0.9) 2px, 
+    transparent 2px, 
+    transparent 8px
+  ) !important;
+  animation: y2k-matrix-scan 4s linear infinite !important;
+}
+
+@keyframes y2k-matrix-scan {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 80px; }
 }
 
 [data-theme="y2k_cybercore"] .glass-card,
 [data-theme="y2k_cybercore"] .bg-\[\#141414\],
 [data-theme="y2k_cybercore"] .bg-limbus-card {
   background: linear-gradient(160deg, #121c3b 0%, #080d1e 60%, #1a0f30 100%) !important;
-  border: 1px solid rgba(0, 240, 255, 0.35) !important;
-  border-radius: 12px !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 18px rgba(0, 240, 255, 0.14), 0 0 32px rgba(255, 42, 133, 0.08) !important;
+  border: 1.5px solid rgba(0, 240, 255, 0.45) !important;
+  border-radius: 14px !important;
+  box-shadow: 
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.35), 
+    0 0 20px rgba(0, 240, 255, 0.18), 
+    0 0 35px rgba(255, 42, 133, 0.1) !important;
+  transition: all 0.25s ease !important;
 }
 
 [data-theme="y2k_cybercore"] .glass-card:hover {
   border-color: #00f0ff !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 25px rgba(0, 240, 255, 0.3), 0 0 40px rgba(255, 42, 133, 0.2) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.6), 
+    0 0 30px rgba(0, 240, 255, 0.4), 
+    0 0 45px rgba(255, 42, 133, 0.25) !important;
 }
 
 /* Y2K Liquid Chrome Pill Buttons */
 [data-theme="y2k_cybercore"] button:not(.sidebar-item):not(.filter-chip):not(.p-1) {
-  background: linear-gradient(180deg, #f1f5f9 0%, #94a3b8 42%, #475569 50%, #1e293b 100%) !important;
-  border: 1px solid #00f0ff !important;
+  background: linear-gradient(180deg, #f8fafc 0%, #cbd5e1 40%, #64748b 48%, #1e293b 100%) !important;
+  border: 1.5px solid #00f0ff !important;
   border-radius: 9999px !important;
   color: #00f0ff !important;
   font-family: 'Orbitron', monospace !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.06em !important;
-  box-shadow: inset 0 1px 2px #ffffff, 0 0 12px rgba(0, 240, 255, 0.5) !important;
-  text-shadow: 0 0 6px rgba(0, 240, 255, 0.9) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  box-shadow: inset 0 1.5px 2px #ffffff, 0 0 14px rgba(0, 240, 255, 0.55) !important;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.95) !important;
+  transition: all 0.2s ease !important;
 }
 
 [data-theme="y2k_cybercore"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):hover {
   border-color: #ff2a85 !important;
   color: #ff2a85 !important;
-  box-shadow: inset 0 1px 2px #ffffff, 0 0 18px rgba(255, 42, 133, 0.7) !important;
-  text-shadow: 0 0 8px rgba(255, 42, 133, 0.9) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: inset 0 1.5px 2px #ffffff, 0 0 22px rgba(255, 42, 133, 0.75) !important;
+  text-shadow: 0 0 10px rgba(255, 42, 133, 0.95) !important;
 }
 
 [data-theme="y2k_cybercore"] .filter-chip {
   border-radius: 9999px !important;
   background: #0c1228 !important;
-  border: 1px solid rgba(0, 240, 255, 0.35) !important;
+  border: 1.5px solid rgba(0, 240, 255, 0.4) !important;
   color: #eef6ff !important;
   font-family: 'Space Grotesk', monospace !important;
 }
 
 [data-theme="y2k_cybercore"] .filter-chip.active {
-  background: rgba(0, 240, 255, 0.25) !important;
+  background: rgba(0, 240, 255, 0.3) !important;
   border-color: #00f0ff !important;
   color: #00f0ff !important;
-  box-shadow: 0 0 12px rgba(0, 240, 255, 0.5) !important;
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.6) !important;
 }
 
 [data-theme="y2k_cybercore"] .sidebar-item.active {
-  background: linear-gradient(90deg, rgba(0, 240, 255, 0.3) 0%, rgba(255, 42, 133, 0.15) 100%) !important;
-  border: 1px solid #00f0ff !important;
+  background: linear-gradient(90deg, rgba(0, 240, 255, 0.32) 0%, rgba(255, 42, 133, 0.18) 100%) !important;
+  border: 1.5px solid #00f0ff !important;
   color: #00f0ff !important;
-  border-radius: 8px !important;
-  box-shadow: 0 0 14px rgba(0, 240, 255, 0.4) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.45) !important;
+}
+
+[data-theme="y2k_cybercore"] input,
+[data-theme="y2k_cybercore"] select {
+  border-radius: 9999px !important;
+  background: #090e22 !important;
+  border: 1.5px solid rgba(0, 240, 255, 0.45) !important;
+  color: #eef6ff !important;
+}
+
+[data-theme="y2k_cybercore"] input:focus,
+[data-theme="y2k_cybercore"] select:focus {
+  border-color: #00f0ff !important;
+  box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.3), 0 0 20px rgba(0, 240, 255, 0.4) !important;
 }
 
 /* --------------------------------------------------------------------------
-   5. NEO-BRUTALISM (Thick 3px Black Ink Borders, Offset Shadows & Pop Colors)
+   5. NEO-BRUTALISM (Bauhaus Blueprint Paper, 3.5px Ink Borders & Hard Shadows)
    -------------------------------------------------------------------------- */
 [data-theme="neo_brutalism"] {
   font-family: 'Space Grotesk', 'Inter', -apple-system, sans-serif !important;
@@ -1077,59 +1393,74 @@ body {
 
 [data-theme="neo_brutalism"].bg-limbus-bg,
 [data-theme="neo_brutalism"] .bg-limbus-bg {
-  background: #f4f0e8 !important;
+  background: 
+    radial-gradient(#111111 1px, transparent 1px),
+    #f5f0e6 !important;
+  background-size: 24px 24px, auto !important;
+  color: #000000 !important;
 }
 
+/* Neo-Brutalist Hazard-Stripe Architectural Pillar */
 [data-theme="neo_brutalism"] aside {
   background: #faeedf !important;
-  border-right: 3px solid #000000 !important;
+  border-right: 18px solid transparent !important;
+  border-image: repeating-linear-gradient(45deg, 
+    #ffbe0b, 
+    #ffbe0b 12px, 
+    #000000 12px, 
+    #000000 24px
+  ) 1 100% !important;
+  box-shadow: 6px 0 0px #000000 !important;
 }
 
 [data-theme="neo_brutalism"] .glass-card,
 [data-theme="neo_brutalism"] .bg-\[\#141414\],
 [data-theme="neo_brutalism"] .bg-limbus-card {
   background: #ffffff !important;
-  border: 3px solid #000000 !important;
-  border-radius: 6px !important;
-  box-shadow: 5px 5px 0px #000000 !important;
+  border: 3.5px solid #000000 !important;
+  border-radius: 8px !important;
+  box-shadow: 6px 6px 0px #000000 !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
 }
 
 [data-theme="neo_brutalism"] .glass-card:hover {
   transform: translate(-3px, -3px) !important;
   border-color: #000000 !important;
-  box-shadow: 8px 8px 0px #000000 !important;
+  box-shadow: 9px 9px 0px #000000 !important;
 }
 
 /* Neo-Brutalist Tactile Pop Buttons */
 [data-theme="neo_brutalism"] button:not(.sidebar-item):not(.filter-chip):not(.p-1) {
   background: #ff4d00 !important;
-  color: #000000 !important;
-  border: 3px solid #000000 !important;
-  border-radius: 6px !important;
+  color: #ffffff !important;
+  border: 3.5px solid #000000 !important;
+  border-radius: 8px !important;
   font-weight: 900 !important;
-  letter-spacing: -0.01em !important;
-  box-shadow: 4px 4px 0px #000000 !important;
+  letter-spacing: 0.02em !important;
+  box-shadow: 5px 5px 0px #000000 !important;
   transition: transform 0.1s ease, box-shadow 0.1s ease !important;
 }
 
 [data-theme="neo_brutalism"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):hover {
   transform: translate(-2px, -2px) !important;
-  box-shadow: 6px 6px 0px #000000 !important;
+  box-shadow: 7px 7px 0px #000000 !important;
   background: #ffbe0b !important;
+  color: #000000 !important;
 }
 
 [data-theme="neo_brutalism"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):active {
-  transform: translate(2px, 2px) !important;
+  transform: translate(3px, 3px) !important;
   box-shadow: 1px 1px 0px #000000 !important;
 }
 
 [data-theme="neo_brutalism"] .filter-chip {
   background: #ffffff !important;
   color: #000000 !important;
-  border: 2px solid #000000 !important;
-  border-radius: 4px !important;
+  border: 2.5px solid #000000 !important;
+  border-radius: 6px !important;
   font-weight: 800 !important;
   box-shadow: 3px 3px 0px #000000 !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease !important;
 }
 
 [data-theme="neo_brutalism"] .filter-chip.active {
@@ -1140,29 +1471,30 @@ body {
 }
 
 [data-theme="neo_brutalism"] .sidebar-item {
-  border-radius: 6px !important;
+  border-radius: 8px !important;
   font-weight: 800 !important;
+  border: 2px solid transparent !important;
 }
 
 [data-theme="neo_brutalism"] .sidebar-item.active {
   background: #ffbe0b !important;
   color: #000000 !important;
-  border: 2px solid #000000 !important;
-  box-shadow: 4px 4px 0px #000000 !important;
+  border: 3px solid #000000 !important;
+  box-shadow: 5px 5px 0px #000000 !important;
 }
 
 [data-theme="neo_brutalism"] input,
 [data-theme="neo_brutalism"] select {
-  border: 3px solid #000000 !important;
-  border-radius: 6px !important;
-  box-shadow: 3px 3px 0px #000000 !important;
+  border: 3.5px solid #000000 !important;
+  border-radius: 8px !important;
+  box-shadow: 4px 4px 0px #000000 !important;
   background: #ffffff !important;
   color: #000000 !important;
   font-weight: 700 !important;
 }
 
 /* --------------------------------------------------------------------------
-   6. VINTAGE EDITORIAL (Archival Broadsheet, Playfair Display & Pressed Ink)
+   6. VINTAGE EDITORIAL (19th-Century Broadsheet, Fluted Brass Columns & Oxblood)
    -------------------------------------------------------------------------- */
 [data-theme="vintage_editorial"] {
   font-family: Georgia, 'Playfair Display', serif !important;
@@ -1180,54 +1512,69 @@ body {
 
 [data-theme="vintage_editorial"].bg-limbus-bg,
 [data-theme="vintage_editorial"] .bg-limbus-bg {
-  background: #fbf7ee !important;
+  background: 
+    linear-gradient(#eee6d4 1px, transparent 1px),
+    #faf5ea !important;
+  background-size: 100% 28px, auto !important;
+  color: #1a1918 !important;
 }
 
+/* Vintage Fluted Architectural Column Sidebar */
 [data-theme="vintage_editorial"] aside {
   background: #f1ebdE !important;
-  border-right: 2px solid #cbbba0 !important;
+  border-right: 16px solid transparent !important;
+  border-image: repeating-linear-gradient(90deg, 
+    #bfa888 0px, 
+    #e8decb 2px, 
+    #8c7352 4px
+  ) 1 100% !important;
+  box-shadow: 4px 0 16px rgba(140, 59, 50, 0.12) !important;
 }
 
 [data-theme="vintage_editorial"] .glass-card,
 [data-theme="vintage_editorial"] .bg-\[\#141414\],
 [data-theme="vintage_editorial"] .bg-limbus-card {
-  background: #f8f4ec !important;
+  background: #fbf7ee !important;
   border: 1px solid #cbbba0 !important;
-  outline: 1px solid #d4c8b4 !important;
-  outline-offset: -3px !important;
-  border-radius: 2px !important;
-  box-shadow: 0 2px 6px rgba(26, 25, 24, 0.08) !important;
+  outline: 1.5px solid #d4c8b4 !important;
+  outline-offset: -5px !important;
+  border-radius: 4px !important;
+  box-shadow: 0 4px 14px rgba(26, 25, 24, 0.08) !important;
+  transition: all 0.25s ease !important;
 }
 
 [data-theme="vintage_editorial"] .glass-card:hover {
   border-color: #8c3b32 !important;
   outline-color: #8c3b32 !important;
-  box-shadow: 0 4px 12px rgba(140, 59, 50, 0.12) !important;
+  box-shadow: 0 8px 24px rgba(140, 59, 50, 0.16) !important;
 }
 
-/* Vintage Editorial Pressed Ink Buttons */
+/* Pressed Printer's Ink & Oxblood Wax Seal Buttons */
 [data-theme="vintage_editorial"] button:not(.sidebar-item):not(.filter-chip):not(.p-1) {
-  background: #1a1918 !important;
+  background: linear-gradient(180deg, #2b2623 0%, #171412 100%) !important;
   color: #fbf7ee !important;
-  border: 1px solid #8c3b32 !important;
-  border-radius: 2px !important;
+  border: 1.5px solid #8c3b32 !important;
+  border-radius: 4px !important;
   font-family: 'Playfair Display', serif !important;
   font-weight: 700 !important;
   letter-spacing: 0.04em !important;
-  box-shadow: 0 2px 4px rgba(26, 25, 24, 0.25) !important;
+  box-shadow: 0 3px 8px rgba(26, 25, 24, 0.3) !important;
+  transition: all 0.2s ease !important;
 }
 
 [data-theme="vintage_editorial"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):hover {
   background: #8c3b32 !important;
   color: #ffffff !important;
-  border-color: #8c3b32 !important;
+  border-color: #b3473b !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 5px 14px rgba(140, 59, 50, 0.35) !important;
 }
 
 [data-theme="vintage_editorial"] .filter-chip {
   background: #fbf7ee !important;
   border: 1px solid #cbbba0 !important;
   color: #1a1918 !important;
-  border-radius: 2px !important;
+  border-radius: 4px !important;
   font-family: 'Playfair Display', serif !important;
   font-weight: 600 !important;
 }
@@ -1236,13 +1583,13 @@ body {
   background: #8c3b32 !important;
   color: #ffffff !important;
   border-color: #8c3b32 !important;
-  box-shadow: 0 1px 4px rgba(140, 59, 50, 0.3) !important;
+  box-shadow: 0 2px 8px rgba(140, 59, 50, 0.35) !important;
 }
 
 [data-theme="vintage_editorial"] .sidebar-item.active {
   background: #8c3b32 !important;
   color: #fbf7ee !important;
-  border-radius: 2px !important;
+  border-radius: 4px !important;
   font-family: 'Playfair Display', serif !important;
   font-weight: 700 !important;
 }
@@ -1251,12 +1598,12 @@ body {
 [data-theme="vintage_editorial"] select {
   background: #ffffff !important;
   border: 1px solid #cbbba0 !important;
-  border-radius: 2px !important;
+  border-radius: 4px !important;
   font-family: Georgia, serif !important;
 }
 
 /* --------------------------------------------------------------------------
-   7. DARK CORPORATE ZEN (Monolithic Slate, Plus Jakarta Sans & Kyoto Sage)
+   7. DARK CORPORATE ZEN (Kyoto Basalt Monoliths, Plus Jakarta Sans & Sage)
    -------------------------------------------------------------------------- */
 [data-theme="dark_corporate_zen"] {
   font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
@@ -1274,12 +1621,40 @@ body {
 
 [data-theme="dark_corporate_zen"].bg-limbus-bg,
 [data-theme="dark_corporate_zen"] .bg-limbus-bg {
-  background: #0b0d0e !important;
+  background: 
+    repeating-linear-gradient(180deg, 
+      rgba(255, 255, 255, 0.012) 0px, 
+      rgba(255, 255, 255, 0.012) 1px, 
+      transparent 1px, 
+      transparent 32px
+    ),
+    #0a0c0d !important;
+  color: #e6e4df !important;
 }
 
+/* Raked Zen Basalt Column Sidebar */
 [data-theme="dark_corporate_zen"] aside {
   background: #0f1214 !important;
-  border-right: 1px solid #1e2428 !important;
+  border-right: 14px solid transparent !important;
+  border-image: repeating-linear-gradient(180deg, 
+    #1e2428 0px, 
+    #13171a 4px, 
+    #252d33 8px
+  ) 1 100% !important;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.7) !important;
+  position: relative !important;
+}
+
+[data-theme="dark_corporate_zen"] aside::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: -14px !important;
+  width: 14px !important;
+  bottom: 0 !important;
+  pointer-events: none !important;
+  z-index: 40 !important;
+  background: linear-gradient(180deg, transparent 0%, rgba(127, 169, 155, 0.35) 50%, transparent 100%) !important;
 }
 
 [data-theme="dark_corporate_zen"] .glass-card,
@@ -1287,23 +1662,26 @@ body {
 [data-theme="dark_corporate_zen"] .bg-limbus-card {
   background: #14181b !important;
   border: 1px solid #23292e !important;
-  border-radius: 12px !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45) !important;
+  border-top: 2px solid rgba(127, 169, 155, 0.4) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.5) !important;
+  transition: all 0.25s ease !important;
 }
 
 [data-theme="dark_corporate_zen"] .glass-card:hover {
-  border-color: #343e46 !important;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55) !important;
+  border-color: #7fa99b !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.65), 0 0 16px rgba(127, 169, 155, 0.15) !important;
 }
 
-/* Zen Quiet Luxury Matte Buttons */
+/* Zen Quiet Luxury Matte Obsidian Buttons */
 [data-theme="dark_corporate_zen"] button:not(.sidebar-item):not(.filter-chip):not(.p-1) {
   background: #1c2226 !important;
   color: #e6e4df !important;
   border: 1px solid #2c363d !important;
-  border-radius: 8px !important;
+  border-radius: 10px !important;
   font-weight: 500 !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35) !important;
   transition: all 0.2s ease !important;
 }
 
@@ -1311,34 +1689,35 @@ body {
   background: #252d33 !important;
   border-color: #7fa99b !important;
   color: #7fa99b !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 12px rgba(127, 169, 155, 0.25) !important;
 }
 
 [data-theme="dark_corporate_zen"] .filter-chip {
   background: #161b1f !important;
   border: 1px solid #283138 !important;
   color: #b0b8c0 !important;
-  border-radius: 8px !important;
+  border-radius: 9999px !important;
 }
 
 [data-theme="dark_corporate_zen"] .filter-chip.active {
-  background: rgba(127, 169, 155, 0.15) !important;
+  background: rgba(127, 169, 155, 0.18) !important;
   border-color: #7fa99b !important;
   color: #7fa99b !important;
+  box-shadow: 0 0 10px rgba(127, 169, 155, 0.2) !important;
 }
 
 [data-theme="dark_corporate_zen"] .sidebar-item.active {
-  background: rgba(127, 169, 155, 0.12) !important;
+  background: rgba(127, 169, 155, 0.14) !important;
   color: #7fa99b !important;
   border-left: 3px solid #7fa99b !important;
-  border-radius: 6px !important;
+  border-radius: 8px !important;
 }
 
 [data-theme="dark_corporate_zen"] input,
 [data-theme="dark_corporate_zen"] select {
   background: #121619 !important;
   border: 1px solid #252c32 !important;
-  border-radius: 8px !important;
+  border-radius: 10px !important;
   color: #e6e4df !important;
 }
 
