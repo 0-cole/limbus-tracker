@@ -9,7 +9,7 @@
   - Dedicated **Walpth Charge Grinder Tribute Hub** (`/mirror-grinder`): A hilarious, over-the-top, late-night BTV infomercial celebrating Walpth's [Charge-Grinder](https://github.com/Walpth/Charge-Grinder/) repository.
   - **Spamton / Tenna Style TV Broadcast**: Unskippable retro CRT variety show presentation locking onto the screen, featuring Toby Fox's *Tenna Introduction* theme, 8 sliced equal-proportion animated GIFs from the official Tenna sprite sheet (`tenna_anim1.gif` through `tenna_anim8.gif`), dancing animations, and 10 extended, comfortably-paced comedy scenes.
 - **Repository**: [0-cole/limbus-tracker](https://github.com/0-cole/limbus-tracker)
-- **Current Deployed Release**: `v1.0.98`
+- **Current Deployed Release**: `v1.0.99`
 
 ---
 
@@ -17,7 +17,8 @@
 
 ### 2.1 Technology Stack
 - **Framework**: Electron (`v36.9.5`), React 19, Vite 6, Tailwind CSS 3, Zustand, Framer Motion.
-- **Packaging**: `electron-builder` (`v26.15.3`) with NSIS targeting Windows x64.
+- **Packaging**: `electron-builder` (`v26.15.3`) with NSIS targeting Windows x64 + standalone `portable` `.exe` target.
+- **Differential Updates Suppressed**: `differentialPackage: false` configured in `package.json` to eliminate auxiliary `.blockmap` files and deliver pure direct executables.
 - **Routing**: `HashRouter` (required for Electron's `file://` protocol).
 
 ### 2.2 Sinner Character Portraits
@@ -39,8 +40,13 @@
 
 ---
 
-## 3. Recent Verified Changes (v1.0.98)
-1. **Full UI Style Architecture & Anatomy Transformation for All 7 Themes**:
+## 3. Recent Verified Changes (v1.0.99 & v1.0.98)
+1. **Executable Packaging Overhaul (v1.0.99)**:
+   - Configured `"differentialPackage": false` under `nsis` in `package.json` to permanently eliminate auxiliary `.blockmap` file generation.
+   - Added `"target": ["nsis", "portable"]` to produce both a clean NSIS installer (`Limbus Tracker Setup 1.0.99.exe`) and a standalone, zero-installation portable executable (`Limbus Tracker 1.0.99.exe`).
+   - Cleaned up obsolete installer artifacts from `release2/`.
+   - Verified local silent installation to `v1.0.99.0`.
+2. **Full UI Style Architecture & Anatomy Transformation for All 7 Themes (v1.0.98)**:
    - Integrated Google Fonts (`Space Grotesk`, `Orbitron`, `Playfair Display`, `Plus Jakarta Sans`) into `src/index.html`.
    - **Frutiger Aero** (`frutiger_aero`): Skeuomorphic Web 2.0 overhaul — rounded glossy gel buttons with top specular reflections, convex glass bubble cards (`inset 0 2px 2px #fff`, `0 6px 20px #0088cc`), rounded pill filter chips, and sky-dew canvas gradient.
    - **DORFic** (`dorfic`): Sharp architectural vector UI — bold uppercase typography, DIN/Grotesk headers, high-visibility Signal Orange (`#ff5500`) & Laser Red (`#ff2a2a`) rectangular buttons and 3px warning bars.
