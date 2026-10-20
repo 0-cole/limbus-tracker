@@ -1,5 +1,6 @@
 import React from 'react';
 import EASTER_EGG_IMAGES from '../assets/easter_eggs/index.js';
+import SINNER_PORTRAITS from '../assets/sinners/index.js';
 import vergiliusImg from '../assets/vergilius.png';
 import mephistophelesImg from '../assets/mephistopheles.png';
 import sinnersData from '../data/sinners.json';
@@ -52,6 +53,7 @@ export default function ManagerAvatar({
       imgSrc = mephistophelesImg;
     } else {
       sinnerMatch = sinnersData.find((s) => s.id === avatarId);
+      imgSrc = SINNER_PORTRAITS[avatarId] || null;
     }
   }
 

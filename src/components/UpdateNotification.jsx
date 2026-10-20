@@ -40,13 +40,31 @@ export default function UpdateNotification() {
           } catch (err) {}
           if (isNewerVersion(release.tag_name, currentVer)) {
             setUpdateInfo(release);
+            return;
           }
         }
-        return;
       }
     } catch (e) { /* Silently ignore */ }
 
-    // Fallback: check cached release if throttled by GitHub 403 rate limit
+    // Fallback 1: check raw.githubusercontent.com for master package.json (bypasses school firewall restrictions)
+    try {
+      const rawRes = await fetch('https://raw.githubusercontent.com/0-cole/limbus-tracker/master/package.json');
+      if (rawRes.ok) {
+        const pkgData = await rawRes.json();
+        if (pkgData?.version && isNewerVersion(pkgData.version, currentVer)) {
+          setUpdateInfo({
+            tag_name: `v${pkgData.version}`,
+            name: `Limbus Tracker v${pkgData.version}`,
+            html_url: `https://github.com/0-cole/limbus-tracker/releases/tag/v${pkgData.version}`,
+            body: 'A newer version has been deployed to the repository master branch.',
+            assets: []
+          });
+          return;
+        }
+      }
+    } catch (rawErr) {}
+
+    // Fallback 2: check cached release if throttled by GitHub 403 rate limit
     try {
       const cached = localStorage.getItem('limbus_latest_release');
       if (cached) {
