@@ -730,6 +730,34 @@ body {
   border-color: var(--border-subtle) !important;
 }
 
+/* Explicit protection for HUD overlays, Radio Comms, Dante Chrono Toast, and Easter Egg Modals: Keep dark with high-contrast text */
+:is([data-theme]) .mephi-bubble,
+:is([data-theme]) .mephi-bubble p,
+:is([data-theme]) .mephi-comms-text,
+:is([data-theme]) p.mephi-comms-text,
+:is([data-theme]) .dante-chrono-toast,
+:is([data-theme]) .dante-chrono-toast p,
+:is([data-theme]) .dante-chrono-text,
+:is([data-theme]) p.dante-chrono-text,
+:is([data-theme]) .angela-modal-card p,
+:is([data-theme]) .artful-modal-card,
+:is([data-theme]) .artful-modal-card p {
+  color: #f9fafb !important;
+}
+
+:is([data-theme]) .mephi-bubble {
+  background-color: rgba(13, 13, 18, 0.96) !important;
+}
+
+:is([data-theme]) .mephi-comms-tag,
+:is([data-theme]) span.mephi-comms-tag {
+  color: #9ca3af !important;
+}
+
+:is([data-theme]) .dante-chrono-toast {
+  background: linear-gradient(to right, #0e0a0a, #1a0f0f, #0e0a0a) !important;
+}
+
 :is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) * {
   scrollbar-color: var(--border-subtle) var(--bg-panel);
 }

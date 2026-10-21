@@ -9,7 +9,7 @@
   - Dedicated **Walpth Charge Grinder Tribute Hub** (`/mirror-grinder`): A hilarious, over-the-top, late-night BTV infomercial celebrating Walpth's [Charge-Grinder](https://github.com/Walpth/Charge-Grinder/) repository.
   - **Spamton / Tenna Style TV Broadcast**: Unskippable retro CRT variety show presentation locking onto the screen, featuring Toby Fox's *Tenna Introduction* theme, 8 sliced equal-proportion animated GIFs from the official Tenna sprite sheet (`tenna_anim1.gif` through `tenna_anim8.gif`), dancing animations, and 10 extended, comfortably-paced comedy scenes.
 - **Repository**: [0-cole/limbus-tracker](https://github.com/0-cole/limbus-tracker)
-- **Current Deployed Release**: `v1.0.103`
+- **Current Deployed Release**: `v1.0.104`
 
 ---
 
@@ -48,9 +48,18 @@
 
 ---
 
-## 3. Recent Verified Changes (v1.0.103 & v1.0.102)
+## 3. Recent Verified Changes (v1.0.104, v1.0.103 & v1.0.102)
 
-### 3.1 Button Clipping Fix & Universal Typography Contrast (v1.0.103)
+### 3.1 Mephistopheles Comms & HUD Overlay Contrast Immunity (v1.0.104)
+1. **Direct-Track Radio Comms Speech Bubble Insulation**:
+   - Diagnosed root cause of invisible speech bubble text on Mephistopheles border bus: while the card retained its dark glass chassis (`bg-[#0d0d12]/95`), `globals.css` forced `.text-gray-100` to `var(--text-primary)` (`#211611`), causing dark brown text to render directly over pitch-black glass.
+   - Refactored `MephistophelesBorderTrack.jsx` to use `.mephi-bubble`, `.mephi-comms-text`, and `.mephi-comms-tag` with inline color locks (`#f9fafb` and `#9ca3af`).
+   - Added high-priority protection rules in `globals.css` ensuring `.mephi-bubble`, `.mephi-comms-text`, `.dante-chrono-toast`, `.dante-chrono-text`, `.angela-modal-card`, and `.artful-modal-card` are completely immune to light-theme text inversions and preserve radiant white/silver typography against their dark tactical containers.
+2. **Packaging & Verification**:
+   - Bumped `package.json` to `1.0.104`.
+   - Added Kenneth memo for `v1.0.104` in `ChangelogPage.jsx`.
+
+### 3.2 Button Clipping Fix & Universal Typography Contrast (v1.0.103)
 1. **Button Selector Over-Catch Elimination**:
    - Diagnosed root cause of mission cards squashing into 9999px pill shapes with clipped headers ("Clear Any Stage 10x") and footers ("Weekly Rota"): `globals.css` applied `border-radius: 9999px !important;` to all `button:not(...)` elements without excluding cards or inline utilities.
    - Refined button selectors across all 7 themes with `:not(.card-btn):not(.btn-inline):not(.glass-card):not([class*="glass-card"]):not([class*="rounded-xl"]):not([class*="rounded-lg"]):not([class*="rounded-2xl"])`.

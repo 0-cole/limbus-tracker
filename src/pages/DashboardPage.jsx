@@ -159,8 +159,8 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            className="mb-6 p-4 rounded-xl border-2 shadow-[0_0_30px_rgba(239,68,68,0.35)] flex items-center justify-between gap-4 bg-gradient-to-r from-[#0e0a0a] via-[#1a0f0f] to-[#0e0a0a] relative overflow-hidden"
-            style={{ borderColor: danteToast.color }}
+            className="dante-chrono-toast mb-6 p-4 rounded-xl border-2 shadow-[0_0_30px_rgba(239,68,68,0.35)] flex items-center justify-between gap-4 bg-gradient-to-r from-[#0e0a0a] via-[#1a0f0f] to-[#0e0a0a] relative overflow-hidden"
+            style={{ borderColor: danteToast.color, color: '#f9fafb' }}
           >
             <div className="flex items-center gap-3 min-w-0">
               <div 
@@ -173,7 +173,10 @@ export default function DashboardPage() {
                 <span className="text-xs font-black uppercase tracking-wider block" style={{ color: danteToast.color }}>
                   {danteToast.sinner} — Chrono Response
                 </span>
-                <p className="text-xs italic text-gray-200 font-serif leading-relaxed mt-0.5">
+                <p 
+                  className="dante-chrono-text text-xs italic font-serif leading-relaxed mt-0.5"
+                  style={{ color: '#f3f4f6' }}
+                >
                   "{danteToast.quote}"
                 </p>
               </div>

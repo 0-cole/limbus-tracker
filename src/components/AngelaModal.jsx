@@ -61,7 +61,7 @@ export default function AngelaModal({ onClose }) {
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        className="max-w-2xl w-full relative bg-[#040e14] border-2 border-cyan-500/70 shadow-[0_0_60px_rgba(6,182,212,0.3)] overflow-hidden max-h-[90vh] flex flex-col rounded-xl"
+        className="angela-modal-card max-w-2xl w-full relative bg-[#040e14] border-2 border-cyan-500/70 shadow-[0_0_60px_rgba(6,182,212,0.3)] overflow-hidden max-h-[90vh] flex flex-col rounded-xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top accent line */}

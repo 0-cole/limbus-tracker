@@ -37,7 +37,7 @@ export default function ArtfulModal({ isOpen, onClose }) {
         initial={{ opacity: 0, scale: 0.92, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.92, y: 20 }}
-        className="bg-[#101216] border-2 border-pink-500 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-[0_0_50px_rgba(236,72,153,0.35)] text-gray-100 flex flex-col relative font-sans"
+        className="artful-modal-card bg-[#101216] border-2 border-pink-500 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-[0_0_50px_rgba(236,72,153,0.35)] text-gray-100 flex flex-col relative font-sans"
       >
         {/* Floating magic spark particles */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">

@@ -635,13 +635,14 @@ export default function MephistophelesBorderTrack() {
             exit={{ opacity: 0, scale: 0.85 }}
             transition={{ type: 'spring', damping: 20, stiffness: 260 }}
             onClick={(e) => e.stopPropagation()}
-            className="absolute pointer-events-auto z-50 p-3.5 rounded-xl bg-[#0d0d12]/95 backdrop-blur-md border shadow-2xl will-change-transform"
+            className="mephi-bubble absolute pointer-events-auto z-50 p-3.5 rounded-xl bg-[#0d0d12]/95 backdrop-blur-md border shadow-2xl will-change-transform"
             style={{
               left: coordsRef.current.bx !== undefined ? `${coordsRef.current.bx}px` : undefined,
               top: coordsRef.current.by !== undefined ? `${coordsRef.current.by}px` : undefined,
               width: `${BUBBLE_WIDTH}px`,
               borderColor: activeDialogue.color || '#c9a84c',
               boxShadow: `0 0 25px ${activeDialogue.color}33, 0 10px 36px rgba(0,0,0,0.85)`,
+              backgroundColor: 'rgba(13, 13, 18, 0.96)',
             }}
           >
             {/* Speaker Header */}
@@ -656,13 +657,19 @@ export default function MephistophelesBorderTrack() {
               >
                 {activeDialogue.sinner}
               </span>
-              <span className="text-[10px] text-gray-400 font-mono ml-auto">
+              <span
+                className="mephi-comms-tag text-[10px] font-mono ml-auto"
+                style={{ color: '#9ca3af' }}
+              >
                 Mephi Comms
               </span>
             </div>
 
             {/* Quote text */}
-            <p className="text-xs text-gray-100 font-serif leading-relaxed italic">
+            <p
+              className="mephi-comms-text text-xs font-serif leading-relaxed italic"
+              style={{ color: '#f9fafb' }}
+            >
               "{activeDialogue.quote}"
             </p>
           </motion.div>
