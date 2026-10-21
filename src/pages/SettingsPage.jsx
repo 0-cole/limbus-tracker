@@ -220,13 +220,18 @@ export default function SettingsPage() {
   // Full data wipe
   const handleConfirmWipe = async () => {
     if (wipeInput.trim() !== 'WIPE') return;
-    if (window.electronAPI) {
-      await window.electronAPI.wipeData();
+    try {
+      if (window.electronAPI) {
+        await window.electronAPI.wipeData();
+      }
+      localStorage.removeItem('limbus-tracker-data');
+      localStorage.removeItem('limbus_mephi_border_progress');
+      // Wipe cloud save too so stale data can't be re-downloaded
+      await syncEngine.wipeCloudSave();
+      await useStore.getState().resetAllData();
+    } catch (err) {
+      console.error('Wipe error:', err);
     }
-    localStorage.removeItem('limbus-tracker-data');
-    localStorage.removeItem('limbus_mephi_border_progress');
-    // Wipe cloud save too so stale data can't be re-downloaded
-    await syncEngine.wipeCloudSave();
     setWipeModalOpen(false);
     window.location.reload();
   };
