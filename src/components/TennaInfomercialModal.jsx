@@ -10,7 +10,9 @@ import {
   CheckCircle2,
   Play,
   FastForward,
-  Sparkles
+  Sparkles,
+  Zap,
+  X
 } from 'lucide-react';
 
 // Audio
@@ -26,12 +28,22 @@ import tennamaxup from '../assets/tennamaxup.png';
 
 const CHARGE_GRINDER_REPO_URL = 'https://github.com/Walpth/Charge-Grinder/';
 
+// Compressed, snappy comedic timeline (~19s total audio duration)
+const SCENE_TIMES = {
+  SCENE_1: 3.5,
+  SCENE_2: 7.0,
+  SCENE_3: 11.0,
+  SCENE_4: 15.0,
+  FINALE: 19.0
+};
+
 export default function TennaInfomercialModal({ isOpen, onClose }) {
   const [scene, setScene] = useState(0); // 0 to 5
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioBlocked, setAudioBlocked] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
+  const [speed, setSpeed] = useState(1.3); // 1.3x default for high-energy infomercial pacing!
   const [explosionPlayed, setExplosionPlayed] = useState(false);
 
   const audioRef = useRef(null);
@@ -44,6 +56,41 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
       window.open(url, '_blank', 'noopener,noreferrer');
     }
   };
+
+  const handleFinish = () => {
+    localStorage.setItem('limbus_chargegrinder_commercial_seen', 'true');
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+    if (explosionRef.current) {
+      explosionRef.current.pause();
+    }
+    if (onClose) onClose();
+  };
+
+  const skipToFinale = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = SCENE_TIMES.FINALE;
+      audioRef.current.volume = 0.4;
+    }
+    setScene(5);
+    localStorage.setItem('limbus_chargegrinder_commercial_seen', 'true');
+  };
+
+  const cycleSpeed = () => {
+    const nextSpeed = speed === 1.0 ? 1.3 : speed === 1.3 ? 2.0 : 1.0;
+    setSpeed(nextSpeed);
+    if (audioRef.current) {
+      audioRef.current.playbackRate = nextSpeed;
+    }
+  };
+
+  // Sync speed changes to audio
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.playbackRate = speed;
+    }
+  }, [speed]);
 
   // Start audio & broadcast when modal opens
   useEffect(() => {
@@ -62,6 +109,7 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
       if (audioRef.current) {
         try {
           audioRef.current.currentTime = 0;
+          audioRef.current.playbackRate = speed;
           audioRef.current.volume = 0.85;
           await audioRef.current.play();
           setIsPlaying(true);
@@ -74,15 +122,22 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
 
     startShow();
 
-    // Lock page navigation / escape keys while commercial broadcast is active
+    // Keyboard controls: ESC/Space/Enter skips ad immediately, ESC at finale closes modal
     const handleKeyDown = (e) => {
-      if (scene < 5) {
-        if (e.key === 'Escape' || e.key === 'Backspace') {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        if (scene < 5) {
+          skipToFinale();
+        } else {
+          handleFinish();
+        }
+      } else if (e.key === ' ' || e.key === 'Enter') {
+        if (scene < 5) {
           e.preventDefault();
           e.stopPropagation();
+          skipToFinale();
         }
-      } else if (e.key === 'Escape') {
-        handleFinish();
       }
     };
 
@@ -90,29 +145,23 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
     return () => {
       window.removeEventListener('keydown', handleKeyDown, true);
     };
-  }, [isOpen]);
+  }, [isOpen, scene, speed]);
 
-  // Synchronized Scene Progression (Punchy, Comedic, and Readable):
-  // 0.0s - 9.0s: Scene 0 (Emergency Special Report: Tired of Tapping Win Rate?)
-  // 9.0s - 18.0s: Scene 1 (The Wacky Pitch: Want a WAAACKY MD Grinder? Look No Further!)
-  // 18.0s - 30.0s: Scene 2 (The Big Reveal: Walpth's Charge Grinder v3.5.3)
-  // 30.0s - 42.0s: Scene 3 (The Price Inquiry: 400 Shards? 1300 Lunacy? NO!!)
-  // 42.0s - 54.0s: Scene 4 (The Climax Explosion: It's 100% FREE on GitHub!)
-  // 54.0s+: Scene 5 (The Grand Finale & Call-to-Action Unlock)
+  // Fast-paced scene progression (~3.5s to 4.0s per act)
   const handleTimeUpdate = () => {
     if (!audioRef.current) return;
     const t = audioRef.current.currentTime;
     setCurrentTime(t);
 
-    if (t < 9.0) {
+    if (t < SCENE_TIMES.SCENE_1) {
       if (scene !== 0) setScene(0);
-    } else if (t < 18.0) {
+    } else if (t < SCENE_TIMES.SCENE_2) {
       if (scene !== 1) setScene(1);
-    } else if (t < 30.0) {
+    } else if (t < SCENE_TIMES.SCENE_3) {
       if (scene !== 2) setScene(2);
-    } else if (t < 42.0) {
+    } else if (t < SCENE_TIMES.SCENE_4) {
       if (scene !== 3) setScene(3);
-    } else if (t < 54.0) {
+    } else if (t < SCENE_TIMES.FINALE) {
       if (scene !== 4) {
         setScene(4);
         if (!explosionPlayed && explosionRef.current) {
@@ -125,6 +174,9 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
     } else {
       if (scene !== 5) {
         setScene(5);
+        if (audioRef.current) {
+          audioRef.current.volume = 0.4;
+        }
         localStorage.setItem('limbus_chargegrinder_commercial_seen', 'true');
       }
     }
@@ -136,31 +188,32 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
 
     const interval = setInterval(() => {
       setCurrentTime((prev) => {
-        const next = prev + 0.5;
-        if (next >= 54.0) {
+        const next = prev + 0.3 * speed;
+        if (next >= SCENE_TIMES.FINALE) {
           setScene(5);
           localStorage.setItem('limbus_chargegrinder_commercial_seen', 'true');
           clearInterval(interval);
-        } else if (next >= 42.0) {
+        } else if (next >= SCENE_TIMES.SCENE_4) {
           setScene(4);
-        } else if (next >= 30.0) {
+        } else if (next >= SCENE_TIMES.SCENE_3) {
           setScene(3);
-        } else if (next >= 18.0) {
+        } else if (next >= SCENE_TIMES.SCENE_2) {
           setScene(2);
-        } else if (next >= 9.0) {
+        } else if (next >= SCENE_TIMES.SCENE_1) {
           setScene(1);
         }
         return next;
       });
-    }, 500);
+    }, 300);
 
     return () => clearInterval(interval);
-  }, [isOpen, isPlaying]);
+  }, [isOpen, isPlaying, speed]);
 
   const handleStartWithClick = async () => {
     if (audioRef.current) {
       try {
         audioRef.current.currentTime = 0;
+        audioRef.current.playbackRate = speed;
         audioRef.current.volume = 0.85;
         await audioRef.current.play();
         setIsPlaying(true);
@@ -171,20 +224,14 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
     }
   };
 
-  const handleFinish = () => {
-    localStorage.setItem('limbus_chargegrinder_commercial_seen', 'true');
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
-    if (onClose) onClose();
-  };
-
   const handleRestart = () => {
     setScene(0);
     setCurrentTime(0);
     setExplosionPlayed(false);
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
+      audioRef.current.playbackRate = speed;
+      audioRef.current.volume = 0.85;
       audioRef.current.play().catch(() => {});
     }
   };
@@ -194,14 +241,6 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
       audioRef.current.muted = !isMuted;
       setIsMuted(!isMuted);
     }
-  };
-
-  const skipToFinale = () => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = 54.0;
-    }
-    setScene(5);
-    localStorage.setItem('limbus_chargegrinder_commercial_seen', 'true');
   };
 
   if (!isOpen) return null;
@@ -228,27 +267,44 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
           <div className="w-1.5 h-14 bg-neutral-500 rotate-[18deg] origin-bottom rounded-full" />
         </div>
 
-        {/* Clean Monitor Frame (No heavy scanlines or muddy CRT filters) */}
+        {/* Clean Monitor Frame */}
         <div className="relative w-full h-full bg-[#0d0914] rounded-2xl border-4 border-neutral-700 shadow-2xl overflow-hidden flex flex-col">
           
-          {/* Subtle vignette border glow (clean and unobtrusive) */}
+          {/* Subtle vignette border glow */}
           <div className="absolute inset-0 pointer-events-none z-30 shadow-[inset_0_0_80px_rgba(0,0,0,0.6)] rounded-xl" />
 
-          {/* Top Channel Header */}
-          <div className="relative z-20 flex items-center justify-between px-6 py-2.5 bg-black/80 border-b border-neutral-800 text-xs">
-            <div className="flex items-center gap-3">
-              <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping inline-block" />
-              <span className="font-black text-red-400 tracking-wider uppercase">● BTV LIVE BROADCAST</span>
-              <span className="text-neutral-600">|</span>
-              <span className="font-bold text-yellow-400">CH-77 (DISTRICT 23)</span>
-              <span className="text-neutral-600">|</span>
-              <span className="text-neutral-400 font-mono">SCENE {scene + 1}/6</span>
+          {/* Top Channel Header with Instant Skip & Speed Controls */}
+          <div className="relative z-20 flex items-center justify-between px-4 sm:px-6 py-2.5 bg-black/85 border-b border-neutral-800 text-xs">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping inline-block shrink-0" />
+              <span className="font-black text-red-400 tracking-wider uppercase text-[11px] sm:text-xs">
+                ● BTV LIVE BROADCAST
+              </span>
+              <span className="text-neutral-600 hidden sm:inline">|</span>
+              <span className="font-bold text-yellow-400 hidden sm:inline">CH-77 (DISTRICT 23)</span>
+              <span className="text-neutral-600 hidden sm:inline">|</span>
+              <span className="text-neutral-300 font-mono text-[11px] sm:text-xs">
+                {scene < 5 ? `SCENE ${scene + 1}/5` : 'FINALE'}
+              </span>
             </div>
 
-            <div className="flex items-center gap-3">
-              <span className="text-neutral-400 font-mono text-xs">
-                {currentTime.toFixed(1)}s / 54s
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* Speed Multiplier Button */}
+              <button
+                onClick={cycleSpeed}
+                className="px-2 py-1 rounded bg-neutral-800/90 hover:bg-neutral-700 text-cyan-300 hover:text-cyan-200 text-xs font-mono font-bold flex items-center gap-1 transition-colors border border-cyan-500/20"
+                title="Cycle playback speed (1.0x / 1.3x / 2.0x)"
+              >
+                <Zap className="w-3 h-3 text-cyan-400 fill-current" />
+                <span>{speed.toFixed(1)}x</span>
+              </button>
+
+              {/* Timestamp */}
+              <span className="text-neutral-400 font-mono text-[11px] sm:text-xs">
+                {Math.min(currentTime, SCENE_TIMES.FINALE).toFixed(1)}s / {SCENE_TIMES.FINALE}s
               </span>
+
+              {/* Mute Toggle */}
               <button
                 onClick={toggleMute}
                 className="p-1.5 rounded-md bg-neutral-800 hover:bg-neutral-700 text-neutral-300 transition-colors"
@@ -256,16 +312,27 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
               >
                 {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-green-400" />}
               </button>
-              {scene > 0 && scene < 5 && (
+
+              {/* Prominent, Instant Skip Button (Always Available in Scenes 0-4) */}
+              {scene < 5 && (
                 <button
                   onClick={skipToFinale}
-                  className="px-2.5 py-1 rounded bg-neutral-800 hover:bg-neutral-700 text-neutral-300 hover:text-white text-xs font-bold flex items-center gap-1 transition-colors"
-                  title="Skip to Finale"
+                  className="px-2.5 sm:px-3 py-1 rounded bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-black flex items-center gap-1.5 transition-all shadow-md hover:scale-105 active:scale-95 uppercase tracking-wider"
+                  title="Skip Ad to Finale [ESC or SPACE]"
                 >
-                  <FastForward className="w-3.5 h-3.5" />
-                  <span>SKIP</span>
+                  <FastForward className="w-3.5 h-3.5 fill-current" />
+                  <span>SKIP AD</span>
                 </button>
               )}
+
+              {/* Close Window Button */}
+              <button
+                onClick={handleFinish}
+                className="p-1.5 rounded-md bg-neutral-800/80 hover:bg-red-900/60 text-neutral-400 hover:text-red-300 transition-colors"
+                title="Close Ad [ESC]"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
           </div>
 
@@ -285,15 +352,23 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
               <p className="text-neutral-300 text-sm max-w-md mb-6">
                 Click below to turn on the TV sound and watch the show!
               </p>
-              <motion.button
-                onClick={handleStartWithClick}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-7 py-3.5 bg-yellow-400 hover:bg-yellow-300 text-black font-black text-base rounded-xl shadow-lg flex items-center gap-2 uppercase tracking-wider"
-              >
-                <Play className="w-5 h-5 fill-current" />
-                TURN ON THE T.V.!
-              </motion.button>
+              <div className="flex items-center gap-3">
+                <motion.button
+                  onClick={handleStartWithClick}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-7 py-3.5 bg-yellow-400 hover:bg-yellow-300 text-black font-black text-base rounded-xl shadow-lg flex items-center gap-2 uppercase tracking-wider"
+                >
+                  <Play className="w-5 h-5 fill-current" />
+                  TURN ON THE T.V.!
+                </motion.button>
+                <button
+                  onClick={skipToFinale}
+                  className="px-5 py-3.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-300 font-bold text-sm rounded-xl transition-colors"
+                >
+                  SKIP STRAIGHT TO DOSSIER
+                </button>
+              </div>
             </div>
           )}
 
@@ -322,23 +397,23 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
             </div>
 
             {/* ======================================================== */}
-            {/* COMEDIC ACTS (Punchy, readable, zero technical feature bloat) */}
+            {/* COMEDIC ACTS (Punchy, fast-paced, rapid fire jokes)       */}
             {/* ======================================================== */}
             <AnimatePresence mode="wait">
 
-              {/* ACT 0 (0-9s): Emergency Special Report */}
+              {/* ACT 0: Emergency Special Report */}
               {scene === 0 && (
                 <motion.div
                   key="scene-0"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 1.05 }}
-                  transition={{ duration: 0.35 }}
+                  transition={{ duration: 0.25 }}
                   className="relative z-10 flex flex-col items-center text-center max-w-2xl"
                 >
                   <motion.div
                     animate={{ rotate: [-2, 2, -2], y: [0, -5, 0] }}
-                    transition={{ repeat: Infinity, duration: 0.7 }}
+                    transition={{ repeat: Infinity, duration: 0.6 }}
                     className="mb-3"
                   >
                     <img
@@ -359,7 +434,7 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
                   <motion.p
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.2, duration: 0.35 }}
+                    transition={{ delay: 0.35, duration: 0.25 }}
                     className="text-sm md:text-lg text-neutral-200 font-bold max-w-lg leading-relaxed"
                   >
                     DO YOUR POOR MANAGER FINGERS CRAMP WHILE VERGILIUS GIVES YOU THE DEATH GLARE?!
@@ -367,19 +442,19 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
                 </motion.div>
               )}
 
-              {/* ACT 1 (9-18s): The Wacky Pitch */}
+              {/* ACT 1: The Wacky Pitch */}
               {scene === 1 && (
                 <motion.div
                   key="scene-1"
                   initial={{ opacity: 0, x: -60 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 60 }}
-                  transition={{ duration: 0.35 }}
+                  transition={{ duration: 0.25 }}
                   className="relative z-10 flex flex-col items-center text-center max-w-3xl"
                 >
                   <motion.div
                     animate={{ x: [-15, 15, -15], y: [-3, 3, -3] }}
-                    transition={{ repeat: Infinity, duration: 1.3, ease: 'easeInOut' }}
+                    transition={{ repeat: Infinity, duration: 1.0, ease: 'easeInOut' }}
                     className="mb-3"
                   >
                     <img
@@ -400,7 +475,7 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 1.2, duration: 0.35 }}
+                    transition={{ delay: 0.35, duration: 0.25 }}
                     className="px-6 py-2 bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 rounded-xl shadow-lg my-2"
                   >
                     <span className="text-xl md:text-2xl font-black text-white uppercase tracking-wider">
@@ -410,19 +485,19 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
                 </motion.div>
               )}
 
-              {/* ACT 2 (18-30s): The Reveal: Walpth's Charge Grinder */}
+              {/* ACT 2: The Reveal: Walpth's Charge Grinder */}
               {scene === 2 && (
                 <motion.div
                   key="scene-2"
                   initial={{ opacity: 0, scale: 0.85 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 1.1 }}
-                  transition={{ duration: 0.4 }}
+                  transition={{ duration: 0.25 }}
                   className="relative z-10 flex flex-col items-center text-center max-w-3xl"
                 >
                   <motion.div
                     animate={{ scale: [1, 1.04, 1] }}
-                    transition={{ repeat: Infinity, duration: 0.8 }}
+                    transition={{ repeat: Infinity, duration: 0.7 }}
                     className="mb-2"
                   >
                     {/* The authentic, official 59-frame full-res Deltarune dance! */}
@@ -444,7 +519,7 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
                   <motion.p
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.2, duration: 0.35 }}
+                    transition={{ delay: 0.35, duration: 0.25 }}
                     className="text-sm md:text-lg text-yellow-200 font-bold max-w-lg mb-2"
                   >
                     THE #1 MIRROR DUNGEON BEHEMOTH IN ALL OF DISTRICT 23!
@@ -453,7 +528,7 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 2.5, duration: 0.35 }}
+                    transition={{ delay: 0.7, duration: 0.25 }}
                     className="text-xs text-neutral-300 font-medium bg-black/60 px-4 py-1.5 rounded-lg border border-neutral-700"
                   >
                     Kenneth has officially retired to run a tea shop in the Outskirts! Walpth is your god now!
@@ -461,19 +536,19 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
                 </motion.div>
               )}
 
-              {/* ACT 3 (30-42s): The Price Inquiry */}
+              {/* ACT 3: The Price Inquiry */}
               {scene === 3 && (
                 <motion.div
                   key="scene-3"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 1.05 }}
-                  transition={{ duration: 0.35 }}
+                  transition={{ duration: 0.25 }}
                   className="relative z-10 flex flex-col items-center text-center max-w-2xl"
                 >
                   <motion.div
                     animate={{ rotate: [-2, 2, -2] }}
-                    transition={{ repeat: Infinity, duration: 1 }}
+                    transition={{ repeat: Infinity, duration: 0.8 }}
                     className="mb-3"
                   >
                     <img
@@ -494,7 +569,7 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
                   <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 1.2, duration: 0.3 }}
+                    transition={{ delay: 0.35, duration: 0.25 }}
                     className="text-lg md:text-2xl text-red-400 font-extrabold line-through mb-3"
                   >
                     1,300 LUNACY?! SELLING CHARON'S BUS SEATS?!
@@ -503,7 +578,7 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
                   <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 2.5, duration: 0.35 }}
+                    transition={{ delay: 0.7, duration: 0.25 }}
                     className="px-6 py-2 bg-red-600 text-white font-black text-xl md:text-2xl uppercase tracking-widest rounded-xl shadow-lg animate-pulse"
                   >
                     NO!! NOT A SINGLE AHN!!
@@ -511,19 +586,19 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
                 </motion.div>
               )}
 
-              {/* ACT 4 (42-54s): The Climax / Explosion: 100% Free! */}
+              {/* ACT 4: The Climax / Explosion: 100% Free! */}
               {scene === 4 && (
                 <motion.div
                   key="scene-4"
                   initial={{ opacity: 0, scale: 0.6 }}
                   animate={{ opacity: 1, scale: [1, 1.06, 1] }}
                   exit={{ opacity: 0, scale: 1.15 }}
-                  transition={{ duration: 0.35 }}
+                  transition={{ duration: 0.25 }}
                   className="relative z-10 flex flex-col items-center text-center max-w-3xl"
                 >
                   <motion.div
                     animate={{ scale: [1, 1.1, 1], rotate: [0, -3, 3, 0] }}
-                    transition={{ repeat: Infinity, duration: 0.4 }}
+                    transition={{ repeat: Infinity, duration: 0.35 }}
                     className="mb-2"
                   >
                     <img
@@ -544,7 +619,7 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
                   <motion.p
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.2, duration: 0.35 }}
+                    transition={{ delay: 0.35, duration: 0.25 }}
                     className="text-lg md:text-2xl text-yellow-300 font-black tracking-wide"
                   >
                     OPEN SOURCE ON GITHUB! ZERO CHARGE! NO HYPERLINK BLOCKED!
@@ -552,13 +627,13 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
                 </motion.div>
               )}
 
-              {/* ACT 5 (54s+): Finale & Call to Action */}
+              {/* ACT 5: Finale & Call to Action */}
               {scene === 5 && (
                 <motion.div
                   key="scene-5"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4 }}
+                  transition={{ duration: 0.3 }}
                   className="relative z-10 flex flex-col items-center text-center max-w-3xl w-full"
                 >
                   <div className="flex items-center justify-center gap-5 mb-4">
@@ -631,7 +706,7 @@ export default function TennaInfomercialModal({ isOpen, onClose }) {
               <span>SPAMTON / TENNA COMMERCIAL PROTOCOL</span>
             </div>
             <div className="text-yellow-500 font-bold">
-              {scene < 5 ? '⚠️ WATCHING BROADCAST' : '✅ BROADCAST CONCLUDED — DOSSIER UNLOCKED'}
+              {scene < 5 ? '⚡ BROADCAST IN PROGRESS — PRESS ESC / SPACE TO SKIP' : '✅ BROADCAST CONCLUDED — DOSSIER UNLOCKED'}
             </div>
           </div>
         </div>

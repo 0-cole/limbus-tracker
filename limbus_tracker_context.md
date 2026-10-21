@@ -9,7 +9,7 @@
   - Dedicated **Walpth Charge Grinder Tribute Hub** (`/mirror-grinder`): A hilarious, over-the-top, late-night BTV infomercial celebrating Walpth's [Charge-Grinder](https://github.com/Walpth/Charge-Grinder/) repository.
   - **Spamton / Tenna Style TV Broadcast**: Unskippable retro CRT variety show presentation locking onto the screen, featuring Toby Fox's *Tenna Introduction* theme, 8 sliced equal-proportion animated GIFs from the official Tenna sprite sheet (`tenna_anim1.gif` through `tenna_anim8.gif`), dancing animations, and 10 extended, comfortably-paced comedy scenes.
 - **Repository**: [0-cole/limbus-tracker](https://github.com/0-cole/limbus-tracker)
-- **Current Deployed Release**: `v1.0.105`
+- **Current Deployed Release**: `v1.0.106`
 
 ---
 
@@ -49,9 +49,30 @@
 
 ---
 
-## 3. Recent Verified Changes (v1.0.105, v1.0.104 & v1.0.103)
+## 3. Recent Verified Changes (v1.0.106, v1.0.105 & v1.0.104)
 
-### 3.1 Local Auto-Updater Fix & Installer Targeting (v1.0.105)
+### 3.1 Walpth Charge Grinder Infomercial Speed & Skip Overhaul (v1.0.106)
+1. **Instant Skip Ability & Keyboard Controls**:
+   - Added prominent yellow `[SKIP AD]` button with `<FastForward />` icon in the BTV Live Broadcast top bar visible during every scene (0 through 4).
+   - Added `Escape`, `Space`, and `Enter` key listeners that immediately trigger `skipToFinale()` during scenes 0–4.
+   - Added top-right `[X]` close button to dismiss the modal instantly.
+   - Pressing `Escape` at scene 5 (finale) cleanly closes the modal.
+2. **Speed & Comedic Pacing Compression**:
+   - Default audio playback rate increased to `1.3x`, delivering high-energy variety show comedy pacing.
+   - Added `1.0x / 1.3x / 2.0x` speed toggle button directly in the header with live audio playback rate synchronization.
+   - Compressed scene durations from 54 seconds down to ~14.6 real seconds (~19s audio time):
+     - Scene 0 (Emergency Special Report): 0.0s – 3.5s
+     - Scene 1 (The Wacky Pitch): 3.5s – 7.0s
+     - Scene 2 (The Reveal): 7.0s – 11.0s
+     - Scene 3 (The Price Inquiry): 11.0s – 15.0s
+     - Scene 4 (Climax Explosion): 15.0s – 19.0s
+     - Scene 5 (Finale & Unlocked Actions): 19.0s+ (with audio volume dropping gracefully to 0.4 for reading comfort).
+   - Snappy motion delays: reduced text animation delays from 1.2s–2.5s down to 0.35s–0.7s so punchlines hit rapidly.
+3. **Packaging & Verification**:
+   - Bumped `package.json` to `1.0.106`.
+   - Added Records Keeper Kenneth memo for `v1.0.106` in `src/pages/ChangelogPage.jsx`.
+
+### 3.2 Local Auto-Updater Fix & Installer Targeting (v1.0.105)
 1. **Root Cause of v1.0.84 Inability to Update**:
    - In `v1.0.84`, `UpdateNotification.jsx` executed `assets?.find(a => a.name.endsWith('.exe'))`.
    - Releases attached two executables: `Limbus Tracker X.X.X.exe` (portable) and `Limbus Tracker Setup X.X.X.exe` (installer).
