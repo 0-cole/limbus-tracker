@@ -626,41 +626,62 @@ body {
   color: var(--text-primary) !important;
 }
 
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#0d0d0d\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#111\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#111111\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#121212\],
 :is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#141414\],
-:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-limbus-surface,
-:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) aside {
-  background-color: var(--bg-surface) !important;
-}
-
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#161616\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#181818\],
 :is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#1a1a1a\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-neutral-900,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-neutral-950,
 :is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-limbus-card,
 :is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .glass-card {
   background-color: var(--bg-card) !important;
   border-color: var(--border-subtle) !important;
+  color: var(--text-primary) !important;
+}
+
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#222\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#222222\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#252525\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#262626\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#2a2a2a\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#333\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-\[\#333333\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-neutral-800,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-limbus-surface,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) aside {
+  background-color: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
 }
 
 :is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .glass-card:hover {
   background-color: var(--bg-card-hover) !important;
 }
 
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-black,
 :is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-black\/20,
 :is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-black\/30,
 :is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-black\/40,
 :is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-black\/50,
 :is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-black\/60,
 :is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-black\/70,
-:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-black\/80 {
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-black\/80,
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-black\/90 {
   background-color: var(--bg-panel) !important;
 }
 
-:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-neutral-900,
-:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .bg-neutral-950 {
-  background-color: var(--bg-card) !important;
-}
-
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-\[\#111\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-\[\#222\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-\[\#2a2a2a\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-\[\#333\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-\[\#444\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-\[\#555\],
+:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-neutral-700,
 :is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-neutral-800,
 :is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-neutral-900,
-:is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-neutral-700,
 :is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-white\/10,
 :is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-white\/5,
 :is([data-theme="creamy"], [data-theme="frutiger_aero"], [data-theme="dorfic"], [data-theme="neo_brutalism"], [data-theme="vintage_editorial"]) .border-limbus-border {
@@ -715,7 +736,7 @@ body {
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. FRUTIGER AERO (2000s Bio-Tech Sky-Domes, Glowing Hydro-Tubes & Aqua Glass)
+   1. FRUTIGER AERO (2000s Bio-Tech Sky-Domes, Bliss Meadows & Glossy Aqua Glass)
    -------------------------------------------------------------------------- */
 [data-theme="frutiger_aero"] {
   font-family: 'Segoe UI', 'Frutiger', 'Lucida Grande', -apple-system, sans-serif !important;
@@ -724,15 +745,16 @@ body {
 [data-theme="frutiger_aero"].bg-limbus-bg,
 [data-theme="frutiger_aero"] .bg-limbus-bg {
   background: 
-    radial-gradient(ellipse 90% 55% at 20% 0%, rgba(56, 189, 248, 0.32) 0%, transparent 60%),
-    radial-gradient(circle 800px at 85% 100%, rgba(52, 211, 153, 0.22) 0%, transparent 55%),
-    linear-gradient(155deg, #d8f1ff 0%, #c4e9ff 42%, #daf7ea 100%) !important;
+    radial-gradient(ellipse 110% 48% at 50% 0%, rgba(56, 189, 248, 0.42) 0%, rgba(186, 230, 253, 0.25) 50%, transparent 75%),
+    radial-gradient(ellipse 125% 32% at 50% 100%, rgba(52, 211, 153, 0.32) 0%, rgba(16, 185, 129, 0.15) 50%, transparent 68%),
+    linear-gradient(165deg, #d8f1ff 0%, #c4e9ff 40%, #e0f9ee 100%) !important;
   color: #052c42 !important;
 }
 
-/* Frutiger Aero Hydro-Tube Sidebar Pillar with Rising Water Bubbles */
+/* Frutiger Aero Hydro-Tube Sidebar Pillar with Floating Glass Capsule Dock */
 [data-theme="frutiger_aero"] aside {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(220, 244, 255, 0.88) 100%) !important;
+  backdrop-filter: blur(16px) !important;
   border-right: 16px solid transparent !important;
   border-image: linear-gradient(180deg, 
     #bae6fd 0%, 
@@ -744,7 +766,8 @@ body {
   box-shadow: 
     8px 0 28px rgba(2, 132, 199, 0.25),
     0 0 14px rgba(56, 189, 248, 0.4),
-    inset -1px 0 0 rgba(255, 255, 255, 0.9) !important;
+    inset -1px 0 0 rgba(255, 255, 255, 0.9),
+    inset 0 2px 1.5px rgba(255, 255, 255, 0.95) !important;
   position: relative !important;
 }
 
@@ -785,17 +808,20 @@ body {
   z-index: 41 !important;
 }
 
+/* Authentic Windows Aero Glass Segmented Panels (Image 5) */
 [data-theme="frutiger_aero"] .glass-card,
 [data-theme="frutiger_aero"] .bg-\[\#141414\],
 [data-theme="frutiger_aero"] .bg-limbus-card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(228, 247, 255, 0.9) 45%, rgba(204, 240, 255, 0.95) 100%) !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(228, 247, 255, 0.92) 45%, rgba(204, 240, 255, 0.96) 100%) !important;
   border: 1.5px solid rgba(56, 189, 248, 0.45) !important;
+  border-top: 2px solid rgba(255, 255, 255, 0.98) !important;
   border-radius: 24px !important;
   box-shadow: 
     inset 0 2px 2px rgba(255, 255, 255, 0.98),
-    0 8px 24px rgba(2, 132, 199, 0.14),
+    inset 0 -1px 2px rgba(56, 189, 248, 0.2),
+    0 10px 30px rgba(2, 132, 199, 0.16),
     0 0 16px rgba(56, 189, 248, 0.12) !important;
-  backdrop-filter: blur(12px) !important;
+  backdrop-filter: blur(14px) !important;
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
 
@@ -803,18 +829,21 @@ body {
   transform: translateY(-3px) scale(1.008) !important;
   box-shadow: 
     inset 0 2px 3px rgba(255, 255, 255, 1), 
-    0 14px 34px rgba(2, 132, 199, 0.24),
-    0 0 22px rgba(56, 189, 248, 0.35) !important;
+    0 16px 38px rgba(2, 132, 199, 0.26),
+    0 0 24px rgba(56, 189, 248, 0.4) !important;
   border-color: #0284c7 !important;
 }
 
-/* Frutiger Aero Glossy Gel Buttons */
+/* Frutiger Aero Glossy Gel Buttons & Pill Tabs (Image 5 - "Hot", "New", "Top") */
 [data-theme="frutiger_aero"] button:not(.sidebar-item):not(.filter-chip):not(.p-1) {
   background: linear-gradient(180deg, #dcf4ff 0%, #38bdf8 46%, #0284c7 50%, #0369a1 100%) !important;
   color: #ffffff !important;
   border: 1px solid #0284c7 !important;
   border-radius: 9999px !important;
-  box-shadow: inset 0 1.5px 2px rgba(255, 255, 255, 0.95), 0 4px 12px rgba(2, 132, 199, 0.38) !important;
+  box-shadow: 
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.98), 
+    0 4px 14px rgba(2, 132, 199, 0.38),
+    0 1px 3px rgba(0, 0, 0, 0.12) !important;
   text-shadow: 0 1px 2px rgba(0, 50, 100, 0.55) !important;
   font-weight: 700 !important;
   transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
@@ -823,7 +852,10 @@ body {
 [data-theme="frutiger_aero"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):hover {
   filter: brightness(1.1) !important;
   transform: translateY(-2px) scale(1.02) !important;
-  box-shadow: inset 0 1.5px 3px #ffffff, 0 8px 20px rgba(2, 132, 199, 0.5) !important;
+  box-shadow: 
+    inset 0 1.5px 3px #ffffff, 
+    0 8px 22px rgba(2, 132, 199, 0.52),
+    0 0 14px rgba(56, 189, 248, 0.45) !important;
 }
 
 [data-theme="frutiger_aero"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):active {
@@ -868,7 +900,7 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   2. DORFIC (Daylight, Orange, Red, Futurism & 2000s Glass Architecture)
+   2. DORFIC (Daylight Orange Futurism, Amber Fluid Tubes & Blobitecture)
    -------------------------------------------------------------------------- */
 [data-theme="dorfic"] {
   font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
@@ -878,9 +910,10 @@ body {
 [data-theme="dorfic"].bg-limbus-bg,
 [data-theme="dorfic"] .bg-limbus-bg {
   background: 
-    radial-gradient(ellipse 90% 55% at 8% 0%, rgba(255, 136, 0, 0.22) 0%, transparent 60%),
-    radial-gradient(circle 750px at 92% 95%, rgba(255, 77, 0, 0.16) 0%, transparent 55%),
-    radial-gradient(circle 600px at 50% 30%, rgba(255, 195, 80, 0.09) 0%, transparent 60%),
+    radial-gradient(ellipse 85% 50% at 8% 0%, rgba(255, 120, 0, 0.25) 0%, transparent 60%),
+    radial-gradient(circle 750px at 95% 90%, rgba(255, 77, 0, 0.18) 0%, transparent 55%),
+    radial-gradient(circle 500px at 50% 25%, rgba(255, 195, 80, 0.14) 0%, transparent 60%),
+    repeating-radial-gradient(circle at 10% 50%, rgba(255, 102, 0, 0.04) 0px, rgba(255, 102, 0, 0.04) 2px, transparent 2px, transparent 40px),
     linear-gradient(180deg, #fefcf8 0%, #fcf5eb 50%, #f9eee0 100%) !important;
   color: #211611 !important;
 }
@@ -960,32 +993,32 @@ body {
   z-index: 41 !important;
 }
 
-/* Glass Block Masonry Motif for Headers & Dividers (Image 1) */
+/* Glass Block Masonry Motif for Headers & Dividers (Image 1 & 2) */
 [data-theme="dorfic"] .glass-block-header,
 [data-theme="dorfic"] thead,
 [data-theme="dorfic"] .border-b.border-limbus-border {
   background: 
-    linear-gradient(rgba(255, 120, 0, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 120, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(rgba(255, 120, 0, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 120, 0, 0.06) 1px, transparent 1px),
     linear-gradient(180deg, #fdf6ec 0%, #faeee0 100%) !important;
   background-size: 20px 20px, 20px 20px, auto !important;
   border-bottom: 2px solid rgba(255, 102, 0, 0.28) !important;
 }
 
-/* Molded Milk-Acrylic Blobitecture Cards with Amber Cove Lighting */
+/* Molded Milk-Acrylic Blobitecture Cards with Glowing Amber Fluid Top Bead */
 [data-theme="dorfic"] .glass-card,
 [data-theme="dorfic"] .bg-\[\#141414\],
 [data-theme="dorfic"] .bg-limbus-card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 249, 242, 0.93) 100%) !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 249, 242, 0.94) 100%) !important;
   border: 1.5px solid rgba(255, 140, 50, 0.32) !important;
   border-top: 4px solid #ff5500 !important;
   border-radius: 22px !important;
   box-shadow: 
-    0 8px 26px rgba(255, 102, 0, 0.09),
+    0 10px 32px rgba(255, 102, 0, 0.12),
     0 2px 8px rgba(100, 50, 0, 0.04),
     0 -4px 14px rgba(255, 85, 0, 0.2),
-    inset 0 1px 1.5px #ffffff !important;
-  backdrop-filter: blur(10px) !important;
+    inset 0 1.5px 2px #ffffff !important;
+  backdrop-filter: blur(12px) !important;
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
 
@@ -999,19 +1032,19 @@ body {
     inset 0 1px 2px #ffffff !important;
 }
 
-/* Luminous Molded Tangerine Lucite Buttons (Image 2 - Mushroom Lamp & Bubble Chair) */
+/* Luminous Molded Tangerine Lucite Convex Buttons (Image 2 - Mushroom Lamp & Bubble Chair) */
 [data-theme="dorfic"] button:not(.sidebar-item):not(.filter-chip):not(.p-1) {
   background: linear-gradient(180deg, #ff8c3b 0%, #ff5d00 52%, #e64200 100%) !important;
   color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
   border-bottom: 2px solid #b83200 !important;
   border-radius: 9999px !important;
   font-weight: 800 !important;
   letter-spacing: 0.04em !important;
   text-shadow: 0 1px 2px rgba(120, 30, 0, 0.6) !important;
   box-shadow: 
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.8),
-    inset 0 -1.5px 2px rgba(180, 40, 0, 0.4),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.9),
+    inset 0 -1.5px 2px rgba(180, 40, 0, 0.45),
     0 4px 16px rgba(255, 93, 0, 0.42),
     0 1px 3px rgba(0, 0, 0, 0.15) !important;
   transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
@@ -1019,7 +1052,7 @@ body {
 
 [data-theme="dorfic"] button:not(.sidebar-item):not(.filter-chip):not(.p-1):hover {
   background: linear-gradient(180deg, #ffa055 0%, #ff6e1a 50%, #e64a00 100%) !important;
-  border-color: rgba(255, 255, 255, 0.75) !important;
+  border-color: rgba(255, 255, 255, 0.85) !important;
   transform: translateY(-2px) scale(1.025) !important;
   box-shadow: 
     inset 0 2px 2px #ffffff,

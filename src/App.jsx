@@ -189,6 +189,11 @@ export default function App() {
   }, [initStore]);
 
   useEffect(() => {
+    const theme = appSettings?.activeTheme || 'gold';
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [appSettings?.activeTheme]);
+
+  useEffect(() => {
     const handleKeyDown = (e) => {
       if (['INPUT', 'TEXTAREA'].includes(e.target?.tagName)) return;
       const key = e.key.toLowerCase();

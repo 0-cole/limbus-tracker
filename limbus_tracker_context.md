@@ -9,7 +9,7 @@
   - Dedicated **Walpth Charge Grinder Tribute Hub** (`/mirror-grinder`): A hilarious, over-the-top, late-night BTV infomercial celebrating Walpth's [Charge-Grinder](https://github.com/Walpth/Charge-Grinder/) repository.
   - **Spamton / Tenna Style TV Broadcast**: Unskippable retro CRT variety show presentation locking onto the screen, featuring Toby Fox's *Tenna Introduction* theme, 8 sliced equal-proportion animated GIFs from the official Tenna sprite sheet (`tenna_anim1.gif` through `tenna_anim8.gif`), dancing animations, and 10 extended, comfortably-paced comedy scenes.
 - **Repository**: [0-cole/limbus-tracker](https://github.com/0-cole/limbus-tracker)
-- **Current Deployed Release**: `v1.0.101`
+- **Current Deployed Release**: `v1.0.102`
 
 ---
 
@@ -22,7 +22,21 @@
 - **Git Push Invariant**: Git remote configured via SSH over Port 443 (`git@github.com:0-cole/limbus-tracker.git`, `ssh.github.com:443`) bypassing school/institution Wi-Fi FortiGuard TLS DPI firewall restrictions.
 - **Routing**: `HashRouter` (required for Electron's `file://` protocol).
 
-### 2.2 Sinner Character Portraits & Avatars
+### 2.2 Aesthetic Architecture & High-Contrast Light Inversion Engine
+- **7 Bespoke Aesthetic Themes**:
+  1. **Frutiger Aero**: 2000s Bio-Tech sky-domes with rolling green meadow horizon auras, floating frosted glass capsule dock sidebars (`backdrop-filter: blur(16px)`, specular top highlight rim), segmented frosted glass cards, and high-gloss aqua gel pill navigation tabs ("Hot", "New", "Top").
+  2. **DORFic Architecture**: 2000s blobitecture with 3D topographic wireframe curves, curving amber fluid tubes, concentric sonar/light pulse waves, milk-acrylic cards with molten orange fluid rims, glass block masonry textures on table headers and dividers, and convex molded tangerine Lucite buttons.
+  3. **Dark Aero**: Vista Ultimate obsidian acrylic windows, electric cyan & emerald aurora borealis sweeps, and neon glass bevels.
+  4. **Y2K Cybercore**: 3D perspective wireframe matrix floors, holographic matrix scanner columns, HUD brackets `[ ]`, and liquid mercury chrome buttons with sharp horizon reflections.
+  5. **Neo-Brutalism**: Bauhaus blueprint drafting dot-grids, 45° industrial yellow/black hazard warning stripes, 3.5px solid black ink borders, and 6px hard offset drop shadows.
+  6. **Vintage Editorial**: 19th-century broadsheet rag paper, fluted classical brass column moldings, double-rule architectural picture frames, and oxblood wax-seal buttons.
+  7. **Dark Corporate Zen**: Kyoto raked basalt stone grooves, quarried dark basalt monolith blocks with razor-thin titanium seams, and serene mineral sage ambient glows.
+- **Contrast Invariant for Light Themes**:
+  - `globals.css` maps all dark utility classes (`.bg-[#111]`, `.bg-[#141414]`, `.bg-[#161616]`, `.bg-[#181818]`, `.bg-[#1a1a1a]`, `.bg-[#222]`, `.bg-[#333]`, `.border-[#222]`, `.border-[#333]`, `.border-[#444]`, etc.) to proper high-contrast surfaces (`var(--bg-card)`, `var(--bg-surface)`, `var(--border-subtle)`), preventing invisible dark text on black cards.
+  - `DailyCycleTracker.jsx` uses semantic `glass-card bg-limbus-card border-limbus-border/60 text-limbus-text` so cards cleanly adapt to each theme's bespoke geometry.
+  - `App.jsx` syncs `document.documentElement.setAttribute('data-theme', ...)` so top-level modals and overlays inherit the active theme.
+
+### 2.3 Sinner Character Portraits & Avatars
 - **Theater Menu Sinner Portraits**: Extracted via REA directly from Limbus Company's internal Unity assets (`StoryTheater_EmployeeCard` SpriteAtlas in `resources.assets`).
 - All 12 official Sinner portraits (Yi Sang, Faust, Don Quixote, Ryōshū, Meursault, Hong Lu, Heathcliff, Ishmael, Rodion, Sinclair, Outis, Gregor) are hardcoded and bundled in `src/assets/sinners/` and `public/assets/sinners/` with zero external URL dependencies.
 - Wired into `ManagerAvatar.jsx` and `SettingsPage.jsx` ("Choose Avatar Source") so every Sinner slot renders the crisp, official full-color character portrait instead of placeholder number/text monograms.
@@ -34,9 +48,23 @@
 
 ---
 
-## 3. Recent Verified Changes (v1.0.101 & v1.0.100)
+## 3. Recent Verified Changes (v1.0.102 & v1.0.101)
 
-### 3.1 Sinner Theater Portraits Extraction & Wiring (v1.0.101)
+### 3.1 DORFic Contrast Fix & Rich Architectural Features (v1.0.102)
+1. **DORFic & Light Theme Contrast Fix**:
+   - Diagnosed root cause of unreadable text on DORFic cards ("Log a Mirror Dungeon Run", "Egoshard Crates & Shard Manager", "Daily Missions", etc.): components had hardcoded `bg-[#111] border-[#333]`, while light themes converted text to dark brown `var(--text-primary)` (`#211611`), creating invisible near-black text on pitch-black cards.
+   - Refactored `DailyCycleTracker.jsx` to use semantic classes `glass-card bg-limbus-card border-limbus-border/60 text-limbus-text` and `text-limbus-muted`.
+   - Expanded `src/styles/globals.css` inversion selectors to cover `.bg-[#111]`, `.bg-[#111111]`, `.bg-[#121212]`, `.bg-[#141414]`, `.bg-[#161616]`, `.bg-[#181818]`, `.bg-[#1a1a1a]`, `.bg-[#222]`, `.bg-[#333]`, `.border-[#222]`, `.border-[#333]`, `.border-[#444]`, `.border-[#555]`.
+   - Wired `data-theme` synchronization to `document.documentElement` in `App.jsx` so top-level portals, modals, and tooltips cleanly inherit the active theme.
+2. **Elevated Architectural & Web Design Systems**:
+   - **DORFic Architecture**: Added 3D topographic wireframe contours, curving amber fluid ducts, concentric pulse arcs, molded milk-acrylic blobitecture cards with glowing orange fluid rims, glass block masonry headers/dividers, and convex molded Lucite pill buttons.
+   - **Frutiger Aero**: Added dual-horizon Bliss sky-domes with rolling green meadow horizon auras, floating frosted glass capsule dock sidebars (`backdrop-filter: blur(16px)`, specular top rim highlight), Windows 7 Aero glass panels, and glossy aqua gel pill navigation tabs ("Hot", "New", "Top") with 3D reflection lines and water droplet sheen.
+   - **Other Themes**: Enhanced Dark Aero (Vista Ultimate obsidian acrylic with electric cyan/emerald aurora meshes), Y2K Cybercore (perspective wireframe matrix floors and liquid mercury chrome buttons), Neo-Brutalism (blueprint dot-grids and 3.5px solid ink borders with 6px offset drop shadows), Vintage Editorial (fluted brass column moldings and oxblood wax-seal buttons), and Dark Corporate Zen (Kyoto basalt stone grooves with serene sage glow).
+3. **Packaging & Verification**:
+   - Produced verified standalone executable `Limbus Tracker 1.0.102.exe` and one-click silent installer `Limbus Tracker Setup 1.0.102.exe` in `release2/`. Purged obsolete `1.0.101` files.
+   - Added Records Keeper Kenneth memo for `v1.0.102` in `ChangelogPage.jsx`.
+
+### 3.2 Sinner Theater Portraits Extraction & Wiring (v1.0.101)
 1. **Extracted from Unity Game Assets via REA & UnityPy**:
    - Located `StoryTheater_EmployeeCard` SpriteAtlas in `resources.assets`.
    - Extracted all 12 cards (`MainUI_PersonalityStory_7_0` through `MainUI_PersonalityStory_7_11`) at 333x503 resolution.
