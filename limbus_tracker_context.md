@@ -9,7 +9,7 @@
   - Dedicated **Walpth Charge Grinder Tribute Hub** (`/mirror-grinder`): A hilarious, over-the-top, late-night BTV infomercial celebrating Walpth's [Charge-Grinder](https://github.com/Walpth/Charge-Grinder/) repository.
   - **Spamton / Tenna Style TV Broadcast**: Unskippable retro CRT variety show presentation locking onto the screen, featuring Toby Fox's *Tenna Introduction* theme, 8 sliced equal-proportion animated GIFs from the official Tenna sprite sheet (`tenna_anim1.gif` through `tenna_anim8.gif`), dancing animations, and 10 extended, comfortably-paced comedy scenes.
 - **Repository**: [0-cole/limbus-tracker](https://github.com/0-cole/limbus-tracker)
-- **Current Deployed Release**: `v1.0.102`
+- **Current Deployed Release**: `v1.0.103`
 
 ---
 
@@ -48,9 +48,22 @@
 
 ---
 
-## 3. Recent Verified Changes (v1.0.102 & v1.0.101)
+## 3. Recent Verified Changes (v1.0.103 & v1.0.102)
 
-### 3.1 DORFic Contrast Fix & Rich Architectural Features (v1.0.102)
+### 3.1 Button Clipping Fix & Universal Typography Contrast (v1.0.103)
+1. **Button Selector Over-Catch Elimination**:
+   - Diagnosed root cause of mission cards squashing into 9999px pill shapes with clipped headers ("Clear Any Stage 10x") and footers ("Weekly Rota"): `globals.css` applied `border-radius: 9999px !important;` to all `button:not(...)` elements without excluding cards or inline utilities.
+   - Refined button selectors across all 7 themes with `:not(.card-btn):not(.btn-inline):not(.glass-card):not([class*="glass-card"]):not([class*="rounded-xl"]):not([class*="rounded-lg"]):not([class*="rounded-2xl"])`.
+   - Designed bespoke `.card-btn` geometry for each theme: molded milk-acrylic tiles for DORFic, glossy aqua glass for Frutiger Aero, cyber plates for Y2K, tactile ink blocks for Neo-Brutalism, warm broadsheet for Vintage Editorial, and matte obsidian for Dark Corporate Zen.
+2. **Weekly Calendar Overview & Typography Contrast**:
+   - Replaced washed-out Active Cycle badge with high-contrast dual light/dark styling (deep royal purple on lavender tint for post-reset; deep amber on gold tint for pre-reset).
+   - Upgraded calendar day cards to semantic `bg-limbus-surface`, `border-limbus-border`, `text-limbus-text`, and `text-limbus-muted`, eliminating hardcoded `#737373` and `#555` faint text.
+   - Styled inline triggers (like "✓ Mark Done" and "🔄 Reset Calendar") with `.btn-inline` so they remain compact and elegant.
+3. **Packaging & Verification**:
+   - Produced verified standalone executable `Limbus Tracker 1.0.103.exe` and one-click silent installer `Limbus Tracker Setup 1.0.103.exe` in `release2/`. Purged obsolete `1.0.102` files.
+   - Added Records Keeper Kenneth memo for `v1.0.103` in `ChangelogPage.jsx`.
+
+### 3.2 DORFic Contrast Fix & Rich Architectural Features (v1.0.102)
 1. **DORFic & Light Theme Contrast Fix**:
    - Diagnosed root cause of unreadable text on DORFic cards ("Log a Mirror Dungeon Run", "Egoshard Crates & Shard Manager", "Daily Missions", etc.): components had hardcoded `bg-[#111] border-[#333]`, while light themes converted text to dark brown `var(--text-primary)` (`#211611`), creating invisible near-black text on pitch-black cards.
    - Refactored `DailyCycleTracker.jsx` to use semantic classes `glass-card bg-limbus-card border-limbus-border/60 text-limbus-text` and `text-limbus-muted`.

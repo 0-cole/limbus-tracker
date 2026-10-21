@@ -151,7 +151,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="p-6 text-[#e5e5e5] h-full overflow-y-auto">
+    <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="p-6 text-limbus-text h-full overflow-y-auto">
       {/* Dante Clock Rewind Toast */}
       <AnimatePresence>
         {danteToast && (
@@ -206,7 +206,7 @@ export default function DashboardPage() {
               </span>
             </h1>
           </div>
-          <p className="text-[#737373] mt-1 flex items-center gap-2">
+          <p className="text-limbus-muted font-medium mt-1 flex items-center gap-2">
             <Calendar size={16} /> {DAYS[currentDayIndex]}, {currentDayStr}
           </p>
         </div>
@@ -423,11 +423,11 @@ export default function DashboardPage() {
               <AlertCircle size={18} /> Contingency Status
             </h2>
             {missedDaysCount === 0 ? (
-              <p className="text-[#737373] text-xs">You are currently on schedule. No contingencies required.</p>
+              <p className="text-limbus-muted text-xs">You are currently on schedule. No contingencies required.</p>
             ) : (
               <div className="space-y-3">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <p className="text-xs text-[#e5e5e5]">You missed <span className="font-bold text-red-400">{missedDaysCount}</span> daily login(s) recently.</p>
+                  <p className="text-xs text-limbus-text">You missed <span className="font-bold text-red-400">{missedDaysCount}</span> daily login(s) recently.</p>
                   <button 
                     onClick={() => {
                       const updated = { ...(weeklyProgress || {}) };
@@ -444,7 +444,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="p-3 bg-red-950/30 border border-red-900 rounded">
                   <p className="font-bold text-xs text-red-300 mb-1">Schedule Adjusted:</p>
-                  <p className="text-[11px] text-[#ccc]">The grind roadmap has automatically redistributed your missed EXP over the remaining days of the season.</p>
+                  <p className="text-[11px] text-limbus-muted">The grind roadmap has automatically redistributed your missed EXP over the remaining days of the season.</p>
                 </div>
               </div>
             )}
@@ -474,11 +474,11 @@ export default function DashboardPage() {
           <div className="glass-card p-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
               <div className="flex items-center gap-3 flex-wrap">
-                <h2 className="text-xl font-bold font-limbus text-white">Weekly Calendar Overview</h2>
-                <span className={`text-[10px] px-2 py-0.5 rounded font-black border ${
+                <h2 className="text-xl font-black font-limbus text-limbus-text">Weekly Calendar Overview</h2>
+                <span className={`text-[11px] px-2.5 py-1 rounded-md font-extrabold border tracking-wide flex items-center gap-1.5 shadow-sm ${
                   activeCycle.isAfterResetToday 
-                    ? 'bg-purple-950/40 text-purple-300 border-purple-500/40' 
-                    : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                    ? 'bg-purple-100 text-purple-900 border-purple-400 dark:bg-purple-950/70 dark:text-purple-200 dark:border-purple-500/50' 
+                    : 'bg-amber-100 text-amber-950 border-amber-400 dark:bg-amber-950/70 dark:text-amber-200 dark:border-amber-500/50'
                 }`}>
                   {activeCycle.isAfterResetToday 
                     ? `⚡ Active Cycle: ${localDayName} Evening (Post-Reset: 5:00 PM – 11:59 PM | Resets ${activeCycle.resetLocalTime} Tomorrow)`
@@ -491,7 +491,7 @@ export default function DashboardPage() {
                       resetWeeklyCalendar();
                     }
                   }}
-                  className="text-[10px] text-gray-400 hover:text-amber-300 bg-[#1a1a1a] hover:bg-[#252525] border border-[#444] hover:border-amber-500/50 px-2 py-0.5 rounded font-bold transition-all flex items-center gap-1 cursor-pointer"
+                  className="btn-inline text-[10px] text-limbus-muted hover:text-amber-500 bg-limbus-surface hover:bg-limbus-card border border-limbus-border hover:border-amber-500/50 px-2.5 py-1 rounded-md font-bold transition-all flex items-center gap-1 cursor-pointer shadow-sm"
                   title="Clear all daily status marks for this week"
                 >
                   🔄 Reset Calendar
@@ -502,7 +502,7 @@ export default function DashboardPage() {
                   </span>
                 )}
               </div>
-              <span className="text-xs text-amber-400 font-bold bg-amber-950/40 border border-amber-800/40 px-2.5 py-1 rounded-full flex items-center gap-1 w-fit">
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1 w-fit bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800/40">
                 🔄 Resets every {resetDayName} ({resetTimeStr} Local / 06:00 KST)
               </span>
             </div>
@@ -525,18 +525,19 @@ export default function DashboardPage() {
                 const mdDoneToday = isCurrentCycle && (totalRequiredMd > 0 ? todayRuns.length >= totalRequiredMd : (scheduleState.mdTodayDone || todayRuns.length > 0));
                 const mdInProgressToday = isCurrentCycle && (totalRequiredMd > 0 && todayRuns.length > 0 && todayRuns.length < totalRequiredMd);
 
-                let bgClass = "bg-[#111] border-[#333]";
+                let bgClass = "bg-limbus-surface/60 border-limbus-border/60 text-limbus-text";
                 let icon = null;
 
                 if (status === 'done') {
-                  bgClass = "bg-[#c9a84c]/20 border-[#c9a84c]";
-                  icon = <CheckCircle className="text-[#c9a84c] mx-auto mt-2" size={20} />;
+                  bgClass = "bg-amber-500/15 border-amber-500 text-limbus-text shadow-[0_0_12px_rgba(201,168,76,0.2)]";
+                  icon = <CheckCircle className="text-amber-500 mx-auto mt-2" size={20} />;
                 } else if (status === 'missed' && isPastDay) {
-                  bgClass = "bg-red-950/30 border-red-900";
+                  bgClass = "bg-red-500/15 border-red-500/40 text-limbus-text";
                   icon = (
                     <div className="flex flex-col items-center">
                       <XCircle className="text-red-500 mx-auto mt-2" size={20} />
                       <button
+                        type="button"
                         onClick={(e) => {
                           e.stopPropagation();
                           const updated = { ...(weeklyProgress || {}) };
@@ -544,45 +545,45 @@ export default function DashboardPage() {
                           newStatus[localDateKey] = 'done';
                           updateWeekly({ ...updated, dailyStatus: newStatus });
                         }}
-                        className="text-[9px] text-emerald-400 hover:underline mt-1 cursor-pointer font-bold"
+                        className="btn-inline text-[9px] text-emerald-600 dark:text-emerald-400 hover:underline mt-1 cursor-pointer font-bold"
                       >
                         ✓ Mark Done
                       </button>
                     </div>
                   );
                 } else if (isPastDay) {
-                  bgClass = "bg-black/30 border-[#222] opacity-60";
+                  bgClass = "bg-limbus-surface/30 border-limbus-border/30 opacity-70 text-limbus-muted";
                 } else if (isCurrentCycle) {
                   bgClass = mdDoneToday 
-                    ? "bg-emerald-950/30 border-emerald-500/50" 
+                    ? "bg-emerald-500/15 border-2 border-emerald-500/80 text-limbus-text shadow-[0_0_12px_rgba(16,185,129,0.25)]" 
                     : mdInProgressToday 
-                      ? "bg-amber-950/30 border-amber-500/50" 
-                      : "bg-[#222] border-amber-400/80 shadow-[0_0_10px_rgba(234,179,8,0.2)]";
+                      ? "bg-amber-500/15 border-2 border-amber-500/80 text-limbus-text shadow-[0_0_12px_rgba(245,158,11,0.25)]" 
+                      : "bg-limbus-surface border-2 border-amber-400/90 text-limbus-text shadow-[0_0_12px_rgba(234,179,8,0.25)]";
                 }
 
                 return (
                   <div key={day} className={`p-3 rounded-lg border text-center transition-all ${bgClass}`}>
                     <div className="flex items-center justify-center gap-1">
-                      <p className={`text-xs font-bold ${isCurrentCycle ? 'text-amber-400' : 'text-[#737373]'}`}>{day.slice(0,3)}</p>
-                      {isResetDay && <span className="text-[8px] bg-amber-500/30 text-amber-300 font-black px-1 rounded">Reset</span>}
+                      <p className={`text-xs font-black tracking-wide ${isCurrentCycle ? 'text-amber-500 dark:text-amber-400 font-extrabold' : 'text-limbus-text font-bold'}`}>{day.slice(0,3)}</p>
+                      {isResetDay && <span className="text-[8px] bg-amber-500/30 text-amber-600 dark:text-amber-300 font-black px-1 rounded">Reset</span>}
                     </div>
-                    <p className="text-[10px] text-[#555]">{colDate.getDate()}</p>
+                    <p className={`text-[11px] font-mono font-bold mt-0.5 ${isCurrentCycle ? 'text-amber-600 dark:text-amber-300' : 'text-limbus-muted'}`}>{colDate.getDate()}</p>
                     {isCurrentCycle && (
-                      <span className="text-[8px] bg-amber-500/20 text-amber-300 font-black px-1 rounded block mt-0.5 uppercase">Active</span>
+                      <span className="text-[8px] bg-amber-500/25 text-amber-700 dark:text-amber-300 font-black px-1.5 py-0.5 rounded block mt-1 uppercase tracking-wider">Active</span>
                     )}
                     {icon}
                     {mdDoneToday && (
-                      <div className="mt-1.5 text-[9px] bg-emerald-500/20 text-emerald-300 font-bold px-1 py-0.5 rounded border border-emerald-500/30">
+                      <div className="mt-1.5 text-[9px] bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 font-bold px-1 py-0.5 rounded border border-emerald-500/30">
                         ⚔️ MD Done
                       </div>
                     )}
                     {mdInProgressToday && (
-                      <div className="mt-1.5 text-[9px] bg-amber-500/20 text-amber-300 font-bold px-1 py-0.5 rounded border border-amber-500/30">
+                      <div className="mt-1.5 text-[9px] bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold px-1 py-0.5 rounded border border-amber-500/30">
                         ⏳ MD {todayRuns.length}/{totalRequiredMd}
                       </div>
                     )}
                     {isResetDay && scheduleState.weekliesDone && (
-                      <div className="mt-1.5 text-[9px] bg-amber-500/20 text-amber-300 font-bold px-1 py-0.5 rounded border border-amber-500/30">
+                      <div className="mt-1.5 text-[9px] bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold px-1 py-0.5 rounded border border-amber-500/30">
                         📜 Weeklies
                       </div>
                     )}
@@ -638,20 +639,20 @@ export default function DashboardPage() {
 
             {/* Lifetime Summary KPI Cards */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-              <div className="bg-[#111] border border-[#333] rounded-xl p-4 text-center">
-                <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider block mb-1">Lifetime MD Runs</span>
-                <span className="text-2xl font-black text-white font-mono">{lifetimeRuns}</span>
+              <div className="glass-card bg-limbus-surface border border-limbus-border/60 rounded-xl p-4 text-center">
+                <span className="text-[10px] uppercase font-bold text-limbus-muted tracking-wider block mb-1">Lifetime MD Runs</span>
+                <span className="text-2xl font-black text-limbus-text font-mono">{lifetimeRuns}</span>
               </div>
-              <div className="bg-[#111] border border-[#333] rounded-xl p-4 text-center">
-                <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider block mb-1">Lifetime EXP</span>
-                <span className="text-2xl font-black text-[#22c55e] font-mono">+{lifetimeExp}</span>
+              <div className="glass-card bg-limbus-surface border border-limbus-border/60 rounded-xl p-4 text-center">
+                <span className="text-[10px] uppercase font-bold text-limbus-muted tracking-wider block mb-1">Lifetime EXP</span>
+                <span className="text-2xl font-black text-emerald-500 font-mono">+{lifetimeExp}</span>
               </div>
-              <div className="bg-[#111] border border-[#333] rounded-xl p-4 text-center">
-                <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider block mb-1">Shards Farmed</span>
-                <span className="text-2xl font-black text-[#eab308] font-mono">+{lifetimeShards}</span>
+              <div className="glass-card bg-limbus-surface border border-limbus-border/60 rounded-xl p-4 text-center">
+                <span className="text-[10px] uppercase font-bold text-limbus-muted tracking-wider block mb-1">Shards Farmed</span>
+                <span className="text-2xl font-black text-amber-500 font-mono">+{lifetimeShards}</span>
               </div>
-              <div className="bg-[#111] border border-[#333] rounded-xl p-4 text-center">
-                <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider block mb-1">Past Cycles</span>
+              <div className="glass-card bg-limbus-surface border border-limbus-border/60 rounded-xl p-4 text-center">
+                <span className="text-[10px] uppercase font-bold text-limbus-muted tracking-wider block mb-1">Past Cycles</span>
                 <span className="text-2xl font-black text-purple-400 font-mono">{weeklyArchive.length}</span>
               </div>
             </div>
@@ -692,10 +693,10 @@ export default function DashboardPage() {
               </h3>
 
               {weeklyArchive.length === 0 ? (
-                <div className="bg-[#111]/60 border border-[#222] rounded-xl p-8 text-center">
-                  <Archive size={32} className="mx-auto text-gray-600 mb-2 opacity-60" />
-                  <p className="text-sm font-bold text-gray-300">No past weekly archives yet</p>
-                  <p className="text-xs text-gray-500 max-w-md mx-auto mt-1">
+                <div className="glass-card bg-limbus-surface border border-limbus-border/60 rounded-xl p-8 text-center">
+                  <Archive size={32} className="mx-auto text-limbus-muted mb-2 opacity-60" />
+                  <p className="text-sm font-bold text-limbus-text">No past weekly archives yet</p>
+                  <p className="text-xs text-limbus-muted max-w-md mx-auto mt-1">
                     Every Wednesday at 5:00 PM EST, when Mirror Dungeons reset, your completed runs and earned resources are automatically archived here!
                   </p>
                 </div>
@@ -704,19 +705,19 @@ export default function DashboardPage() {
                   {weeklyArchive.map((entry) => (
                     <div
                       key={entry.id}
-                      className="bg-[#111] border border-[#2a2a2a] hover:border-[#3a3a3a] transition-colors rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4"
+                      className="glass-card bg-limbus-surface border border-limbus-border/60 hover:border-amber-500/40 transition-colors rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4"
                     >
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-white text-sm">{entry.weekLabel}</span>
+                          <span className="font-bold text-limbus-text text-sm">{entry.weekLabel}</span>
                           {entry.weekliesCompleted && (
                             <span className="text-[9px] bg-yellow-500/20 text-yellow-300 font-bold px-1.5 py-0.5 rounded border border-yellow-500/30">
                               👑 Weeklies Completed
                             </span>
                           )}
                         </div>
-                        <div className="flex flex-wrap gap-4 text-xs text-gray-400 font-mono">
-                          <span>MDs: <strong className="text-white">{entry.mdRunsCompleted || 0}</strong></span>
+                        <div className="flex flex-wrap gap-4 text-xs text-limbus-muted font-mono">
+                          <span>MDs: <strong className="text-limbus-text">{entry.mdRunsCompleted || 0}</strong></span>
                           <span>EXP: <strong className="text-green-400">+{entry.totalExpEarned || 0}</strong></span>
                           <span>Shards: <strong className="text-yellow-400">+{entry.shardsEarned || 0}</strong></span>
                           {entry.cratesEarned > 0 && <span>Crates: <strong className="text-amber-300">+{entry.cratesEarned}</strong></span>}
@@ -754,10 +755,10 @@ export default function DashboardPage() {
         <div className="space-y-4">
 
           {window.electronAPI?.setGameLaunchPreference && (
-            <label className="bg-[#111] border border-[#333] p-6 rounded-lg flex flex-col md:flex-row items-center justify-between gap-6 cursor-pointer">
+            <label className="glass-card bg-limbus-surface border border-limbus-border/60 p-6 rounded-xl flex flex-col md:flex-row items-center justify-between gap-6 cursor-pointer">
               <div>
-                <h3 className="font-bold text-white mb-1">Open when Limbus Company starts</h3>
-                <p className="text-sm text-gray-400">The tracker starts quietly in the background with Windows so it can open when the game launches. Turn this off to disable both behaviors.</p>
+                <h3 className="font-bold text-limbus-text mb-1">Open when Limbus Company starts</h3>
+                <p className="text-sm text-limbus-muted">The tracker starts quietly in the background with Windows so it can open when the game launches. Turn this off to disable both behaviors.</p>
               </div>
               <input
                 type="checkbox"

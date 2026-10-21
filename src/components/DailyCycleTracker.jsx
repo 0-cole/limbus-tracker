@@ -398,8 +398,9 @@ export default function DailyCycleTracker() {
               </p>
             </div>
             <button 
+              type="button"
               onClick={() => setShowManualLogger(!showManualLogger)} 
-              className="text-xs text-[#c9a84c] hover:underline font-bold"
+              className="btn-inline text-xs text-[#c9a84c] hover:underline font-bold cursor-pointer"
             >
               {showManualLogger ? 'Hide Options' : '+ Quick Log'}
             </button>
@@ -409,62 +410,65 @@ export default function DailyCycleTracker() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-limbus-border/40">
               {/* Hard Bonus Option */}
               <button
+                type="button"
                 disabled={!cantoUnlockedHard || !effectiveHasMdHard || bonusesAvailable < 3}
                 onClick={() => {
                   logMdRun('hard_bonus');
                   promptEnkephalinSync('md');
                 }}
-                className={`p-2.5 rounded border text-left flex flex-col justify-between transition-all ${
+                className={`card-btn p-2.5 rounded-xl border text-left flex flex-col justify-between transition-all ${
                   cantoUnlockedHard && effectiveHasMdHard && bonusesAvailable >= 3
                     ? 'bg-red-950/30 border-red-800 hover:border-red-500 text-white cursor-pointer'
-                    : 'bg-black/30 border-[#222] text-gray-600 cursor-not-allowed opacity-50'
+                    : 'bg-limbus-surface/40 border-limbus-border/40 text-limbus-muted cursor-not-allowed opacity-50'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-xs text-red-400">Hard Bonus</span>
                   <span className="text-[10px] text-red-300 font-mono">18 mod</span>
                 </div>
-                <div className="text-[11px] text-gray-400 mt-1">
-                  +225 EXP <span className="text-[9px] text-gray-500">(3 bonuses)</span>
+                <div className="text-[11px] text-limbus-muted mt-1">
+                  +225 EXP <span className="text-[9px] text-limbus-muted/70">(3 bonuses)</span>
                 </div>
               </button>
 
               {/* Normal Bonus Option */}
               <button
+                type="button"
                 disabled={bonusesAvailable < 1}
                 onClick={() => {
                   logMdRun('normal_bonus');
                   promptEnkephalinSync('md');
                 }}
-                className={`p-2.5 rounded border text-left flex flex-col justify-between transition-all ${
+                className={`card-btn p-2.5 rounded-xl border text-left flex flex-col justify-between transition-all ${
                   bonusesAvailable >= 1
                     ? 'bg-yellow-950/30 border-yellow-800 hover:border-[#c9a84c] text-white cursor-pointer'
-                    : 'bg-black/30 border-[#222] text-gray-600 cursor-not-allowed opacity-50'
+                    : 'bg-limbus-surface/40 border-limbus-border/40 text-limbus-muted cursor-not-allowed opacity-50'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-xs text-[#eab308]">Normal Bonus</span>
                   <span className="text-[10px] text-yellow-300 font-mono">5 mod</span>
                 </div>
-                <div className="text-[11px] text-gray-400 mt-1">
-                  +45 EXP <span className="text-[9px] text-gray-500">(1 bonus)</span>
+                <div className="text-[11px] text-limbus-muted mt-1">
+                  +45 EXP <span className="text-[9px] text-limbus-muted/70">(1 bonus)</span>
                 </div>
               </button>
 
               {/* Normal No Bonus Option */}
               <button
+                type="button"
                 onClick={() => {
                   logMdRun('normal_nobonus');
                   promptEnkephalinSync('md');
                 }}
-                className="p-2.5 rounded border bg-black/50 border-[#333] hover:border-gray-400 text-white text-left flex flex-col justify-between transition-all cursor-pointer"
+                className="card-btn p-2.5 rounded-xl border bg-limbus-surface border-limbus-border/60 hover:border-gray-400 text-limbus-text text-left flex flex-col justify-between transition-all cursor-pointer"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs text-gray-300">Normal (No Bonus)</span>
-                  <span className="text-[10px] text-gray-400 font-mono">5 mod</span>
+                  <span className="font-bold text-xs text-limbus-text">Normal (No Bonus)</span>
+                  <span className="text-[10px] text-limbus-muted font-mono">5 mod</span>
                 </div>
-                <div className="text-[11px] text-gray-400 mt-1">
-                  +30 EXP <span className="text-[9px] text-gray-500">(0 bonus)</span>
+                <div className="text-[11px] text-limbus-muted mt-1">
+                  +30 EXP <span className="text-[9px] text-limbus-muted/70">(0 bonus)</span>
                 </div>
               </button>
 
@@ -506,8 +510,9 @@ export default function DailyCycleTracker() {
               </p>
             </div>
             <button 
+              type="button"
               onClick={() => setShowShardLogger(!showShardLogger)} 
-              className="text-xs text-[#c9a84c] hover:underline font-bold"
+              className="btn-inline text-xs text-[#c9a84c] hover:underline font-bold cursor-pointer"
             >
               {showShardLogger ? 'Hide Options' : '+ Open Crates / Log Shards'}
             </button>
@@ -520,10 +525,10 @@ export default function DailyCycleTracker() {
                 <button
                   type="button"
                   onClick={() => setShardLoggerTab('open_crates')}
-                  className={`pb-2 px-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${
+                  className={`btn-inline pb-2 px-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${
                     shardLoggerTab === 'open_crates'
                       ? 'border-[#c9a84c] text-[#c9a84c]'
-                      : 'border-transparent text-gray-400 hover:text-gray-200'
+                      : 'border-transparent text-limbus-muted hover:text-limbus-text'
                   }`}
                 >
                   <PackagePlus size={14} /> Open Choice Crates
@@ -531,10 +536,10 @@ export default function DailyCycleTracker() {
                 <button
                   type="button"
                   onClick={() => setShardLoggerTab('open_random')}
-                  className={`pb-2 px-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${
+                  className={`btn-inline pb-2 px-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${
                     shardLoggerTab === 'open_random'
-                      ? 'border-purple-400 text-purple-300'
-                      : 'border-transparent text-gray-400 hover:text-gray-200'
+                      ? 'border-purple-400 text-purple-400'
+                      : 'border-transparent text-limbus-muted hover:text-limbus-text'
                   }`}
                 >
                   <Shuffle size={14} /> Open Random Crates
@@ -542,10 +547,10 @@ export default function DailyCycleTracker() {
                 <button
                   type="button"
                   onClick={() => setShardLoggerTab('direct_log')}
-                  className={`pb-2 px-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${
+                  className={`btn-inline pb-2 px-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${
                     shardLoggerTab === 'direct_log'
                       ? 'border-[#c9a84c] text-[#c9a84c]'
-                      : 'border-transparent text-gray-400 hover:text-gray-200'
+                      : 'border-transparent text-limbus-muted hover:text-limbus-text'
                   }`}
                 >
                   ➕ Direct Log (Drops / Gacha)
@@ -587,7 +592,7 @@ export default function DailyCycleTracker() {
                               key={val}
                               type="button"
                               onClick={() => handleCratesCountChange((cratesToOpen || 0) + val)}
-                              className="px-2 py-1 text-xs bg-black/50 border border-[#333] hover:border-gray-500 rounded text-gray-300 font-mono cursor-pointer"
+                              className="btn-inline px-2 py-1 text-xs bg-limbus-surface border border-limbus-border hover:border-[#c9a84c] rounded text-limbus-text font-mono cursor-pointer"
                             >
                               +{val}
                             </button>
@@ -672,7 +677,7 @@ export default function DailyCycleTracker() {
                               key={val}
                               type="button"
                               onClick={() => handleRandomCratesCountChange((randomCratesToOpen || 0) + val)}
-                              className="px-2 py-1 text-xs bg-black/50 border border-[#333] hover:border-gray-500 rounded text-gray-300 font-mono cursor-pointer"
+                              className="btn-inline px-2 py-1 text-xs bg-limbus-surface border border-limbus-border hover:border-purple-400 rounded text-limbus-text font-mono cursor-pointer"
                             >
                               +{val}
                             </button>
@@ -845,7 +850,7 @@ export default function DailyCycleTracker() {
                   useStore.getState().setAllDailyMissions(!allDone);
                   if (!allDone) promptEnkephalinSync('dailies');
                 }}
-                className={`px-2.5 py-1 text-xs font-bold rounded border transition-all cursor-pointer ${
+                className={`btn-inline px-2.5 py-1 text-xs font-bold rounded border transition-all cursor-pointer ${
                   scheduleState.dailiesProgress >= 5
                     ? 'bg-red-950/30 border-red-800/60 text-red-400 hover:bg-red-900/40'
                     : 'bg-[#c9a84c]/20 border-[#c9a84c]/40 text-[#eab308] hover:bg-[#c9a84c]/30'
@@ -906,41 +911,42 @@ export default function DailyCycleTracker() {
                   <button
                     key={m.step}
                     type="button"
+                    data-done={isDone}
                     onClick={() => {
                       const res = toggleDailyMissionStep(m.step);
                       if (res?.isAllDone) {
                         promptEnkephalinSync('dailies');
                       }
                     }}
-                    className={`p-2.5 rounded-lg border text-left flex flex-col justify-between transition-all cursor-pointer select-none ${
+                    className={`card-btn p-3 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer select-none ${
                       isDone
-                        ? 'bg-[#c9a84c]/15 border-[#c9a84c] text-white shadow-[0_0_12px_rgba(201,168,76,0.25)]'
-                        : 'glass-card bg-limbus-surface border-limbus-border/60 hover:border-[#c9a84c]/50 text-limbus-text'
+                        ? 'card-done bg-amber-500/15 border-amber-500 text-limbus-text shadow-[0_0_12px_rgba(201,168,76,0.25)]'
+                        : 'glass-card bg-limbus-surface border-limbus-border/60 hover:border-amber-500/50 text-limbus-text'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-base">{m.icon}</span>
+                      <span className="text-base select-none">{m.icon}</span>
                       <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
                         isDone 
-                          ? 'bg-[#c9a84c] text-black' 
-                          : 'bg-black/30 text-limbus-muted border border-limbus-border/60'
+                          ? 'bg-[#c9a84c] text-black font-extrabold' 
+                          : 'bg-limbus-surface text-limbus-muted border border-limbus-border/60 font-semibold'
                       }`}>
                         {isDone ? '✓ DONE' : '+2 EXP'}
                       </span>
                     </div>
                     <div>
                       <div className="font-bold text-xs text-limbus-text leading-tight">{m.name}</div>
-                      <div className="text-[10px] text-limbus-muted mt-0.5">{m.desc}</div>
+                      <div className="text-[10px] text-limbus-muted mt-0.5 leading-snug">{m.desc}</div>
                       {m.isExpLux && !isDone && (
                         <div className="flex items-center gap-1 mt-1.5" onClick={(e) => e.stopPropagation()}>
-                          <span className="text-[9px] text-limbus-muted font-medium">Tier:</span>
+                          <span className="text-[9px] text-limbus-muted font-bold">Tier:</span>
                           <button
                             type="button"
                             onClick={() => updateScheduleState({ expLuxModules: 2 })}
-                            className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-bold transition-all cursor-pointer ${
+                            className={`btn-inline px-1.5 py-0.5 rounded text-[9px] font-mono font-bold transition-all cursor-pointer ${
                               expLuxCost === 2 
                                 ? 'bg-[#c9a84c] text-black shadow-sm' 
-                                : 'bg-black/40 text-limbus-muted hover:text-limbus-text border border-limbus-border/60'
+                                : 'bg-limbus-surface text-limbus-muted hover:text-limbus-text border border-limbus-border/60'
                             }`}
                             title="Canto I-III EXP Lux (2 Modules / 40 Enk)"
                           >
@@ -949,10 +955,10 @@ export default function DailyCycleTracker() {
                           <button
                             type="button"
                             onClick={() => updateScheduleState({ expLuxModules: 3 })}
-                            className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-bold transition-all cursor-pointer ${
+                            className={`btn-inline px-1.5 py-0.5 rounded text-[9px] font-mono font-bold transition-all cursor-pointer ${
                               expLuxCost === 3 
                                 ? 'bg-[#c9a84c] text-black shadow-sm' 
-                                : 'bg-black/40 text-limbus-muted hover:text-limbus-text border border-limbus-border/60'
+                                : 'bg-limbus-surface text-limbus-muted hover:text-limbus-text border border-limbus-border/60'
                             }`}
                             title="Canto IV+ EXP Lux (3 Modules / 60 Enk)"
                           >
@@ -961,12 +967,12 @@ export default function DailyCycleTracker() {
                         </div>
                       )}
                     </div>
-                    <div className="mt-2 pt-1.5 border-t border-white/5 flex items-center justify-between text-[10px]">
-                      <span className={`font-mono ${isDone ? 'text-amber-300 font-bold' : 'text-gray-500'}`}>
+                    <div className="mt-2 pt-1.5 border-t border-limbus-border/30 flex items-center justify-between text-[10px]">
+                      <span className={`font-mono font-bold ${isDone ? 'text-amber-500 dark:text-amber-300' : 'text-limbus-muted'}`}>
                         {m.cost}
                       </span>
                       {deduction && (
-                        <span className={`text-[9px] font-mono ${deduction.modulesAdded ? 'text-amber-300' : 'text-red-400'}`}>
+                        <span className={`text-[9px] font-mono font-bold ${deduction.modulesAdded ? 'text-amber-500 dark:text-amber-300' : 'text-red-500 dark:text-red-400'}`}>
                           {deduction.modulesAdded ? `+${deduction.modulesAdded}m ` : ''}
                           {deduction.modules > 0 ? `-${deduction.modules}m ` : ''}
                           {deduction.enkephalin > 0 ? `-${deduction.enkephalin}e` : ''}
@@ -998,7 +1004,7 @@ export default function DailyCycleTracker() {
                   const allDone = scheduleState.weekliesDone || (scheduleState.weekliesProgress >= 5);
                   setAllWeeklyMissions(!allDone);
                 }}
-                className={`px-2.5 py-1 text-xs font-bold rounded border transition-all cursor-pointer ${
+                className={`btn-inline px-2.5 py-1 text-xs font-bold rounded border transition-all cursor-pointer ${
                   scheduleState.weekliesDone || (scheduleState.weekliesProgress >= 5)
                     ? 'bg-red-950/30 border-red-800/60 text-red-400 hover:bg-red-900/40'
                     : 'bg-[#c9a84c]/20 border-[#c9a84c]/40 text-[#eab308] hover:bg-[#c9a84c]/30'
@@ -1025,32 +1031,33 @@ export default function DailyCycleTracker() {
                 <button
                   key={m.step}
                   type="button"
+                  data-done={isDone}
                   onClick={() => {
                     toggleWeeklyMissionStep(m.step);
                   }}
-                  className={`p-2.5 rounded-lg border text-left flex flex-col justify-between transition-all cursor-pointer select-none ${
+                  className={`card-btn p-3 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer select-none ${
                     isDone
-                      ? 'bg-[#c9a84c]/15 border-[#c9a84c] text-white shadow-[0_0_12px_rgba(201,168,76,0.25)]'
-                      : 'glass-card bg-limbus-surface border-limbus-border/60 hover:border-[#c9a84c]/50 text-limbus-text'
+                      ? 'card-done bg-amber-500/15 border-amber-500 text-limbus-text shadow-[0_0_12px_rgba(201,168,76,0.25)]'
+                      : 'glass-card bg-limbus-surface border-limbus-border/60 hover:border-amber-500/50 text-limbus-text'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-base">{m.icon}</span>
+                    <span className="text-base select-none">{m.icon}</span>
                     <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
                       isDone 
-                        ? 'bg-[#c9a84c] text-black' 
-                        : 'bg-black/30 text-limbus-muted border border-limbus-border/60'
+                        ? 'bg-[#c9a84c] text-black font-extrabold' 
+                        : 'bg-limbus-surface text-limbus-muted border border-limbus-border/60 font-semibold'
                     }`}>
                       {isDone ? '✓ DONE' : '+4 EXP'}
                     </span>
                   </div>
                   <div>
                     <div className="font-bold text-xs text-limbus-text leading-tight">{m.name}</div>
-                    <div className="text-[10px] text-limbus-muted mt-0.5">{m.desc}</div>
+                    <div className="text-[10px] text-limbus-muted mt-0.5 leading-snug">{m.desc}</div>
                   </div>
-                  <div className="mt-2 pt-1.5 border-t border-white/5 flex items-center justify-between text-[10px]">
-                    <span className={`font-mono ${isDone ? 'text-amber-300 font-bold' : 'text-gray-500'}`}>
-                      {isDone ? 'Claimed' : 'Weekly Rota'}
+                  <div className="mt-2 pt-1.5 border-t border-limbus-border/30 flex items-center justify-between text-[10px]">
+                    <span className={`font-mono font-bold ${isDone ? 'text-amber-500 dark:text-amber-300' : 'text-limbus-muted'}`}>
+                      {isDone ? '✓ Claimed' : 'Weekly Rota'}
                     </span>
                   </div>
                 </button>
@@ -1170,28 +1177,28 @@ export default function DailyCycleTracker() {
                 <button 
                   type="button"
                   onClick={() => setEnkephalinInputVal(getEnkephalinCapForLevel(companyLevelInputVal))}
-                  className="px-2.5 py-1 text-xs bg-[#c9a84c]/20 hover:bg-[#c9a84c]/30 border border-[#c9a84c]/40 text-[#eab308] rounded font-bold transition-colors cursor-pointer"
+                  className="btn-inline px-2.5 py-1 text-xs bg-[#c9a84c]/20 hover:bg-[#c9a84c]/30 border border-[#c9a84c]/40 text-[#eab308] rounded font-bold transition-colors cursor-pointer"
                 >
                   Set to Cap ({getEnkephalinCapForLevel(companyLevelInputVal)})
                 </button>
                 <button 
                   type="button"
                   onClick={() => setEnkephalinInputVal(prev => prev + getEnkephalinCapForLevel(companyLevelInputVal))}
-                  className="px-2.5 py-1 text-xs bg-limbus-card hover:bg-limbus-surface border border-limbus-border/80 text-limbus-text rounded transition-colors cursor-pointer"
+                  className="btn-inline px-2.5 py-1 text-xs bg-limbus-card hover:bg-limbus-surface border border-limbus-border/80 text-limbus-text rounded transition-colors cursor-pointer"
                 >
                   +{getEnkephalinCapForLevel(companyLevelInputVal)} (Level Up)
                 </button>
                 <button 
                   type="button"
                   onClick={() => setEnkephalinInputVal(prev => prev + 20)}
-                  className="px-2.5 py-1 text-xs bg-limbus-card hover:bg-limbus-surface border border-limbus-border/80 text-limbus-text rounded font-mono transition-colors cursor-pointer"
+                  className="btn-inline px-2.5 py-1 text-xs bg-limbus-card hover:bg-limbus-surface border border-limbus-border/80 text-limbus-text rounded font-mono transition-colors cursor-pointer"
                 >
                   +20 Box
                 </button>
                 <button 
                   type="button"
                   onClick={() => setEnkephalinInputVal(prev => prev + 60)}
-                  className="px-2.5 py-1 text-xs bg-limbus-card hover:bg-limbus-surface border border-limbus-border/80 text-limbus-text rounded font-mono transition-colors cursor-pointer"
+                  className="btn-inline px-2.5 py-1 text-xs bg-limbus-card hover:bg-limbus-surface border border-limbus-border/80 text-limbus-text rounded font-mono transition-colors cursor-pointer"
                 >
                   +60 Box
                 </button>
@@ -1202,7 +1209,7 @@ export default function DailyCycleTracker() {
               <button 
                 type="button"
                 onClick={() => setShowEnkephalinModal(false)}
-                className="px-4 py-2 text-xs text-gray-400 hover:text-white rounded transition-colors cursor-pointer"
+                className="btn-inline px-4 py-2 text-xs text-limbus-muted hover:text-limbus-text rounded transition-colors cursor-pointer"
               >
                 Cancel
               </button>
