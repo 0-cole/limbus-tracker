@@ -9,7 +9,7 @@
   - Dedicated **Walpth Charge Grinder Tribute Hub** (`/mirror-grinder`): A hilarious, over-the-top, late-night BTV infomercial celebrating Walpth's [Charge-Grinder](https://github.com/Walpth/Charge-Grinder/) repository.
   - **Spamton / Tenna Style TV Broadcast**: Unskippable retro CRT variety show presentation locking onto the screen, featuring Toby Fox's *Tenna Introduction* theme, 8 sliced equal-proportion animated GIFs from the official Tenna sprite sheet (`tenna_anim1.gif` through `tenna_anim8.gif`), dancing animations, and 10 extended, comfortably-paced comedy scenes.
 - **Repository**: [0-cole/limbus-tracker](https://github.com/0-cole/limbus-tracker)
-- **Current Deployed Release**: `v1.0.104`
+- **Current Deployed Release**: `v1.0.105`
 
 ---
 
@@ -17,7 +17,8 @@
 
 ### 2.1 Technology Stack
 - **Framework**: Electron (`v36.9.5`), React 19, Vite 6, Tailwind CSS 3, Zustand, Framer Motion.
-- **Packaging**: `electron-builder` (`v26.15.3`) with NSIS targeting Windows x64 + standalone `portable` `.exe` target.
+- **Packaging**: `electron-builder` (`v26.15.3`) with NSIS targeting Windows x64 (`oneClick: true`, `perMachine: false`). Portable standalone build removed to eliminate asset conflict in GitHub release feeds.
+- **Auto-Updater Asset Targeting Invariant**: Updaters strictly target `/setup.*\.exe$/i` installer binaries. Releases only publish the NSIS setup installer so older clients (such as `v1.0.84`) never accidentally download the portable standalone `.exe` which triggers Kenneth's single-instance lock dialog.
 - **Differential Updates Permanently Suppressed**: `differentialPackage: false` configured in `package.json` to eliminate auxiliary `.blockmap` files and deliver pure direct executables.
 - **Git Push Invariant**: Git remote configured via SSH over Port 443 (`git@github.com:0-cole/limbus-tracker.git`, `ssh.github.com:443`) bypassing school/institution Wi-Fi FortiGuard TLS DPI firewall restrictions.
 - **Routing**: `HashRouter` (required for Electron's `file://` protocol).
@@ -48,9 +49,23 @@
 
 ---
 
-## 3. Recent Verified Changes (v1.0.104, v1.0.103 & v1.0.102)
+## 3. Recent Verified Changes (v1.0.105, v1.0.104 & v1.0.103)
 
-### 3.1 Mephistopheles Comms & HUD Overlay Contrast Immunity (v1.0.104)
+### 3.1 Local Auto-Updater Fix & Installer Targeting (v1.0.105)
+1. **Root Cause of v1.0.84 Inability to Update**:
+   - In `v1.0.84`, `UpdateNotification.jsx` executed `assets?.find(a => a.name.endsWith('.exe'))`.
+   - Releases attached two executables: `Limbus Tracker X.X.X.exe` (portable) and `Limbus Tracker Setup X.X.X.exe` (installer).
+   - Because `Limbus Tracker` sorted alphabetically before `Limbus Tracker Setup`, older clients downloaded the portable executable to `%TEMP%` and launched it.
+   - The portable instance detected the active installed app, failed to acquire the single-instance lock, and displayed Kenneth's advisory dialog: `"Cannot start app, as there is already a running app, silly! — Kenneth"`, leaving the local installation un-updated.
+2. **Permanent Resolution**:
+   - Purged `portable` from `package.json` build targets so GitHub releases publish only `Limbus Tracker Setup ${version}.exe`. Older clients (`v1.0.84`) now find the real installer.
+   - Refactored `src/components/UpdateNotification.jsx` to strictly prioritize `/setup.*\.exe$/i` and reject any standalone portable binaries.
+   - Refactored `electron/main.cjs` `download-update` handler: when the installer completes downloading, it launches the NSIS installer in silent one-click mode (`/S`) detached, clears `app.pid`, and cleanly quits the app (`app.quit()`), allowing NSIS to overwrite files with zero file locks and automatically restart the application into the latest version.
+3. **Packaging & Verification**:
+   - Bumped `package.json` to `1.0.105`.
+   - Added Kenneth memo for `v1.0.105` in `ChangelogPage.jsx`.
+
+### 3.2 Mephistopheles Comms & HUD Overlay Contrast Immunity (v1.0.104)
 1. **Direct-Track Radio Comms Speech Bubble Insulation**:
    - Diagnosed root cause of invisible speech bubble text on Mephistopheles border bus: while the card retained its dark glass chassis (`bg-[#0d0d12]/95`), `globals.css` forced `.text-gray-100` to `var(--text-primary)` (`#211611`), causing dark brown text to render directly over pitch-black glass.
    - Refactored `MephistophelesBorderTrack.jsx` to use `.mephi-bubble`, `.mephi-comms-text`, and `.mephi-comms-tag` with inline color locks (`#f9fafb` and `#9ca3af`).

@@ -91,10 +91,16 @@ export default function UpdateNotification() {
       return;
     }
 
-    // Find the .exe asset
-    const exeAsset = updateInfo.assets?.find(a => a.name.endsWith('.exe'));
+    // Find the installer .exe asset (strictly prioritize NSIS Setup installer over standalone portable)
+    const exeAsset = 
+      updateInfo.assets?.find(a => /setup.*\.exe$/i.test(a.name)) ||
+      updateInfo.assets?.find(a => /installer.*\.exe$/i.test(a.name)) ||
+      updateInfo.assets?.find(a => a.name.endsWith('.exe') && !/^limbus[ -_]?tracker[ -_]?\d/i.test(a.name)) ||
+      updateInfo.assets?.find(a => a.name.endsWith('.exe'));
+
     if (!exeAsset) {
-      window.electronAPI?.openExternalUrl(updateInfo.html_url);
+      const url = updateInfo.html_url || 'https://github.com/0-cole/limbus-tracker/releases/latest';
+      window.electronAPI?.openExternalUrl(url) || window.open(url, '_blank');
       return;
     }
 
@@ -144,8 +150,8 @@ export default function UpdateNotification() {
               </div>
             )}
             {dlState === 'done' && (
-              <span className="text-green-400 text-xs flex items-center gap-1">
-                <CheckCircle size={12} /> Installer launched — close the app and follow the prompts!
+              <span className="text-green-400 text-xs flex items-center gap-1 font-bold">
+                <CheckCircle size={12} /> Update downloaded! Restarting to apply...
               </span>
             )}
             {dlState === 'error' && (

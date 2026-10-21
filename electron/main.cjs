@@ -336,7 +336,39 @@ ipcMain.handle('download-update', async (event, url, filename) => {
 
         file.on('finish', () => {
           file.close(() => {
-            shell.openPath(tmpPath);
+            const { spawn } = require('child_process');
+            const isInstaller = /setup|installer/i.test(tmpPath);
+
+            if (isInstaller) {
+              writeLog(`Launching update installer: ${tmpPath}`);
+              
+              // Unlink PID file so single-instance lock is vacated cleanly
+              try {
+                const PID_FILE = path.join(app.getPath('userData'), 'app.pid');
+                if (fs.existsSync(PID_FILE)) fs.unlinkSync(PID_FILE);
+              } catch (e) {}
+
+              // Launch NSIS installer in silent one-click mode (/S) detached from this process
+              try {
+                const child = spawn(tmpPath, ['/S'], {
+                  detached: true,
+                  stdio: 'ignore'
+                });
+                child.unref();
+              } catch (err) {
+                // Fallback to shell open if spawn fails
+                shell.openPath(tmpPath);
+              }
+
+              // Cleanly exit current app after brief delay so files are unlocked for the installer
+              setTimeout(() => {
+                isQuitting = true;
+                app.quit();
+              }, 800);
+            } else {
+              shell.openPath(tmpPath);
+            }
+
             resolve(tmpPath);
           });
         });
