@@ -1,0 +1,4185 @@
+[
+  {
+    "id": "classic-burn-no-thumb",
+    "nameKo": "엄지 듀오 없는 화상덱",
+    "nameEn": "Classic Burn (No Thumb Duo)",
+    "descriptionKo": "엄지 뫼르소와 엄지 싱클레어를 제외한 클래식 화상 조합입니다.",
+    "descriptionEn": "A classic Burn team composition excluding Thumb Meursault and Thumb Sinclair.",
+    "targetKeywords": [
+      "burn"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=ctcUuajePrY",
+    "youtubeChannelName": "림쌤화람",
+    "youtubeChannelUrl": "https://www.youtube.com/@Limsam-hwaram",
+    "updatedAt": "2026-03-29",
+    "members": [
+      {
+        "sinnerId": 7,
+        "identityId": 98
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 140
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 12
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 121
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 105
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 166
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 149
+      }
+    ],
+    "nameJa": "親指コンビなしの火傷編成",
+    "descriptionJa": "親指ムルソーと親指シンクレアを除いたクラシックな火傷編成です。"
+  },
+  {
+    "id": "classic-sinking-no-key",
+    "nameKo": "뤼상 정이스 없는 침잠덱",
+    "nameEn": "Classic Sinking (No Spider Yi Sang & Jeong's Office Ishmael)",
+    "descriptionKo": "검지 아비 이상과 정사무소 이스마엘을 제외한 클래식한 침잠 조합입니다.",
+    "descriptionEn": "A classic Sinking team composition excluding The Index Nursefather Yi Sang and Jeong's Office Rep Ishmael.",
+    "targetKeywords": [
+      "sinking"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=fnx9WeFbJMI",
+    "youtubeChannelName": "림쌤화람",
+    "youtubeChannelUrl": "https://www.youtube.com/@Limsam-hwaram",
+    "updatedAt": "2026-03-29",
+    "members": [
+      {
+        "sinnerId": 1,
+        "identityId": 11
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 29
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 43
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 155
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 169
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 125
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 94
+      }
+    ],
+    "egos": [
+      {
+        "sinnerId": 1,
+        "egoId": 110
+      }
+    ],
+    "nameJa": "蜘蛛の巣イサン・定イシュメールなしの沈潜編成",
+    "descriptionJa": "人差し指の親方イサンと定事務所イシュメールを除いたクラシックな沈潜編成です。"
+  },
+  {
+    "id": "burn-bleed-desperado",
+    "nameKo": "화상 출혈 데스페라도덱",
+    "nameEn": "Burn Bleed Desperado Build",
+    "descriptionKo": "화상과 출혈을 동시에 보유한 인격과 데스페라도 기프트를 조합한 하이브리드 구성입니다.",
+    "descriptionEn": "A hybrid composition combining Burn and Bleed keywords with the Desperado E.G.O gift.",
+    "targetKeywords": [
+      "burn",
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=mPlbTjweQ6E",
+    "youtubeChannelName": "제리",
+    "youtubeChannelUrl": "https://www.youtube.com/@%EC%A0%9C%EB%A6%AC-yts",
+    "updatedAt": "2026-03-29",
+    "members": [
+      {
+        "sinnerId": 5,
+        "identityId": 71
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 134
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 107
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 12
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 121
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 168
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 55
+      }
+    ],
+    "nameJa": "火傷出血 デスペラード編成",
+    "descriptionJa": "火傷と出血を両方持つ人格とデスペラードのギフトを組み合わせたハイブリッド編成です。"
+  },
+  {
+    "id": "burn-bleed-7-season",
+    "nameKo": "7시즌 최신 출혈 화상덱",
+    "nameEn": "Season 7 Burn-Bleed Hybrid",
+    "descriptionKo": "호넷변조 뫼르소, 피쿼드호 선장 이스마엘, 쥐어들 자 싱클레어를 핵심으로 하는 7시즌 최신 출혈·화상 하이브리드 조합입니다.",
+    "descriptionEn": "A Season 7 hybrid composition featuring Hornet Meursault, The Pequod Captain Ishmael, and The One Who Shall Grip Sinclair.",
+    "targetKeywords": [
+      "bleed",
+      "burn"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [
+      71,
+      107,
+      134
+    ],
+    "youtubeUrl": "https://www.youtube.com/watch?v=5qt4c3gLTtM",
+    "youtubeChannelName": "림쌤화람",
+    "youtubeChannelUrl": "https://www.youtube.com/@Limsam-hwaram",
+    "updatedAt": "2026-03-29",
+    "members": [
+      {
+        "sinnerId": 5,
+        "identityId": 71
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 107
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 134
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 4
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 149
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 166
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 92
+      }
+    ],
+    "nameJa": "シーズン7最新 出血火傷編成",
+    "descriptionJa": "ホーネット【変調】ムルソー、ピークォド号船長イシュメール、握らんとする者シンクレアを中心にした、シーズン7最新の出血・火傷ハイブリッド編成です。"
+  },
+  {
+    "id": "budget-sinking-tremor",
+    "nameKo": "가성비 침잠 진동덱",
+    "nameEn": "Budget Sinking-Tremor Build",
+    "descriptionKo": "데스페라도를 제외하고 먹장구름과 쌍시계에 집중한 라이트한 침잠·진동 조합입니다.",
+    "descriptionEn": "A lightweight Sinking-Tremor composition focusing on Ink-over-Cloud and Twin-Clock gifts.",
+    "targetKeywords": [
+      "tremor",
+      "sinking"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=FjVbxTcuGgI",
+    "youtubeChannelName": "림쌤화람",
+    "youtubeChannelUrl": "https://www.youtube.com/@Limsam-hwaram",
+    "updatedAt": "2026-03-29",
+    "members": [
+      {
+        "sinnerId": 8,
+        "identityId": 111
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 57
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 8
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 155
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 69
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 125
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 168
+      }
+    ],
+    "nameJa": "お手軽 沈潜振動編成",
+    "descriptionJa": "デスペラードを除き、暗雲と「双時計」に絞ったライトな沈潜・振動の編成です。"
+  },
+  {
+    "id": "breathing-sinking-hard",
+    "nameKo": "검지 호흡 침잠덱",
+    "nameEn": "The Index Poise-Sinking (Hard)",
+    "descriptionKo": "거울 던전 하드 모드와 10층 공략을 위해 거미집 이상을 핵심으로 구성한 호흡·침잠 조합입니다.",
+    "descriptionEn": "A Poise and Sinking team built around The House of Spiders: The Index Nursefather Yi Sang for Mirror Dungeon Hard mode.",
+    "targetKeywords": [
+      "poise",
+      "sinking"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [
+      1,
+      29,
+      43,
+      15
+    ],
+    "youtubeUrl": "https://www.youtube.com/watch?v=VpqJTxBPkvo",
+    "youtubeChannelName": "림쌤화람",
+    "youtubeChannelUrl": "https://www.youtube.com/@Limsam-hwaram",
+    "updatedAt": "2026-03-30",
+    "members": [
+      {
+        "sinnerId": 1,
+        "identityId": 15
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 43
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 29
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 82
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 95
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 155
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 169
+      }
+    ],
+    "nameJa": "人差し指 呼吸沈潜編成",
+    "descriptionJa": "鏡ダンジョンのハードモードと10階攻略のため、蜘蛛の巣イサンを中心に組んだ呼吸・沈潜の編成です。"
+  },
+  {
+    "id": "charge-sinking-7-season",
+    "nameKo": "7시즌 충전 침잠덱",
+    "nameEn": "Season 7 Charge-Sinking Build",
+    "descriptionKo": "LCE E.G.O::AEDD 그레고르를 서포터로 활용하여 충전과 침잠 키워드를 결합한 하이브리드 조합입니다.",
+    "descriptionEn": "A hybrid composition combining Charge and Sinking keywords, featuring LCE E.G.O::AEDD Gregor as a supporter.",
+    "targetKeywords": [
+      "charge",
+      "sinking"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [
+      170,
+      126,
+      83,
+      104
+    ],
+    "youtubeUrl": "https://www.youtube.com/watch?v=btBCTXsrr1g",
+    "youtubeChannelName": "림쌤화람",
+    "youtubeChannelUrl": "https://www.youtube.com/@Limsam-hwaram",
+    "updatedAt": "2026-03-29",
+    "members": [
+      {
+        "sinnerId": 12,
+        "identityId": 170
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 126
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 83
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 104
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 8
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 57
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 97
+      }
+    ],
+    "nameJa": "シーズン7 充電沈潜編成",
+    "descriptionJa": "LCE E.G.O::AEDDグレゴールをサポーターにして、充電と沈潜のキーワードを組み合わせたハイブリッド編成です。"
+  },
+  {
+    "id": "tremor-rupture-ammo",
+    "nameKo": "진동 파열 탄환덱",
+    "nameEn": "Tremor Rupture Ammo Build",
+    "descriptionKo": "LCCB 대리 이스마엘과 LCCB 대리 료슈를 핵심으로, 진동과 파열 키워드에 탄환 시너지를 더한 조합입니다.",
+    "descriptionEn": "A composition featuring LCCB Assistant Manager Ishmael and LCCB Assistant Manager Ryōshū, combining Tremor and Rupture keywords with Ammo synergy.",
+    "targetKeywords": [
+      "tremor",
+      "rupture"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [
+      14,
+      46,
+      101
+    ],
+    "youtubeUrl": "https://www.youtube.com/watch?v=ktm-vJJ2DOI",
+    "youtubeChannelName": "림쌤화람",
+    "youtubeChannelUrl": "https://www.youtube.com/@Limsam-hwaram",
+    "updatedAt": "2026-04-13",
+    "members": [
+      {
+        "sinnerId": 4,
+        "identityId": 46
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 101
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 14
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 90
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 69
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 139
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 42
+      }
+    ],
+    "nameJa": "振動破裂弾丸編成",
+    "descriptionJa": "LCCB係長イシュメールとLCCB係長良秀を中心に、振動と破裂のキーワードに弾丸のシナジーを加えた編成です。"
+  },
+  {
+    "id": "sinking-tremor-ammo-guide",
+    "nameKo": "침잠 진동 탄환덱",
+    "nameEn": "Sinking Tremor Ammo Guide",
+    "descriptionKo": "먹장구름과 데스페라도 기프트를 활용하여 침잠과 진동 키워드 인격들의 고점을 높인 조합입니다.",
+    "descriptionEn": "A team composition maximizing Sinking and Tremor IDs using Ink-over-Cloud and Desperado gifts.",
+    "targetKeywords": [
+      "sinking",
+      "tremor"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=ji0xtd3XLfg",
+    "youtubeChannelName": "제리",
+    "youtubeChannelUrl": "https://www.youtube.com/@%EC%A0%9C%EB%A6%AC-yts",
+    "updatedAt": "2026-03-30",
+    "members": [
+      {
+        "sinnerId": 4,
+        "identityId": 57
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 111
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 69
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 139
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 155
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 11
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 169
+      }
+    ],
+    "egos": [
+      {
+        "sinnerId": 1,
+        "egoId": 110
+      }
+    ],
+    "nameJa": "沈潜振動弾丸編成",
+    "descriptionJa": "暗雲とデスペラードのギフトを活かして、沈潜と振動のキーワード人格の最大火力を高めた編成です。"
+  },
+  {
+    "id": "sinking-tremor-ammo-hot",
+    "nameKo": "침잠 진동 탄환덱",
+    "nameEn": "Sinking Tremor Ammo Build",
+    "descriptionKo": "데스페라도와 먹장구름 기프트를 활용하여 침잠·진동·탄환 시너지를 극대화한 조합입니다.",
+    "descriptionEn": "A team composition maximizing Sinking, Tremor, and Ammo synergies with Desperado and Ink-over-Cloud gifts.",
+    "targetKeywords": [
+      "tremor",
+      "sinking"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=5otDoLbdaz8",
+    "youtubeChannelName": "림쌤화람",
+    "youtubeChannelUrl": "https://www.youtube.com/@Limsam-hwaram",
+    "updatedAt": "2026-03-29",
+    "members": [
+      {
+        "sinnerId": 4,
+        "identityId": 57
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 111
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 155
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 69
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 139
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 11
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 169
+      }
+    ],
+    "egos": [
+      {
+        "sinnerId": 1,
+        "egoId": 110
+      }
+    ],
+    "nameJa": "沈潜振動弾丸編成",
+    "descriptionJa": "デスペラードと暗雲のギフトを活かして、沈潜・振動・弾丸のシナジーを最大化した編成です。"
+  },
+  {
+    "id": "normal-burn-speedrun",
+    "nameKo": "거던 노말 스피드런 화상덱",
+    "nameEn": "Normal Mirror Burn Speedrun",
+    "descriptionKo": "적의 체력이 낮은 노말 거던에서 편린을 활용해 가장 빠르게 클리어할 수 있는 저점 높은 화상 조합입니다.",
+    "descriptionEn": "A high-floor Burn composition using 'Glimpse of Flames' for fast Normal Mirror Dungeon clears.",
+    "targetKeywords": [
+      "burn"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 11,
+        "identityId": 26
+      }
+    ],
+    "youtubeUrl": "https://www.youtube.com/watch?v=WPVFh6UDO1E",
+    "youtubeChannelName": "림쌤화람",
+    "youtubeChannelUrl": "https://www.youtube.com/@Limsam-hwaram",
+    "updatedAt": "2026-03-29",
+    "members": [
+      {
+        "sinnerId": 1,
+        "identityId": 12
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 105
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 121
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 136
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 166
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 149
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 71
+      }
+    ],
+    "nameJa": "鏡ダンジョン ノーマル スピードラン火傷編成",
+    "descriptionJa": "敵の体力が低いノーマルの鏡ダンジョンで、ギフトのかけらを活かして最速でクリアできる、安定性の高い火傷編成です。"
+  },
+  {
+    "id": "normal-rupture-heuksuyu",
+    "nameKo": "거던 노말 파열 흑수덱 스피드런",
+    "nameEn": "Normal Mirror Heishou Rupture Speedrun",
+    "descriptionKo": "홍원 군주 홍루를 기반으로 하며, 고점보다 저점이 중요한 노말 거던에서 효율적인 순수 파열 조합입니다.",
+    "descriptionEn": "A pure Rupture composition based on The Lord of Hongyuan Hong Lu, optimized for the low-ceiling environment of Normal Mirror.",
+    "targetKeywords": [
+      "rupture"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [
+      84,
+      98,
+      14,
+      27,
+      124
+    ],
+    "youtubeUrl": "https://www.youtube.com/watch?v=WPVFh6UDO1E",
+    "youtubeChannelName": "림쌤화람",
+    "youtubeChannelUrl": "https://www.youtube.com/@Limsam-hwaram",
+    "updatedAt": "2026-03-29",
+    "members": [
+      {
+        "sinnerId": 6,
+        "identityId": 84
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 14
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 27
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 42
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 54
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 98
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 110
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 124
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 140
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 153
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 167
+      }
+    ],
+    "nameJa": "鏡ダンジョン ノーマル 破裂黒獣 スピードラン",
+    "descriptionJa": "鴻園の君主ホンルを軸にした、最大火力より安定性が大事なノーマルの鏡ダンジョンで効率のいい純粋な破裂編成です。"
+  },
+  {
+    "id": "normal-poise-kimsang",
+    "nameKo": "거던 노말 검계렌싱덱 스피드런",
+    "nameEn": "Normal Mirror Blade Lineage & Pinky Sinclair Poise Speedrun",
+    "descriptionKo": "검계 인격과 거미집 소지 제자 싱클레어 위주의 참격 호흡 조합입니다. ",
+    "descriptionEn": "A Slash-specialized Poise composition centered on Blade Lineage IDs and The House of Spiders: The Pinky Apprentice Sinclair.",
+    "targetKeywords": [
+      "poise"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [
+      141
+    ],
+    "youtubeUrl": "https://www.youtube.com/watch?v=WPVFh6UDO1E",
+    "youtubeChannelName": "림쌤화람",
+    "youtubeChannelUrl": "https://www.youtube.com/@Limsam-hwaram",
+    "updatedAt": "2026-03-29",
+    "members": [
+      {
+        "sinnerId": 10,
+        "identityId": 141
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 66
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 7
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 24
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 34
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 143
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 52
+      }
+    ],
+    "egos": [
+      {
+        "sinnerId": 5,
+        "egoId": 109
+      }
+    ],
+    "nameJa": "鏡ダンジョン ノーマル 剣契シンクレア スピードラン",
+    "descriptionJa": "剣契の人格と蜘蛛の巣小指の子方シンクレアを中心にした斬撃の呼吸編成です。"
+  },
+  {
+    "id": "ring-charge-bleed",
+    "nameKo": "약지 충전 출혈 조합 (약지충출덱)",
+    "nameEn": "The Ring Charge & Bleed Composition",
+    "descriptionKo": "약지 아비 홍루를 중심으로 한 조합으로 충전을 통한 고점 확보와 출혈 상태 이상을 결합하여 강력한 피해를 입히는 조합입니다.",
+    "descriptionEn": "A composition centered on The Ring Nursefather Hong Lu that combines high power ceilings through Charge with the Bleed status ailment to deliver devastating damage.",
+    "targetKeywords": [
+      "bleed",
+      "charge"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [
+      172,
+      171
+    ],
+    "alternatives": [
+      {
+        "sinnerId": 3,
+        "identityId": 174
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 173
+      }
+    ],
+    "youtubeUrl": "https://youtu.be/9vHz69T5bq0",
+    "youtubeChannelName": "림쌤화람",
+    "youtubeChannelUrl": "https://youtube.com/@limsam-hwaram",
+    "updatedAt": "2026-04-18",
+    "members": [
+      {
+        "sinnerId": 6,
+        "identityId": 172
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 171
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 10
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 146
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 53
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 170
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 63
+      }
+    ],
+    "nameJa": "薬指 充電出血編成",
+    "descriptionJa": "薬指の親方ホンルを中心にした編成で、充電で最大火力を確保しつつ出血の状態異常を組み合わせて強力なダメージを与えます。"
+  },
+  {
+    "id": "bleed-poise-pierce",
+    "nameKo": "출혈 호흡 관통덱(출호덱)",
+    "nameEn": "Bleed Poise Pierce Build",
+    "descriptionKo": "피쿼드호 선장 이스마엘·일등 항해사 이상, 쌍갈고리 해적단 부선장 그레고르, 마침표 사무소 대표 홍루·해결사 히스클리프, 호넷【변조】 뫼르소, 거미집 소지 제자 싱클레어로 짜는 관통 위주의 출혈·호흡 조합입니다.",
+    "descriptionEn": "A Pierce-focused Bleed and Poise team with The Pequod Captain Ishmael and First Mate Yi Sang, Twinhook Pirates First Mate Gregor, Full-Stop Office Rep Hong Lu and Fixer Heathcliff, Hornet【Alteration】 Meursault and The House of Spiders Pinky Apprentice Sinclair.",
+    "targetKeywords": [
+      "bleed",
+      "poise"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 8,
+        "identityId": 107
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 4
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 163
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 82
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 95
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 71
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 141
+      }
+    ],
+    "nameJa": "出血呼吸貫通編成",
+    "descriptionJa": "ピークォド号船長イシュメール・1等航海士イサン、双鉤海賊団副船長グレゴール、終止符事務所代表ホンル・フィクサー ヒースクリフ、ホーネット【変調】ムルソー、蜘蛛の巣小指の子方シンクレアで組む貫通中心の出血・呼吸の編成です。"
+  },
+  {
+    "id": "tremor-rupture-charge",
+    "nameKo": "진동 파열 충전덱(진파충덱)",
+    "nameEn": "Tremor Rupture Charge Build",
+    "descriptionKo": "장미스패너 공방 대표 로쟈·해결사 그레고르·뫼르소, W사 3등급 정리 요원 팀장 오티스·돈키호테, LCCB 대리 이스마엘·료슈로 짜는 진동·파열·충전 조합입니다.",
+    "descriptionEn": "A Tremor, Rupture and Charge team of Rosespanner Workshop Rep Rodion and Fixers Gregor and Meursault, W Corp. L3 Cleanup Captain Outis and Agent Don Quixote, and LCCB Assistant Managers Ishmael and Ryoshu.",
+    "targetKeywords": [
+      "tremor",
+      "rupture",
+      "charge"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 12,
+        "identityId": 159
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 119
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 60
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 151
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 35
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 101
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 46
+      }
+    ],
+    "nameJa": "振動破裂充電編成",
+    "descriptionJa": "バラのスパナ工房代表ロージャ・フィクサー グレゴール・ムルソー、W社 3級整理要員チーフ ウーティス・ドンキホーテ、LCCB係長イシュメール・良秀で組む振動・破裂・充電の編成です。"
+  },
+  {
+    "id": "bleed-rupture-blood",
+    "nameKo": "출혈 파열 혈귀묘덱(출파덱)",
+    "nameEn": "Bleed Rupture Blood Build",
+    "descriptionKo": "라만차랜드 혈귀 다섯(실장 돈키호테·공주 로쟈·왕자 뫼르소·이발사 오티스·신부 그레고르)에 흑수 - 묘 필두 파우스트·료슈를 더한 출혈·파열 조합입니다.",
+    "descriptionEn": "A Bleed and Rupture team of five La Manchaland Bloodfiends (Manager Don Quixote, Princess Rodion, Prince Meursault, Barber Outis and Priest Gregor) plus Heishou Pack Mao Branch Adept Faust and Ryoshu.",
+    "targetKeywords": [
+      "bleed",
+      "rupture"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=EkLHODB7VRo",
+    "youtubeChannelName": "제리",
+    "youtubeChannelUrl": "https://www.youtube.com/@%EC%A0%9C%EB%A6%AC-yts",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 3,
+        "identityId": 39
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 123
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 70
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 152
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 165
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 27
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 54
+      }
+    ],
+    "nameJa": "出血破裂 血鬼編成",
+    "descriptionJa": "ラ・マンチャランドの血鬼5人（室長ドンキホーテ・姫ロージャ・王子ムルソー・理髪師ウーティス・神父グレゴール）に、黒獣 - 卯 筆頭ファウスト・卯良秀を加えた出血・破裂の編成です。"
+  },
+  {
+    "id": "special-tcorp-tremor",
+    "nameKo": "T사 진동 덱",
+    "nameEn": "T Corp Tremor Deck",
+    "descriptionKo": "T사 소속 인격을 핵심으로 한 진동 덱. T사 오티스·돈키호테의 진동 특화 효과를 극대화합니다.",
+    "descriptionEn": "Tremor deck with T Corp core. Maximizes T Corp Otis and Don Quixote's tremor specialization.",
+    "targetKeywords": [
+      "tremor"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [
+      154,
+      38
+    ],
+    "alternatives": [
+      {
+        "sinnerId": 5,
+        "identityId": 69
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 119
+      }
+    ],
+    "updatedAt": "2026-03-29",
+    "members": [
+      {
+        "sinnerId": 11,
+        "identityId": 154
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 38
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 57
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 108
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 81
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 23
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 168
+      }
+    ],
+    "nameJa": "T社 振動編成",
+    "descriptionJa": "T社所属の人格を中心にした振動編成。T社ウーティス・ドンキホーテの振動特化の効果を最大限に活かします。"
+  },
+  {
+    "id": "special-lobotomy-allstar",
+    "nameKo": "로보토미 올스타",
+    "nameEn": "Lobotomy All-Stars",
+    "descriptionKo": "로보토미 E.G.O 인격으로 구성된 특수 덱. 다양한 키워드를 커버하며 E.G.O 스킬의 고유 효과를 극대화합니다.",
+    "descriptionEn": "Special deck with Lobotomy E.G.O identities. Covers diverse keywords and maximizes unique E.G.O skill effects.",
+    "targetKeywords": [
+      "burn",
+      "sinking"
+    ],
+    "tags": [
+      "advanced"
+    ],
+    "isFeatured": false,
+    "coreMembers": [],
+    "updatedAt": "2026-04-13",
+    "members": [
+      {
+        "sinnerId": 5,
+        "identityId": 71
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 57
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 169
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 11
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 23
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 41
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 125
+      }
+    ],
+    "egos": [
+      {
+        "sinnerId": 1,
+        "egoId": 110
+      }
+    ],
+    "nameJa": "ロボトミー オールスター",
+    "descriptionJa": "ロボトミーE.G.Oの人格で組んだ特殊な編成。さまざまなキーワードをカバーし、E.G.Oスキル固有の効果を最大限に活かします。"
+  },
+  {
+    "id": "ring-pointillist-focus",
+    "nameKo": "약지 몰빵덱 (순수약지덱)",
+    "nameEn": "Ring Pointillist Comp",
+    "descriptionKo": "다양한 디버프를 쌓아 약지 인격의 위력을 강화하고, 인격 간의 상호작용으로 폭발적인 화력을 내는 것이 핵심입니다.",
+    "descriptionEn": "Focuses on stacking various debuffs to empower Ring Identities and unleashing explosive damage through their unique interactions.",
+    "targetKeywords": [
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [
+      174,
+      171,
+      172
+    ],
+    "alternatives": [
+      {
+        "sinnerId": 8,
+        "identityId": 112
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 71
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 168
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 134
+      }
+    ],
+    "updatedAt": "2026-04-16",
+    "members": [
+      {
+        "sinnerId": 6,
+        "identityId": 172
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 171
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 174
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 10
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 173
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 146
+      }
+    ],
+    "nameJa": "薬指特化編成（純薬指編成）",
+    "descriptionJa": "さまざまなデバフを重ねて薬指の人格の威力を高め、人格同士の連携で爆発的な火力を出すのがポイントです。"
+  },
+  {
+    "id": "ring-fauvist-spiders-charge",
+    "nameKo": "약지 야수파-거미집 충전 출혈 조합(약지충출덱)",
+    "nameEn": "The Ring Fauvist & House of Spiders Charge Bleed Composition",
+    "descriptionKo": "약지 아비 홍루를 중심으로 야수파와 거미집 인격들의 유기적 공격 시너지를 극대화한 조합입니다. 충전을 통해 기술의 고점을 확보하고, 다양한 출혈 상태 이상을 결합하여 강력한 피해를 입힙니다.",
+    "descriptionEn": "A composition based on The Ring Fauvist and House of Spiders identities that maximizes Organic Attack synergy. It achieves high power ceilings through Charge and combines various Bleed effects to deliver devastating damage, centered on The House of Spiders: The Ring Nursefather Hong Lu.",
+    "targetKeywords": [
+      "bleed",
+      "charge"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [
+      172,
+      174
+    ],
+    "youtubeUrl": "https://www.youtube.com/watch?v=VeV_pvm9utQ",
+    "youtubeChannelName": "종제봉",
+    "youtubeChannelUrl": "https://youtube.com/@종제봉",
+    "updatedAt": "2026-04-18",
+    "members": [
+      {
+        "sinnerId": 6,
+        "identityId": 172
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 171
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 174
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 173
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 53
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 170
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 97
+      }
+    ],
+    "nameJa": "薬指 野獣派・蜘蛛の巣 充電出血編成",
+    "descriptionJa": "薬指の親方ホンルを中心に、野獣派と蜘蛛の巣の人格同士の攻撃シナジーを最大化した編成です。充電でスキルの最大火力を確保し、さまざまな出血の状態異常を組み合わせて強力なダメージを与えます。"
+  },
+  {
+    "id": "poise-rupture-7-season",
+    "nameKo": "시즌7 호파덱 최신화",
+    "nameEn": "Season 7 Poise-Rupture Build",
+    "descriptionKo": "홍원 군주 홍루·흑수 - 사 로쟈·흑수 - 사 그레고르·가주 후보 이스마엘·홍원 방랑무사 료슈를 핵심으로 하는 시즌 7 호흡·파열 조합입니다. 나머지 자리는 흑수 인격으로 채웁니다.",
+    "descriptionEn": "A Season 7 Poise and Rupture team built around The Lord of Hongyuan Hong Lu, Heishou Pack Si Branch Rodion and Gregor, Family Hierarch Candidate Ishmael and Drifting Blade of Hongyuan Ryoshu, with the rest filled by Heishou Pack identities.",
+    "targetKeywords": [
+      "poise",
+      "rupture"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [
+      84,
+      124,
+      167,
+      110,
+      56
+    ],
+    "youtubeUrl": "https://www.youtube.com/watch?v=ImrqlodDruI",
+    "youtubeChannelName": "윈쁘",
+    "youtubeChannelUrl": "https://www.youtube.com/@Winppe",
+    "updatedAt": "2026-06-16",
+    "members": [
+      {
+        "sinnerId": 6,
+        "identityId": 84
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 124
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 167
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 110
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 56
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 14
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 98
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 27
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 42
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 140
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 153
+      }
+    ],
+    "nameJa": "シーズン7 呼吸破裂編成 最新版",
+    "descriptionJa": "鴻園の君主ホンル・黒獣 - 巳ロージャ・黒獣 - 巳グレゴール・家主候補イシュメール・鴻園の放浪武者良秀を中心にした、シーズン7の呼吸・破裂の編成です。残りの枠は黒獣の人格で埋めます。"
+  },
+  {
+    "id": "n-corp-zealots-bleed",
+    "nameKo": "N사 광신도: 색욕 분노 출혈덱",
+    "nameEn": "N Corp. Zealots Bleed Build",
+    "descriptionKo": "N사 망치 인격(큰·중간·작은 망치)과 N사 E.G.O 인격으로 짜는 색욕·분노 출혈 조합입니다. 흑운회 부조장 이스마엘이 함께 들어갑니다.",
+    "descriptionEn": "A Lust and Wrath Bleed team of N Corp. hammer identities (Gross-, Mittel- and Kleinhammer) and N Corp. E.G.O identities, joined by Kurokumo Clan Captain Ishmael.",
+    "targetKeywords": [
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=yJ3pA9Sgla4",
+    "youtubeChannelName": "제리",
+    "youtubeChannelUrl": "https://www.youtube.com/@%EC%A0%9C%EB%A6%AC-yts",
+    "updatedAt": "2026-06-16",
+    "members": [
+      {
+        "sinnerId": 1,
+        "identityId": 13
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 32
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 64
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 87
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 115
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 55
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 109
+      }
+    ],
+    "nameJa": "N社の狂信者：色欲憤怒出血編成",
+    "descriptionJa": "N社の鎚の人格（大鎚・中鎚・小鎚）とN社E.G.Oの人格で組む、色欲・憤怒の出血編成です。黒雲会副組長イシュメールも一緒に入ります。"
+  },
+  {
+    "id": "spider-blade-ryoshu-burn",
+    "nameKo": "거미집의 검 료슈: 화상 출혈 호흡덱",
+    "nameEn": "Blade of the House of Spiders Ryoshu Burn-Bleed-Poise",
+    "descriptionKo": "거미집의 검 료슈를 중심으로 화상·출혈·호흡을 함께 쓰는 조합입니다. 피쿼드호 선장 이스마엘, 쌍갈고리 해적단 부선장 그레고르, 중지 작은 형님 히스클리프 등이 들어가고, 거미집 중지 아비 오티스로 바꿔 쓸 수 있습니다.",
+    "descriptionEn": "A Burn, Bleed and Poise team centered on Blade of the House of Spiders Ryoshu, with The Pequod Captain Ishmael, Twinhook Pirates First Mate Gregor and The Middle Big Brother Heathcliff; The House of Spiders: The Middle Nursefather Outis can sub in.",
+    "targetKeywords": [
+      "burn",
+      "bleed",
+      "poise"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 11,
+        "identityId": 177
+      }
+    ],
+    "youtubeUrl": "https://www.youtube.com/watch?v=ILHbEYp5R8I",
+    "youtubeChannelName": "제리",
+    "youtubeChannelUrl": "https://www.youtube.com/@%EC%A0%9C%EB%A6%AC-yts",
+    "updatedAt": "2026-06-16",
+    "members": [
+      {
+        "sinnerId": 4,
+        "identityId": 176
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 107
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 163
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 71
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 175
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 118
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 40
+      }
+    ],
+    "nameJa": "蜘蛛の巣の刀良秀：火傷出血呼吸編成",
+    "descriptionJa": "蜘蛛の巣の刀良秀を中心に、火傷・出血・呼吸を一緒に使う編成です。ピークォド号船長イシュメール、双鉤海賊団副船長グレゴール、中指末兄ヒースクリフなどが入り、蜘蛛の巣中指の親方ウーティスに替えられます。"
+  },
+  {
+    "id": "spider-middle-burn-bleed",
+    "nameKo": "시즌7 중지 화출덱",
+    "nameEn": "Season 7 House of Spiders Middle Burn-Bleed Build",
+    "descriptionKo": "거미집 중지 아비 오티스와 거미집 중지 제자 이스마엘을 핵심으로, 중지 인격들과 함께 화상과 출혈을 쌓는 시즌 7 조합입니다.",
+    "descriptionEn": "A Season 7 Burn and Bleed team built around The House of Spiders: The Middle Nursefather Outis and Middle Apprentice Ishmael, filled out with The Middle identities.",
+    "targetKeywords": [
+      "burn",
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [
+      177,
+      112
+    ],
+    "youtubeUrl": "https://www.youtube.com/watch?v=7QmAXb29OEE",
+    "youtubeChannelName": "림쌤화람",
+    "youtubeChannelUrl": "https://www.youtube.com/@Limsam-hwaram",
+    "updatedAt": "2026-06-16",
+    "members": [
+      {
+        "sinnerId": 1,
+        "identityId": 12
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 37
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 175
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 112
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 138
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 177
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 169
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 61
+      }
+    ],
+    "nameJa": "シーズン7 中指 火傷出血編成",
+    "descriptionJa": "蜘蛛の巣中指の親方ウーティスと蜘蛛の巣中指の子方イシュメールを中心に、中指の人格と一緒に火傷と出血を重ねるシーズン7の編成です。"
+  },
+  {
+    "id": "new-blade-lineage",
+    "nameKo": "뉴 검계덱",
+    "nameEn": "New Blade Lineage Deck",
+    "descriptionKo": "검계 살수 인격과 검계 우두머리 뫼르소를 중심으로, S사 추노꾼 홍루·LCD 현장추리팀 이스마엘이 출혈을 더하는 호흡·출혈 조합입니다.",
+    "descriptionEn": "A Poise and Bleed team of Blade Lineage Salsu identities and Blade Lineage Mentor Meursault, with S Corp. Ch'unokkun Hong Lu and LCD OSIR Team Ishmael adding Bleed.",
+    "targetKeywords": [
+      "poise",
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=z5u6Kyyymh4",
+    "youtubeChannelName": "종제봉",
+    "youtubeChannelUrl": "https://www.youtube.com/@%EC%A2%85%EC%A0%9C%EB%B4%89",
+    "updatedAt": "2026-06-16",
+    "members": [
+      {
+        "sinnerId": 1,
+        "identityId": 7
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 24
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 34
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 66
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 133
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 178
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 179
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 143
+      }
+    ],
+    "egos": [
+      {
+        "sinnerId": 5,
+        "egoId": 109
+      }
+    ],
+    "nameJa": "新・剣契編成",
+    "descriptionJa": "剣契殺手の人格と剣契頭目ムルソーを中心に、S社チュノックン ホンル・LCD現場推理チーム イシュメールが出血を加える呼吸・出血の編成です。"
+  },
+  {
+    "id": "blade-lineage-guide",
+    "nameKo": "검계덱 사용 가이드 - 개정판",
+    "nameEn": "Blade Lineage Guide (Revised)",
+    "descriptionKo": "검계 살수 인격과 검계 우두머리 뫼르소를 중심으로, S사 추노꾼 홍루·LCD 현장추리팀 이스마엘이 출혈을 더하는 호흡·출혈 조합입니다.",
+    "descriptionEn": "A Poise and Bleed team of Blade Lineage Salsu identities and Blade Lineage Mentor Meursault, with S Corp. Ch'unokkun Hong Lu and LCD OSIR Team Ishmael adding Bleed.",
+    "targetKeywords": [
+      "poise",
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=I95yo8XX9MA",
+    "youtubeChannelName": "제리",
+    "youtubeChannelUrl": "https://www.youtube.com/@%EC%A0%9C%EB%A6%AC-yts",
+    "updatedAt": "2026-06-16",
+    "members": [
+      {
+        "sinnerId": 1,
+        "identityId": 7
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 24
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 34
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 66
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 133
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 178
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 179
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 143
+      }
+    ],
+    "egos": [
+      {
+        "sinnerId": 5,
+        "egoId": 109
+      }
+    ],
+    "nameJa": "剣契編成ガイド - 改訂版",
+    "descriptionJa": "剣契殺手の人格と剣契頭目ムルソーを中心に、S社チュノックン ホンル・LCD現場推理チーム イシュメールが出血を加える呼吸・出血の編成です。"
+  },
+  {
+    "id": "blade-lineage-poise-bleed",
+    "nameKo": "검계 호흡 출혈 참격덱 (개정판)",
+    "nameEn": "Blade Lineage Poise-Bleed Slash (Revised)",
+    "descriptionKo": "검계 살수 인격과 검계 우두머리 뫼르소를 중심으로, S사 추노꾼 홍루·LCD 현장추리팀 이스마엘이 출혈을 더하는 호흡·출혈 조합입니다.",
+    "descriptionEn": "A Poise and Bleed team of Blade Lineage Salsu identities and Blade Lineage Mentor Meursault, with S Corp. Ch'unokkun Hong Lu and LCD OSIR Team Ishmael adding Bleed.",
+    "targetKeywords": [
+      "poise",
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=pCSTkKDnugw",
+    "youtubeChannelName": "림쌤화람",
+    "youtubeChannelUrl": "https://www.youtube.com/@Limsam-hwaram",
+    "updatedAt": "2026-06-16",
+    "members": [
+      {
+        "sinnerId": 1,
+        "identityId": 7
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 24
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 34
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 66
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 133
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 178
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 179
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 143
+      }
+    ],
+    "egos": [
+      {
+        "sinnerId": 5,
+        "egoId": 109
+      }
+    ],
+    "nameJa": "剣契 呼吸出血斬撃編成（改訂版）",
+    "descriptionJa": "剣契殺手の人格と剣契頭目ムルソーを中心に、S社チュノックン ホンル・LCD現場推理チーム イシュメールが出血を加える呼吸・出血の編成です。"
+  },
+  {
+    "id": "blade-lineage-spider-goldan",
+    "nameKo": "검계뤼상 골단덱",
+    "nameEn": "Blade Lineage & Spider Yi Sang (Goldan) Deck",
+    "descriptionKo": "거미집 검지 아비 이상·동부 시 협회 3과 파우스트와 검계 인격(우두머리 뫼르소·살수 싱클레어)을 핵심으로, S사 추노꾼 홍루·LCD 현장추리팀 이스마엘이 함께 들어가는 호흡·출혈 조합입니다.",
+    "descriptionEn": "A Poise and Bleed team built around The House of Spiders: The Index Nursefather Yi Sang, Shi Assoc. East Section 3 Faust and Blade Lineage identities (Mentor Meursault, Salsu Sinclair), with S Corp. Ch'unokkun Hong Lu and LCD OSIR Team Ishmael.",
+    "targetKeywords": [
+      "poise",
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [
+      15,
+      28,
+      66,
+      133,
+      178,
+      179
+    ],
+    "youtubeUrl": "https://www.youtube.com/watch?v=6qx3IV4jAgc",
+    "youtubeChannelName": "림쌤화람",
+    "youtubeChannelUrl": "https://www.youtube.com/@Limsam-hwaram",
+    "updatedAt": "2026-06-16",
+    "members": [
+      {
+        "sinnerId": 1,
+        "identityId": 15
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 28
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 39
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 176
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 66
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 178
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 92
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 179
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 118
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 133
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 145
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 163
+      }
+    ],
+    "egos": [
+      {
+        "sinnerId": 5,
+        "egoId": 109
+      }
+    ],
+    "nameJa": "剣契・蜘蛛の巣イサン 骨断編成",
+    "descriptionJa": "蜘蛛の巣人差し指の親方イサン・東部シ協会3課ファウストと剣契の人格（頭目ムルソー・殺手シンクレア）を中心に、S社チュノックン ホンル・LCD現場推理チーム イシュメールが一緒に入る呼吸・出血の編成です。"
+  },
+  {
+    "id": "charge-rupture-7-season",
+    "nameKo": "시즌7 충파덱",
+    "nameEn": "Season 7 Charge-Rupture Build",
+    "descriptionKo": "LCE E.G.O::AEDD 그레고르·차원찢개 이상과 W사 정리 요원 인격들로 짜는 시즌 7 충전·파열 조합입니다. 이상 자리는 W사 3등급 정리 요원 이상으로 바꿔 쓸 수 있습니다.",
+    "descriptionEn": "A Season 7 Charge and Rupture team of LCE E.G.O::AEDD Gregor and Dimension Shredder Yi Sang with W Corp. Cleanup Agent identities. W Corp. L3 Cleanup Agent Yi Sang can take the Yi Sang slot.",
+    "targetKeywords": [
+      "charge",
+      "rupture"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 1,
+        "identityId": 9
+      }
+    ],
+    "youtubeUrl": "https://www.youtube.com/watch?v=0URFnPpHXQk",
+    "youtubeChannelName": "윈쁘",
+    "youtubeChannelUrl": "https://www.youtube.com/@Winppe",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 12,
+        "identityId": 170
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 97
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 35
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 51
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 151
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 184
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 63
+      }
+    ],
+    "nameJa": "シーズン7 充電破裂編成",
+    "descriptionJa": "LCE E.G.O::AEDDグレゴール・次元裂きイサンとW社の整理要員の人格で組む、シーズン7の充電・破裂の編成です。イサンの枠はW社 3級整理要員イサンに替えられます。"
+  },
+  {
+    "id": "kurokumo-lust-bleed",
+    "nameKo": "흑운회 색욕 출혈 참격덱",
+    "nameEn": "Kurokumo Clan Lust-Bleed Slash",
+    "descriptionKo": "흑운회 인격들과 라만차랜드 왕자 뫼르소로 짜는 색욕·출혈 참격 조합입니다. 거미집 소지 제자 싱클레어로 바꿔 쓸 수 있습니다.",
+    "descriptionEn": "A Lust Bleed Slash team of Kurokumo Clan identities and The Prince of La Manchaland Meursault; The House of Spiders: The Pinky Apprentice Sinclair can sub in.",
+    "targetKeywords": [
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 10,
+        "identityId": 141
+      }
+    ],
+    "youtubeUrl": "https://www.youtube.com/watch?v=BzQlNAxFO58",
+    "youtubeChannelName": "림쌤화람",
+    "youtubeChannelUrl": "https://www.youtube.com/@Limsam-hwaram",
+    "updatedAt": "2026-06-16",
+    "members": [
+      {
+        "sinnerId": 4,
+        "identityId": 49
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 73
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 96
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 109
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 118
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 160
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 70
+      }
+    ],
+    "nameJa": "黒雲会 色欲出血斬撃編成",
+    "descriptionJa": "黒雲会の人格とラ・マンチャランドの王子ムルソーで組む、色欲・出血の斬撃編成です。蜘蛛の巣小指の子方シンクレアに替えられます。"
+  },
+  {
+    "id": "dieci-sinking-discard",
+    "nameKo": "디에치 침잠 버리기덱",
+    "nameEn": "Dieci Sinking Discard Build",
+    "descriptionKo": "남부 디에치 협회 4과 인격들로 짜는 침잠 조합입니다. 정사무소 대표 이스마엘과 어금니 사무소 해결사 오티스가 함께 들어갑니다.",
+    "descriptionEn": "A Sinking team of Dieci Assoc. South Section 4 identities, joined by Jeong's Office Rep Ishmael and Molar Office Fixer Outis.",
+    "targetKeywords": [
+      "sinking"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=nXwUlv4CsLM",
+    "youtubeChannelName": "림쌤화람",
+    "youtubeChannelUrl": "https://www.youtube.com/@Limsam-hwaram",
+    "updatedAt": "2026-06-16",
+    "members": [
+      {
+        "sinnerId": 1,
+        "identityId": 5
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 67
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 80
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 120
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 111
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 148
+      }
+    ],
+    "nameJa": "ディエーチ 沈潜捨て札編成",
+    "descriptionJa": "南部ディエーチ協会4課の人格で組む沈潜の編成です。定事務所代表イシュメールと奥歯事務所フィクサー ウーティスも一緒に入ります。"
+  },
+  {
+    "id": "burn-tremor-dawn-thumb",
+    "nameKo": "화상 진동덱 (화진덱)",
+    "nameEn": "Burn Tremor Build (Dawn Office & Thumb)",
+    "descriptionKo": "새벽 사무소 대표 그레고르·해결사 파우스트·해결사 싱클레어와 동부 엄지 카포 IIII 뫼르소, 거미집 엄지 아비 로쟈·엄지 제자 히스클리프로 짜는 6인 화상·진동 조합입니다. 엄지 뫼르소가 없으면 호넷【변조】 뫼르소로 바꿔 씁니다.",
+    "descriptionEn": "A six-member Burn and Tremor team of Dawn Office Rep Gregor and Fixers Faust and Sinclair, The Thumb East Capo IIII Meursault, and The House of Spiders: The Thumb Nursefather Rodion and Thumb Apprentice Heathcliff. Hornet【Alteration】 Meursault can replace the Thumb Meursault.",
+    "targetKeywords": [
+      "burn",
+      "tremor"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 10,
+        "identityId": 139
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 98
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 71
+      }
+    ],
+    "youtubeUrl": "https://www.youtube.com/watch?v=OWMkRXw1VWM",
+    "youtubeChannelName": "제리",
+    "youtubeChannelUrl": "https://www.youtube.com/@%EC%A0%9C%EB%A6%AC-yts",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 2,
+        "identityId": 183
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 182
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 136
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 69
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 181
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 180
+      }
+    ],
+    "nameJa": "火傷振動編成（夜明事務所・親指）",
+    "descriptionJa": "夜明事務所代表グレゴール・フィクサー ファウスト・フィクサー シンクレアと東部親指カポIIII ムルソー、蜘蛛の巣親指の親方ロージャ・親指の子方ヒースクリフで組む6人の火傷・振動の編成です。親指ムルソーがいなければホーネット【変調】ムルソーに替えて使います。"
+  },
+  {
+    "id": "le-noir-tremor-charge",
+    "nameKo": "르누아르 진동 충전덱",
+    "nameEn": "Le Noir Tremor Charge Build",
+    "descriptionKo": "시즌 8 오트쿠튀르의 르누아르 브랜드 매니저 돈키호테·르누아르 신발관 료슈·수선실 로쟈를 중심으로 AEDD 그레고르, 엄숙한 애도 이상, 장미스패너 공방 해결사 뫼르소를 더한 6인 진동·충전 조합입니다. 7명으로 쓸 때는 장미스패너 뫼르소 대신 정사무소 대표 이스마엘과 W사 4등급 정리 요원 - CCA 히스클리프를 넣습니다.",
+    "descriptionEn": "A six-member Season 8 Tremor and Charge team built around Haute Couture's Le Noir Brand Manager Don Quixote, Le Noir Footwear Hall Ryoshu and Alteration Shop Rodion, with AEDD Gregor, Solemn Lament Yi Sang and Rosespanner Workshop Fixer Meursault. For seven slots, swap the Meursault for Jeong's Office Rep Ishmael and W Corp. L4 Cleanup Agent - CCA Heathcliff.",
+    "targetKeywords": [
+      "tremor",
+      "charge"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 1,
+        "identityId": 184
+      }
+    ],
+    "youtubeUrl": "https://www.youtube.com/watch?v=9iFTk4zU2Y8",
+    "youtubeChannelName": "제리",
+    "youtubeChannelUrl": "https://www.youtube.com/@%EC%A0%9C%EB%A6%AC-yts",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 3,
+        "identityId": 189
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 186
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 188
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 170
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 11
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 60
+      }
+    ],
+    "egos": [
+      {
+        "sinnerId": 1,
+        "egoId": 110
+      }
+    ],
+    "nameJa": "ル・ノワール 振動充電編成",
+    "descriptionJa": "シーズン8オートクチュールのル・ノワールブランドマネージャー ドンキホーテ・ル・ノワール シューズフロア良秀・お直し室ロージャを中心に、AEDDグレゴール、厳粛な哀悼イサン、バラのスパナ工房フィクサー ムルソーを加えた6人の振動・充電の編成です。7人で使うときはバラのスパナ ムルソーの代わりに定事務所代表イシュメールとW社 4級整理要員 - CCA ヒースクリフを入れます。"
+  },
+  {
+    "id": "le-noir-tremor-charge-wu-lamp",
+    "nameKo": "르누아르 진동 충전덱 (오 필두·램프)",
+    "nameEn": "Le Noir Tremor Charge Build (Wu Branch & Lamp)",
+    "descriptionKo": "르누아르 브랜드 매니저 돈키호테·르누아르 신발관 료슈·수선실 로쟈·장미스패너 공방 해결사 뫼르소에 흑수 - 오 필두 이상, 거미집 약지 제자 파우스트, 램프 그레고르를 더한 진동·충전 조합입니다.",
+    "descriptionEn": "A Tremor and Charge team of Le Noir Brand Manager Don Quixote, Le Noir Footwear Hall Ryoshu, Alteration Shop Rodion and Rosespanner Workshop Fixer Meursault, plus Heishou Pack - Wu Branch Adept Yi Sang, The House of Spiders: The Ring Apprentice Faust and Lamp Gregor.",
+    "targetKeywords": [
+      "tremor",
+      "charge"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=8Awx8r1QrB0",
+    "youtubeChannelName": "드라미 Drumi",
+    "youtubeChannelUrl": "https://www.youtube.com/@%EB%93%9C%EB%9D%BC%EB%AF%B8",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 3,
+        "identityId": 189
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 186
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 188
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 60
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 14
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 171
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 169
+      }
+    ],
+    "nameJa": "ル・ノワール 振動充電編成（午 筆頭・ランプ）",
+    "descriptionJa": "ル・ノワールブランドマネージャー ドンキホーテ・ル・ノワール シューズフロア良秀・お直し室ロージャ・バラのスパナ工房フィクサー ムルソーに、黒獣 - 午 筆頭イサン、蜘蛛の巣薬指の子方ファウスト、ランプ グレゴールを加えた振動・充電の編成です。"
+  },
+  {
+    "id": "haute-couture-rupture-charge-tremor",
+    "nameKo": "오트쿠튀르 파열 충전 진동덱",
+    "nameEn": "Haute Couture Rupture Charge Tremor Build",
+    "descriptionKo": "르누아르 브랜드 매니저 돈키호테·수선실 로쟈, 차원찢개 이상, W사 4등급 정리 요원 - CCA 히스클리프, 장미스패너 공방 해결사 그레고르, LCCB 대리 이스마엘·료슈로 짜는 파열·충전·진동 조합입니다. 세 상태를 모두 거는 장미스패너 그레고르는 바꿀 인격이 없습니다.",
+    "descriptionEn": "A Rupture, Charge and Tremor team of Le Noir Brand Manager Don Quixote, Alteration Shop Rodion, Dimension Shredder Yi Sang, W Corp. L4 Cleanup Agent - CCA Heathcliff, Rosespanner Workshop Fixer Gregor, and LCCB Assistant Managers Ishmael and Ryoshu. Rosespanner Gregor carries all three statuses and has no substitute.",
+    "targetKeywords": [
+      "rupture",
+      "charge",
+      "tremor"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 3,
+        "identityId": 35
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 41
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 9
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 14
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 119
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 186
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 3,
+        "identityId": 189
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 184
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 188
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 97
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 159
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 101
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 46
+      }
+    ],
+    "nameJa": "オートクチュール 破裂充電振動編成",
+    "descriptionJa": "ル・ノワールブランドマネージャー ドンキホーテ・お直し室ロージャ、次元裂きイサン、W社 4級整理要員 - CCA ヒースクリフ、バラのスパナ工房フィクサー グレゴール、LCCB係長イシュメール・良秀で組む破裂・充電・振動の編成です。3つの状態をすべて付与するバラのスパナ グレゴールは替えの人格がいません。"
+  },
+  {
+    "id": "alteration-shop-rodion-charge-tremor",
+    "nameKo": "수선실 로쟈 충전 진동덱",
+    "nameEn": "Alteration Shop Rodion Charge Tremor Build",
+    "descriptionKo": "오트쿠튀르 수선실 로쟈·르누아르 신발관 료슈에 거미집 약지 아비 홍루·약지 제자 파우스트, 정사무소 대표 이스마엘, 장미스패너 공방 해결사 뫼르소·그레고르를 더한 충전·진동 조합입니다. 10층까지는 약지 제자 파우스트를 빼고 6명으로 갑니다.",
+    "descriptionEn": "A Charge and Tremor team of Haute Couture's Alteration Shop Rodion and Le Noir Footwear Hall Ryoshu with The House of Spiders: The Ring Nursefather Hong Lu and Ring Apprentice Faust, Jeong's Office Rep Ishmael, and Rosespanner Workshop Fixers Meursault and Gregor. Through floor 10 it runs as six, without the Ring Apprentice Faust.",
+    "targetKeywords": [
+      "charge",
+      "tremor"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=xs5X9HCu0i0",
+    "youtubeChannelName": "윈쁘",
+    "youtubeChannelUrl": "https://www.youtube.com/@Winppe",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 4,
+        "identityId": 186
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 188
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 172
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 111
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 171
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 60
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 159
+      }
+    ],
+    "nameJa": "お直し室ロージャ 充電振動編成",
+    "descriptionJa": "オートクチュールのお直し室ロージャ・ル・ノワール シューズフロア良秀に、蜘蛛の巣薬指の親方ホンル・薬指の子方ファウスト、定事務所代表イシュメール、バラのスパナ工房フィクサー ムルソー・グレゴールを加えた充電・振動の編成です。10階までは薬指の子方ファウストを抜いて6人で進みます。"
+  },
+  {
+    "id": "tcorp-sloth-tremor",
+    "nameKo": "T사 나태 진동덱 (신발관 료슈)",
+    "nameEn": "T Corp. Sloth Tremor Build (Footwear Hall Ryoshu)",
+    "descriptionKo": "T사 3등급 강력징수직 직원 오티스·3등급 징수직 직원 돈키호테·2등급 징수직 직원 로쟈에 르누아르 신발관 료슈, 후회 파우스트, 서부 츠바이 협회 3과 싱클레어, 장미스패너 공방 해결사 뫼르소를 더한 나태·타격 위주의 진동 조합입니다.",
+    "descriptionEn": "A Sloth- and Blunt-leaning Tremor team of T Corp. Class 3 VDCU Staff Outis, Class 3 Collection Staff Don Quixote and Class 2 Collection Staff Rodion, plus Le Noir Footwear Hall Ryoshu, Regret Faust, Zwei Assoc. West Section 3 Sinclair and Rosespanner Workshop Fixer Meursault.",
+    "targetKeywords": [
+      "tremor"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=bJFoNfD43zs",
+    "youtubeChannelName": "Koiodon",
+    "youtubeChannelUrl": "https://www.youtube.com/@Koiodon",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 4,
+        "identityId": 186
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 154
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 23
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 38
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 117
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 132
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 60
+      }
+    ],
+    "nameJa": "T社 怠惰振動編成（シューズフロア良秀）",
+    "descriptionJa": "T社3級強制徴収職 職員ウーティス・3級徴収職職員ドンキホーテ・2級徴収職職員ロージャに、ル・ノワール シューズフロア良秀、後悔ファウスト、西部ツヴァイ協会3課シンクレア、バラのスパナ工房フィクサー ムルソーを加えた怠惰・打撃中心の振動編成です。"
+  },
+  {
+    "id": "boutique-du-rouge-ishmael-charge-bleed",
+    "nameKo": "르루주 부티크 이스마엘 충전 출혈덱",
+    "nameEn": "Boutique du Rouge Ishmael Charge Bleed Build",
+    "descriptionKo": "오트쿠튀르 르루주 부티크 이스마엘을 중심으로 AEDD 그레고르, 거미집 약지 아비 홍루, 적안 · 참회 료슈, R사 제 4무리 코뿔소팀 뫼르소, 흑운회 와카슈 히스클리프, N사 중간 망치 돈키호테를 더한 충전·출혈 조합입니다. 약지 인격은 약지 아비 홍루 한 명만 씁니다.",
+    "descriptionEn": "A Charge and Bleed team centered on Haute Couture's Boutique du Rouge Ishmael, with AEDD Gregor, The House of Spiders: The Ring Nursefather Hong Lu, Red Eyes & Penitence Ryoshu, R Corp. 4th Pack Rhino Meursault, Kurokumo Clan Wakashu Heathcliff and N Corp. Mittelhammer Don Quixote. The Ring Nursefather is its only Ring identity.",
+    "targetKeywords": [
+      "bleed",
+      "charge"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=0rqTXV7oyoI",
+    "youtubeChannelName": "드라미 Drumi",
+    "youtubeChannelUrl": "https://www.youtube.com/@%EB%93%9C%EB%9D%BC%EB%AF%B8",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 8,
+        "identityId": 187
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 170
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 172
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 53
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 65
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 96
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 32
+      }
+    ],
+    "nameJa": "ル・ルージュ ブティークイシュメール 充電出血編成",
+    "descriptionJa": "オートクチュールのル・ルージュ ブティークイシュメールを中心に、AEDDグレゴール、蜘蛛の巣薬指の親方ホンル、赤眼・懺悔良秀、R社第4群サイチーム ムルソー、黒雲会若衆ヒースクリフ、N社中鎚ドンキホーテを加えた充電・出血の編成です。薬指の人格は薬指の親方ホンル1人だけ使います。"
+  },
+  {
+    "id": "ring-kurokumo-bleed",
+    "nameKo": "약지 흑운회 출혈덱",
+    "nameEn": "Ring & Kurokumo Bleed Build",
+    "descriptionKo": "거미집 약지 아비 홍루·약지 제자 파우스트, 흑운회 와카슈 히스클리프·부조장 이스마엘, 약지 야수파 도슨트 로쟈·스튜던트 뫼르소로 짜는 6인 출혈 조합입니다. 뫼르소 자리는 라만차랜드 왕자 뫼르소로 바꿔 쓸 수 있습니다.",
+    "descriptionEn": "A six-member Bleed team of The House of Spiders: The Ring Nursefather Hong Lu and Ring Apprentice Faust, Kurokumo Clan Wakashu Heathcliff and Captain Ishmael, and The Ring Fauvist Docent Rodion and Student Meursault. The Prince of La Manchaland Meursault can take the Meursault slot.",
+    "targetKeywords": [
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 5,
+        "identityId": 70
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 6,
+        "identityId": 172
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 171
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 96
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 109
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 174
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 173
+      }
+    ],
+    "nameJa": "薬指・黒雲会 出血編成",
+    "descriptionJa": "蜘蛛の巣薬指の親方ホンル・薬指の子方ファウスト、黒雲会若衆ヒースクリフ・副組長イシュメール、薬指 野獣派ドーセント ロージャ・スチューデント ムルソーで組む6人の出血編成です。ムルソーの枠はラ・マンチャランドの王子ムルソーに替えられます。"
+  },
+  {
+    "id": "molar-rosespanner-tremor",
+    "nameKo": "어금니·장미스패너 진동덱",
+    "nameEn": "Molar & Rosespanner Tremor Build",
+    "descriptionKo": "어금니 사무소 해결사 오티스·이상, 어금니 보트 센터 해결사 이스마엘·싱클레어, 장미스패너 공방 대표 로쟈·해결사 뫼르소·해결사 그레고르로 짜는 진동 조합입니다.",
+    "descriptionEn": "A Tremor team of Molar Office Fixers Outis and Yi Sang, Molar Boatworks Fixers Ishmael and Sinclair, and Rosespanner Workshop Rep Rodion and Fixers Meursault and Gregor.",
+    "targetKeywords": [
+      "tremor"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=UKQhkRkTV34",
+    "youtubeChannelName": "Koiodon",
+    "youtubeChannelUrl": "https://www.youtube.com/@Koiodon",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 11,
+        "identityId": 148
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 106
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 119
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 3
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 131
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 60
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 159
+      }
+    ],
+    "nameJa": "奥歯・バラのスパナ 振動編成",
+    "descriptionJa": "奥歯事務所フィクサー ウーティス・イサン、奥歯ボートセンターフィクサー イシュメール・シンクレア、バラのスパナ工房代表ロージャ・フィクサー ムルソー・フィクサー グレゴールで組む振動編成です。"
+  },
+  {
+    "id": "seven-devyat-rupture",
+    "nameKo": "세븐·제뱌찌 파열덱",
+    "nameEn": "Seven & Devyat' Rupture Build",
+    "descriptionKo": "남부 세븐 협회 6과 부장 오티스·6과 이상·6과 료슈·4과 파우스트·4과 히스클리프와 북부 제뱌찌 협회 3과 싱클레어·로쟈로 짜는 파열 조합입니다.",
+    "descriptionEn": "A Rupture team of Seven Assoc. South Section 6 Director Outis, Section 6 Yi Sang and Ryoshu, Section 4 Faust and Heathcliff, and Devyat' Assoc. North Section 3 Sinclair and Rodion.",
+    "targetKeywords": [
+      "rupture"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=UKQhkRkTV34",
+    "youtubeChannelName": "Koiodon",
+    "youtubeChannelUrl": "https://www.youtube.com/@Koiodon",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 10,
+        "identityId": 137
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 122
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 147
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 22
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 2
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 88
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 45
+      }
+    ],
+    "nameJa": "セブン・ヂェーヴィチ 破裂編成",
+    "descriptionJa": "南部セブン協会6課部長ウーティス・6課イサン・6課良秀・4課ファウスト・4課ヒースクリフと北部ヂェーヴィチ協会3課シンクレア・ロージャで組む破裂編成です。"
+  },
+  {
+    "id": "pierce-bleed-fast-farming",
+    "nameKo": "관통 출혈덱 (빠른 파밍)",
+    "nameEn": "Pierce Bleed Build (Fast Farming)",
+    "descriptionKo": "R사 제 4무리 토끼팀 히스클리프, 마침표 사무소 대표 홍루, 호넷【변조】 뫼르소, 밤의 송곳 카피타노 그레고르, 라만차랜드 공주 로쟈, 약지 점묘파 스튜던트 이상으로 짜는 관통 위주의 6인 출혈 조합입니다. 일반 거울 던전을 빠르게 도는 파밍용입니다.",
+    "descriptionEn": "A six-member, Pierce-focused Bleed team of R Corp. 4th Pack Rabbit Heathcliff, Full-Stop Office Rep Hong Lu, Hornet【Alteration】 Meursault, Night Awls Capitano Gregor, The Princess of La Manchaland Rodion and The Ring Pointillist Student Yi Sang. Built for fast farming runs in the regular Mirror Dungeon.",
+    "targetKeywords": [
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 1,
+        "identityId": 11
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 125
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 169
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 76
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 7,
+        "identityId": 90
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 82
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 71
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 168
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 123
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 10
+      }
+    ],
+    "nameJa": "貫通出血編成（高速周回）",
+    "descriptionJa": "R社第4群ウサギチーム ヒースクリフ、終止符事務所代表ホンル、ホーネット【変調】ムルソー、夜の錐カピターノ グレゴール、ラ・マンチャランドの姫ロージャ、薬指点描派スチューデント イサンで組む貫通中心の6人の出血編成です。通常の鏡ダンジョンを素早く回る周回用です。"
+  },
+  {
+    "id": "heishou-thumb-rupture-tremor",
+    "nameKo": "흑수 엄지 파열 진동덱",
+    "nameEn": "Heishou & Thumb Rupture Tremor Build",
+    "descriptionKo": "밤의 송곳 카피타노 그레고르, 흑수 - 오 필두 이상·묘 필두 파우스트, 거미집 엄지 아비 로쟈, 홍원 군주 홍루, LCCB 대리 이스마엘·료슈로 짜는 파열·진동 조합입니다.",
+    "descriptionEn": "A Rupture and Tremor team of Night Awls Capitano Gregor, Heishou Pack - Wu Branch Adept Yi Sang and Mao Branch Adept Faust, The House of Spiders: The Thumb Nursefather Rodion, The Lord of Hongyuan Hong Lu, and LCCB Assistant Managers Ishmael and Ryoshu.",
+    "targetKeywords": [
+      "rupture",
+      "tremor"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 12,
+        "identityId": 168
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 14
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 180
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 27
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 84
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 101
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 46
+      }
+    ],
+    "nameJa": "黒獣・親指 破裂振動編成",
+    "descriptionJa": "夜の錐カピターノ グレゴール、黒獣 - 午 筆頭イサン・卯 筆頭ファウスト、蜘蛛の巣親指の親方ロージャ、鴻園の君主ホンル、LCCB係長イシュメール・良秀で組む破裂・振動の編成です。"
+  },
+  {
+    "id": "liu-assoc-burn",
+    "nameKo": "리우 협회 화상덱",
+    "nameEn": "Liu Association Burn Build",
+    "descriptionKo": "남부 리우 협회 4과 부장 로쟈·3과 이상·5과 홍루·6과 그레고르·6과 뫼르소에 W사 3등급 정리 요원 료슈, 쥐어들 자 싱클레어를 더한 화상 조합입니다. 구하기 쉬운 인격 위주라, 새벽 사무소·엄지 같은 화상 인격이 생기면 하나씩 바꿔 넣습니다.",
+    "descriptionEn": "A Burn team of Liu Assoc. South Section 4 Director Rodion, Section 3 Yi Sang, Section 5 Hong Lu and Section 6 Gregor and Meursault, plus W Corp. L3 Cleanup Agent Ryoshu and The One Who Shall Grip Sinclair. It leans on easy-to-get identities; swap in Dawn Office, Thumb or other Burn identities as you get them.",
+    "targetKeywords": [
+      "burn"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 9,
+        "identityId": 121
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 157
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 74
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 59
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 12
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 51
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 134
+      }
+    ],
+    "nameJa": "リウ協会 火傷編成",
+    "descriptionJa": "南部リウ協会4課部長ロージャ・3課イサン・5課ホンル・6課グレゴール・6課ムルソーに、W社 3級整理要員良秀、握らんとする者シンクレアを加えた火傷編成です。入手しやすい人格が中心なので、夜明事務所や親指のような火傷人格が手に入ったら1人ずつ入れ替えます。"
+  },
+  {
+    "id": "pequod-burn-bleed-poise",
+    "nameKo": "피쿼드 화상 출혈 호흡덱",
+    "nameEn": "Pequod Burn Bleed Poise Build",
+    "descriptionKo": "호넷【변조】 뫼르소, 거미집의 검 료슈, 피쿼드호 선장 이스마엘·작살잡이 히스클리프, 동부 섕크 협회 3과 돈키호테, 새벽 사무소 대표 그레고르, 동부 시 협회 3과 파우스트로 짜는 화상·출혈·호흡 조합입니다.",
+    "descriptionEn": "A Burn, Bleed and Poise team of Hornet【Alteration】 Meursault, Blade of the House of Spiders Ryoshu, The Pequod Captain Ishmael and Harpooneer Heathcliff, Cinq Assoc. East Section 3 Don Quixote, Dawn Office Rep Gregor and Shi Assoc. East Section 3 Faust.",
+    "targetKeywords": [
+      "bleed",
+      "burn",
+      "poise"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 12,
+        "identityId": 166
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 169
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 163
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 66
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 175
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 5,
+        "identityId": 71
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 176
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 107
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 40
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 182
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 28
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 92
+      }
+    ],
+    "nameJa": "ピークォド 火傷出血呼吸編成",
+    "descriptionJa": "ホーネット【変調】ムルソー、蜘蛛の巣の刀良秀、ピークォド号船長イシュメール・銛使いヒースクリフ、東部センク協会3課ドンキホーテ、夜明事務所代表グレゴール、東部シ協会3課ファウストで組む火傷・出血・呼吸の編成です。"
+  },
+  {
+    "id": "cinq-shi-burn-bleed-poise",
+    "nameKo": "섕크·시 협회 화상 출혈 호흡덱",
+    "nameEn": "Cinq & Shi Burn Bleed Poise Build",
+    "descriptionKo": "피쿼드호 인격 없이 짜는 화상·출혈·호흡 조합입니다. 호넷【변조】 뫼르소, 거미집의 검 료슈, LCD 현장추리팀 이스마엘, 동부 섕크 협회 3과 홍루·돈키호테, 동부 시 협회 3과 파우스트, 쥐어들 자 싱클레어가 들어갑니다.",
+    "descriptionEn": "A Burn, Bleed and Poise team without Pequod identities: Hornet【Alteration】 Meursault, Blade of the House of Spiders Ryoshu, LCD OSIR Team Ishmael, Cinq Assoc. East Section 3 Hong Lu and Don Quixote, Shi Assoc. East Section 3 Faust and The One Who Shall Grip Sinclair.",
+    "targetKeywords": [
+      "bleed",
+      "burn",
+      "poise"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 5,
+        "identityId": 66
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 5,
+        "identityId": 71
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 176
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 179
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 185
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 40
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 28
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 134
+      }
+    ],
+    "nameJa": "センク・シ協会 火傷出血呼吸編成",
+    "descriptionJa": "ピークォド号の人格なしで組む火傷・出血・呼吸の編成です。ホーネット【変調】ムルソー、蜘蛛の巣の刀良秀、LCD現場推理チーム イシュメール、東部センク協会3課ホンル・ドンキホーテ、東部シ協会3課ファウスト、握らんとする者シンクレアが入ります。"
+  },
+  {
+    "id": "cinq-pierce-poise",
+    "nameKo": "섕크 협회 관통 호흡덱",
+    "nameEn": "Cinq Association Pierce Poise Build",
+    "descriptionKo": "동부 섕크 협회 3과 홍루·돈키호테, 서부 섕크 협회 3과 뫼르소, 남부 섕크 협회 4과 부장 싱클레어·4과 오티스에 홍원 방랑무사 료슈, 쌍갈고리 해적단 부선장 그레고르를 더한 관통 위주의 호흡 조합입니다.",
+    "descriptionEn": "A Pierce-focused Poise team of Cinq Assoc. East Section 3 Hong Lu and Don Quixote, West Section 3 Meursault, and South Section 4 Director Sinclair and Section 4 Outis, plus Drifting Blade of Hongyuan Ryoshu and Twinhook Pirates First Mate Gregor.",
+    "targetKeywords": [
+      "poise"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=1p5oggJLyKA",
+    "youtubeChannelName": "Koiodon",
+    "youtubeChannelUrl": "https://www.youtube.com/@Koiodon",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 6,
+        "identityId": 185
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 68
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 40
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 135
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 145
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 56
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 163
+      }
+    ],
+    "nameJa": "センク協会 貫通呼吸編成",
+    "descriptionJa": "東部センク協会3課ホンル・ドンキホーテ、西部センク協会3課ムルソー、南部センク協会4課部長シンクレア・4課ウーティスに、鴻園の放浪武者良秀、双鉤海賊団副船長グレゴールを加えた貫通中心の呼吸編成です。"
+  },
+  {
+    "id": "great-trichiliocosm-bleed-farming",
+    "nameKo": "삼천대세계 출혈덱 (파밍)",
+    "nameEn": "Great Trichiliocosm Bleed Build (Farming)",
+    "descriptionKo": "삼천대세계 [三千大世界] 료슈 E.G.O를 중심으로 호넷【변조】 뫼르소, 중지 작은 아우 싱클레어, 거미집의 검 료슈, 흑운회 와카슈 홍루·와카슈 히스클리프, 동부 시 협회 3과 파우스트, 라만차랜드 실장 돈키호테를 쓰는 출혈 조합입니다. 일반 거울 던전을 빠르게 도는 파밍용입니다.",
+    "descriptionEn": "A Bleed team built around the Great Trichiliocosm [三千大世界] Ryoshu E.G.O, with Hornet【Alteration】 Meursault, The Middle Little Brother Sinclair, Blade of the House of Spiders Ryoshu, Kurokumo Clan Wakashu Hong Lu and Heathcliff, Shi Assoc. East Section 3 Faust and The Manager of La Manchaland Don Quixote. Built for fast farming runs in the regular Mirror Dungeon.",
+    "targetKeywords": [
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 4,
+        "identityId": 55
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 140
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 172
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 5,
+        "identityId": 71
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 138
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 176
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 73
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 96
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 28
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 39
+      }
+    ],
+    "nameJa": "三千大世界 出血編成（周回）",
+    "descriptionJa": "良秀のE.G.O「三千大世界」を中心に、ホーネット【変調】ムルソー、中指末弟シンクレア、蜘蛛の巣の刀良秀、黒雲会若衆ホンル・若衆ヒースクリフ、東部シ協会3課ファウスト、ラ・マンチャランド室長ドンキホーテを使う出血編成です。通常の鏡ダンジョンを素早く回る周回用です。"
+  },
+  {
+    "id": "ncorp-tremor-bleed",
+    "nameKo": "N사 진동 출혈덱 (진출덱)",
+    "nameEn": "N Corp. Tremor Bleed Build",
+    "descriptionKo": "쥐는 자 파우스트, N사 중간 망치 돈키호테, 경멸, 경외 료슈, 쥐어들 자 싱클레어 같은 N사 인격에 동부 엄지 카포 IIII 뫼르소, T사 3등급 강력징수직 직원 오티스, 밤의 송곳 카피타노 그레고르를 더한 진동·출혈 조합입니다.",
+    "descriptionEn": "A Tremor and Bleed team mixing N Corp. identities (The One Who Grips Faust, Mittelhammer Don Quixote, Contempt, Awe Ryoshu and The One Who Shall Grip Sinclair) with The Thumb East Capo IIII Meursault, T Corp. Class 3 VDCU Staff Outis and Night Awls Capitano Gregor.",
+    "targetKeywords": [
+      "tremor",
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=X8WOd8yQZSg",
+    "youtubeChannelName": "종제봉",
+    "youtubeChannelUrl": "https://www.youtube.com/@%EC%A2%85%EC%A0%9C%EB%B4%89",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 2,
+        "identityId": 21
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 32
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 55
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 69
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 134
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 154
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 168
+      }
+    ],
+    "nameJa": "N社 振動出血編成",
+    "descriptionJa": "握る者ファウスト、N社中鎚ドンキホーテ、軽蔑、畏敬良秀、握らんとする者シンクレアといったN社の人格に、東部親指カポIIII ムルソー、T社3級強制徴収職 職員ウーティス、夜の錐カピターノ グレゴールを加えた振動・出血の編成です。"
+  },
+  {
+    "id": "wild-hunt-sinking-farming",
+    "nameKo": "와일드헌트 침잠덱 (파밍)",
+    "nameEn": "Wild Hunt Sinking Build (Farming)",
+    "descriptionKo": "와일드헌트 히스클리프, 정사무소 대표 이스마엘, 거미집 검지 아비 이상, 램프 그레고르, 흑수 - 미 돈키호테, LCA 우제트 선봉 3팀 팀장 오티스, 검지 수행자:【쪽지】 파우스트로 짜는 침잠 조합입니다. 일반 거울 던전을 빠르게 도는 파밍용입니다.",
+    "descriptionEn": "A Sinking team of Wild Hunt Heathcliff, Jeong's Office Rep Ishmael, The House of Spiders: The Index Nursefather Yi Sang, Lamp Gregor, Heishou Pack - Wei Branch Don Quixote, LCA Udjat Vanguard Team 3 Leader Outis and The Index Proselyte:【Paper Slip】 Faust. Built for fast farming runs in the regular Mirror Dungeon.",
+    "targetKeywords": [
+      "sinking"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 1,
+        "identityId": 11
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 43
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 164
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 7,
+        "identityId": 94
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 111
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 15
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 169
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 42
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 155
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 29
+      }
+    ],
+    "nameJa": "ワイルドハント 沈潜編成（周回）",
+    "descriptionJa": "ワイルドハント ヒースクリフ、定事務所代表イシュメール、蜘蛛の巣人差し指の親方イサン、ランプ グレゴール、黒獣 - 未ドンキホーテ、LCAウアジェト先鋒三隊隊長ウーティス、人差し指遂行者:【紙片】ファウストで組む沈潜編成です。通常の鏡ダンジョンを素早く回る周回用です。"
+  },
+  {
+    "id": "dieci-wuthering-heights-sinking",
+    "nameKo": "디에치·워더링하이츠 침잠 타격덱",
+    "nameEn": "Dieci & Wuthering Heights Blunt Sinking Build",
+    "descriptionKo": "남부 디에치 협회 4과 부장 뫼르소·4과 로쟈·4과 홍루·4과 이상에 와일드헌트 히스클리프, 워더링하이츠 치프 버틀러 오티스·버틀러 파우스트를 더한 타격 위주의 침잠 조합입니다.",
+    "descriptionEn": "A Blunt-focused Sinking team of Dieci Assoc. South Section 4 Director Meursault and Section 4 Rodion, Hong Lu and Yi Sang, plus Wild Hunt Heathcliff and Wuthering Heights Chief Butler Outis and Butler Faust.",
+    "targetKeywords": [
+      "sinking"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=2XHn9zIVISU",
+    "youtubeChannelName": "Koiodon",
+    "youtubeChannelUrl": "https://www.youtube.com/@Koiodon",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 9,
+        "identityId": 120
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 67
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 80
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 5
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 94
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 150
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 20
+      }
+    ],
+    "nameJa": "ディエーチ・ワザリング・ハイツ 沈潜打撃編成",
+    "descriptionJa": "南部ディエーチ協会4課部長ムルソー・4課ロージャ・4課ホンル・4課イサンに、ワイルドハント ヒースクリフ、ワザリング・ハイツ チーフバトラー ウーティス・バトラー ファウストを加えた打撃中心の沈潜編成です。"
+  },
+  {
+    "id": "love-and-hate-charge-farming",
+    "nameKo": "사랑과 증오 충전덱 (파밍)",
+    "nameEn": "Love and Hate Charge Build (Farming)",
+    "descriptionKo": "사랑과 증오의 이름으로 돈키호테를 중심으로 멀티크랙 사무소 해결사 히스클리프, AEDD 그레고르, 눈물로 벼려낸 검 로쟈, W사 3등급 정리 요원 료슈, 차원찢개 이상, 정사무소 대표 이스마엘을 더한 충전 조합입니다. 일반 거울 던전을 빠르게 도는 파밍용입니다.",
+    "descriptionEn": "A Charge team centered on In the Name of Love and Hate Don Quixote, with MultiCrack Office Fixer Heathcliff, AEDD Gregor, The Sword Sharpened with Tears Rodion, W Corp. L3 Cleanup Agent Ryoshu, Dimension Shredder Yi Sang and Jeong's Office Rep Ishmael. Built for fast farming runs in the regular Mirror Dungeon.",
+    "targetKeywords": [
+      "charge"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 4,
+        "identityId": 53
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 12
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 7,
+        "identityId": 89
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 41
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 170
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 125
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 51
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 184
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 111
+      }
+    ],
+    "nameJa": "愛と憎悪 充電編成（周回）",
+    "descriptionJa": "愛と憎悪の名の下にドンキホーテを中心に、マルチクラック事務所フィクサー ヒースクリフ、AEDDグレゴール、涙で研ぎ澄まされた剣ロージャ、W社 3級整理要員良秀、次元裂きイサン、定事務所代表イシュメールを加えた充電編成です。通常の鏡ダンジョンを素早く回る周回用です。"
+  },
+  {
+    "id": "shi-slash-poise",
+    "nameKo": "시 협회 참격 호흡덱",
+    "nameEn": "Shi Association Slash Poise Build",
+    "descriptionKo": "남부 시 협회 5과 부장 돈키호테·5과 이스마엘·5과 히스클리프, 동부 시 협회 3과 파우스트에 검계 우두머리 뫼르소, 검계 살수 이상, S사 추노꾼 홍루를 더한 참격 위주의 호흡 조합입니다.",
+    "descriptionEn": "A Slash-focused Poise team of Shi Assoc. South Section 5 Director Don Quixote and Section 5 Ishmael and Heathcliff and East Section 3 Faust, plus Blade Lineage Mentor Meursault, Blade Lineage Salsu Yi Sang and S Corp. Ch'unokkun Hong Lu.",
+    "targetKeywords": [
+      "poise"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=-fwqxH6Iv08",
+    "youtubeChannelName": "Koiodon",
+    "youtubeChannelUrl": "https://www.youtube.com/@Koiodon",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 2,
+        "identityId": 28
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 66
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 178
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 7
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 31
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 100
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 86
+      }
+    ],
+    "egos": [
+      {
+        "sinnerId": 5,
+        "egoId": 109
+      }
+    ],
+    "nameJa": "シ協会 斬撃呼吸編成",
+    "descriptionJa": "南部シ協会5課部長ドンキホーテ・5課イシュメール・5課ヒースクリフ、東部シ協会3課ファウストに、剣契頭目ムルソー、剣契殺手イサン、S社チュノックン ホンルを加えた斬撃中心の呼吸編成です。"
+  },
+  {
+    "id": "ring-rupture-bleed-charge",
+    "nameKo": "약지 파열 출혈 충전덱",
+    "nameEn": "Ring Rupture Bleed Charge Build",
+    "descriptionKo": "거미집 약지 아비 홍루·약지 제자 파우스트, AEDD 그레고르, 차원찢개 이상, 라만차랜드 왕자 뫼르소·공주 로쟈, R사 제 4무리 토끼팀 히스클리프로 짜는 파열·출혈·충전 조합입니다. 세 상태를 모두 거는 토끼팀 히스클리프는 바꿀 인격이 없습니다.",
+    "descriptionEn": "A Rupture, Bleed and Charge team of The House of Spiders: The Ring Nursefather Hong Lu and Ring Apprentice Faust, AEDD Gregor, Dimension Shredder Yi Sang, The Prince and Princess of La Manchaland (Meursault and Rodion) and R Corp. 4th Pack Rabbit Heathcliff. The Rabbit Heathcliff carries all three statuses and has no substitute.",
+    "targetKeywords": [
+      "rupture",
+      "bleed",
+      "charge"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 12,
+        "identityId": 165
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 65
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 6,
+        "identityId": 172
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 170
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 171
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 184
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 70
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 90
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 123
+      }
+    ],
+    "nameJa": "薬指 破裂出血充電編成",
+    "descriptionJa": "蜘蛛の巣薬指の親方ホンル・薬指の子方ファウスト、AEDDグレゴール、次元裂きイサン、ラ・マンチャランドの王子ムルソー・姫ロージャ、R社第4群ウサギチーム ヒースクリフで組む破裂・出血・充電の編成です。3つの状態をすべて付与するウサギチーム ヒースクリフは替えの人格がいません。"
+  },
+  {
+    "id": "sinking-tremor-ammo-revised",
+    "nameKo": "침잠 진동 탄환덱 개정판",
+    "nameEn": "Sinking Tremor Ammo Build (Revised)",
+    "descriptionKo": "엄숙한 애도 이상, 잔향 · 외로움 료슈, LCA 우제트 선봉 3팀 팀장 오티스, 에드가 가문 승계자 그레고르, 정사무소 대표 이스마엘, 거미집 엄지 아비 로쟈로 짜는 6인 침잠·진동 탄환 조합입니다. 엄숙한 애도 이상은 [엄숙한 애도] E.G.O를 낄 때 진동으로도 칩니다.",
+    "descriptionEn": "A six-member Sinking and Tremor ammo team of Solemn Lament Yi Sang, Faint Aroma & Solitude Ryoshu, LCA Udjat Vanguard Team 3 Leader Outis, Edgar Family Heir Gregor, Jeong's Office Rep Ishmael and The House of Spiders: The Thumb Nursefather Rodion. Solemn Lament Yi Sang counts toward Tremor when the Solemn Lament E.G.O is equipped.",
+    "targetKeywords": [
+      "sinking",
+      "tremor"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=0ODlW7ehcp8",
+    "youtubeChannelName": "제리",
+    "youtubeChannelUrl": "https://www.youtube.com/@%EC%A0%9C%EB%A6%AC-yts",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 1,
+        "identityId": 11
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 57
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 155
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 164
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 111
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 180
+      }
+    ],
+    "egos": [
+      {
+        "sinnerId": 1,
+        "egoId": 110
+      }
+    ],
+    "nameJa": "沈潜振動弾丸編成 改訂版",
+    "descriptionJa": "厳粛な哀悼イサン、残香・寂しさ良秀、LCAウアジェト先鋒三隊隊長ウーティス、エドガー家継承者グレゴール、定事務所代表イシュメール、蜘蛛の巣親指の親方ロージャで組む6人の沈潜・振動・弾丸の編成です。厳粛な哀悼イサンは[厳粛な哀悼]E.G.Oを装着すると振動の人格としても数えます。"
+  },
+  {
+    "id": "dawn-sinking-tremor",
+    "nameKo": "새벽 사무소 침잠 진동덱",
+    "nameEn": "Dawn Office Sinking Tremor Build",
+    "descriptionKo": "엄숙한 애도 이상, 잔향 · 외로움 료슈, 새벽 사무소 해결사 파우스트·대표 그레고르, 정사무소 대표 이스마엘, LCA 우제트 선봉 3팀 팀장 오티스, 약지 야수파 도슨트 로쟈로 짜는 침잠·진동 조합입니다.",
+    "descriptionEn": "A Sinking and Tremor team of Solemn Lament Yi Sang, Faint Aroma & Solitude Ryoshu, Dawn Office Fixer Faust and Rep Gregor, Jeong's Office Rep Ishmael, LCA Udjat Vanguard Team 3 Leader Outis and The Ring Fauvist Docent Rodion.",
+    "targetKeywords": [
+      "sinking",
+      "tremor"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 12,
+        "identityId": 168
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 180
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 15
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 8
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 1,
+        "identityId": 11
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 183
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 57
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 111
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 182
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 155
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 174
+      }
+    ],
+    "egos": [
+      {
+        "sinnerId": 1,
+        "egoId": 110
+      }
+    ],
+    "nameJa": "夜明事務所 沈潜振動編成",
+    "descriptionJa": "厳粛な哀悼イサン、残香・寂しさ良秀、夜明事務所フィクサー ファウスト・代表グレゴール、定事務所代表イシュメール、LCAウアジェト先鋒三隊隊長ウーティス、薬指 野獣派ドーセント ロージャで組む沈潜・振動の編成です。"
+  },
+  {
+    "id": "thumb-mono-tremor",
+    "nameKo": "엄지 진동덱",
+    "nameEn": "Thumb Mono-Tremor Build",
+    "descriptionKo": "거미집 엄지 아비 로쟈, 동부 엄지 카포 IIII 뫼르소·솔다토 II 싱클레어, 밤의 송곳 카피타노 그레고르, T사 3등급 징수직 직원 돈키호테, 잔향 · 외로움 료슈, 후회 파우스트로 짜는 진동 조합입니다.",
+    "descriptionEn": "A Tremor team of The House of Spiders: The Thumb Nursefather Rodion, The Thumb East Capo IIII Meursault and Soldato II Sinclair, Night Awls Capitano Gregor, T Corp. Class 3 Collection Staff Don Quixote, Faint Aroma & Solitude Ryoshu and Regret Faust.",
+    "targetKeywords": [
+      "tremor"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 9,
+        "identityId": 180
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 69
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 168
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 139
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 38
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 57
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 23
+      }
+    ],
+    "nameJa": "親指 振動編成",
+    "descriptionJa": "蜘蛛の巣親指の親方ロージャ、東部親指カポIIII ムルソー・ソルダートII シンクレア、夜の錐カピターノ グレゴール、T社 3級徴収職職員ドンキホーテ、残香・寂しさ良秀、後悔ファウストで組む振動編成です。"
+  },
+  {
+    "id": "spiders-bleed-tremor",
+    "nameKo": "거미집 출혈 진동덱",
+    "nameEn": "House of Spiders Bleed Tremor Build",
+    "descriptionKo": "출혈과 진동을 함께 거는 밤의 송곳 카피타노 그레고르, 경멸, 경외 료슈, N사 중간 망치 돈키호테를 중심으로 거미집 약지 아비 홍루·약지 제자 파우스트·엄지 아비 로쟈, 정사무소 대표 이스마엘을 더한 출혈·진동 조합입니다.",
+    "descriptionEn": "A Bleed and Tremor team built around the dual-status Night Awls Capitano Gregor, Contempt, Awe Ryoshu and N Corp. Mittelhammer Don Quixote, with The House of Spiders: The Ring Nursefather Hong Lu, Ring Apprentice Faust and Thumb Nursefather Rodion, and Jeong's Office Rep Ishmael.",
+    "targetKeywords": [
+      "bleed",
+      "tremor"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 2,
+        "identityId": 183
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 174
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 12,
+        "identityId": 168
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 172
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 180
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 111
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 55
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 171
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 32
+      }
+    ],
+    "nameJa": "蜘蛛の巣 出血振動編成",
+    "descriptionJa": "出血と振動を両方付与する夜の錐カピターノ グレゴール、軽蔑、畏敬良秀、N社中鎚ドンキホーテを中心に、蜘蛛の巣薬指の親方ホンル・薬指の子方ファウスト・親指の親方ロージャ、定事務所代表イシュメールを加えた出血・振動の編成です。"
+  },
+  {
+    "id": "thumb-burn-tremor",
+    "nameKo": "엄지 화상 진동덱 (새벽 사무소 없이)",
+    "nameEn": "Thumb Burn Tremor Build (No Dawn Office)",
+    "descriptionKo": "거미집 엄지 아비 로쟈·엄지 제자 히스클리프, 동부 엄지 카포 IIII 뫼르소·솔다토 II 싱클레어에 후회 파우스트, 불주먹 사무소 생존자 그레고르, 마탄 오티스를 더한 화상·진동 조합입니다. 새벽 사무소 인격 없이 짭니다.",
+    "descriptionEn": "A Burn and Tremor team of The House of Spiders: The Thumb Nursefather Rodion and Thumb Apprentice Heathcliff and The Thumb East Capo IIII Meursault and Soldato II Sinclair, plus Regret Faust, Firefist Office Survivor Gregor and Magic Bullet Outis. No Dawn Office identities needed.",
+    "targetKeywords": [
+      "burn",
+      "tremor"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=2h6my0A0gcI",
+    "youtubeChannelName": "Koiodon",
+    "youtubeChannelUrl": "https://www.youtube.com/@Koiodon",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 9,
+        "identityId": 180
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 69
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 181
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 139
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 23
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 166
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 149
+      }
+    ],
+    "nameJa": "親指 火傷振動編成（夜明事務所なし）",
+    "descriptionJa": "蜘蛛の巣親指の親方ロージャ・親指の子方ヒースクリフ、東部親指カポIIII ムルソー・ソルダートII シンクレアに、後悔ファウスト、炎拳事務所生存者グレゴール、魔弾ウーティスを加えた火傷・振動の編成です。夜明事務所の人格なしで組みます。"
+  },
+  {
+    "id": "seven-devyat-heishou-rupture-farming",
+    "nameKo": "세븐·제뱌찌 흑수 파열덱 (빠른 파밍)",
+    "nameEn": "Seven, Devyat' & Heishou Rupture Build (Fast Farming)",
+    "descriptionKo": "남부 세븐 협회 4과 파우스트, 북부 제뱌찌 협회 3과 로쟈, 흑수 - 유 싱클레어·유 필두 히스클리프, 홍원 군주 홍루, W사 3등급 정리 요원 료슈로 짜는 6인 파열 조합입니다. 일반 거울 던전을 빠르게 도는 파밍용입니다.",
+    "descriptionEn": "A six-member Rupture team of Seven Assoc. South Section 4 Faust, Devyat' Assoc. North Section 3 Rodion, Heishou Pack - You Branch Sinclair and You Branch Adept Heathcliff, The Lord of Hongyuan Hong Lu and W Corp. L3 Cleanup Agent Ryoshu. Built for fast farming runs in the regular Mirror Dungeon.",
+    "targetKeywords": [
+      "rupture"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 6,
+        "identityId": 78
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 73
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 176
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 54
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 2,
+        "identityId": 22
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 84
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 122
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 140
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 98
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 51
+      }
+    ],
+    "nameJa": "セブン・ヂェーヴィチ・黒獣 破裂編成（高速周回）",
+    "descriptionJa": "南部セブン協会4課ファウスト、北部ヂェーヴィチ協会3課ロージャ、黒獣 - 酉シンクレア・酉 筆頭ヒースクリフ、鴻園の君主ホンル、W社 3級整理要員良秀で組む6人の破裂編成です。通常の鏡ダンジョンを素早く回る周回用です。"
+  },
+  {
+    "id": "railway-line6-manchaland-spiders",
+    "nameKo": "굴절 철도 6호선 편성 (라만차랜드·거미집)",
+    "nameEn": "Refraction Railway Line 6 Team (La Manchaland & Spiders)",
+    "descriptionKo": "굴절 철도 6호선용 출혈 편성입니다. 거미집의 검 료슈, 라만차랜드 실장 돈키호테·왕자 뫼르소·공주 로쟈·신부 그레고르, 거미집 소지 제자 싱클레어·검지 아비 이상이 들어가고, 구간에 따라 편성을 바꿔 씁니다.",
+    "descriptionEn": "A Bleed lineup for Refraction Railway Line 6: Blade of the House of Spiders Ryoshu, La Manchaland's Manager Don Quixote, Prince Meursault, Princess Rodion and Priest Gregor, and The House of Spiders: The Pinky Apprentice Sinclair and Index Nursefather Yi Sang. Swap lineups between sections as needed.",
+    "targetKeywords": [
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=LRhnnTBvnh0",
+    "youtubeChannelName": "윈쁘",
+    "youtubeChannelUrl": "https://www.youtube.com/@Winppe",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 4,
+        "identityId": 176
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 39
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 70
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 123
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 165
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 141
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 15
+      }
+    ],
+    "nameJa": "鏡屈折鉄道6号線 編成（ラ・マンチャランド・蜘蛛の巣）",
+    "descriptionJa": "鏡屈折鉄道6号線用の出血編成です。蜘蛛の巣の刀良秀、ラ・マンチャランド室長ドンキホーテ・王子ムルソー・姫ロージャ・神父グレゴール、蜘蛛の巣小指の子方シンクレア・人差し指の親方イサンが入り、区間によって編成を替えて使います。"
+  },
+  {
+    "id": "fullstop-poise",
+    "nameKo": "마침표 사무소 호흡덱",
+    "nameEn": "Full-Stop Office Poise Build",
+    "descriptionKo": "마침표 사무소 대표 홍루·해결사 히스클리프를 중심으로 검계 우두머리 뫼르소, 홍원 방랑무사 료슈, 거미집 검지 아비 이상·소지 제자 싱클레어, 대행 돈키호테를 더한 호흡 조합입니다.",
+    "descriptionEn": "A Poise team built around Full-Stop Office Rep Hong Lu and Fixer Heathcliff, with Blade Lineage Mentor Meursault, Drifting Blade of Hongyuan Ryoshu, The House of Spiders: The Index Nursefather Yi Sang and Pinky Apprentice Sinclair, and Procuration Don Quixote.",
+    "targetKeywords": [
+      "poise"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 1,
+        "identityId": 7
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 133
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 52
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 135
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 5,
+        "identityId": 66
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 56
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 15
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 141
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 82
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 95
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 43
+      }
+    ],
+    "egos": [
+      {
+        "sinnerId": 5,
+        "egoId": 109
+      }
+    ],
+    "nameJa": "終止符事務所 呼吸編成",
+    "descriptionJa": "終止符事務所代表ホンル・フィクサー ヒースクリフを中心に、剣契頭目ムルソー、鴻園の放浪武者良秀、蜘蛛の巣人差し指の親方イサン・小指の子方シンクレア、代行ドンキホーテを加えた呼吸編成です。"
+  },
+  {
+    "id": "tremor-reverb",
+    "nameKo": "진동 반향덱",
+    "nameEn": "Tremor Reverb Build",
+    "descriptionKo": "홍원 군주 홍루, 흑수 - 오 필두 이상·묘 필두 파우스트, T사 2등급 징수직 직원 로쟈, LCCB 대리 이스마엘, 어금니 사무소 해결사 오티스, 20구 유로지비 료슈로 짜는 진동 조합입니다. 진동 - 반향으로 진동을 터뜨리는 방식이고, 나태 약점인 적에게 강합니다.",
+    "descriptionEn": "A Tremor team of The Lord of Hongyuan Hong Lu, Heishou Pack - Wu Branch Adept Yi Sang and Mao Branch Adept Faust, T Corp. Class 2 Collection Staff Rodion, LCCB Assistant Manager Ishmael, Molar Office Fixer Outis and District 20 Yurodivy Ryoshu. It bursts Tremor through Tremor - Reverb and does well against Sloth-weak enemies.",
+    "targetKeywords": [
+      "tremor"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 8,
+        "identityId": 108
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 154
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 119
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 6,
+        "identityId": 84
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 14
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 117
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 101
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 148
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 48
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 27
+      }
+    ],
+    "nameJa": "振動 - 反響編成",
+    "descriptionJa": "鴻園の君主ホンル、黒獣 - 午 筆頭イサン・卯 筆頭ファウスト、T社 2級徴収職職員ロージャ、LCCB係長イシュメール、奥歯事務所フィクサー ウーティス、20区ユロージヴィ良秀で組む振動編成です。振動 - 反響で振動を爆発させる戦い方で、怠惰が弱点の敵に強いです。"
+  },
+  {
+    "id": "spicebush-yisang-sinking-deluge",
+    "nameKo": "동백 이상 침잠 범람덱",
+    "nameEn": "Spicebush Yi Sang Sinking Deluge Build",
+    "descriptionKo": "동백 이상을 중심으로 정사무소 대표 이스마엘, 눈물로 벼려낸 검 로쟈, 와일드헌트 히스클리프, LCA 우제트 선봉 3팀 팀장 오티스, 워더링하이츠 버틀러 파우스트를 더한 6인 침잠 조합입니다. 침잠을 쌓아 동백 이상의 3스킬로 범람을 일으키고, 남은 한 자리는 자유롭게 채웁니다.",
+    "descriptionEn": "A six-member Sinking team centered on Spicebush Yi Sang, with Jeong's Office Rep Ishmael, The Sword Sharpened with Tears Rodion, Wild Hunt Heathcliff, LCA Udjat Vanguard Team 3 Leader Outis and Wuthering Heights Butler Faust. Stack Sinking, then trigger a Deluge with Spicebush Yi Sang's Skill 3; the last slot is free.",
+    "targetKeywords": [
+      "sinking"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 11,
+        "identityId": 150
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 106
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 1,
+        "identityId": 8
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 111
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 125
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 94
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 155
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 20
+      }
+    ],
+    "nameJa": "壇香梅イサン 沈潜氾濫編成",
+    "descriptionJa": "壇香梅イサンを中心に、定事務所代表イシュメール、涙で研ぎ澄まされた剣ロージャ、ワイルドハント ヒースクリフ、LCAウアジェト先鋒三隊隊長ウーティス、ワザリング・ハイツ バトラー ファウストを加えた6人の沈潜編成です。沈潜を重ねて壇香梅イサンのスキル3で氾濫を起こし、残りの1枠は自由に埋めます。"
+  },
+  {
+    "id": "wcorp-charge",
+    "nameKo": "W사 충전덱",
+    "nameEn": "W Corp. Charge Build",
+    "descriptionKo": "W사 3등급 정리 요원 팀장 오티스·정리 요원 료슈, W사 4등급 정리 요원 - CCA 히스클리프, 멀티크랙 사무소 대표 파우스트, 사랑과 증오의 이름으로 돈키호테, R사 제 4무리 순록팀 홍루, 눈물로 벼려낸 검 로쟈로 짜는 충전 조합입니다. W사 팀장 오티스가 충전을 채우고 나머지가 소모해 피해를 냅니다.",
+    "descriptionEn": "A Charge team of W Corp. L3 Cleanup Captain Outis and Agent Ryoshu, W Corp. L4 Cleanup Agent - CCA Heathcliff, MultiCrack Office Rep Faust, In the Name of Love and Hate Don Quixote, R Corp. 4th Pack Reindeer Hong Lu and The Sword Sharpened with Tears Rodion. The W Corp. Captain supplies Charge and the rest spend it for damage.",
+    "targetKeywords": [
+      "charge"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 4,
+        "identityId": 53
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 126
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 35
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 2,
+        "identityId": 25
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 41
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 51
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 97
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 151
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 83
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 125
+      }
+    ],
+    "nameJa": "W社 充電編成",
+    "descriptionJa": "W社 3級整理要員チーフ ウーティス・整理要員良秀、W社 4級整理要員 - CCA ヒースクリフ、マルチクラック事務所代表ファウスト、愛と憎悪の名の下にドンキホーテ、R社第4群トナカイチーム ホンル、涙で研ぎ澄まされた剣ロージャで組む充電編成です。W社チーフ ウーティスが充電をため、残りが消耗してダメージを出します。"
+  },
+  {
+    "id": "ring-middle-bleed-starlight",
+    "nameKo": "약지·중지 출혈덱 (별빛 파밍)",
+    "nameEn": "Ring & Middle Bleed Build (Starlight Farming)",
+    "descriptionKo": "중지 작은 형님 히스클리프·작은 아우 싱클레어·작은 아우 돈키호테, 거미집 중지 제자 이스마엘, 거미집 약지 아비 홍루·약지 제자 파우스트, 약지 야수파 도슨트 로쟈로 짜는 질투 위주의 출혈 조합입니다. 거울 던전 15층에서 별빛을 모으는 데 씁니다.",
+    "descriptionEn": "An Envy-leaning Bleed team of The Middle Big Brother Heathcliff, Little Brother Sinclair and Little Sister Don Quixote, The House of Spiders: The Middle Apprentice Ishmael, Ring Nursefather Hong Lu and Ring Apprentice Faust, and The Ring Fauvist Docent Rodion. Used to farm Starlight on Mirror Dungeon floor 15.",
+    "targetKeywords": [
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 7,
+        "identityId": 175
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 112
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 138
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 37
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 172
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 171
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 174
+      }
+    ],
+    "nameJa": "薬指・中指 出血編成（星の光周回）",
+    "descriptionJa": "中指末兄ヒースクリフ・末弟シンクレア・末妹ドンキホーテ、蜘蛛の巣中指の子方イシュメール、蜘蛛の巣薬指の親方ホンル・薬指の子方ファウスト、薬指 野獣派ドーセント ロージャで組む、嫉妬中心の出血編成です。鏡ダンジョン15階で星の光を集めるのに使います。"
+  },
+  {
+    "id": "blade-lineage-kurokumo-poise-bleed",
+    "nameKo": "검계·흑운회 호흡 출혈덱 (흑검덱)",
+    "nameEn": "Blade Lineage & Kurokumo Poise Bleed Build",
+    "descriptionKo": "검계 우두머리 뫼르소·살수 이상·살수 파우스트, 흑운회 와카슈 히스클리프·와카슈 로쟈·부조장 이스마엘, 거미집 소지 제자 싱클레어로 짜는 참격 위주의 호흡·출혈 조합입니다.",
+    "descriptionEn": "A Slash-focused Poise and Bleed team of Blade Lineage Mentor Meursault and Salsu Yi Sang and Faust, Kurokumo Clan Wakashu Heathcliff and Rodion and Captain Ishmael, and The House of Spiders: The Pinky Apprentice Sinclair.",
+    "targetKeywords": [
+      "poise",
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=5SkxwwPZxWI",
+    "youtubeChannelName": "제리",
+    "youtubeChannelUrl": "https://www.youtube.com/@%EC%A0%9C%EB%A6%AC-yts",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 10,
+        "identityId": 141
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 7
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 96
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 24
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 66
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 118
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 109
+      }
+    ],
+    "egos": [
+      {
+        "sinnerId": 5,
+        "egoId": 109
+      }
+    ],
+    "nameJa": "剣契・黒雲会 呼吸出血編成",
+    "descriptionJa": "剣契頭目ムルソー・殺手イサン・殺手ファウスト、黒雲会若衆ヒースクリフ・若衆ロージャ・副組長イシュメール、蜘蛛の巣小指の子方シンクレアで組む、斬撃中心の呼吸・出血の編成です。"
+  },
+  {
+    "id": "pequod-pierce-poise-bleed",
+    "nameKo": "피쿼드 관통 호흡 출혈덱",
+    "nameEn": "Pequod Pierce Poise Bleed Build",
+    "descriptionKo": "피쿼드호 선장 이스마엘·일등 항해사 이상·작살잡이 히스클리프, 동부 시 협회 3과 파우스트, 동부 섕크 협회 3과 돈키호테, 쌍갈고리 해적단 부선장 그레고르, 검계 살수 싱클레어로 짜는 관통 위주의 호흡·출혈 조합입니다.",
+    "descriptionEn": "A Pierce-focused Poise and Bleed team of The Pequod Captain Ishmael, First Mate Yi Sang and Harpooneer Heathcliff, Shi Assoc. East Section 3 Faust, Cinq Assoc. East Section 3 Don Quixote, Twinhook Pirates First Mate Gregor and Blade Lineage Salsu Sinclair.",
+    "targetKeywords": [
+      "poise",
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 8,
+        "identityId": 107
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 4
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 92
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 28
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 40
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 163
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 133
+      }
+    ],
+    "nameJa": "ピークォド 貫通呼吸出血編成",
+    "descriptionJa": "ピークォド号船長イシュメール・1等航海士イサン・銛使いヒースクリフ、東部シ協会3課ファウスト、東部センク協会3課ドンキホーテ、双鉤海賊団副船長グレゴール、剣契殺手シンクレアで組む貫通中心の呼吸・出血の編成です。"
+  },
+  {
+    "id": "fullstop-cinq-pierce-poise",
+    "nameKo": "마침표·섕크 관통 호흡덱",
+    "nameEn": "Full-Stop & Cinq Pierce Poise Build",
+    "descriptionKo": "마침표 사무소 대표 홍루·해결사 히스클리프, 서부 섕크 협회 3과 뫼르소, 남부 섕크 협회 4과 부장 싱클레어·4과 오티스, 살아남은 로보토미 직원 파우스트, 흉탄 이상으로 짜는 관통 위주의 호흡 조합입니다.",
+    "descriptionEn": "A Pierce-focused Poise team of Full-Stop Office Rep Hong Lu and Fixer Heathcliff, Cinq Assoc. West Section 3 Meursault, South Section 4 Director Sinclair and Section 4 Outis, Lobotomy Corp. Remnant Faust and Fell Bullet Yi Sang.",
+    "targetKeywords": [
+      "poise"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 6,
+        "identityId": 82
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 68
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 135
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 145
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 95
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 18
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 13
+      }
+    ],
+    "nameJa": "終止符・センク 貫通呼吸編成",
+    "descriptionJa": "終止符事務所代表ホンル・フィクサー ヒースクリフ、西部センク協会3課ムルソー、南部センク協会4課部長シンクレア・4課ウーティス、生き残ったロボトミー職員ファウスト、凶弾イサンで組む貫通中心の呼吸編成です。"
+  },
+  {
+    "id": "love-and-hate-reindeer-charge-sinking",
+    "nameKo": "R사 순록팀 충전 침잠덱 (충침덱)",
+    "nameEn": "R Corp. Reindeer Charge Sinking Build",
+    "descriptionKo": "사랑과 증오의 이름으로 돈키호테, R사 제 4무리 순록팀 로쟈·홍루·이스마엘, 멀티크랙 사무소 대표 파우스트·해결사 히스클리프, 동백 이상으로 짜는 충전·침잠 조합입니다.",
+    "descriptionEn": "A Charge and Sinking team of In the Name of Love and Hate Don Quixote, R Corp. 4th Pack Reindeer Rodion, Hong Lu and Ishmael, MultiCrack Office Rep Faust and Fixer Heathcliff, and Spicebush Yi Sang.",
+    "targetKeywords": [
+      "charge",
+      "sinking"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 3,
+        "identityId": 41
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 126
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 83
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 25
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 104
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 89
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 8
+      }
+    ],
+    "nameJa": "R社トナカイチーム 充電沈潜編成",
+    "descriptionJa": "愛と憎悪の名の下にドンキホーテ、R社第4群トナカイチーム ロージャ・ホンル・イシュメール、マルチクラック事務所代表ファウスト・フィクサー ヒースクリフ、壇香梅イサンで組む充電・沈潜の編成です。"
+  },
+  {
+    "id": "ncorp-tremor-bleed-zwei-molar",
+    "nameKo": "N사 진동 출혈덱 (츠바이·어금니)",
+    "nameEn": "N Corp. Tremor Bleed Build (Zwei & Molar)",
+    "descriptionKo": "N사 중간 망치 돈키호테, 경멸, 경외 료슈, 쥐어들 자 싱클레어에 밤의 송곳 카피타노 그레고르, 약지 야수파 스튜던트 뫼르소, 어금니 사무소 해결사 오티스, 서부 츠바이 협회 3과 이스마엘을 더한 진동·출혈 조합입니다.",
+    "descriptionEn": "A Tremor and Bleed team of N Corp. Mittelhammer Don Quixote, Contempt, Awe Ryoshu and The One Who Shall Grip Sinclair, plus Night Awls Capitano Gregor, The Ring Fauvist Student Meursault, Molar Office Fixer Outis and Zwei Assoc. West Section 3 Ishmael.",
+    "targetKeywords": [
+      "tremor",
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 4,
+        "identityId": 55
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 168
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 173
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 148
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 32
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 134
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 108
+      }
+    ],
+    "nameJa": "N社 振動出血編成（ツヴァイ・奥歯）",
+    "descriptionJa": "N社中鎚ドンキホーテ、軽蔑、畏敬良秀、握らんとする者シンクレアに、夜の錐カピターノ グレゴール、薬指 野獣派スチューデント ムルソー、奥歯事務所フィクサー ウーティス、西部ツヴァイ協会3課イシュメールを加えた振動・出血の編成です。"
+  },
+  {
+    "id": "regret-faust-thumb-tremor",
+    "nameKo": "후회 파우스트·엄지 진동덱",
+    "nameEn": "Regret Faust & Thumb Tremor Build",
+    "descriptionKo": "후회 파우스트, 동부 엄지 카포 IIII 뫼르소·솔다토 II 싱클레어, 정사무소 대표 이스마엘, 20구 유로지비 홍루, 밤의 송곳 카피타노 그레고르, T사 3등급 강력징수직 직원 오티스로 짜는 진동 조합입니다.",
+    "descriptionEn": "A Tremor team of Regret Faust, The Thumb East Capo IIII Meursault and Soldato II Sinclair, Jeong's Office Rep Ishmael, District 20 Yurodivy Hong Lu, Night Awls Capitano Gregor and T Corp. Class 3 VDCU Staff Outis.",
+    "targetKeywords": [
+      "tremor"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 2,
+        "identityId": 23
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 69
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 111
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 139
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 81
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 168
+      },
+      {
+        "sinnerId": 11,
+        "identityId": 154
+      }
+    ],
+    "nameJa": "後悔ファウスト・親指 振動編成",
+    "descriptionJa": "後悔ファウスト、東部親指カポIIII ムルソー・ソルダートII シンクレア、定事務所代表イシュメール、20区ユロージヴィ ホンル、夜の錐カピターノ グレゴール、T社3級強制徴収職 職員ウーティスで組む振動編成です。"
+  },
+  {
+    "id": "drifting-blade-ryoshu-pride-poise",
+    "nameKo": "방랑무사 료슈 오만 호흡덱",
+    "nameEn": "Drifting Blade Ryoshu Pride Poise Build",
+    "descriptionKo": "홍원 방랑무사 료슈를 중심으로 마침표 사무소 대표 홍루·해결사 히스클리프, 피쿼드호 선장 이스마엘, 검계 우두머리 뫼르소·살수 이상, 동부 시 협회 3과 파우스트를 더한 오만 공명 위주의 호흡 조합입니다. 길게 이어지는 전투와 굴절 철도에 맞춘 구성이고, 파우스트 자리는 검계 살수 파우스트로 바꿔 쓸 수 있습니다.",
+    "descriptionEn": "A Pride-resonance Poise team centered on Drifting Blade of Hongyuan Ryoshu, with Full-Stop Office Rep Hong Lu and Fixer Heathcliff, The Pequod Captain Ishmael, Blade Lineage Mentor Meursault and Salsu Yi Sang, and Shi Assoc. East Section 3 Faust. Built for long fights and Refraction Railway; Blade Lineage Salsu Faust can take the Faust slot.",
+    "targetKeywords": [
+      "poise"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 2,
+        "identityId": 24
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 1,
+        "identityId": 7
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 28
+      },
+      {
+        "sinnerId": 4,
+        "identityId": 56
+      },
+      {
+        "sinnerId": 5,
+        "identityId": 66
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 82
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 95
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 107
+      }
+    ],
+    "egos": [
+      {
+        "sinnerId": 5,
+        "egoId": 109
+      }
+    ],
+    "nameJa": "放浪武者良秀 傲慢呼吸編成",
+    "descriptionJa": "鴻園の放浪武者良秀を中心に、終止符事務所代表ホンル・フィクサー ヒースクリフ、ピークォド号船長イシュメール、剣契頭目ムルソー・殺手イサン、東部シ協会3課ファウストを加えた傲慢の共鳴中心の呼吸編成です。長く続く戦闘と鏡屈折鉄道向けの構成で、ファウストの枠は剣契殺手ファウストに替えられます。"
+  },
+  {
+    "id": "heishou-index-rupture-poise",
+    "nameKo": "흑수·검지 파열 호흡덱",
+    "nameEn": "Heishou & Index Rupture Poise Build",
+    "descriptionKo": "거미집 검지 아비 이상, 검지 수행자:【쪽지】 파우스트, 흑수 - 미 돈키호테·사 그레고르·사 로쟈, 홍원 군주 홍루, 여우비 히스클리프로 짜는 파열·호흡 조합입니다.",
+    "descriptionEn": "A Rupture and Poise team of The House of Spiders: The Index Nursefather Yi Sang, The Index Proselyte:【Paper Slip】 Faust, Heishou Pack - Wei Branch Don Quixote and Si Branch Gregor and Rodion, The Lord of Hongyuan Hong Lu and Sunshower Heathcliff.",
+    "targetKeywords": [
+      "rupture",
+      "poise"
+    ],
+    "tags": [],
+    "isFeatured": false,
+    "coreMembers": [],
+    "alternatives": [
+      {
+        "sinnerId": 3,
+        "identityId": 41
+      }
+    ],
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 1,
+        "identityId": 15
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 42
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 29
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 84
+      },
+      {
+        "sinnerId": 12,
+        "identityId": 167
+      },
+      {
+        "sinnerId": 9,
+        "identityId": 124
+      },
+      {
+        "sinnerId": 7,
+        "identityId": 91
+      }
+    ],
+    "nameJa": "黒獣・人差し指 破裂呼吸編成",
+    "descriptionJa": "蜘蛛の巣人差し指の親方イサン、人差し指遂行者:【紙片】ファウスト、黒獣 - 未ドンキホーテ・巳グレゴール・巳ロージャ、鴻園の君主ホンル、狐雨ヒースクリフで組む破裂・呼吸の編成です。"
+  },
+  {
+    "id": "spider-blade-ryoshu-solo",
+    "nameKo": "거미집의 검 료슈 1인 클리어덱 (거검슈 1인클)",
+    "nameEn": "Blade of the House of Spiders Ryoshu Solo Clear Build",
+    "descriptionKo": "거미집의 검 료슈 한 명만 남겨 거울 던전을 깨는 조합입니다. 거미집 소지 제자 싱클레어·중지 제자 이스마엘·약지 제자 파우스트·약지 아비 홍루·검지 아비 이상과 대행 돈키호테는 료슈의 천살 [天殺]로 처형되는 재료로 들어갑니다.",
+    "descriptionEn": "A build that clears the Mirror Dungeon with Blade of the House of Spiders Ryoshu alone. The House of Spiders' Pinky Apprentice Sinclair, Middle Apprentice Ishmael, Ring Apprentice Faust, Ring Nursefather Hong Lu and Index Nursefather Yi Sang, plus Procuration Don Quixote, are there to be executed by Ryoshu's Slay the Heavens - Tiansha [天殺].",
+    "targetKeywords": [
+      "bleed"
+    ],
+    "tags": [],
+    "isFeatured": true,
+    "coreMembers": [],
+    "youtubeUrl": "https://www.youtube.com/watch?v=YCvnkwWmzkY",
+    "youtubeChannelName": "윈쁘",
+    "youtubeChannelUrl": "https://www.youtube.com/@Winppe",
+    "updatedAt": "2026-10-12",
+    "members": [
+      {
+        "sinnerId": 4,
+        "identityId": 176
+      },
+      {
+        "sinnerId": 10,
+        "identityId": 141
+      },
+      {
+        "sinnerId": 8,
+        "identityId": 112
+      },
+      {
+        "sinnerId": 2,
+        "identityId": 171
+      },
+      {
+        "sinnerId": 3,
+        "identityId": 43
+      },
+      {
+        "sinnerId": 6,
+        "identityId": 172
+      },
+      {
+        "sinnerId": 1,
+        "identityId": 15
+      }
+    ],
+    "nameJa": "蜘蛛の巣の刀良秀 1人クリア編成",
+    "descriptionJa": "蜘蛛の巣の刀良秀1人だけを残して鏡ダンジョンをクリアする編成です。蜘蛛の巣小指の子方シンクレア・中指の子方イシュメール・薬指の子方ファウスト・薬指の親方ホンル・人差し指の親方イサンと代行ドンキホーテは、良秀の天殺で処刑される素材として入ります。"
+  }
+]

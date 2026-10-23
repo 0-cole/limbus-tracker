@@ -1,0 +1,656 @@
+{
+  "traits": {
+    "associate-office-o-ufi": {
+      "ko": "협력 사무소 - 외우피",
+      "en": "Associate Office - Öufi",
+      "ja": "協力事務所 - ウーフィ"
+    },
+    "blade-lineage": {
+      "ko": "검계",
+      "en": "Blade Lineage",
+      "ja": "剣契"
+    },
+    "bloodfiend": {
+      "ko": "혈귀",
+      "en": "Bloodfiend",
+      "ja": "血鬼"
+    },
+    "capo-iiii": {
+      "ko": "카포 IIII",
+      "en": "Capo IIII",
+      "ja": "カポIIII"
+    },
+    "cinq-association": {
+      "ko": "섕크 협회",
+      "en": "Cinq Association",
+      "ja": "センク協会"
+    },
+    "dawn-office": {
+      "ko": "새벽 사무소",
+      "en": "Dawn Office",
+      "ja": "夜明事務所"
+    },
+    "devyat-association": {
+      "ko": "제뱌찌 협회",
+      "en": "Devyat' Association",
+      "ja": "ヂェーヴィチ協会"
+    },
+    "dieci-association": {
+      "ko": "디에치 협회",
+      "en": "Dieci Association",
+      "ja": "ディエーチ協会"
+    },
+    "dihui-star": {
+      "ko": "지혜성",
+      "en": "Dihui Star",
+      "ja": "地慧星"
+    },
+    "docent": {
+      "ko": "도슨트",
+      "en": "Docent",
+      "ja": "ドーセント"
+    },
+    "edgar-family": {
+      "ko": "에드가 가문",
+      "en": "Edgar Family",
+      "ja": "エドガー家"
+    },
+    "ego-gear": {
+      "ko": "E.G.O 장비",
+      "en": "E.G.O Gear",
+      "ja": "E.G.O装備"
+    },
+    "family-hierarch-candidate": {
+      "ko": "가주 후보",
+      "en": "Family Hierarch Candidate",
+      "ja": "家主候補"
+    },
+    "fanghunt-office": {
+      "ko": "송곳니 사냥 사무소",
+      "en": "Fanghunt Office",
+      "ja": "牙狩事務所"
+    },
+    "fixer": {
+      "ko": "해결사",
+      "en": "Fixer",
+      "ja": "フィクサー"
+    },
+    "full-stop-office": {
+      "ko": "마침표 사무소",
+      "en": "Full-Stop Office",
+      "ja": "終止符事務所"
+    },
+    "g-corp": {
+      "ko": "G사",
+      "en": "G Corp.",
+      "ja": "G社"
+    },
+    "great-sister": {
+      "ko": "큰 누님",
+      "en": "Great Sister",
+      "ja": "長姉"
+    },
+    "h-corp": {
+      "ko": "H사",
+      "en": "H Corp.",
+      "ja": "H社"
+    },
+    "heishou-pack": {
+      "ko": "흑수",
+      "en": "Heishou Pack",
+      "ja": "黒獣"
+    },
+    "heishou-pack-adept": {
+      "ko": "흑수 필두",
+      "en": "Heishou Pack Adept",
+      "ja": "黒獣 筆頭"
+    },
+    "heishou-pack-mao-branch": {
+      "ko": "흑수 - 묘",
+      "en": "Heishou Pack - Mao Branch",
+      "ja": "黒獣 - 卯"
+    },
+    "heishou-pack-si-branch": {
+      "ko": "흑수 - 사",
+      "en": "Heishou Pack - Si Branch",
+      "ja": "黒獣 - 巳"
+    },
+    "heishou-pack-wei-branch": {
+      "ko": "흑수 - 미",
+      "en": "Heishou Pack - Wei Branch",
+      "ja": "黒獣 - 未"
+    },
+    "heishou-pack-wu-branch": {
+      "ko": "흑수 - 오",
+      "en": "Heishou Pack - Wu Branch",
+      "ja": "黒獣 - 午"
+    },
+    "heishou-pack-you-branch": {
+      "ko": "흑수 - 유",
+      "en": "Heishou Pack - You Branch",
+      "ja": "黒獣 - 酉"
+    },
+    "hook-office": {
+      "ko": "갈고리 사무소",
+      "en": "Hook Office",
+      "ja": "鈎事務所"
+    },
+    "jeongs-office": {
+      "ko": "정사무소",
+      "en": "Jeong's Office",
+      "ja": "定事務所"
+    },
+    "jia-family": {
+      "ko": "가씨 가문",
+      "en": "Jia Family",
+      "ja": "ジア家"
+    },
+    "k-corp": {
+      "ko": "K사",
+      "en": "K Corp.",
+      "ja": "K社"
+    },
+    "kurokumo-clan": {
+      "ko": "흑운회",
+      "en": "Kurokumo Clan",
+      "ja": "黒雲会"
+    },
+    "la-manchaland": {
+      "ko": "라만차랜드",
+      "en": "La Manchaland",
+      "ja": "ラ・マンチャランド"
+    },
+    "lca": {
+      "ko": "LCA",
+      "en": "LCA",
+      "ja": "LCA"
+    },
+    "lcb": {
+      "ko": "LCB",
+      "en": "LCB",
+      "ja": "LCB"
+    },
+    "lcc": {
+      "ko": "LCC",
+      "en": "LCC",
+      "ja": "LCC"
+    },
+    "lcd": {
+      "ko": "LCD",
+      "en": "LCD",
+      "ja": "LCD"
+    },
+    "lce": {
+      "ko": "LCE",
+      "en": "LCE",
+      "ja": "LCE"
+    },
+    "le-noir": {
+      "ko": "르누아르",
+      "en": "Le Noir",
+      "ja": "ル・ノワール"
+    },
+    "le-rouge": {
+      "ko": "르루주",
+      "en": "Le Rouge",
+      "ja": "ル・ルージュ"
+    },
+    "le-sette-famiglie": {
+      "ko": "7대 패밀리",
+      "en": "Le Sette Famiglie",
+      "ja": "七大ファミリー"
+    },
+    "limbus-company": {
+      "ko": "림버스 컴퍼니",
+      "en": "Limbus Company",
+      "ja": "リンバス・カンパニー"
+    },
+    "liu-association": {
+      "ko": "리우 협회",
+      "en": "Liu Association",
+      "ja": "リウ協会"
+    },
+    "lobotomy-corp-branch": {
+      "ko": "로보토미 지부",
+      "en": "Lobotomy Corp. Branch",
+      "ja": "ロボトミー支部"
+    },
+    "lobotomy-corp-headquarters": {
+      "ko": "로보토미 본사",
+      "en": "Lobotomy Corp. Headquarters",
+      "ja": "ロボトミー本社"
+    },
+    "los-mariachis": {
+      "ko": "마리아치",
+      "en": "Los Mariachis",
+      "ja": "マリアッチ"
+    },
+    "maestro": {
+      "ko": "마에스트로",
+      "en": "Maestro",
+      "ja": "マエストロ"
+    },
+    "mechanical-amalgam": {
+      "ko": "기계 융화 생명체",
+      "en": "Mechanical Amalgam",
+      "ja": "機械融和生命体"
+    },
+    "molar-office": {
+      "ko": "어금니 사무소",
+      "en": "Molar Office",
+      "ja": "奥歯事務所"
+    },
+    "multicrack-office": {
+      "ko": "멀티크랙 사무소",
+      "en": "MultiCrack Office",
+      "ja": "マルチクラック事務所"
+    },
+    "n-corp": {
+      "ko": "N사",
+      "en": "N Corp.",
+      "ja": "N社"
+    },
+    "n-corp-fanatic": {
+      "ko": "N사 광신도",
+      "en": "N Corp. Fanatic",
+      "ja": "N社の狂信者"
+    },
+    "night-awls": {
+      "ko": "밤의 송곳",
+      "en": "Night Awls",
+      "ja": "夜の錐"
+    },
+    "o-ufi-association": {
+      "ko": "외우피 협회",
+      "en": "Öufi Association",
+      "ja": "ウーフィ協会"
+    },
+    "r-corp": {
+      "ko": "R사",
+      "en": "R Corp.",
+      "ja": "R社"
+    },
+    "rb": {
+      "ko": "료.고.파",
+      "en": "R.B.",
+      "ja": "りょ・ミ・パ"
+    },
+    "rosespanner-workshop": {
+      "ko": "장미스패너 공방",
+      "en": "Rosespanner Workshop",
+      "ja": "バラのスパナ工房"
+    },
+    "s-corp": {
+      "ko": "S사",
+      "en": "S Corp.",
+      "ja": "S社"
+    },
+    "school-of-corporism": {
+      "ko": "신체파",
+      "en": "School of Corporism",
+      "ja": "身体派"
+    },
+    "school-of-fauvism": {
+      "ko": "야수파",
+      "en": "School of Fauvism",
+      "ja": "野獣派"
+    },
+    "school-of-pointillism": {
+      "ko": "점묘파",
+      "en": "School of Pointillism",
+      "ja": "点描派"
+    },
+    "second-kindred": {
+      "ko": "제2권속",
+      "en": "Second Kindred",
+      "ja": "第2眷属"
+    },
+    "seven-association": {
+      "ko": "세븐 협회",
+      "en": "Seven Association",
+      "ja": "セブン協会"
+    },
+    "shi-association": {
+      "ko": "시 협회",
+      "en": "Shi Association",
+      "ja": "シ協会"
+    },
+    "sisyphe": {
+      "ko": "시지프",
+      "en": "Sisyphe",
+      "ja": "シーシュポス"
+    },
+    "smoke-war": {
+      "ko": "연기전쟁",
+      "en": "Smoke War",
+      "ja": "煙戦争"
+    },
+    "soldato-ii": {
+      "ko": "솔다토 II",
+      "en": "Soldato II",
+      "ja": "ソルダートII"
+    },
+    "sottocapo": {
+      "ko": "언더보스",
+      "en": "Sottocapo",
+      "ja": "アンダーボス"
+    },
+    "student": {
+      "ko": "스튜던트",
+      "en": "Student",
+      "ja": "スチューデント"
+    },
+    "syndicate": {
+      "ko": "조직",
+      "en": "Syndicate",
+      "ja": "組織"
+    },
+    "t-corp": {
+      "ko": "T사",
+      "en": "T Corp.",
+      "ja": "T社"
+    },
+    "technology-liberation-alliance": {
+      "ko": "기술해방연합",
+      "en": "Technology Liberation Alliance",
+      "ja": "技術解放連合"
+    },
+    "the-backstreets": {
+      "ko": "뒷골목",
+      "en": "The Backstreets",
+      "ja": "裏路地"
+    },
+    "the-dead-rabbits": {
+      "ko": "데드레빗츠",
+      "en": "The Dead Rabbits",
+      "ja": "デッドラビッツ"
+    },
+    "the-fingers": {
+      "ko": "손가락",
+      "en": "The Fingers",
+      "ja": "指"
+    },
+    "the-house-of-spiders": {
+      "ko": "거미집",
+      "en": "The House of Spiders",
+      "ja": "蜘蛛の巣"
+    },
+    "the-index": {
+      "ko": "검지",
+      "en": "The Index",
+      "ja": "人差し指"
+    },
+    "the-middle": {
+      "ko": "중지",
+      "en": "The Middle",
+      "ja": "中指"
+    },
+    "the-oracles-proxy": {
+      "ko": "신탁 대행자",
+      "en": "The Oracle's Proxy",
+      "ja": "神託代行者"
+    },
+    "the-pequod": {
+      "ko": "피쿼드호",
+      "en": "The Pequod",
+      "ja": "ピークォド号"
+    },
+    "the-pinky": {
+      "ko": "소지",
+      "en": "The Pinky",
+      "ja": "小指"
+    },
+    "the-ring": {
+      "ko": "약지",
+      "en": "The Ring",
+      "ja": "薬指"
+    },
+    "the-thumb": {
+      "ko": "엄지",
+      "en": "The Thumb",
+      "ja": "親指"
+    },
+    "the-wild-hunt": {
+      "ko": "와일드헌트",
+      "en": "The Wild Hunt",
+      "ja": "ワイルドハント"
+    },
+    "third-kindred": {
+      "ko": "제3권속",
+      "en": "Third Kindred",
+      "ja": "第3眷属"
+    },
+    "tiansha-star": {
+      "ko": "천살성",
+      "en": "Tiansha Star",
+      "ja": "天殺星"
+    },
+    "tingtang-gang": {
+      "ko": "콩콩이파",
+      "en": "Tingtang Gang",
+      "ja": "ぽんぽん派"
+    },
+    "twinhook-pirates": {
+      "ko": "쌍갈고리 해적단",
+      "en": "Twinhook Pirates",
+      "ja": "双鉤海賊団"
+    },
+    "w-corp": {
+      "ko": "W사",
+      "en": "W Corp.",
+      "ja": "W社"
+    },
+    "war-hero": {
+      "ko": "전쟁영웅",
+      "en": "War Hero",
+      "ja": "戦争の英雄"
+    },
+    "wuthering-heights": {
+      "ko": "워더링하이츠",
+      "en": "Wuthering Heights",
+      "ja": "ワザリング・ハイツ"
+    },
+    "yurodiviye": {
+      "ko": "유로지비",
+      "en": "Yurodiviye",
+      "ja": "ユロージヴィ"
+    },
+    "zwei-association": {
+      "ko": "츠바이 협회",
+      "en": "Zwei Association",
+      "ja": "ツヴァイ協会"
+    }
+  },
+  "metaTiers": {
+    "1": "D",
+    "2": "D",
+    "3": "D",
+    "4": "D",
+    "5": "D",
+    "6": "D",
+    "7": "C",
+    "8": "B",
+    "9": "C",
+    "10": "B",
+    "11": "A",
+    "12": "B",
+    "13": "C",
+    "14": "A",
+    "15": "S",
+    "16": "D",
+    "17": "D",
+    "18": "D",
+    "19": "D",
+    "20": "D",
+    "21": "C",
+    "22": "C",
+    "23": "C",
+    "24": "C",
+    "25": "C",
+    "26": "C",
+    "27": "S",
+    "28": "C",
+    "29": "B",
+    "30": "D",
+    "31": "D",
+    "32": "D",
+    "33": "D",
+    "34": "D",
+    "35": "C",
+    "36": "C",
+    "37": "C",
+    "38": "C",
+    "39": "B",
+    "40": "C",
+    "41": "B",
+    "42": "B",
+    "43": "B",
+    "44": "D",
+    "45": "D",
+    "46": "D",
+    "47": "D",
+    "48": "D",
+    "49": "C",
+    "50": "C",
+    "51": "C",
+    "52": "C",
+    "53": "B",
+    "54": "C",
+    "55": "B",
+    "56": "C",
+    "57": "S",
+    "58": "D",
+    "59": "D",
+    "60": "D",
+    "61": "D",
+    "62": "D",
+    "63": "C",
+    "64": "C",
+    "65": "C",
+    "66": "B",
+    "67": "C",
+    "68": "C",
+    "69": "B",
+    "70": "C",
+    "71": "A",
+    "72": "D",
+    "73": "D",
+    "74": "D",
+    "75": "D",
+    "76": "D",
+    "77": "D",
+    "78": "C",
+    "79": "C",
+    "80": "C",
+    "81": "C",
+    "82": "B",
+    "83": "C",
+    "84": "S",
+    "85": "D",
+    "86": "D",
+    "87": "D",
+    "88": "D",
+    "89": "D",
+    "90": "C",
+    "91": "C",
+    "92": "C",
+    "93": "C",
+    "94": "B",
+    "95": "B",
+    "96": "C",
+    "97": "B",
+    "98": "B",
+    "99": "D",
+    "100": "D",
+    "101": "D",
+    "102": "D",
+    "103": "D",
+    "104": "C",
+    "105": "C",
+    "106": "C",
+    "107": "B",
+    "108": "C",
+    "109": "C",
+    "110": "B",
+    "111": "A",
+    "112": "B",
+    "113": "D",
+    "114": "D",
+    "115": "D",
+    "116": "D",
+    "117": "D",
+    "118": "C",
+    "119": "C",
+    "120": "C",
+    "121": "B",
+    "122": "C",
+    "123": "C",
+    "124": "A",
+    "125": "A",
+    "126": "C",
+    "127": "D",
+    "128": "D",
+    "129": "D",
+    "130": "D",
+    "131": "D",
+    "132": "D",
+    "133": "C",
+    "134": "B",
+    "135": "C",
+    "136": "A",
+    "137": "C",
+    "138": "C",
+    "139": "B",
+    "140": "B",
+    "141": "B",
+    "142": "D",
+    "143": "D",
+    "144": "D",
+    "145": "D",
+    "146": "D",
+    "147": "C",
+    "148": "C",
+    "149": "B",
+    "150": "C",
+    "151": "C",
+    "152": "C",
+    "153": "C",
+    "154": "C",
+    "155": "A",
+    "156": "D",
+    "157": "D",
+    "158": "D",
+    "159": "D",
+    "160": "D",
+    "161": "C",
+    "162": "C",
+    "163": "C",
+    "164": "C",
+    "165": "C",
+    "166": "B",
+    "167": "C",
+    "168": "A",
+    "169": "B",
+    "170": "B",
+    "171": "B",
+    "172": "A",
+    "173": "B",
+    "174": "B",
+    "175": "B",
+    "176": "S",
+    "177": "A",
+    "178": "B",
+    "179": "B",
+    "180": "A",
+    "181": "B",
+    "182": "S",
+    "183": "S",
+    "184": "B",
+    "185": "C",
+    "186": "A",
+    "187": "A",
+    "188": "A",
+    "189": "S",
+    "190": "S"
+  }
+}

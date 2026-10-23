@@ -139,8 +139,75 @@
 
 ---
 
-## 4. Key File Locations
+## 4. LimbusDeck.com Complete REA Reverse-Engineering Inventory (Ready for Integration)
+All 126 unique Next.js Turbopack JavaScript chunks (551 exported modules across all 29 routes) and full datasets from `https://limbusdeck.com/en` have been captured and extracted via REA into `C:\Users\cdbla\.gemini\antigravity\brain\9beca90b-f2da-4618-bde8-a9209f8a8a44\scratch\multiroute_extracted\`:
+
+1. **Complete Datasets Extracted**:
+   - **Full Identities DB with Skill & Coin Effect Text**: `3o-8c1-ji611u.js` (1.26 MB, module `554884`) — 190+ Identities with full `skills` (`coinEffects`, `coinEffectsKo`, `variants`, `keywords`), `defenseSkills`, `passives` (`descriptionEn`, `descriptionKo`, `conditionType`, `requiredSin`, `requiredCount`), `hpBase`, `hpGrowth`, `speedMin`/`speedMax`, `staggerThresholds`, `resistances`, `traits`, and `isWalpurgis`.
+   - **Lightweight Identities Summary DB**: `0jeieeit2ti93.js` (357 KB, module `501738`).
+   - **Full E.G.O DB with Awakening, Corrosion & Passive Text**: `0fsrk512cua9c.js` (373 KB) — 116+ E.G.O with full Awakening `coinEffects`, Corrosion `coinEffects`, passive descriptions, sin `costs`, SP `sanity` costs, and sin `resistances`.
+   - **Lightweight E.G.O Summary DB**: `0akfwzoof2v4-.js` (95 KB, module `224710`).
+   - **76 Recommended Meta Parties JSON**: `api_recommended-parties.html` (110 KB JSON) — 76 community archetypes with `coreMembers`, `members`, `targetKeywords`, `descriptionEn`, and `youtubeUrl`.
+   - **Records & Statuses Index**: `3py36gywokrwg.js` (`RECORDS_INDEX`), `40b153jlm65cu.js` (`DUMMY_IDENTITIES`).
+
+2. **Reverse-Engineered Systems & Modules**:
+   - **Skill Card UI & Bracket Tag Parser (`444a_5rtna8p8.js`, `3z15am40gf--d.js`, `3u3bm5ir4bed9.js`)**:
+     - `CoinEffects` (`715704`): `coinEffects[0]` = pre-roll (`[On Use]`/`[Combat Start]`), `coinEffects[1..N]` = per-coin effects.
+     - `splitEffectSegments` & `getBracketColor`: 7-tier semantic color parser (`#fbbf24` Hit/Heads, `#a78bfa` On Use, `#60a5fa` Combat/Turn Start, `#34d399` Clash Win/Lose, `#f59e0b` Unbreakable Coin, `#fb923c` Self/Enemy/Ally, `#94a3b8` Turn End/Default).
+     - Interactive Status Keyword Highlighting & Hover Tooltips (`highlightEffectText`, `renderStatusSegments`, `buildTermPattern`).
+     - Conditional Skill Variants (`skill.variants`) & Multiple Defense Skills.
+     - **Advanced Effect Search** (`EFFECT_SCOPES`, `EffectMatchCardLine` in `3z15am40gf--d.js`): Searches inside skill/passive descriptions and highlights matching effect lines on the card.
+   - **10-Section Identity & E.G.O Detail Pages (`3u3bm5ir4bed9.js`, `2u0h43u5x5dml.js`)**:
+     - Hero, Level Scaling (`HP = floor(hpBase + hpGrowth * (level - 1))`) & Resistances, "Based on my pool" synergy & comparison, Artwork Lightbox (Pre-Uptie vs Uptie 3/4), S1–S3 Skills, Defense Skills, Combat/Support Passives, Status Glossary (`Unique statuses` vs `Other statuses`), Common Teammates, and Same-Sinner Alternatives.
+   - **Clash Calculator (`37h1ypx2wtpri.js`, mod `803245` & `542101`)**:
+     - Exact Markov-chain DP solver (`solveClash`), SP clamp `[-45, 45]`, offense level bonus `floor(abs(lvA - lvB) / 3)`, Paralysis per-round coin consumption, expected post-win skill damage, and URL query state sync.
+   - **Party Builder, Deck Finder & Synergy Analyzer (`1c7n7tg_cu3b3.js`, `3yx2j8ito-4p2.js`, `3q5xzuqgwtdy2.js`)**:
+     - Base64URL `?b=` deck serialization (`partySize|keywords|12_identityIds|egoSegment`).
+     - Passive feasibility engine (`checkPartyPassives`, `PASSIVE_HARD_SHARE = 0.15`).
+     - 5-Axis Party Synergy Analyzer (`analyzeParty`: performance, keyword `sqrt(potency * count)`, gimmick, resonance, coverage).
+     - Deck Finder with `EGO_LINKED_KEYWORDS`, fixed/excluded Sinner/ID filters, and Slot 1 `+2` slot priority.
+   - **Counter Finder (`2ka0xmbph2vkr.js`, mod `513411`)**:
+     - Dual-axis weakness multiplier (`physMult * sinMult` up to `4.0x`) ranked by `skillPowerRange(skill).max`.
+   - **My Pool, Shard Advisor (`0yfxn5q8z-4th.js`), Schedule (`130i4hoix-2_9.js`) & Reports (`39z8522m8n5f_.js`, `253e-k_l_0g-x.js`)**:
+     - `Ready decks` (7/7) vs `One short` (6/7), `pullImpact`/`partyImpact` recommendation engine, KST 06:00 / Thursday reset timers, Meta Report, Community Stats, Release Timeline, and Records.
+   - **Fun & Minigames (`3irv8euffrkhx.js`, `0gjnfo6-l_g_q.js`, `0s1_ovx34azw8.js`, `02xm5_n6_iqna.js`)**:
+     - Limbusdle (Daily, Archive, Unlimited, Hard, Custom Creator), 6 Minigames (`higher-lower`, `timeline`, `skill-name`, `art-zoom`, `memory`, `connections`), Mock Exam (`/exam`), Sinner Personality Test (`/sinner-test`), Worldcups (`/worldcup`, `/party-worldcup`), Tier Maker (`/tier-maker`), Image Maker Suite (`/wallpaper`, `/card-maker`, `/meme-maker`), and Achievement Badges (`useBadgesStore`).
+
+---
+
+## 5. LimbusDeck Integration Progress
+
+### Phase 1 — COMPLETED & VERIFIED (`npx vite build` passed with 0 errors):
+1. **Complete Database Enrichment (`scripts/syncLimbusDeckComplete.cjs`)**:
+   - `src/data/identities.json`: All 190 LimbusDeck Identities enriched in-place with `ldId`, `sinnerId`, `nameEn`/`nameKo`/`nameJa`, `releaseDate`, `isStandard`, `isWalpurgis`, `hpBase`, `hpGrowth`, `minSpeed`, `maxSpeed`, `defenseLevel`, `resistances`, `staggerThresholds`, `ldSkills` (full `coinEffects`, `coinEffectsKo`, `variants`, `keywords`), `ldDefenseSkills`, `ldPassives` (`conditionType`, `requiredSin`, `requiredCount`, `descriptionEn`, `descriptionKo`), `traits`, `metaTier`, and resolved `statuses`.
+   - `src/data/egos.json`: All 116 LimbusDeck E.G.O enriched in-place with `ldId`, `sinnerId`, `nameEn`/`nameKo`/`nameJa`, `releaseDate`, `sanity`, `costs`, `resistances`, `ldSkills`, `ldCorrosionSkills`, `ldPassive`, and resolved `statuses`.
+   - `src/data/recommendedParties.json`: All 76 LimbusDeck recommended meta builds.
+   - `src/data/recordsIndex.json`: All 190 `RECORDS_INDEX` entries for Hall of Records rank badges.
+   - `src/data/traitsDictionary.json`: All 92 localized traits & `IDENTITY_META_TIERS`.
+   - `src/data/statusDictionary.json`: 1,444 unique status effects extracted and cleaned directly from the Limbus Company game client (`EN_BattleKeywords*.json`).
+2. **Core Engine (`src/utils/limbusDeckEngine.js`)**:
+   - `getBracketColor`, `splitEffectSegments`, `segmentDisplayText` (7-color bracket tag parser), `getIdentityRecordRank`, `computeIdentityPoolImpact`, `searchIdentityEffects`, `EFFECT_SCOPES`, and exact Markov-chain DP `solveClash` solver.
+3. **LimbusDeck Skill & Status Components (`src/components/limbusdeck/SkillComponents.jsx`)**:
+   - `StatusTermsProvider`, `StatusTerm`, `StatusText`, `StatusSection` (with portal-based hover/click popover tooltips and `Unique Statuses` vs `Other Statuses` glossary), `CoinEffects` (`effects[0]` pre-roll + `1..N` numbered coins), `CoinDots`, `SinBadge`, `KeywordRoleBadge`, `LimbusDeckSkillCard` (with conditional `variants` and `Clash Calc` trigger), and `LimbusDeckPassiveCard`.
+4. **10-Section Character & E.G.O Detail Modals (`src/components/IdDetailsModal.jsx` & `src/components/EgoDetailsModal.jsx`)**:
+   - Sticky section quick-jump pills, `EN / KO` language toggle, interactive Lv 1–60 stat scaler, Hall of Records rank badges, Physical/Sin Resistances & Stagger, "Based on My Pool" impact diagnostics, Pre/Post-Uptie Artwork Viewer (with Side-by-Side & Fullscreen Lightbox), S1–S3 Skills + Variants, Defense Skills, Combat/Support Passives, Statuses Glossary, Tactical Playbook, Common Teammates & Recommended Meta Teams, Same-Sinner Switcher, and built-in Markov-chain Clash Simulator drawer.
+5. **Advanced Effect Search & Filters (`src/pages/IdentitiesPage.jsx` & `src/pages/EgoPage.jsx`)**:
+   - Added LimbusDeck's Effect Text Search bar + Scope selector (`All`, `Attack`, `S1`, `S2`, `S3`, `Defense`, `Passives`) + `+Variants` toggle + Faction/Trait dropdown + Meta Tier filter (`S`/`A`/`B`/`C`), with `EffectMatchCardLine` highlighting on `IdCard`.
+
+### Next Phases (Ready to Execute):
+- **Phase 2**: Party Builder, 76 Recommended Meta Builds, Deck Finder, Passive Feasibility (`checkPartyPassives`), 5-Axis Synergy Radar (`analyzeParty`), and Base64URL `?b=` Deck Sharing.
+- **Phase 3**: Standalone Clash Calculator Page, Enemy Weakness Counter Finder, My Pool & Shard Advisor, and Reports Hub (Meta Report, Community Stats, Release Timeline, Hall of Records).
+- **Phase 4**: Fun & Minigames Hub (Limbusdle, Higher or Lower, Skill Name Quiz, Art Zoom Quiz, Connections, Memory Match, Mock Exam, Sinner Personality Test, Worldcups, Tier Maker, Wallpaper/Card/Meme Studio, and Badges).
+
+---
+
+## 6. Key File Locations
 - Context summary: `C:\Users\cdbla\Documents\Antigravity Playground\Limbus Tracker\limbus_tracker_context.md`
+- Extracted LimbusDeck chunks & DBs: `C:\Users\cdbla\.gemini\antigravity\brain\9beca90b-f2da-4618-bde8-a9209f8a8a44\scratch\multiroute_extracted\`
+- LimbusDeck sync script: `scripts/syncLimbusDeckComplete.cjs`
+- LimbusDeck engine: `src/utils/limbusDeckEngine.js`
+- LimbusDeck skill/status UI: `src/components/limbusdeck/SkillComponents.jsx`
+- Character & E.G.O Detail Modals: `src/components/IdDetailsModal.jsx`, `src/components/EgoDetailsModal.jsx`
 - Sinner portraits: `src/assets/sinners/` and `src/assets/sinners/index.js`
 - Avatar component: `src/components/ManagerAvatar.jsx`
 - Settings avatar picker: `src/pages/SettingsPage.jsx`

@@ -1,0 +1,5646 @@
+[
+  {
+    "id": 1,
+    "sinnerId": 1,
+    "slug": "lcb-sinner-yi-sang",
+    "nameKo": "LCB 수감자 이상",
+    "nameEn": "LCB Sinner Yi Sang",
+    "nameJa": "LCB囚人 イサン",
+    "rarity": 1,
+    "releaseDate": "2023-02-27",
+    "primarySin": "gloom",
+    "keywords": [
+      "sinking"
+    ],
+    "hp": 233,
+    "minSpeed": 4,
+    "maxSpeed": 8,
+    "defenseLevel": -2,
+    "coins": 6,
+    "maxPower": 12,
+    "maxPowerSkill": [
+      "밀어 찌르기",
+      "End-stop Stab"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 2,
+    "sinnerId": 1,
+    "slug": "seven-assoc-south-section-6-yi-sang",
+    "nameKo": "남부 세븐 협회 6과 이상",
+    "nameEn": "Seven Assoc. South Section 6 Yi Sang",
+    "nameJa": "南部セブン協会6課 イサン",
+    "rarity": 2,
+    "releaseDate": "2023-02-27",
+    "primarySin": "gloom",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 265,
+    "minSpeed": 5,
+    "maxSpeed": 8,
+    "defenseLevel": 2,
+    "coins": 6,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "물리네",
+      "Moulinet"
+    ],
+    "stagger": [
+      60,
+      30
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 3,
+    "sinnerId": 1,
+    "slug": "molar-office-fixer-yi-sang",
+    "nameKo": "어금니 사무소 해결사 이상",
+    "nameEn": "Molar Office Fixer Yi Sang",
+    "nameJa": "奥歯事務所フィクサー イサン",
+    "rarity": 2,
+    "releaseDate": "2023-09-14",
+    "primarySin": "lust",
+    "keywords": [
+      "tremor"
+    ],
+    "hp": 236,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": -2,
+    "coins": 6,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "도박수",
+      "Gamble"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 4,
+    "sinnerId": 1,
+    "slug": "the-pequod-first-mate-yi-sang",
+    "nameKo": "피쿼드호 일등 항해사 이상",
+    "nameEn": "The Pequod First Mate Yi Sang",
+    "nameJa": "ピークォド号1等航海士 イサン",
+    "rarity": 2,
+    "releaseDate": "2023-12-07",
+    "primarySin": "pride",
+    "keywords": [
+      "bleed",
+      "poise"
+    ],
+    "hp": 224,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": -3,
+    "coins": 6,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "급습",
+      "Ambush"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 5,
+    "sinnerId": 1,
+    "slug": "dieci-assoc-south-section-4-yi-sang",
+    "nameKo": "남부 디에치 협회 4과 이상",
+    "nameEn": "Dieci Assoc. South Section 4 Yi Sang",
+    "nameJa": "南部ディエーチ協会4課 イサン",
+    "rarity": 2,
+    "releaseDate": "2024-01-25",
+    "primarySin": "gluttony",
+    "keywords": [
+      "sinking"
+    ],
+    "hp": 265,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 3,
+    "coins": 9,
+    "maxPower": 13,
+    "maxPowerSkill": [
+      "잠궈닫기",
+      "Seal Shut"
+    ],
+    "stagger": [
+      60,
+      30
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 6,
+    "sinnerId": 1,
+    "slug": "lce-ego-lantern-yi-sang",
+    "nameKo": "LCE E.G.O::초롱 이상",
+    "nameEn": "LCE E.G.O::Lantern Yi Sang",
+    "nameJa": "LCE E.G.O::提灯 イサン",
+    "rarity": 2,
+    "releaseDate": "2025-01-23",
+    "primarySin": "sloth",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 236,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 0,
+    "coins": 6,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "본체의 특징을 더 유연하게 활용 가능하오",
+      "the idiosyncrasies of the source may be utilized with greater flexibility"
+    ],
+    "stagger": [
+      50
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 7,
+    "sinnerId": 1,
+    "slug": "blade-lineage-salsu-yi-sang",
+    "nameKo": "검계 살수 이상",
+    "nameEn": "Blade Lineage Salsu Yi Sang",
+    "nameJa": "剣契殺手 イサン",
+    "rarity": 3,
+    "releaseDate": "2023-02-27",
+    "primarySin": "pride",
+    "keywords": [
+      "poise"
+    ],
+    "hp": 214,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -4,
+    "coins": 6,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "이면찬자",
+      "Flank Thrust"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 8,
+    "sinnerId": 1,
+    "slug": "effloresced-ego-spicebush-yi-sang",
+    "nameKo": "개화 E.G.O::동백 이상",
+    "nameEn": "Effloresced E.G.O::Spicebush Yi Sang",
+    "nameJa": "開花 E.G.O::壇香梅 イサン",
+    "rarity": 3,
+    "releaseDate": "2023-06-15",
+    "primarySin": "gluttony",
+    "keywords": [
+      "sinking",
+      "tremor"
+    ],
+    "hp": 214,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -4,
+    "coins": 9,
+    "maxPower": 18,
+    "maxPowerSkill": [
+      "피를 머금은 향기",
+      "Bloodsteeped Scent"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 9,
+    "sinnerId": 1,
+    "slug": "w-corp-l3-cleanup-agent-yi-sang",
+    "nameKo": "W사 3등급 정리 요원 이상",
+    "nameEn": "W Corp. L3 Cleanup Agent Yi Sang",
+    "nameJa": "W社 3級整理要員 イサン",
+    "rarity": 3,
+    "releaseDate": "2023-11-09",
+    "primarySin": "sloth",
+    "keywords": [
+      "charge",
+      "rupture"
+    ],
+    "hp": 256,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -2,
+    "coins": 6,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "차원의 틈",
+      "Dimensional Rift"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 10,
+    "sinnerId": 1,
+    "slug": "the-ring-pointillist-student-yi-sang",
+    "nameKo": "약지 점묘파 스튜던트 이상",
+    "nameEn": "The Ring Pointillist Student Yi Sang",
+    "nameJa": "薬指点描派スチューデント イサン",
+    "rarity": 3,
+    "releaseDate": "2024-05-16",
+    "primarySin": "gloom",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 226,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -2,
+    "coins": 8,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "혈점묘화",
+      "Sanguine Pointillism"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 11,
+    "sinnerId": 1,
+    "slug": "lobotomy-ego-solemn-lament-yi-sang",
+    "nameKo": "로보토미 E.G.O::엄숙한 애도 이상",
+    "nameEn": "Lobotomy E.G.O::Solemn Lament Yi Sang",
+    "nameJa": "ロボトミーE.G.O::厳粛な哀悼 イサン",
+    "rarity": 3,
+    "releaseDate": "2024-09-05",
+    "primarySin": "pride",
+    "keywords": [
+      "sinking"
+    ],
+    "hp": 214,
+    "minSpeed": 3,
+    "maxSpeed": 8,
+    "defenseLevel": 2,
+    "coins": 8,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "남은자에게 엄숙한 애도를",
+      "Solemn Lament for the Living"
+    ],
+    "stagger": [
+      60,
+      30,
+      15
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 12,
+    "sinnerId": 1,
+    "slug": "liu-assoc-south-section-3-yi-sang",
+    "nameKo": "남부 리우 협회 3과 이상",
+    "nameEn": "Liu Assoc. South Section 3 Yi Sang",
+    "nameJa": "南部リウ協会3課 イサン",
+    "rarity": 3,
+    "releaseDate": "2025-02-20",
+    "primarySin": "sloth",
+    "keywords": [
+      "burn"
+    ],
+    "hp": 243,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 2,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "정면돌파",
+      "Frontal Assault"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 13,
+    "sinnerId": 1,
+    "slug": "n-corp-ego-fell-bullet-yi-sang",
+    "nameKo": "N사 E.G.O::흉탄 이상",
+    "nameEn": "N Corp. E.G.O::Fell Bullet Yi Sang",
+    "nameJa": "N社E.G.O::凶弾 イサン",
+    "rarity": 3,
+    "releaseDate": "2025-07-03",
+    "primarySin": "wrath",
+    "keywords": [
+      "bleed",
+      "poise"
+    ],
+    "hp": 214,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 2,
+    "coins": 5,
+    "maxPower": 18,
+    "maxPowerSkill": [
+      "대상 조정 사격",
+      "Target Readjustment Fire"
+    ],
+    "stagger": [
+      70,
+      30,
+      15
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 14,
+    "sinnerId": 1,
+    "slug": "heishou-pack-wu-branch-adept-yi-sang",
+    "nameKo": "흑수 - 오 필두 이상",
+    "nameEn": "Heishou Pack - Wu Branch Adept Yi Sang",
+    "nameJa": "黒獣 - 午 筆頭 イサン",
+    "rarity": 3,
+    "releaseDate": "2025-08-28",
+    "primarySin": "sloth",
+    "keywords": [
+      "rupture",
+      "tremor"
+    ],
+    "hp": 288,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 5,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "선봉주파",
+      "Cavalry's Vanguard Charge"
+    ],
+    "stagger": [
+      60,
+      30
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 15,
+    "sinnerId": 1,
+    "slug": "the-house-of-spiders-the-index-nursefather-yi-sang",
+    "nameKo": "거미집 검지 아비 이상",
+    "nameEn": "The House of Spiders: The Index Nursefather Yi Sang",
+    "nameJa": "蜘蛛の巣人差し指の親方 イサン",
+    "rarity": 3,
+    "releaseDate": "2026-02-19",
+    "primarySin": "gluttony",
+    "keywords": [
+      "poise",
+      "sinking"
+    ],
+    "hp": 263,
+    "minSpeed": 3,
+    "maxSpeed": 8,
+    "defenseLevel": 2,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "소리 없이 손뼉 쳐 즐기고, 목소리 없이 슬피 꿰뚫어",
+      "\"Revel with Soundless Applause, Impale in Voiceless Sorrow\""
+    ],
+    "stagger": [
+      65
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 184,
+    "sinnerId": 1,
+    "slug": "lce-ego-dimension-shredder-yi-sang",
+    "nameKo": "LCE E.G.O::차원찢개 이상",
+    "nameEn": "LCE E.G.O::Dimension Shredder Yi Sang",
+    "nameJa": "LCE E.G.O::次元裂き イサン",
+    "rarity": 3,
+    "releaseDate": "2026-07-23",
+    "primarySin": "pride",
+    "keywords": [
+      "rupture",
+      "charge"
+    ],
+    "hp": 257,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -2,
+    "coins": 6,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "공간 절단",
+      "Rip Space"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 16,
+    "sinnerId": 2,
+    "slug": "lcb-sinner-faust",
+    "nameKo": "LCB 수감자 파우스트",
+    "nameEn": "LCB Sinner Faust",
+    "nameJa": "LCB囚人 ファウスト",
+    "rarity": 1,
+    "releaseDate": "2023-02-27",
+    "primarySin": "pride",
+    "keywords": [],
+    "hp": 273,
+    "minSpeed": 2,
+    "maxSpeed": 4,
+    "defenseLevel": 1,
+    "coins": 5,
+    "maxPower": 13,
+    "maxPowerSkill": [
+      "올려베기",
+      "Upward Slash"
+    ],
+    "stagger": [
+      60,
+      30,
+      15
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 17,
+    "sinnerId": 2,
+    "slug": "w-corp-l2-cleanup-agent-faust",
+    "nameKo": "W사 2등급 정리 요원 파우스트",
+    "nameEn": "W Corp. L2 Cleanup Agent Faust",
+    "nameJa": "W社 2級整理要員 ファウスト",
+    "rarity": 2,
+    "releaseDate": "2023-02-27",
+    "primarySin": "envy",
+    "keywords": [
+      "charge"
+    ],
+    "hp": 286,
+    "minSpeed": 2,
+    "maxSpeed": 4,
+    "defenseLevel": 3,
+    "coins": 6,
+    "maxPower": 15,
+    "maxPowerSkill": [
+      "과충전",
+      "Overcharge"
+    ],
+    "stagger": [
+      60,
+      30
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 18,
+    "sinnerId": 2,
+    "slug": "lobotomy-corp-remnant-faust",
+    "nameKo": "살아남은 로보토미 직원 파우스트",
+    "nameEn": "Lobotomy Corp. Remnant Faust",
+    "nameJa": "生き残ったロボトミー職員 ファウスト",
+    "rarity": 2,
+    "releaseDate": "2023-02-27",
+    "primarySin": "lust",
+    "keywords": [
+      "poise",
+      "rupture"
+    ],
+    "hp": 224,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": -4,
+    "coins": 6,
+    "maxPower": 20,
+    "maxPowerSkill": [
+      "기회 노리기",
+      "Opportunistic Slash"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 19,
+    "sinnerId": 2,
+    "slug": "zwei-assoc-south-section-4-faust",
+    "nameKo": "남부 츠바이 협회 4과 파우스트",
+    "nameEn": "Zwei Assoc. South Section 4 Faust",
+    "nameJa": "南部ツヴァイ協会4課 ファウスト",
+    "rarity": 2,
+    "releaseDate": "2023-08-10",
+    "primarySin": "envy",
+    "keywords": [],
+    "hp": 265,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 2,
+    "coins": 7,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "치안 수호",
+      "Law and Order"
+    ],
+    "stagger": [
+      55,
+      20
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 20,
+    "sinnerId": 2,
+    "slug": "wuthering-heights-butler-faust",
+    "nameKo": "워더링하이츠 버틀러 파우스트",
+    "nameEn": "Wuthering Heights Butler Faust",
+    "nameJa": "ワザリング・ハイツバトラー ファウスト",
+    "rarity": 2,
+    "releaseDate": "2024-04-04",
+    "primarySin": "gloom",
+    "keywords": [
+      "sinking"
+    ],
+    "hp": 252,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -1,
+    "coins": 8,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "불청객 맞이",
+      "Interloper Reception"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 21,
+    "sinnerId": 2,
+    "slug": "the-one-who-grips-faust",
+    "nameKo": "쥐는 자 파우스트",
+    "nameEn": "The One Who Grips Faust",
+    "nameJa": "握る者 ファウスト",
+    "rarity": 3,
+    "releaseDate": "2023-03-23",
+    "primarySin": "envy",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 214,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": -1,
+    "coins": 8,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "쥐어짐",
+      "The Gripping"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 22,
+    "sinnerId": 2,
+    "slug": "seven-assoc-south-section-4-faust",
+    "nameKo": "남부 세븐 협회 4과 파우스트",
+    "nameEn": "Seven Assoc. South Section 4 Faust",
+    "nameJa": "南部セブン協会4課 ファウスト",
+    "rarity": 3,
+    "releaseDate": "2023-09-07",
+    "primarySin": "envy",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 232,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": -2,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "프로파일링",
+      "Profiling"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 23,
+    "sinnerId": 2,
+    "slug": "lobotomy-ego-regret-faust",
+    "nameKo": "로보토미 E.G.O::후회 파우스트",
+    "nameEn": "Lobotomy E.G.O::Regret Faust",
+    "nameJa": "ロボトミーE.G.O::後悔 ファウスト",
+    "rarity": 3,
+    "releaseDate": "2023-10-26",
+    "primarySin": "sloth",
+    "keywords": [
+      "tremor"
+    ],
+    "hp": 265,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": 1,
+    "coins": 7,
+    "maxPower": 18,
+    "maxPowerSkill": [
+      "풀려난 폭력성",
+      "Unleashed Violence"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 24,
+    "sinnerId": 2,
+    "slug": "blade-lineage-salsu-faust",
+    "nameKo": "검계 살수 파우스트",
+    "nameEn": "Blade Lineage Salsu Faust",
+    "nameJa": "剣契殺手 ファウスト",
+    "rarity": 3,
+    "releaseDate": "2024-02-22",
+    "primarySin": "sloth",
+    "keywords": [
+      "bleed",
+      "poise"
+    ],
+    "hp": 239,
+    "minSpeed": 3,
+    "maxSpeed": 8,
+    "defenseLevel": -2,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "흩날리는 홍매화",
+      "Red Plum Blossoms Scatter"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 25,
+    "sinnerId": 2,
+    "slug": "multicrack-office-rep-faust",
+    "nameKo": "멀티크랙 사무소 대표 파우스트",
+    "nameEn": "MultiCrack Office Rep Faust",
+    "nameJa": "マルチクラック事務所代表 ファウスト",
+    "rarity": 3,
+    "releaseDate": "2024-08-08",
+    "primarySin": "lust",
+    "keywords": [
+      "charge"
+    ],
+    "hp": 214,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -1,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "충전 역류",
+      "Charge Countercurrent"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 26,
+    "sinnerId": 2,
+    "slug": "lce-ego-ardor-blossom-star-faust",
+    "nameKo": "LCE E.G.O::홍염살 파우스트",
+    "nameEn": "LCE E.G.O::Ardor Blossom Star Faust",
+    "nameJa": "LCE E.G.O::紅炎殺 ファウスト",
+    "rarity": 3,
+    "releaseDate": "2025-01-23",
+    "primarySin": "sloth",
+    "keywords": [
+      "burn"
+    ],
+    "hp": 214,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -1,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "불에 끌리는 마음으로",
+      "Drawn by Flame"
+    ],
+    "stagger": [
+      50,
+      20
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 27,
+    "sinnerId": 2,
+    "slug": "heishou-pack-mao-branch-adept-faust",
+    "nameKo": "흑수 - 묘 필두 파우스트",
+    "nameEn": "Heishou Pack - Mao Branch Adept Faust",
+    "nameJa": "黒獣 - 卯 筆頭 ファウスト",
+    "rarity": 3,
+    "releaseDate": "2025-05-22",
+    "primarySin": "sloth",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 283,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 3,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "눈으로도 귀로도 쫓지 못하게.",
+      "Traceless to Sight and Sound Alike."
+    ],
+    "stagger": [
+      50
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 28,
+    "sinnerId": 2,
+    "slug": "shi-assoc-east-section-3-faust",
+    "nameKo": "동부 시 협회 3과 파우스트",
+    "nameEn": "Shi Assoc. East Section 3 Faust",
+    "nameJa": "東部シ協会3課 ファウスト",
+    "rarity": 3,
+    "releaseDate": "2025-10-09",
+    "primarySin": "wrath",
+    "keywords": [
+      "bleed",
+      "poise"
+    ],
+    "hp": 243,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -1,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "거리 확보",
+      "Positioning Maneuver"
+    ],
+    "stagger": [
+      70,
+      50,
+      20
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 29,
+    "sinnerId": 2,
+    "slug": "the-index-proselyte-paper-slip-faust",
+    "nameKo": "검지 수행자:【쪽지】파우스트",
+    "nameEn": "The Index Proselyte:【Paper Slip】 Faust",
+    "nameJa": "人差し指遂行者:【紙片】 ファウスト",
+    "rarity": 3,
+    "releaseDate": "2025-12-31",
+    "primarySin": "sloth",
+    "keywords": [
+      "poise",
+      "sinking"
+    ],
+    "hp": 232,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 1,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "지령에 따라 당신을 처단하겠습니다.",
+      "As the Prescript Demands, You Will Be Eliminated."
+    ],
+    "stagger": [
+      60,
+      30
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 171,
+    "sinnerId": 2,
+    "slug": "the-house-of-spiders-the-ring-apprentice-faust",
+    "nameKo": "거미집 약지 제자 파우스트",
+    "nameEn": "The House of Spiders: The Ring Apprentice Faust",
+    "nameJa": "蜘蛛の巣薬指の子方 ファウスト",
+    "rarity": 3,
+    "releaseDate": "2026-04-02",
+    "primarySin": "gluttony",
+    "keywords": [
+      "bleed",
+      "charge"
+    ],
+    "hp": 299,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": 2,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "파시아가 굶주렸어",
+      "Fascia Hungers"
+    ],
+    "stagger": [
+      50,
+      30
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 183,
+    "sinnerId": 2,
+    "slug": "dawn-office-fixer-faust",
+    "nameKo": "새벽 사무소 해결사 파우스트",
+    "nameEn": "Dawn Office Fixer Faust",
+    "nameJa": "夜明事務所フィクサー ファウスト",
+    "rarity": 3,
+    "releaseDate": "2026-07-09",
+    "primarySin": "pride",
+    "keywords": [
+      "burn",
+      "tremor"
+    ],
+    "hp": 253,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "사출",
+      "Eject"
+    ],
+    "stagger": [
+      55,
+      25
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 30,
+    "sinnerId": 3,
+    "slug": "lcb-sinner-don-quixote",
+    "nameKo": "LCB 수감자 돈키호테",
+    "nameEn": "LCB Sinner Don Quixote",
+    "nameJa": "LCB囚人 ドンキホーテ",
+    "rarity": 1,
+    "releaseDate": "2023-02-27",
+    "primarySin": "lust",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 214,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": -2,
+    "coins": 5,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "모아 찌르기",
+      "Galloping Tilt"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 31,
+    "sinnerId": 3,
+    "slug": "shi-assoc-south-section-5-director-don-quixote",
+    "nameKo": "남부 시 협회 5과 부장 돈키호테",
+    "nameEn": "Shi Assoc. South Section 5 Director Don Quixote",
+    "nameJa": "南部シ協会5課 ドンキホーテ",
+    "rarity": 2,
+    "releaseDate": "2023-02-27",
+    "primarySin": "wrath",
+    "keywords": [
+      "poise"
+    ],
+    "hp": 224,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": -4,
+    "coins": 4,
+    "maxPower": 25,
+    "maxPowerSkill": [
+      "과호흡",
+      "Overbreathe"
+    ],
+    "stagger": [
+      80,
+      60
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 32,
+    "sinnerId": 3,
+    "slug": "n-corp-mittelhammer-don-quixote",
+    "nameKo": "N사 중간 망치 돈키호테",
+    "nameEn": "N Corp. Mittelhammer Don Quixote",
+    "nameJa": "N社中鎚 ドンキホーテ",
+    "rarity": 2,
+    "releaseDate": "2023-05-03",
+    "primarySin": "lust",
+    "keywords": [
+      "tremor",
+      "bleed"
+    ],
+    "hp": 265,
+    "minSpeed": 2,
+    "maxSpeed": 5,
+    "defenseLevel": 1,
+    "coins": 6,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "집행!",
+      "Enactment!"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 33,
+    "sinnerId": 3,
+    "slug": "lobotomy-ego-lantern-don-quixote",
+    "nameKo": "로보토미 E.G.O::초롱 돈키호테",
+    "nameEn": "Lobotomy E.G.O::Lantern Don Quixote",
+    "nameJa": "ロボトミーE.G.O::提灯 ドンキホーテ",
+    "rarity": 2,
+    "releaseDate": "2024-01-11",
+    "primarySin": "gluttony",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 265,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 4,
+    "coins": 7,
+    "maxPower": 13,
+    "maxPowerSkill": [
+      "발광 미끼",
+      "Flashing Lure"
+    ],
+    "stagger": [
+      50,
+      20
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 34,
+    "sinnerId": 3,
+    "slug": "blade-lineage-salsu-don-quixote",
+    "nameKo": "검계 살수 돈키호테",
+    "nameEn": "Blade Lineage Salsu Don Quixote",
+    "nameJa": "剣契殺手 ドンキホーテ",
+    "rarity": 2,
+    "releaseDate": "2024-02-22",
+    "primarySin": "pride",
+    "keywords": [
+      "poise"
+    ],
+    "hp": 229,
+    "minSpeed": 4,
+    "maxSpeed": 8,
+    "defenseLevel": -2,
+    "coins": 7,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "검궤",
+      "Blade Arc"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 35,
+    "sinnerId": 3,
+    "slug": "w-corp-l3-cleanup-agent-don-quixote",
+    "nameKo": "W사 3등급 정리 요원 돈키호테",
+    "nameEn": "W Corp. L3 Cleanup Agent Don Quixote",
+    "nameJa": "W社 3級整理要員 ドンキホーテ",
+    "rarity": 3,
+    "releaseDate": "2023-02-27",
+    "primarySin": "sloth",
+    "keywords": [
+      "charge",
+      "rupture"
+    ],
+    "hp": 236,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": -1,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "도약",
+      "Leap"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 36,
+    "sinnerId": 3,
+    "slug": "cinq-assoc-south-section-5-director-don-quixote",
+    "nameKo": "남부 섕크 협회 5과 부장 돈키호테",
+    "nameEn": "Cinq Assoc. South Section 5 Director Don Quixote",
+    "nameJa": "南部センク協会5課 部長 ドンキホーテ",
+    "rarity": 3,
+    "releaseDate": "2023-07-20",
+    "primarySin": "lust",
+    "keywords": [],
+    "hp": 220,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": -2,
+    "coins": 6,
+    "maxPower": 18,
+    "maxPowerSkill": [
+      "살뤼!",
+      "Salut!"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 37,
+    "sinnerId": 3,
+    "slug": "the-middle-little-sister-don-quixote",
+    "nameKo": "중지 작은 아우 돈키호테",
+    "nameEn": "The Middle Little Sister Don Quixote",
+    "nameJa": "中指末妹 ドンキホーテ",
+    "rarity": 3,
+    "releaseDate": "2023-11-23",
+    "primarySin": "wrath",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 278,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 5,
+    "coins": 8,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "의리 증명",
+      "Proof of Loyalty"
+    ],
+    "stagger": [
+      50,
+      20
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 38,
+    "sinnerId": 3,
+    "slug": "t-corp-class-3-collection-staff-don-quixote",
+    "nameKo": "T사 3등급 징수직 직원 돈키호테",
+    "nameEn": "T Corp. Class 3 Collection Staff Don Quixote",
+    "nameJa": "T社 3級徴収職職員 ドンキホーテ",
+    "rarity": 3,
+    "releaseDate": "2024-06-27",
+    "primarySin": "gluttony",
+    "keywords": [
+      "tremor"
+    ],
+    "hp": 307,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 4,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "T사제 가속 절단기",
+      "T Corp. Accelerated Amputator"
+    ],
+    "stagger": [
+      50
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 39,
+    "sinnerId": 3,
+    "slug": "the-manager-of-la-manchaland-don-quixote",
+    "nameKo": "라만차랜드 실장 돈키호테",
+    "nameEn": "The Manager of La Manchaland Don Quixote",
+    "nameJa": "ラ・マンチャランド室長 ドンキホーテ",
+    "rarity": 3,
+    "releaseDate": "2024-12-12",
+    "primarySin": "sloth",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 204,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "꿰뚫겠습니다",
+      "I Shall Impale"
+    ],
+    "stagger": [
+      65,
+      40,
+      20
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 40,
+    "sinnerId": 3,
+    "slug": "cinq-assoc-east-section-3-don-quixote",
+    "nameKo": "동부 섕크 협회 3과 돈키호테",
+    "nameEn": "Cinq Assoc. East Section 3 Don Quixote",
+    "nameJa": "東部センク協会3課 ドンキホーテ",
+    "rarity": 3,
+    "releaseDate": "2025-03-06",
+    "primarySin": "gluttony",
+    "keywords": [
+      "burn",
+      "poise"
+    ],
+    "hp": 265,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 2,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "초염장",
+      "Virescent Flame Palm"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 41,
+    "sinnerId": 3,
+    "slug": "lobotomy-ego-in-the-name-of-love-and-hate-don-quixote",
+    "nameKo": "로보토미 E.G.O::사랑과 증오의 이름으로 돈키호테",
+    "nameEn": "Lobotomy E.G.O::In the Name of Love and Hate Don Quixote",
+    "nameJa": "ロボトミーE.G.O::愛と憎悪の名の下に ドンキホーテ",
+    "rarity": 3,
+    "releaseDate": "2025-07-17",
+    "primarySin": "wrath",
+    "keywords": [
+      "charge",
+      "rupture",
+      "sinking"
+    ],
+    "hp": 224,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 2,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "아르카나 비트!! / 마이너 아르카나 슬레이브!!!",
+      "Arcana Beats!! / Minor Arcana Slave!!!"
+    ],
+    "stagger": [
+      70,
+      40,
+      15
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 42,
+    "sinnerId": 3,
+    "slug": "heishou-pack-wei-branch-don-quixote",
+    "nameKo": "흑수 - 미 돈키호테",
+    "nameEn": "Heishou Pack - Wei Branch Don Quixote",
+    "nameJa": "黒獣 - 未 ドンキホーテ",
+    "rarity": 3,
+    "releaseDate": "2025-11-20",
+    "primarySin": "lust",
+    "keywords": [
+      "rupture",
+      "sinking"
+    ],
+    "hp": 265,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 3,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "파죽지세",
+      "Seize the Momentum, Shatter the Wall"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 43,
+    "sinnerId": 3,
+    "slug": "the-index-proxy-effloresced-ego-procuration-don-quixote",
+    "nameKo": "검지 대행자 - 개화 E.G.O::대행 돈키호테",
+    "nameEn": "The Index Proxy - Effloresced E.G.O::Procuration Don Quixote",
+    "nameJa": "人差し指代行者 - 開花E.G.O::代行 ドンキホーテ",
+    "rarity": 3,
+    "releaseDate": "2026-01-08",
+    "primarySin": "lust",
+    "keywords": [
+      "poise",
+      "sinking"
+    ],
+    "hp": 231,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": 2,
+    "coins": 7,
+    "maxPower": 18,
+    "maxPowerSkill": [
+      "빠,빨리 지령을 수행해야만…",
+      "T-the Prescript Must be Fulfilled Anon..."
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 189,
+    "sinnerId": 3,
+    "slug": "haute-couture-le-noir-brand-manager-don-quixote",
+    "nameKo": "오트쿠튀르::르누아르 브랜드 매니저 돈키호테",
+    "nameEn": "Haute Couture::Le Noir Brand Manager Don Quixote",
+    "nameJa": "オートクチュール::ル・ノワールブランドマネージャー ドンキホーテ",
+    "rarity": 3,
+    "releaseDate": "2026-10-01",
+    "primarySin": "pride",
+    "keywords": [
+      "charge",
+      "tremor"
+    ],
+    "hp": 286,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 4,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "탄생을 끊으리라!",
+      "I Sever Thine Advent!"
+    ],
+    "stagger": [
+      40
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 44,
+    "sinnerId": 4,
+    "slug": "lcb-sinner-ryoshu",
+    "nameKo": "LCB 수감자 료슈",
+    "nameEn": "LCB Sinner Ryōshū",
+    "nameJa": "LCB囚人 良秀",
+    "rarity": 1,
+    "releaseDate": "2023-02-27",
+    "primarySin": "gluttony",
+    "keywords": [
+      "poise"
+    ],
+    "hp": 214,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": -4,
+    "coins": 6,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "흩뿌리기",
+      "Splatter"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 45,
+    "sinnerId": 4,
+    "slug": "seven-assoc-south-section-6-ryoshu",
+    "nameKo": "남부 세븐 협회 6과 료슈",
+    "nameEn": "Seven Assoc. South Section 6 Ryōshū",
+    "nameJa": "南部セブン協会6課 良秀",
+    "rarity": 2,
+    "releaseDate": "2023-02-27",
+    "primarySin": "sloth",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 204,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -4,
+    "coins": 5,
+    "maxPower": 19,
+    "maxPowerSkill": [
+      "스워시",
+      "Swash"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 46,
+    "sinnerId": 4,
+    "slug": "lccb-assistant-manager-ryoshu",
+    "nameKo": "LCCB 대리 료슈",
+    "nameEn": "LCCB Assistant Manager Ryōshū",
+    "nameJa": "LCCB係長 良秀",
+    "rarity": 2,
+    "releaseDate": "2023-11-16",
+    "primarySin": "lust",
+    "keywords": [
+      "poise",
+      "rupture",
+      "tremor"
+    ],
+    "hp": 245,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 6,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "타.무",
+      "T.N."
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 47,
+    "sinnerId": 4,
+    "slug": "liu-assoc-south-section-4-ryoshu",
+    "nameKo": "남부 리우 협회 4과 료슈",
+    "nameEn": "Liu Assoc. South Section 4 Ryōshū",
+    "nameJa": "南部リウ協会4課 良秀",
+    "rarity": 2,
+    "releaseDate": "2024-03-07",
+    "primarySin": "gluttony",
+    "keywords": [
+      "burn"
+    ],
+    "hp": 245,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -1,
+    "coins": 8,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "염수격",
+      "Fiery Knifehand"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 48,
+    "sinnerId": 4,
+    "slug": "district-20-yurodivy-ryoshu",
+    "nameKo": "20구 유로지비 료슈",
+    "nameEn": "District 20 Yurodivy Ryōshū",
+    "nameJa": "20区ユロージヴィ 良秀",
+    "rarity": 2,
+    "releaseDate": "2024-06-13",
+    "primarySin": "lust",
+    "keywords": [
+      "tremor"
+    ],
+    "hp": 227,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 8,
+    "maxPower": 13,
+    "maxPowerSkill": [
+      "압착 태엽 스패너",
+      "Compression Wind-up Spanner"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 49,
+    "sinnerId": 4,
+    "slug": "kurokumo-clan-wakashu-ryoshu",
+    "nameKo": "흑운회 와카슈 료슈",
+    "nameEn": "Kurokumo Clan Wakashu Ryōshū",
+    "nameJa": "黒雲会若衆 良秀",
+    "rarity": 3,
+    "releaseDate": "2023-02-27",
+    "primarySin": "gluttony",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 236,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": 0,
+    "coins": 5,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "구름 휘젓기",
+      "Lenticular Swirl"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 50,
+    "sinnerId": 4,
+    "slug": "rb-chef-de-cuisine-ryoshu",
+    "nameKo": "료.고.파. 주방장 료슈",
+    "nameEn": "R.B. Chef de Cuisine Ryōshū",
+    "nameJa": "りょ・ミ・パ厨房長 良秀",
+    "rarity": 3,
+    "releaseDate": "2023-04-20",
+    "primarySin": "wrath",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 226,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": -2,
+    "coins": 9,
+    "maxPower": 18,
+    "maxPowerSkill": [
+      "재.사",
+      "I.H."
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 51,
+    "sinnerId": 4,
+    "slug": "w-corp-l3-cleanup-agent-ryoshu",
+    "nameKo": "W사 3등급 정리 요원 료슈",
+    "nameEn": "W Corp. L3 Cleanup Agent Ryōshū",
+    "nameJa": "W社 3級整理要員 良秀",
+    "rarity": 3,
+    "releaseDate": "2023-08-24",
+    "primarySin": "lust",
+    "keywords": [
+      "charge"
+    ],
+    "hp": 214,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": -4,
+    "coins": 10,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "도약",
+      "Leap"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 52,
+    "sinnerId": 4,
+    "slug": "edgar-family-chief-butler-ryoshu",
+    "nameKo": "에드가 가문 치프 버틀러 료슈",
+    "nameEn": "Edgar Family Chief Butler Ryōshū",
+    "nameJa": "エドガー家チーフバトラー 良秀",
+    "rarity": 3,
+    "releaseDate": "2024-04-18",
+    "primarySin": "lust",
+    "keywords": [
+      "poise"
+    ],
+    "hp": 226,
+    "minSpeed": 3,
+    "maxSpeed": 8,
+    "defenseLevel": -2,
+    "coins": 6,
+    "maxPower": 18,
+    "maxPowerSkill": [
+      "응접도 제 2식 모.분",
+      "Receiving Arts 2: S.Y.N.C."
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 53,
+    "sinnerId": 4,
+    "slug": "lobotomy-ego-red-eyes-and-penitence-ryoshu",
+    "nameKo": "로보토미 E.G.O::적안 · 참회 료슈",
+    "nameEn": "Lobotomy E.G.O::Red Eyes & Penitence Ryōshū",
+    "nameJa": "ロボトミーE.G.O::赤眼・懺悔 良秀",
+    "rarity": 3,
+    "releaseDate": "2024-09-05",
+    "primarySin": "envy",
+    "keywords": [
+      "bleed",
+      "charge"
+    ],
+    "hp": 221,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "대가리 터트리기",
+      "Skullbuster"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 54,
+    "sinnerId": 4,
+    "slug": "heishou-pack-mao-branch-ryoshu",
+    "nameKo": "흑수 - 묘 료슈",
+    "nameEn": "Heishou Pack - Mao Branch Ryōshū",
+    "nameJa": "黒獣 - 卯 良秀",
+    "rarity": 3,
+    "releaseDate": "2025-03-20",
+    "primarySin": "lust",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 221,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": -2,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "저주가 새겨진 검을 쑤셔주지",
+      "I'll gut you with a curse-engraved blade"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 55,
+    "sinnerId": 4,
+    "slug": "n-corp-ego-contempt-awe-ryoshu",
+    "nameKo": "N사 E.G.O::경멸, 경외 료슈",
+    "nameEn": "N Corp. E.G.O::Contempt, Awe Ryōshū",
+    "nameJa": "N社E.G.O::軽蔑、畏敬 良秀",
+    "rarity": 3,
+    "releaseDate": "2025-09-11",
+    "primarySin": "envy",
+    "keywords": [
+      "bleed",
+      "tremor"
+    ],
+    "hp": 224,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": -2,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "경외, 경멸",
+      "Awe, Contempt"
+    ],
+    "stagger": [
+      50
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 56,
+    "sinnerId": 4,
+    "slug": "drifting-blade-of-hongyuan-ryoshu",
+    "nameKo": "홍원 방랑무사 료슈",
+    "nameEn": "Drifting Blade of Hongyuan Ryōshū",
+    "nameJa": "鴻園の放浪武者 良秀",
+    "rarity": 3,
+    "releaseDate": "2025-12-04",
+    "primarySin": "gloom",
+    "keywords": [
+      "poise",
+      "rupture"
+    ],
+    "hp": 265,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 2,
+    "coins": 8,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "명기누골[銘肌鏤骨]",
+      "Engraved in Flesh and Bone [銘肌鏤骨]"
+    ],
+    "stagger": [
+      30
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 57,
+    "sinnerId": 4,
+    "slug": "lobotomy-ego-faint-aroma-and-solitude-ryoshu",
+    "nameKo": "로보토미 E.G.O::잔향 · 외로움 료슈",
+    "nameEn": "Lobotomy E.G.O::Faint Aroma & Solitude Ryōshū",
+    "nameJa": "ロボトミーE.G.O::残香・寂しさ 良秀",
+    "rarity": 3,
+    "releaseDate": "2026-03-05",
+    "primarySin": "sloth",
+    "keywords": [
+      "sinking",
+      "tremor"
+    ],
+    "hp": 216,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "만개",
+      "Full Bloom"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 176,
+    "sinnerId": 4,
+    "slug": "blade-of-the-house-of-spiders-ryoshu",
+    "nameKo": "거미집의 검 료슈",
+    "nameEn": "Blade of the House of Spiders Ryōshū",
+    "nameJa": "蜘蛛の巣の刀 良秀",
+    "rarity": 3,
+    "releaseDate": "2026-05-14",
+    "primarySin": "lust",
+    "keywords": [
+      "burn",
+      "bleed",
+      "poise"
+    ],
+    "hp": 263,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 2,
+    "coins": 7,
+    "maxPower": 22,
+    "maxPowerSkill": [
+      "공간참[空間斬]",
+      "Rend Space [空間斬]"
+    ],
+    "stagger": [
+      40
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 186,
+    "sinnerId": 4,
+    "slug": "haute-couture-le-noir-footwear-hall-ryoshu",
+    "nameKo": "오트쿠튀르::르누아르 신발관 료슈",
+    "nameEn": "Haute Couture::Le Noir Footwear Hall Ryōshū",
+    "nameJa": "オートクチュール::ル・ノワール シューズフロア 良秀",
+    "rarity": 3,
+    "releaseDate": "2026-09-17",
+    "primarySin": "envy",
+    "keywords": [
+      "tremor",
+      "charge"
+    ],
+    "hp": 282,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 2,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "트리플 스탬피드 스티칭",
+      "Triple Stamped Stitching"
+    ],
+    "stagger": [
+      60,
+      30
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 58,
+    "sinnerId": 5,
+    "slug": "lcb-sinner-meursault",
+    "nameKo": "LCB 수감자 뫼르소",
+    "nameEn": "LCB Sinner Meursault",
+    "nameJa": "LCB囚人 ムルソー",
+    "rarity": 1,
+    "releaseDate": "2023-02-27",
+    "primarySin": "sloth",
+    "keywords": [
+      "tremor"
+    ],
+    "hp": 292,
+    "minSpeed": 2,
+    "maxSpeed": 3,
+    "defenseLevel": 3,
+    "coins": 7,
+    "maxPower": 15,
+    "maxPowerSkill": [
+      "주먹꽂기",
+      "Nailing Fist"
+    ],
+    "stagger": [
+      50,
+      20
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 59,
+    "sinnerId": 5,
+    "slug": "liu-assoc-south-section-6-meursault",
+    "nameKo": "남부 리우 협회 6과 뫼르소",
+    "nameEn": "Liu Assoc. South Section 6 Meursault",
+    "nameJa": "南部リウ協会6課 ムルソー",
+    "rarity": 2,
+    "releaseDate": "2023-02-27",
+    "primarySin": "lust",
+    "keywords": [
+      "burn"
+    ],
+    "hp": 265,
+    "minSpeed": 2,
+    "maxSpeed": 5,
+    "defenseLevel": 1,
+    "coins": 7,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "연무 붕권",
+      "Perfected Death Fist"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 60,
+    "sinnerId": 5,
+    "slug": "rosespanner-workshop-fixer-meursault",
+    "nameKo": "장미스패너 공방 해결사 뫼르소",
+    "nameEn": "Rosespanner Workshop Fixer Meursault",
+    "nameJa": "バラのスパナ工房フィクサー ムルソー",
+    "rarity": 2,
+    "releaseDate": "2023-06-01",
+    "primarySin": "gloom",
+    "keywords": [
+      "charge",
+      "tremor"
+    ],
+    "hp": 252,
+    "minSpeed": 3,
+    "maxSpeed": 8,
+    "defenseLevel": 0,
+    "coins": 7,
+    "maxPower": 13,
+    "maxPowerSkill": [
+      "강제 휴식",
+      "Forced Break"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 61,
+    "sinnerId": 5,
+    "slug": "the-middle-little-brother-meursault",
+    "nameKo": "중지 작은 아우 뫼르소",
+    "nameEn": "The Middle Little Brother Meursault",
+    "nameJa": "中指末弟 ムルソー",
+    "rarity": 2,
+    "releaseDate": "2023-11-23",
+    "primarySin": "sloth",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 265,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 3,
+    "coins": 7,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "의리 사슬",
+      "Chains of Loyalty"
+    ],
+    "stagger": [
+      55,
+      20
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 62,
+    "sinnerId": 5,
+    "slug": "dead-rabbits-boss-meursault",
+    "nameKo": "데드레빗츠 보스 뫼르소",
+    "nameEn": "Dead Rabbits Boss Meursault",
+    "nameJa": "デッドラビッツボス ムルソー",
+    "rarity": 2,
+    "releaseDate": "2024-03-28",
+    "primarySin": "lust",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 245,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 2,
+    "coins": 7,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "내려박기",
+      "Smackdown"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 63,
+    "sinnerId": 5,
+    "slug": "w-corp-l2-cleanup-agent-meursault",
+    "nameKo": "W사 2등급 정리 요원 뫼르소",
+    "nameEn": "W Corp. L2 Cleanup Agent Meursault",
+    "nameJa": "W社 2級整理要員 ムルソー",
+    "rarity": 3,
+    "releaseDate": "2023-02-27",
+    "primarySin": "envy",
+    "keywords": [
+      "charge",
+      "rupture"
+    ],
+    "hp": 256,
+    "minSpeed": 4,
+    "maxSpeed": 8,
+    "defenseLevel": 4,
+    "coins": 8,
+    "maxPower": 13,
+    "maxPowerSkill": [
+      "에너지 교류",
+      "Energy Current"
+    ],
+    "stagger": [
+      60,
+      30
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 64,
+    "sinnerId": 5,
+    "slug": "n-corp-grosshammer-meursault",
+    "nameKo": "N사 큰 망치 뫼르소",
+    "nameEn": "N Corp. Großhammer Meursault",
+    "nameJa": "N社大鎚 ムルソー",
+    "rarity": 3,
+    "releaseDate": "2023-03-09",
+    "primarySin": "sloth",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 321,
+    "minSpeed": 3,
+    "maxSpeed": 5,
+    "defenseLevel": 5,
+    "coins": 6,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "이단 말살",
+      "Annihilate Heretics"
+    ],
+    "stagger": [
+      50
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 65,
+    "sinnerId": 5,
+    "slug": "r-corp-4th-pack-rhino-meursault",
+    "nameKo": "R사 제 4무리 코뿔소팀 뫼르소",
+    "nameEn": "R Corp. 4th Pack Rhino Meursault",
+    "nameJa": "R社第4群サイチーム ムルソー",
+    "rarity": 3,
+    "releaseDate": "2023-07-13",
+    "primarySin": "envy",
+    "keywords": [
+      "bleed",
+      "charge"
+    ],
+    "hp": 290,
+    "minSpeed": 3,
+    "maxSpeed": 5,
+    "defenseLevel": 5,
+    "coins": 7,
+    "maxPower": 15,
+    "maxPowerSkill": [
+      "코뿔소 돌진",
+      "Rhino Ram"
+    ],
+    "stagger": [
+      40
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 66,
+    "sinnerId": 5,
+    "slug": "blade-lineage-mentor-meursault",
+    "nameKo": "검계 우두머리 뫼르소",
+    "nameEn": "Blade Lineage Mentor Meursault",
+    "nameJa": "剣契頭目 ムルソー",
+    "rarity": 3,
+    "releaseDate": "2024-02-22",
+    "primarySin": "pride",
+    "keywords": [
+      "poise"
+    ],
+    "hp": 259,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 3,
+    "coins": 6,
+    "maxPower": 20,
+    "maxPowerSkill": [
+      "육참",
+      "Yield My Flesh"
+    ],
+    "stagger": [
+      80,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 67,
+    "sinnerId": 5,
+    "slug": "dieci-assoc-south-section-4-director-meursault",
+    "nameKo": "남부 디에치 협회 4과 부장 뫼르소",
+    "nameEn": "Dieci Assoc. South Section 4 Director Meursault",
+    "nameJa": "南部ディエーチ協会4課 部長 ムルソー",
+    "rarity": 3,
+    "releaseDate": "2024-07-11",
+    "primarySin": "gluttony",
+    "keywords": [
+      "sinking"
+    ],
+    "hp": 265,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 2,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "지식 전소",
+      "Scorch Knowledge"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 68,
+    "sinnerId": 5,
+    "slug": "cinq-assoc-west-section-3-meursault",
+    "nameKo": "서부 섕크 협회 3과 뫼르소",
+    "nameEn": "Cinq Assoc. West Section 3 Meursault",
+    "nameJa": "西部センク協会3課 ムルソー",
+    "rarity": 3,
+    "releaseDate": "2024-10-10",
+    "primarySin": "pride",
+    "keywords": [
+      "poise",
+      "rupture"
+    ],
+    "hp": 224,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 2,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "살뤼",
+      "Salut"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 69,
+    "sinnerId": 5,
+    "slug": "the-thumb-east-capo-iiii-meursault",
+    "nameKo": "동부 엄지 카포 IIII 뫼르소",
+    "nameEn": "The Thumb East Capo IIII Meursault",
+    "nameJa": "東部親指カポIIII ムルソー",
+    "rarity": 3,
+    "releaseDate": "2025-06-19",
+    "primarySin": "sloth",
+    "keywords": [
+      "burn",
+      "tremor"
+    ],
+    "hp": 265,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 2,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "쾌도난마 [快刀亂麻]",
+      "Tanglecleaver [快刀亂麻]"
+    ],
+    "stagger": [
+      65
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 70,
+    "sinnerId": 5,
+    "slug": "the-prince-of-la-manchaland-meursault",
+    "nameKo": "라만차랜드 왕자 뫼르소",
+    "nameEn": "The Prince of La Manchaland Meursault",
+    "nameJa": "ラ・マンチャランドの王子 ムルソー",
+    "rarity": 3,
+    "releaseDate": "2025-10-23",
+    "primarySin": "envy",
+    "keywords": [
+      "bleed",
+      "rupture"
+    ],
+    "hp": 286,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 2,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "재건의 의무",
+      "Responsibility to Rebuild"
+    ],
+    "stagger": [
+      65
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 173,
+    "sinnerId": 5,
+    "slug": "the-ring-fauvist-student-meursault",
+    "nameKo": "약지 야수파 스튜던트 뫼르소",
+    "nameEn": "The Ring Fauvist Student Meursault",
+    "nameJa": "薬指 野獣派スチューデント ムルソー",
+    "rarity": 3,
+    "releaseDate": "2026-04-16",
+    "primarySin": "wrath",
+    "keywords": [
+      "bleed",
+      "sinking"
+    ],
+    "hp": 224,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": -1,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "야수파 - 출품작 전개",
+      "Le Fauvisme - Reveal Submission"
+    ],
+    "stagger": [
+      70,
+      40
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 71,
+    "sinnerId": 5,
+    "slug": "lobotomy-ego-hornet-alteration-meursault",
+    "nameKo": "로보토미 E.G.O::호넷【변조】뫼르소",
+    "nameEn": "Lobotomy E.G.O::Hornet【Alteration】 Meursault",
+    "nameJa": "ロボトミーE.G.O::ホーネット【変調】 ムルソー",
+    "rarity": 3,
+    "releaseDate": "2026-03-05",
+    "primarySin": "lust",
+    "keywords": [
+      "bleed",
+      "burn"
+    ],
+    "hp": 236,
+    "minSpeed": 4,
+    "maxSpeed": 8,
+    "defenseLevel": 0,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "E.G.O 변조 - 산탄",
+      "E.G.O Alteration - Buckshot"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 72,
+    "sinnerId": 6,
+    "slug": "lcb-sinner-hong-lu",
+    "nameKo": "LCB 수감자 홍루",
+    "nameEn": "LCB Sinner Hong Lu",
+    "nameJa": "LCB囚人 ホンル",
+    "rarity": 1,
+    "releaseDate": "2023-02-27",
+    "primarySin": "pride",
+    "keywords": [
+      "rupture",
+      "sinking"
+    ],
+    "hp": 214,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": -2,
+    "coins": 5,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "선풍",
+      "Whirlwind"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 73,
+    "sinnerId": 6,
+    "slug": "kurokumo-clan-wakashu-hong-lu",
+    "nameKo": "흑운회 와카슈 홍루",
+    "nameEn": "Kurokumo Clan Wakashu Hong Lu",
+    "nameJa": "黒雲会若衆 ホンル",
+    "rarity": 2,
+    "releaseDate": "2023-02-27",
+    "primarySin": "lust",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 245,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 1,
+    "coins": 6,
+    "maxPower": 13,
+    "maxPowerSkill": [
+      "구름 절개",
+      "Cloud Cutter"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 74,
+    "sinnerId": 6,
+    "slug": "liu-assoc-south-section-5-hong-lu",
+    "nameKo": "남부 리우 협회 5과 홍루",
+    "nameEn": "Liu Assoc. South Section 5 Hong Lu",
+    "nameJa": "南部リウ協会5課 ホンル",
+    "rarity": 2,
+    "releaseDate": "2023-04-06",
+    "primarySin": "gloom",
+    "keywords": [
+      "burn"
+    ],
+    "hp": 245,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": 1,
+    "coins": 6,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "홍염권",
+      "Crimson Blaze Fist"
+    ],
+    "stagger": [
+      70,
+      30
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 75,
+    "sinnerId": 6,
+    "slug": "w-corp-l2-cleanup-agent-hong-lu",
+    "nameKo": "W사 2등급 정리 요원 홍루",
+    "nameEn": "W Corp. L2 Cleanup Agent Hong Lu",
+    "nameJa": "W社 2級整理要員 ホンル",
+    "rarity": 2,
+    "releaseDate": "2023-08-24",
+    "primarySin": "pride",
+    "keywords": [
+      "charge",
+      "rupture"
+    ],
+    "hp": 265,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 2,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "충전 역장 전개",
+      "Deploy Charge Barrier"
+    ],
+    "stagger": [
+      55,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 76,
+    "sinnerId": 6,
+    "slug": "hook-office-fixer-hong-lu",
+    "nameKo": "갈고리 사무소 해결사 홍루",
+    "nameEn": "Hook Office Fixer Hong Lu",
+    "nameJa": "鈎事務所フィクサー ホンル",
+    "rarity": 2,
+    "releaseDate": "2023-10-26",
+    "primarySin": "wrath",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 222,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -3,
+    "coins": 9,
+    "maxPower": 13,
+    "maxPowerSkill": [
+      "먼저 간다",
+      "Goin' First"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 77,
+    "sinnerId": 6,
+    "slug": "fanghunt-office-fixer-hong-lu",
+    "nameKo": "송곳니 사냥 사무소 해결사 홍루",
+    "nameEn": "Fanghunt Office Fixer Hong Lu",
+    "nameJa": "牙狩事務所フィクサー ホンル",
+    "rarity": 2,
+    "releaseDate": "2024-10-17",
+    "primarySin": "gluttony",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 236,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": 0,
+    "coins": 7,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "뼈 부수기",
+      "Bonecrusher"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 78,
+    "sinnerId": 6,
+    "slug": "tingtang-gang-gangleader-hong-lu",
+    "nameKo": "콩콩이파 두목 홍루",
+    "nameEn": "Tingtang Gang Gangleader Hong Lu",
+    "nameJa": "ぽんぽん派ボス ホンル",
+    "rarity": 3,
+    "releaseDate": "2023-02-27",
+    "primarySin": "envy",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 245,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": 2,
+    "coins": 5,
+    "maxPower": 30,
+    "maxPowerSkill": [
+      "난도질",
+      "Mutilate"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 79,
+    "sinnerId": 6,
+    "slug": "k-corp-class-3-excision-staff-hong-lu",
+    "nameKo": "K사 3등급 적출직 직원 홍루",
+    "nameEn": "K Corp. Class 3 Excision Staff Hong Lu",
+    "nameJa": "K社 3級摘出職職員 ホンル",
+    "rarity": 3,
+    "releaseDate": "2023-06-29",
+    "primarySin": "pride",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 321,
+    "minSpeed": 2,
+    "maxSpeed": 6,
+    "defenseLevel": 5,
+    "coins": 5,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "붕괴 칼날",
+      "Decay Blade"
+    ],
+    "stagger": [
+      50
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 80,
+    "sinnerId": 6,
+    "slug": "dieci-assoc-south-section-4-hong-lu",
+    "nameKo": "남부 디에치 협회 4과 홍루",
+    "nameEn": "Dieci Assoc. South Section 4 Hong Lu",
+    "nameJa": "南部ディエーチ協会4課 ホンル",
+    "rarity": 3,
+    "releaseDate": "2024-01-25",
+    "primarySin": "wrath",
+    "keywords": [
+      "sinking"
+    ],
+    "hp": 242,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -1,
+    "coins": 7,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "열어 젖히기",
+      "Unveil"
+    ],
+    "stagger": [
+      70,
+      30
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 81,
+    "sinnerId": 6,
+    "slug": "district-20-yurodivy-hong-lu",
+    "nameKo": "20구 유로지비 홍루",
+    "nameEn": "District 20 Yurodivy Hong Lu",
+    "nameJa": "20区ユロージヴィ ホンル",
+    "rarity": 3,
+    "releaseDate": "2024-06-13",
+    "primarySin": "gloom",
+    "keywords": [
+      "tremor"
+    ],
+    "hp": 226,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "변형 지팡이 호신술",
+      "Morph Cane Technique"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 82,
+    "sinnerId": 6,
+    "slug": "full-stop-office-rep-hong-lu",
+    "nameKo": "마침표 사무소 대표 홍루",
+    "nameEn": "Full-Stop Office Rep Hong Lu",
+    "nameJa": "終止符事務所代表 ホンル",
+    "rarity": 3,
+    "releaseDate": "2025-01-09",
+    "primarySin": "sloth",
+    "keywords": [
+      "poise"
+    ],
+    "hp": 226,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 9,
+    "maxPower": 19,
+    "maxPowerSkill": [
+      "삶의 마침표",
+      "Full-Stop to Life"
+    ],
+    "stagger": [
+      70,
+      30
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 83,
+    "sinnerId": 6,
+    "slug": "r-corp-4th-pack-reindeer-hong-lu",
+    "nameKo": "R사 제 4무리 순록팀 홍루",
+    "nameEn": "R Corp. 4th Pack Reindeer Hong Lu",
+    "nameJa": "R社第4群トナカイチーム ホンル",
+    "rarity": 3,
+    "releaseDate": "2025-04-30",
+    "primarySin": "gluttony",
+    "keywords": [
+      "charge",
+      "sinking"
+    ],
+    "hp": 220,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": -1,
+    "coins": 7,
+    "maxPower": 18,
+    "maxPowerSkill": [
+      "집중",
+      "Concentration"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 84,
+    "sinnerId": 6,
+    "slug": "the-lord-of-hongyuan-hong-lu",
+    "nameKo": "홍원 군주 홍루",
+    "nameEn": "The Lord of Hongyuan Hong Lu",
+    "nameJa": "鴻園の君主 ホンル",
+    "rarity": 3,
+    "releaseDate": "2025-08-14",
+    "primarySin": "gloom",
+    "keywords": [
+      "poise",
+      "rupture"
+    ],
+    "hp": 203,
+    "minSpeed": 4,
+    "maxSpeed": 8,
+    "defenseLevel": -2,
+    "coins": 7,
+    "maxPower": 22,
+    "maxPowerSkill": [
+      "흑수들이여 답하라",
+      "Answer Me, Heishou Packs"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 172,
+    "sinnerId": 6,
+    "slug": "the-house-of-spiders-the-ring-nursefather-hong-lu",
+    "nameKo": "거미집 약지 아비 홍루",
+    "nameEn": "The House of Spiders: The Ring Nursefather Hong Lu",
+    "nameJa": "蜘蛛の巣薬指の親方 ホンル",
+    "rarity": 3,
+    "releaseDate": "2026-04-02",
+    "primarySin": "pride",
+    "keywords": [
+      "bleed",
+      "charge"
+    ],
+    "hp": 263,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 2,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "재료획득 - 피로 목욕하는 오브제",
+      "Gather Ingredient - Blood-bathed Objet"
+    ],
+    "stagger": [
+      50
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 178,
+    "sinnerId": 6,
+    "slug": "s-corp-chunokkun-hong-lu",
+    "nameKo": "S사 추노꾼 홍루",
+    "nameEn": "S Corp. Ch'unokkun Hong Lu",
+    "nameJa": "S社チュノックン ホンル",
+    "rarity": 3,
+    "releaseDate": "2026-06-11",
+    "primarySin": "gluttony",
+    "keywords": [
+      "bleed",
+      "poise"
+    ],
+    "hp": 273,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 2,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "찢어베기",
+      "Avulsion Slash"
+    ],
+    "stagger": [
+      55,
+      20
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 185,
+    "sinnerId": 6,
+    "slug": "cinq-assoc-east-section-3-hong-lu",
+    "nameKo": "동부 섕크 협회 3과 홍루",
+    "nameEn": "Cinq Assoc. East Section 3 Hong Lu",
+    "nameJa": "東部センク協会3課 ホンル",
+    "rarity": 3,
+    "releaseDate": "2026-08-20",
+    "primarySin": "gloom",
+    "keywords": [
+      "burn",
+      "poise"
+    ],
+    "hp": 265,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 2,
+    "coins": 6,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "마지막 수까지 받아주시겠어요?",
+      "Take the Hit to the Last Blow, Please?"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 85,
+    "sinnerId": 7,
+    "slug": "lcb-sinner-heathcliff",
+    "nameKo": "LCB 수감자 히스클리프",
+    "nameEn": "LCB Sinner Heathcliff",
+    "nameJa": "LCB囚人 ヒースクリフ",
+    "rarity": 1,
+    "releaseDate": "2023-02-27",
+    "primarySin": "envy",
+    "keywords": [
+      "tremor"
+    ],
+    "hp": 253,
+    "minSpeed": 2,
+    "maxSpeed": 5,
+    "defenseLevel": 0,
+    "coins": 5,
+    "maxPower": 20,
+    "maxPowerSkill": [
+      "분풀기",
+      "Upheaval"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 86,
+    "sinnerId": 7,
+    "slug": "shi-assoc-south-section-5-heathcliff",
+    "nameKo": "남부 시 협회 5과 히스클리프",
+    "nameEn": "Shi Assoc. South Section 5 Heathcliff",
+    "nameJa": "南部シ協会5課 ヒースクリフ",
+    "rarity": 2,
+    "releaseDate": "2023-02-27",
+    "primarySin": "lust",
+    "keywords": [
+      "poise"
+    ],
+    "hp": 265,
+    "minSpeed": 2,
+    "maxSpeed": 5,
+    "defenseLevel": 1,
+    "coins": 4,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "섬격",
+      "Flashing Strike"
+    ],
+    "stagger": [
+      80,
+      60
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 87,
+    "sinnerId": 7,
+    "slug": "n-corp-kleinhammer-heathcliff",
+    "nameKo": "N사 작은 망치 히스클리프",
+    "nameEn": "N Corp. Kleinhammer Heathcliff",
+    "nameJa": "N社小鎚 ヒースクリフ",
+    "rarity": 2,
+    "releaseDate": "2023-03-23",
+    "primarySin": "envy",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 245,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 1,
+    "coins": 6,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "미약한 단죄",
+      "Infirm Retribution"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 88,
+    "sinnerId": 7,
+    "slug": "seven-assoc-south-section-4-heathcliff",
+    "nameKo": "남부 세븐 협회 4과 히스클리프",
+    "nameEn": "Seven Assoc. South Section 4 Heathcliff",
+    "nameJa": "南部セブン協会4課 ヒースクリフ",
+    "rarity": 2,
+    "releaseDate": "2023-09-07",
+    "primarySin": "wrath",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 252,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -1,
+    "coins": 7,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "뒷수습",
+      "The Wrap-up"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 89,
+    "sinnerId": 7,
+    "slug": "multicrack-office-fixer-heathcliff",
+    "nameKo": "멀티크랙 사무소 해결사 히스클리프",
+    "nameEn": "MultiCrack Office Fixer Heathcliff",
+    "nameJa": "マルチクラック事務所フィクサー ヒースクリフ",
+    "rarity": 2,
+    "releaseDate": "2024-08-08",
+    "primarySin": "wrath",
+    "keywords": [
+      "charge"
+    ],
+    "hp": 237,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": -1,
+    "coins": 9,
+    "maxPower": 13,
+    "maxPowerSkill": [
+      "광전 표식",
+      "Photoelectric Mark"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 90,
+    "sinnerId": 7,
+    "slug": "r-corp-4th-pack-rabbit-heathcliff",
+    "nameKo": "R사 제 4무리 토끼팀 히스클리프",
+    "nameEn": "R Corp. 4th Pack Rabbit Heathcliff",
+    "nameJa": "R社第4群ウサギチーム ヒースクリフ",
+    "rarity": 3,
+    "releaseDate": "2023-02-27",
+    "primarySin": "wrath",
+    "keywords": [
+      "bleed",
+      "charge",
+      "rupture"
+    ],
+    "hp": 214,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -4,
+    "coins": 12,
+    "maxPower": 13,
+    "maxPowerSkill": [
+      "신속한 제압",
+      "Quick Suppression"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 91,
+    "sinnerId": 7,
+    "slug": "lobotomy-ego-sunshower-heathcliff",
+    "nameKo": "로보토미 E.G.O::여우비 히스클리프",
+    "nameEn": "Lobotomy E.G.O::Sunshower Heathcliff",
+    "nameJa": "ロボトミーE.G.O::狐雨 ヒースクリフ",
+    "rarity": 3,
+    "releaseDate": "2023-06-08",
+    "primarySin": "envy",
+    "keywords": [
+      "rupture",
+      "sinking"
+    ],
+    "hp": 278,
+    "minSpeed": 3,
+    "maxSpeed": 5,
+    "defenseLevel": 2,
+    "coins": 10,
+    "maxPower": 18,
+    "maxPowerSkill": [
+      "퍼져라!",
+      "Spread Out!"
+    ],
+    "stagger": [
+      55,
+      20
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 92,
+    "sinnerId": 7,
+    "slug": "the-pequod-harpooneer-heathcliff",
+    "nameKo": "피쿼드호 작살잡이 히스클리프",
+    "nameEn": "The Pequod Harpooneer Heathcliff",
+    "nameJa": "ピークォド号銛使い ヒースクリフ",
+    "rarity": 3,
+    "releaseDate": "2023-12-07",
+    "primarySin": "pride",
+    "keywords": [
+      "bleed",
+      "poise"
+    ],
+    "hp": 321,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 5,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "작살박이",
+      "Snagharpoon"
+    ],
+    "stagger": [
+      80
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 93,
+    "sinnerId": 7,
+    "slug": "oufi-assoc-south-section-3-heathcliff",
+    "nameKo": "남부 외우피 협회 3과 히스클리프",
+    "nameEn": "Öufi Assoc. South Section 3 Heathcliff",
+    "nameJa": "南部ウーフィ協会3課 ヒースクリフ",
+    "rarity": 3,
+    "releaseDate": "2024-03-21",
+    "primarySin": "envy",
+    "keywords": [
+      "tremor"
+    ],
+    "hp": 256,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": -2,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "집행 선고",
+      "Execution Sentencing"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 94,
+    "sinnerId": 7,
+    "slug": "wild-hunt-heathcliff",
+    "nameKo": "와일드헌트 히스클리프",
+    "nameEn": "Wild Hunt Heathcliff",
+    "nameJa": "ワイルドハント ヒースクリフ",
+    "rarity": 3,
+    "releaseDate": "2024-08-22",
+    "primarySin": "wrath",
+    "keywords": [
+      "sinking"
+    ],
+    "hp": 236,
+    "minSpeed": 3,
+    "maxSpeed": 8,
+    "defenseLevel": -2,
+    "coins": 7,
+    "maxPower": 18,
+    "maxPowerSkill": [
+      "레퀴엠",
+      "Requiem"
+    ],
+    "stagger": [
+      65,
+      35,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 95,
+    "sinnerId": 7,
+    "slug": "full-stop-office-fixer-heathcliff",
+    "nameKo": "마침표 사무소 해결사 히스클리프",
+    "nameEn": "Full-Stop Office Fixer Heathcliff",
+    "nameJa": "終止符事務所フィクサー ヒースクリフ",
+    "rarity": 3,
+    "releaseDate": "2025-01-09",
+    "primarySin": "gloom",
+    "keywords": [
+      "poise"
+    ],
+    "hp": 220,
+    "minSpeed": 3,
+    "maxSpeed": 8,
+    "defenseLevel": -1,
+    "coins": 5,
+    "maxPower": 26,
+    "maxPowerSkill": [
+      "한 점만 노린다",
+      "Goin' for the Bullseye"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 96,
+    "sinnerId": 7,
+    "slug": "kurokumo-clan-wakashu-heathcliff",
+    "nameKo": "흑운회 와카슈 히스클리프",
+    "nameEn": "Kurokumo Clan Wakashu Heathcliff",
+    "nameJa": "黒雲会若衆 ヒースクリフ",
+    "rarity": 3,
+    "releaseDate": "2025-02-06",
+    "primarySin": "wrath",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 277,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 3,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "천둥베기",
+      "Thundercleave"
+    ],
+    "stagger": [
+      60,
+      30
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 97,
+    "sinnerId": 7,
+    "slug": "w-corp-l4-cleanup-agent-cca-heathcliff",
+    "nameKo": "W사 4등급 정리 요원 - CCA 히스클리프",
+    "nameEn": "W Corp. L4 Cleanup Agent - CCA Heathcliff",
+    "nameJa": "W社 4級整理要員 - CCA ヒースクリフ",
+    "rarity": 3,
+    "releaseDate": "2025-10-23",
+    "primarySin": "gluttony",
+    "keywords": [
+      "charge",
+      "rupture"
+    ],
+    "hp": 321,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 3,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "부스트 엘보 커터",
+      "Boost: Elbow Blade"
+    ],
+    "stagger": [
+      50
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 98,
+    "sinnerId": 7,
+    "slug": "heishou-pack-you-branch-adept-heathcliff",
+    "nameKo": "흑수 - 유 필두 히스클리프",
+    "nameEn": "Heishou Pack - You Branch Adept Heathcliff",
+    "nameJa": "黒獣 - 酉 筆頭 ヒースクリフ",
+    "rarity": 3,
+    "releaseDate": "2025-11-20",
+    "primarySin": "envy",
+    "keywords": [
+      "burn",
+      "rupture"
+    ],
+    "hp": 255,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": -1,
+    "coins": 10,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "발톱으로 찢어주지",
+      "Mutilating Talons"
+    ],
+    "stagger": [
+      70
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 175,
+    "sinnerId": 7,
+    "slug": "the-middle-big-brother-heathcliff",
+    "nameKo": "중지 작은 형님 히스클리프",
+    "nameEn": "The Middle Big Brother Heathcliff",
+    "nameJa": "中指末兄 ヒースクリフ",
+    "rarity": 3,
+    "releaseDate": "2026-04-30",
+    "primarySin": "wrath",
+    "keywords": [
+      "bleed",
+      "burn"
+    ],
+    "hp": 298,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 5,
+    "coins": 7,
+    "maxPower": 22,
+    "maxPowerSkill": [
+      "내 헤어쿠포오오오온!!!!",
+      "MY HAIR COUPOOOOOOOOOOONS!!!!"
+    ],
+    "stagger": [
+      50
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 181,
+    "sinnerId": 7,
+    "slug": "the-house-of-spiders-the-thumb-apprentice-heathcliff",
+    "nameKo": "거미집 엄지 제자 히스클리프",
+    "nameEn": "The House of Spiders: The Thumb Apprentice Heathcliff",
+    "nameJa": "蜘蛛の巣親指の子方 ヒースクリフ",
+    "rarity": 3,
+    "releaseDate": "2026-06-25",
+    "primarySin": "lust",
+    "keywords": [
+      "burn",
+      "tremor"
+    ],
+    "hp": 275,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 2,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "카치아토레",
+      "Il Cacciatore"
+    ],
+    "stagger": [
+      55,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 99,
+    "sinnerId": 8,
+    "slug": "lcb-sinner-ishmael",
+    "nameKo": "LCB 수감자 이스마엘",
+    "nameEn": "LCB Sinner Ishmael",
+    "nameJa": "LCB囚人 イシュメール",
+    "rarity": 1,
+    "releaseDate": "2023-02-27",
+    "primarySin": "wrath",
+    "keywords": [
+      "tremor"
+    ],
+    "hp": 253,
+    "minSpeed": 5,
+    "maxSpeed": 8,
+    "defenseLevel": 0,
+    "coins": 3,
+    "maxPower": 20,
+    "maxPowerSkill": [
+      "방어",
+      "Shield Bash"
+    ],
+    "stagger": [
+      60,
+      30
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 100,
+    "sinnerId": 8,
+    "slug": "shi-assoc-south-section-5-ishmael",
+    "nameKo": "남부 시 협회 5과 이스마엘",
+    "nameEn": "Shi Assoc. South Section 5 Ishmael",
+    "nameJa": "南部シ協会5課 イシュメール",
+    "rarity": 2,
+    "releaseDate": "2023-02-27",
+    "primarySin": "envy",
+    "keywords": [
+      "poise"
+    ],
+    "hp": 265,
+    "minSpeed": 2,
+    "maxSpeed": 5,
+    "defenseLevel": 1,
+    "coins": 6,
+    "maxPower": 18,
+    "maxPowerSkill": [
+      "숨고르기",
+      "Catch Breath"
+    ],
+    "stagger": [
+      80,
+      60
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 101,
+    "sinnerId": 8,
+    "slug": "lccb-assistant-manager-ishmael",
+    "nameKo": "LCCB 대리 이스마엘",
+    "nameEn": "LCCB Assistant Manager Ishmael",
+    "nameJa": "LCCB係長 イシュメール",
+    "rarity": 2,
+    "releaseDate": "2023-02-27",
+    "primarySin": "gluttony",
+    "keywords": [
+      "rupture",
+      "tremor"
+    ],
+    "hp": 265,
+    "minSpeed": 2,
+    "maxSpeed": 6,
+    "defenseLevel": 3,
+    "coins": 8,
+    "maxPower": 13,
+    "maxPowerSkill": [
+      "진동탄",
+      "Quake Rounds"
+    ],
+    "stagger": [
+      55,
+      20
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 102,
+    "sinnerId": 8,
+    "slug": "lobotomy-ego-sloshing-ishmael",
+    "nameKo": "로보토미 E.G.O::출렁임 이스마엘",
+    "nameEn": "Lobotomy E.G.O::Sloshing Ishmael",
+    "nameJa": "ロボトミーE.G.O::たぷつき イシュメール",
+    "rarity": 2,
+    "releaseDate": "2023-06-15",
+    "primarySin": "gloom",
+    "keywords": [
+      "rupture",
+      "tremor"
+    ],
+    "hp": 292,
+    "minSpeed": 2,
+    "maxSpeed": 7,
+    "defenseLevel": 5,
+    "coins": 4,
+    "maxPower": 22,
+    "maxPowerSkill": [
+      "부식성 점액 타격",
+      "Corrosive Splash"
+    ],
+    "stagger": [
+      50,
+      20
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 103,
+    "sinnerId": 8,
+    "slug": "edgar-family-butler-ishmael",
+    "nameKo": "에드가 가문 버틀러 이스마엘",
+    "nameEn": "Edgar Family Butler Ishmael",
+    "nameJa": "エドガー家バトラー イシュメール",
+    "rarity": 2,
+    "releaseDate": "2024-04-18",
+    "primarySin": "sloth",
+    "keywords": [
+      "poise",
+      "sinking"
+    ],
+    "hp": 236,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": -1,
+    "coins": 7,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "정리정돈",
+      "Housekeeping"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 104,
+    "sinnerId": 8,
+    "slug": "r-corp-4th-pack-reindeer-ishmael",
+    "nameKo": "R사 제 4무리 순록팀 이스마엘",
+    "nameEn": "R Corp. 4th Pack Reindeer Ishmael",
+    "nameJa": "R社第4群トナカイチーム イシュメール",
+    "rarity": 3,
+    "releaseDate": "2023-02-27",
+    "primarySin": "gloom",
+    "keywords": [
+      "charge",
+      "sinking"
+    ],
+    "hp": 254,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 3,
+    "coins": 7,
+    "maxPower": 26,
+    "maxPowerSkill": [
+      "정신 채찍",
+      "Mind Whip"
+    ],
+    "stagger": [
+      70,
+      30
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 105,
+    "sinnerId": 8,
+    "slug": "liu-assoc-south-section-4-ishmael",
+    "nameKo": "남부 리우 협회 4과 이스마엘",
+    "nameEn": "Liu Assoc. South Section 4 Ishmael",
+    "nameJa": "南部リウ協会4課 イシュメール",
+    "rarity": 3,
+    "releaseDate": "2023-07-06",
+    "primarySin": "lust",
+    "keywords": [
+      "burn"
+    ],
+    "hp": 256,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": 0,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "정면 돌파",
+      "Frontal Assault"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 106,
+    "sinnerId": 8,
+    "slug": "molar-boatworks-fixer-ishmael",
+    "nameKo": "어금니 보트 센터 해결사 이스마엘",
+    "nameEn": "Molar Boatworks Fixer Ishmael",
+    "nameJa": "奥歯ボートセンターフィクサー イシュメール",
+    "rarity": 3,
+    "releaseDate": "2023-07-27",
+    "primarySin": "pride",
+    "keywords": [
+      "sinking",
+      "tremor"
+    ],
+    "hp": 226,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": -2,
+    "coins": 7,
+    "maxPower": 18,
+    "maxPowerSkill": [
+      "과격한 판단",
+      "Risky Judgement"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 107,
+    "sinnerId": 8,
+    "slug": "the-pequod-captain-ishmael",
+    "nameKo": "피쿼드호 선장 이스마엘",
+    "nameEn": "The Pequod Captain Ishmael",
+    "nameJa": "ピークォド号船長 イシュメール",
+    "rarity": 3,
+    "releaseDate": "2024-02-08",
+    "primarySin": "envy",
+    "keywords": [
+      "bleed",
+      "burn",
+      "poise"
+    ],
+    "hp": 218,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": -3,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "끝까지 추적한다!",
+      "Pursue Them to the End!"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 108,
+    "sinnerId": 8,
+    "slug": "zwei-assoc-west-section-3-ishmael",
+    "nameKo": "서부 츠바이 협회 3과 이스마엘",
+    "nameEn": "Zwei Assoc. West Section 3 Ishmael",
+    "nameJa": "西部ツヴァイ協会3課 イシュメール",
+    "rarity": 3,
+    "releaseDate": "2024-10-03",
+    "primarySin": "pride",
+    "keywords": [
+      "tremor"
+    ],
+    "hp": 302,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 5,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "수호",
+      "Ward"
+    ],
+    "stagger": [
+      55
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 109,
+    "sinnerId": 8,
+    "slug": "kurokumo-clan-captain-ishmael",
+    "nameKo": "흑운회 부조장 이스마엘",
+    "nameEn": "Kurokumo Clan Captain Ishmael",
+    "nameJa": "黒雲会副組長 イシュメール",
+    "rarity": 3,
+    "releaseDate": "2025-02-06",
+    "primarySin": "envy",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 241,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 3,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "먹칠",
+      "Ink Over"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 110,
+    "sinnerId": 8,
+    "slug": "family-hierarch-candidate-ishmael",
+    "nameKo": "가주 후보 이스마엘",
+    "nameEn": "Family Hierarch Candidate Ishmael",
+    "nameJa": "家主候補 イシュメール",
+    "rarity": 3,
+    "releaseDate": "2025-06-05",
+    "primarySin": "gloom",
+    "keywords": [
+      "poise",
+      "rupture"
+    ],
+    "hp": 218,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 7,
+    "maxPower": 22,
+    "maxPowerSkill": [
+      "적춘",
+      "Crimson Spring"
+    ],
+    "stagger": [
+      70,
+      40,
+      15
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 111,
+    "sinnerId": 8,
+    "slug": "jeongs-office-rep-ishmael",
+    "nameKo": "정사무소 대표 이스마엘",
+    "nameEn": "Jeong's Office Rep Ishmael",
+    "nameJa": "定事務所代表 イシュメール",
+    "rarity": 3,
+    "releaseDate": "2025-11-06",
+    "primarySin": "wrath",
+    "keywords": [
+      "sinking",
+      "tremor"
+    ],
+    "hp": 236,
+    "minSpeed": 3,
+    "maxSpeed": 8,
+    "defenseLevel": 0,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "사쿠라센[桜閃]",
+      "Sakura-sen [桜閃]"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 112,
+    "sinnerId": 8,
+    "slug": "the-house-of-spiders-the-middle-apprentice-ishmael",
+    "nameKo": "거미집 중지 제자 이스마엘",
+    "nameEn": "The House of Spiders: The Middle Apprentice Ishmael",
+    "nameJa": "蜘蛛の巣中指の子方 イシュメール",
+    "rarity": 3,
+    "releaseDate": "2026-01-22",
+    "primarySin": "lust",
+    "keywords": [
+      "burn",
+      "bleed"
+    ],
+    "hp": 290,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 4,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "십자난무",
+      "Crossing Dervish"
+    ],
+    "stagger": [
+      50,
+      30
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 179,
+    "sinnerId": 8,
+    "slug": "lcd-osir-team-ishmael",
+    "nameKo": "LCD 현장추리팀 이스마엘",
+    "nameEn": "LCD OSIR Team Ishmael",
+    "nameJa": "LCD現場推理チーム イシュメール",
+    "rarity": 3,
+    "releaseDate": "2026-06-11",
+    "primarySin": "wrath",
+    "keywords": [
+      "bleed",
+      "poise"
+    ],
+    "hp": 277,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 3,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "청린화",
+      "Lucent Rippling Flame"
+    ],
+    "stagger": [
+      40
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 187,
+    "sinnerId": 8,
+    "slug": "haute-couture-boutique-du-rouge-ishmael",
+    "nameKo": "오트쿠튀르::르루주 부티크 이스마엘",
+    "nameEn": "Haute Couture::Boutique du Rouge Ishmael",
+    "nameJa": "オートクチュール::ル・ルージュ ブティーク イシュメール",
+    "rarity": 3,
+    "releaseDate": "2026-09-17",
+    "primarySin": "wrath",
+    "keywords": [
+      "bleed",
+      "charge"
+    ],
+    "hp": 233,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 0,
+    "coins": 7,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "목소리가 들리지 않았다해서 부재했던것이 아니었음을!",
+      "Indeed, the Silence of the Voice Did Not Signify Its Absence!"
+    ],
+    "stagger": [
+      50
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 113,
+    "sinnerId": 9,
+    "slug": "lcb-sinner-rodion",
+    "nameKo": "LCB 수감자 로쟈",
+    "nameEn": "LCB Sinner Rodion",
+    "nameJa": "LCB囚人 ロージャ",
+    "rarity": 1,
+    "releaseDate": "2023-02-27",
+    "primarySin": "gluttony",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 253,
+    "minSpeed": 2,
+    "maxSpeed": 5,
+    "defenseLevel": 0,
+    "coins": 7,
+    "maxPower": 12,
+    "maxPowerSkill": [
+      "연속 베기",
+      "Axe Combo"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 114,
+    "sinnerId": 9,
+    "slug": "lccb-assistant-manager-rodion",
+    "nameKo": "LCCB 대리 로쟈",
+    "nameEn": "LCCB Assistant Manager Rodion",
+    "nameJa": "LCCB係長 ロージャ",
+    "rarity": 2,
+    "releaseDate": "2023-02-27",
+    "primarySin": "pride",
+    "keywords": [],
+    "hp": 204,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -4,
+    "coins": 5,
+    "maxPower": 11,
+    "maxPowerSkill": [
+      "타격",
+      "Bludgeon"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 115,
+    "sinnerId": 9,
+    "slug": "n-corp-mittelhammer-rodion",
+    "nameKo": "N사 중간 망치 로쟈",
+    "nameEn": "N Corp. Mittelhammer Rodion",
+    "nameJa": "N社中鎚 ロージャ",
+    "rarity": 2,
+    "releaseDate": "2023-03-09",
+    "primarySin": "pride",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 224,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 8,
+    "maxPower": 12,
+    "maxPowerSkill": [
+      "철의 단죄",
+      "Ironclad Retribution"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 116,
+    "sinnerId": 9,
+    "slug": "zwei-assoc-south-section-5-rodion",
+    "nameKo": "남부 츠바이 협회 5과 로쟈",
+    "nameEn": "Zwei Assoc. South Section 5 Rodion",
+    "nameJa": "南部ツヴァイ協会5課 ロージャ",
+    "rarity": 2,
+    "releaseDate": "2023-07-13",
+    "primarySin": "wrath",
+    "keywords": [
+      "poise"
+    ],
+    "hp": 286,
+    "minSpeed": 2,
+    "maxSpeed": 4,
+    "defenseLevel": 3,
+    "coins": 7,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "집중 방어",
+      "Focused Defense"
+    ],
+    "stagger": [
+      55,
+      20
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 117,
+    "sinnerId": 9,
+    "slug": "t-corp-class-2-collection-staff-rodion",
+    "nameKo": "T사 2등급 징수직 직원 로쟈",
+    "nameEn": "T Corp. Class 2 Collection Staff Rodion",
+    "nameJa": "T社 2級徴収職職員 ロージャ",
+    "rarity": 2,
+    "releaseDate": "2024-06-27",
+    "primarySin": "envy",
+    "keywords": [
+      "tremor"
+    ],
+    "hp": 278,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": -1,
+    "coins": 8,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "T사식 제압 격투",
+      "T Corp. Martial Suppression"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 118,
+    "sinnerId": 9,
+    "slug": "kurokumo-clan-wakashu-rodion",
+    "nameKo": "흑운회 와카슈 로쟈",
+    "nameEn": "Kurokumo Clan Wakashu Rodion",
+    "nameJa": "黒雲会若衆 ロージャ",
+    "rarity": 3,
+    "releaseDate": "2023-02-27",
+    "primarySin": "gloom",
+    "keywords": [
+      "bleed",
+      "poise"
+    ],
+    "hp": 278,
+    "minSpeed": 2,
+    "maxSpeed": 5,
+    "defenseLevel": 2,
+    "coins": 4,
+    "maxPower": 25,
+    "maxPowerSkill": [
+      "쾌청 베기",
+      "Sky-clearing Cut"
+    ],
+    "stagger": [
+      60,
+      30
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 119,
+    "sinnerId": 9,
+    "slug": "rosespanner-workshop-rep-rodion",
+    "nameKo": "장미스패너 공방 대표 로쟈",
+    "nameEn": "Rosespanner Workshop Rep Rodion",
+    "nameJa": "バラのスパナ工房代表 ロージャ",
+    "rarity": 3,
+    "releaseDate": "2023-06-01",
+    "primarySin": "pride",
+    "keywords": [
+      "charge",
+      "tremor"
+    ],
+    "hp": 236,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": -1,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "한탕 해볼까",
+      "Let’s Rack Up Some Scores"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 120,
+    "sinnerId": 9,
+    "slug": "dieci-assoc-south-section-4-rodion",
+    "nameKo": "남부 디에치 협회 4과 로쟈",
+    "nameEn": "Dieci Assoc. South Section 4 Rodion",
+    "nameJa": "南部ディエーチ協会4課 ロージャ",
+    "rarity": 3,
+    "releaseDate": "2023-09-21",
+    "primarySin": "gloom",
+    "keywords": [
+      "sinking"
+    ],
+    "hp": 290,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 5,
+    "coins": 11,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "고통스러운 계몽",
+      "Excruciating Study"
+    ],
+    "stagger": [
+      50
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 121,
+    "sinnerId": 9,
+    "slug": "liu-assoc-south-section-4-director-rodion",
+    "nameKo": "남부 리우 협회 4과 부장 로쟈",
+    "nameEn": "Liu Assoc. South Section 4 Director Rodion",
+    "nameJa": "南部リウ協会4課 部長 ロージャ",
+    "rarity": 3,
+    "releaseDate": "2024-03-07",
+    "primarySin": "pride",
+    "keywords": [
+      "burn"
+    ],
+    "hp": 257,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "염수격-연",
+      "Fiery Knifehand-Combust"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 122,
+    "sinnerId": 9,
+    "slug": "devyat-assoc-north-section-3-rodion",
+    "nameKo": "북부 제뱌찌 협회 3과 로쟈",
+    "nameEn": "Devyat' Assoc. North Section 3 Rodion",
+    "nameJa": "北部ヂェーヴィチ協会3課 ロージャ",
+    "rarity": 3,
+    "releaseDate": "2024-09-19",
+    "primarySin": "lust",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 268,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 2,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "플루! 힘 좀 써줘!",
+      "I Trust Ya, Polu!"
+    ],
+    "stagger": [
+      60,
+      30
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 123,
+    "sinnerId": 9,
+    "slug": "the-princess-of-la-manchaland-rodion",
+    "nameKo": "라만차랜드 공주 로쟈",
+    "nameEn": "The Princess of La Manchaland Rodion",
+    "nameJa": "ラ・マンチャランドの姫 ロージャ",
+    "rarity": 3,
+    "releaseDate": "2024-11-14",
+    "primarySin": "pride",
+    "keywords": [
+      "bleed",
+      "rupture"
+    ],
+    "hp": 256,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 3,
+    "coins": 8,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "흩뿌리며 갈려나가라",
+      "In Finely Ground Mistfall"
+    ],
+    "stagger": [
+      70,
+      30
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 124,
+    "sinnerId": 9,
+    "slug": "heishou-pack-si-branch-rodion",
+    "nameKo": "흑수 - 사 로쟈",
+    "nameEn": "Heishou Pack - Si Branch Rodion",
+    "nameJa": "黒獣 - 巳 ロージャ",
+    "rarity": 3,
+    "releaseDate": "2025-05-15",
+    "primarySin": "envy",
+    "keywords": [
+      "poise",
+      "rupture"
+    ],
+    "hp": 224,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "절명사난",
+      "Serpent's Mortal Flurry"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 125,
+    "sinnerId": 9,
+    "slug": "lobotomy-ego-the-sword-sharpened-with-tears-rodion",
+    "nameKo": "로보토미 E.G.O::눈물로 벼려낸 검 로쟈",
+    "nameEn": "Lobotomy E.G.O::The Sword Sharpened with Tears Rodion",
+    "nameJa": "ロボトミーE.G.O::涙で研ぎ澄まされた剣 ロージャ",
+    "rarity": 3,
+    "releaseDate": "2025-07-17",
+    "primarySin": "gloom",
+    "keywords": [
+      "sinking",
+      "charge"
+    ],
+    "hp": 294,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 5,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "아르카나 피어스",
+      "Arcana Pierce"
+    ],
+    "stagger": [
+      50
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 174,
+    "sinnerId": 9,
+    "slug": "the-ring-fauvist-docent-rodion",
+    "nameKo": "약지 야수파 도슨트 로쟈",
+    "nameEn": "The Ring Fauvist Docent Rodion",
+    "nameJa": "薬指 野獣派ドーセント ロージャ",
+    "rarity": 3,
+    "releaseDate": "2026-04-16",
+    "primarySin": "gloom",
+    "keywords": [
+      "bleed",
+      "sinking"
+    ],
+    "hp": 240,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 7,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "원색 표현",
+      "Expression of Primary Colors"
+    ],
+    "stagger": [
+      60,
+      30
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 126,
+    "sinnerId": 9,
+    "slug": "r-corp-4th-pack-reindeer-rodion",
+    "nameKo": "R사 제 4무리 순록팀 로쟈",
+    "nameEn": "R Corp. 4th Pack Reindeer Rodion",
+    "nameJa": "R社第4群トナカイチーム ロージャ",
+    "rarity": 3,
+    "releaseDate": "2025-12-18",
+    "primarySin": "gloom",
+    "keywords": [
+      "charge",
+      "sinking"
+    ],
+    "hp": 242,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 1,
+    "coins": 8,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "집중 - ‘크리스마스색으로 터져버려’",
+      "Concentration - 'Burst and Pop with Christmas Colors!'"
+    ],
+    "stagger": [
+      70,
+      35
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 180,
+    "sinnerId": 9,
+    "slug": "the-house-of-spiders-the-thumb-nursefather-rodion",
+    "nameKo": "거미집 엄지 아비 로쟈",
+    "nameEn": "The House of Spiders: The Thumb Nursefather Rodion",
+    "nameJa": "蜘蛛の巣親指の親方 ロージャ",
+    "rarity": 3,
+    "releaseDate": "2026-06-25",
+    "primarySin": "pride",
+    "keywords": [
+      "burn",
+      "tremor"
+    ],
+    "hp": 263,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "기꺼이 이 탄환으로 꿰뚫어주지",
+      "I'll Gladly Blast a Hole Through Ya"
+    ],
+    "stagger": [
+      60
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 188,
+    "sinnerId": 9,
+    "slug": "haute-couture-alteration-shop-rodion",
+    "nameKo": "오트쿠튀르::수선실 로쟈",
+    "nameEn": "Haute Couture::Alteration Shop Rodion",
+    "nameJa": "オートクチュール::お直し室 ロージャ",
+    "rarity": 3,
+    "releaseDate": "2026-09-24",
+    "primarySin": "pride",
+    "keywords": [
+      "tremor",
+      "charge"
+    ],
+    "hp": 269,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 3,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "쿠페 당 르 비에",
+      "Coupez dans le Biais"
+    ],
+    "stagger": [
+      70,
+      30
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 127,
+    "sinnerId": 10,
+    "slug": "lcb-sinner-sinclair",
+    "nameKo": "LCB 수감자 싱클레어",
+    "nameEn": "LCB Sinner Sinclair",
+    "nameJa": "LCB囚人 シンクレア",
+    "rarity": 1,
+    "releaseDate": "2023-02-27",
+    "primarySin": "pride",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 195,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -4,
+    "coins": 7,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "헤집어 베기",
+      "Ravaging Cut"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 128,
+    "sinnerId": 10,
+    "slug": "zwei-assoc-south-section-6-sinclair",
+    "nameKo": "남부 츠바이 협회 6과 싱클레어",
+    "nameEn": "Zwei Assoc. South Section 6 Sinclair",
+    "nameJa": "南部ツヴァイ協会6課 シンクレア",
+    "rarity": 2,
+    "releaseDate": "2023-02-27",
+    "primarySin": "gloom",
+    "keywords": [
+      "tremor"
+    ],
+    "hp": 286,
+    "minSpeed": 2,
+    "maxSpeed": 4,
+    "defenseLevel": 3,
+    "coins": 4,
+    "maxPower": 20,
+    "maxPowerSkill": [
+      "강타",
+      "Strong Strike"
+    ],
+    "stagger": [
+      55,
+      20
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 129,
+    "sinnerId": 10,
+    "slug": "los-mariachis-jefe-sinclair",
+    "nameKo": "마리아치 보스 싱클레어",
+    "nameEn": "Los Mariachis Jefe Sinclair",
+    "nameJa": "マリアッチボス シンクレア",
+    "rarity": 2,
+    "releaseDate": "2023-02-27",
+    "primarySin": "sloth",
+    "keywords": [
+      "poise",
+      "sinking"
+    ],
+    "hp": 307,
+    "minSpeed": 2,
+    "maxSpeed": 3,
+    "defenseLevel": 3,
+    "coins": 6,
+    "maxPower": 19,
+    "maxPowerSkill": [
+      "파냐타 파티",
+      "Pañata Party"
+    ],
+    "stagger": [
+      50
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 130,
+    "sinnerId": 10,
+    "slug": "lobotomy-ego-red-sheet-sinclair",
+    "nameKo": "로보토미 E.G.O::홍적 싱클레어",
+    "nameEn": "Lobotomy E.G.O::Red Sheet Sinclair",
+    "nameJa": "ロボトミーE.G.O::紅籍 シンクレア",
+    "rarity": 2,
+    "releaseDate": "2023-06-29",
+    "primarySin": "gluttony",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 252,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 6,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "파열부",
+      "Rupturing Talisman"
+    ],
+    "stagger": [
+      70,
+      30
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 131,
+    "sinnerId": 10,
+    "slug": "molar-boatworks-fixer-sinclair",
+    "nameKo": "어금니 보트 센터 해결사 싱클레어",
+    "nameEn": "Molar Boatworks Fixer Sinclair",
+    "nameJa": "奥歯ボートセンターフィクサー シンクレア",
+    "rarity": 2,
+    "releaseDate": "2023-07-27",
+    "primarySin": "gloom",
+    "keywords": [
+      "tremor"
+    ],
+    "hp": 224,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": -2,
+    "coins": 7,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "침착하게...",
+      "Steady..."
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 132,
+    "sinnerId": 10,
+    "slug": "zwei-assoc-west-section-3-sinclair",
+    "nameKo": "서부 츠바이 협회 3과 싱클레어",
+    "nameEn": "Zwei Assoc. West Section 3 Sinclair",
+    "nameJa": "西部ツヴァイ協会3課 シンクレア",
+    "rarity": 2,
+    "releaseDate": "2024-10-10",
+    "primarySin": "lust",
+    "keywords": [
+      "tremor"
+    ],
+    "hp": 278,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 4,
+    "coins": 7,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "전투 준비",
+      "Combat Preparation"
+    ],
+    "stagger": [
+      60
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 133,
+    "sinnerId": 10,
+    "slug": "blade-lineage-salsu-sinclair",
+    "nameKo": "검계 살수 싱클레어",
+    "nameEn": "Blade Lineage Salsu Sinclair",
+    "nameJa": "剣契殺手 シンクレア",
+    "rarity": 3,
+    "releaseDate": "2023-02-27",
+    "primarySin": "gluttony",
+    "keywords": [
+      "bleed",
+      "poise"
+    ],
+    "hp": 278,
+    "minSpeed": 2,
+    "maxSpeed": 5,
+    "defenseLevel": 2,
+    "coins": 6,
+    "maxPower": 26,
+    "maxPowerSkill": [
+      "골단",
+      "To Claim Their Bones"
+    ],
+    "stagger": [
+      60,
+      30
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 134,
+    "sinnerId": 10,
+    "slug": "the-one-who-shall-grip-sinclair",
+    "nameKo": "쥐어들 자 싱클레어",
+    "nameEn": "The One Who Shall Grip Sinclair",
+    "nameJa": "握らんとする者 シンクレア",
+    "rarity": 3,
+    "releaseDate": "2023-05-03",
+    "primarySin": "gloom",
+    "keywords": [
+      "bleed",
+      "burn"
+    ],
+    "hp": 256,
+    "minSpeed": 3,
+    "maxSpeed": 8,
+    "defenseLevel": -4,
+    "coins": 9,
+    "maxPower": 30,
+    "maxPowerSkill": [
+      "자멸적 정화",
+      "Self-destructive Purge"
+    ],
+    "stagger": [
+      70,
+      30
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 135,
+    "sinnerId": 10,
+    "slug": "cinq-assoc-south-section-4-director-sinclair",
+    "nameKo": "남부 섕크 협회 4과 부장 싱클레어",
+    "nameEn": "Cinq Assoc. South Section 4 Director Sinclair",
+    "nameJa": "南部センク協会4課 部長 シンクレア",
+    "rarity": 3,
+    "releaseDate": "2023-12-21",
+    "primarySin": "gluttony",
+    "keywords": [
+      "poise"
+    ],
+    "hp": 256,
+    "minSpeed": 4,
+    "maxSpeed": 8,
+    "defenseLevel": 0,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "꽁트르 아따끄",
+      "Contre Attaque"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 136,
+    "sinnerId": 10,
+    "slug": "dawn-office-fixer-sinclair",
+    "nameKo": "새벽 사무소 해결사 싱클레어",
+    "nameEn": "Dawn Office Fixer Sinclair",
+    "nameJa": "夜明事務所フィクサー シンクレア",
+    "rarity": 3,
+    "releaseDate": "2024-05-02",
+    "primarySin": "gloom",
+    "keywords": [
+      "burn"
+    ],
+    "hp": 214,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 6,
+    "maxPower": 18,
+    "maxPowerSkill": [
+      "낙인",
+      "Stigmatize"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 137,
+    "sinnerId": 10,
+    "slug": "devyat-assoc-north-section-3-sinclair",
+    "nameKo": "북부 제뱌찌 협회 3과 싱클레어",
+    "nameEn": "Devyat' Assoc. North Section 3 Sinclair",
+    "nameJa": "北部ヂェーヴィチ協会3課 シンクレア",
+    "rarity": 3,
+    "releaseDate": "2024-11-28",
+    "primarySin": "lust",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 228,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -2,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "플루드니차... 부탁해요!",
+      "Poludnitsa... I trust you!"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 138,
+    "sinnerId": 10,
+    "slug": "the-middle-little-brother-sinclair",
+    "nameKo": "중지 작은 아우 싱클레어",
+    "nameEn": "The Middle Little Brother Sinclair",
+    "nameJa": "中指末弟 シンクレア",
+    "rarity": 3,
+    "releaseDate": "2025-04-03",
+    "primarySin": "gluttony",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 290,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 5,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "똑똑히 새겨라",
+      "Write 'em all down"
+    ],
+    "stagger": [
+      50,
+      20
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 139,
+    "sinnerId": 10,
+    "slug": "the-thumb-east-soldato-ii-sinclair",
+    "nameKo": "동부 엄지 솔다토 II 싱클레어",
+    "nameEn": "The Thumb East Soldato II Sinclair",
+    "nameJa": "東部親指ソルダートII シンクレア",
+    "rarity": 3,
+    "releaseDate": "2025-06-19",
+    "primarySin": "lust",
+    "keywords": [
+      "burn",
+      "tremor"
+    ],
+    "hp": 271,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 0,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "추력 집중",
+      "Thruster Compression"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 140,
+    "sinnerId": 10,
+    "slug": "heishou-pack-you-branch-sinclair",
+    "nameKo": "흑수 - 유 싱클레어",
+    "nameEn": "Heishou Pack - You Branch Sinclair",
+    "nameJa": "黒獣 - 酉 シンクレア",
+    "rarity": 3,
+    "releaseDate": "2025-08-28",
+    "primarySin": "lust",
+    "keywords": [
+      "burn",
+      "rupture"
+    ],
+    "hp": 238,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": -4,
+    "coins": 10,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "취해서 날뛰어 보도록 하죠.",
+      "... Fuel My Rampage."
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 141,
+    "sinnerId": 10,
+    "slug": "the-house-of-spiders-the-pinky-apprentice-sinclair",
+    "nameKo": "거미집 소지 제자 싱클레어",
+    "nameEn": "The House of Spiders: The Pinky Apprentice Sinclair",
+    "nameJa": "蜘蛛の巣小指の子方 シンクレア",
+    "rarity": 3,
+    "releaseDate": "2026-02-05",
+    "primarySin": "gloom",
+    "keywords": [
+      "bleed",
+      "poise"
+    ],
+    "hp": 214,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": -2,
+    "coins": 5,
+    "maxPower": 22,
+    "maxPowerSkill": [
+      "낙성일살[落星一殺]",
+      "Fallstar Slayer [落星一殺]"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 190,
+    "sinnerId": 10,
+    "slug": "haute-couture-the-crimson-god-of-le-rouge-sinclair",
+    "nameKo": "오트쿠튀르::르루주 붉은 신 싱클레어",
+    "nameEn": "Haute Couture::The Crimson God of Le Rouge Sinclair",
+    "nameJa": "オートクチュール::ル・ルージュ 赤き神 シンクレア",
+    "rarity": 3,
+    "releaseDate": "2026-10-15",
+    "primarySin": "gluttony",
+    "keywords": [
+      "bleed",
+      "charge"
+    ],
+    "hp": 266,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 6,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "르 바템 루주(le baptême rouge)",
+      "Le Baptême rouge"
+    ],
+    "stagger": [
+      55
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 142,
+    "sinnerId": 11,
+    "slug": "lcb-sinner-outis",
+    "nameKo": "LCB 수감자 오티스",
+    "nameEn": "LCB Sinner Outis",
+    "nameJa": "LCB囚人 ウーティス",
+    "rarity": 1,
+    "releaseDate": "2023-02-27",
+    "primarySin": "sloth",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 195,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -4,
+    "coins": 6,
+    "maxPower": 21,
+    "maxPowerSkill": [
+      "뚫어내기",
+      "Piercing Thrust"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 143,
+    "sinnerId": 11,
+    "slug": "blade-lineage-salsu-outis",
+    "nameKo": "검계 살수 오티스",
+    "nameEn": "Blade Lineage Salsu Outis",
+    "nameJa": "剣契殺手 ウーティス",
+    "rarity": 2,
+    "releaseDate": "2023-02-27",
+    "primarySin": "wrath",
+    "keywords": [
+      "poise"
+    ],
+    "hp": 265,
+    "minSpeed": 2,
+    "maxSpeed": 5,
+    "defenseLevel": 0,
+    "coins": 5,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "요격세",
+      "Decisive Dive"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 144,
+    "sinnerId": 11,
+    "slug": "g-corp-head-manager-outis",
+    "nameKo": "G사 부장 오티스",
+    "nameEn": "G Corp. Head Manager Outis",
+    "nameJa": "G社部長 ウーティス",
+    "rarity": 2,
+    "releaseDate": "2023-02-27",
+    "primarySin": "sloth",
+    "keywords": [
+      "sinking"
+    ],
+    "hp": 245,
+    "minSpeed": 4,
+    "maxSpeed": 8,
+    "defenseLevel": 2,
+    "coins": 3,
+    "maxPower": 22,
+    "maxPowerSkill": [
+      "기합",
+      "Focus"
+    ],
+    "stagger": [
+      65,
+      35
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 145,
+    "sinnerId": 11,
+    "slug": "cinq-assoc-south-section-4-outis",
+    "nameKo": "남부 섕크 협회 4과 오티스",
+    "nameEn": "Cinq Assoc. South Section 4 Outis",
+    "nameJa": "南部センク協会4課 ウーティス",
+    "rarity": 2,
+    "releaseDate": "2023-12-21",
+    "primarySin": "pride",
+    "keywords": [
+      "poise"
+    ],
+    "hp": 265,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 3,
+    "coins": 5,
+    "maxPower": 22,
+    "maxPowerSkill": [
+      "발레스트라 팡트",
+      "Balestra Fente"
+    ],
+    "stagger": [
+      50
+    ],
+    "res": "FIN"
+  },
+  {
+    "id": 146,
+    "sinnerId": 11,
+    "slug": "the-ring-pointillist-student-outis",
+    "nameKo": "약지 점묘파 스튜던트 오티스",
+    "nameEn": "The Ring Pointillist Student Outis",
+    "nameJa": "薬指点描派スチューデント ウーティス",
+    "rarity": 2,
+    "releaseDate": "2024-05-16",
+    "primarySin": "lust",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 216,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": -2,
+    "coins": 6,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "작품 점검",
+      "Artwork Inspection"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 147,
+    "sinnerId": 11,
+    "slug": "seven-assoc-south-section-6-director-outis",
+    "nameKo": "남부 세븐 협회 6과 부장 오티스",
+    "nameEn": "Seven Assoc. South Section 6 Director Outis",
+    "nameJa": "南部セブン協会6課部長 ウーティス",
+    "rarity": 3,
+    "releaseDate": "2023-04-06",
+    "primarySin": "gluttony",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 278,
+    "minSpeed": 5,
+    "maxSpeed": 8,
+    "defenseLevel": 3,
+    "coins": 6,
+    "maxPower": 15,
+    "maxPowerSkill": [
+      "현장 지휘",
+      "Field Command"
+    ],
+    "stagger": [
+      60
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 148,
+    "sinnerId": 11,
+    "slug": "molar-office-fixer-outis",
+    "nameKo": "어금니 사무소 해결사 오티스",
+    "nameEn": "Molar Office Fixer Outis",
+    "nameJa": "奥歯事務所フィクサー ウーティス",
+    "rarity": 3,
+    "releaseDate": "2023-09-14",
+    "primarySin": "wrath",
+    "keywords": [
+      "tremor"
+    ],
+    "hp": 223,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -3,
+    "coins": 8,
+    "maxPower": 18,
+    "maxPowerSkill": [
+      "가르기",
+      "Slice"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 149,
+    "sinnerId": 11,
+    "slug": "lobotomy-ego-magic-bullet-outis",
+    "nameKo": "로보토미 E.G.O::마탄 오티스",
+    "nameEn": "Lobotomy E.G.O::Magic Bullet Outis",
+    "nameJa": "ロボトミーE.G.O::魔弾 ウーティス",
+    "rarity": 3,
+    "releaseDate": "2024-01-11",
+    "primarySin": "wrath",
+    "keywords": [
+      "burn"
+    ],
+    "hp": 214,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -3,
+    "coins": 5,
+    "maxPower": 19,
+    "maxPowerSkill": [
+      "마탄 사격",
+      "Magic Bullet Fire"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 150,
+    "sinnerId": 11,
+    "slug": "wuthering-heights-chief-butler-outis",
+    "nameKo": "워더링하이츠 치프 버틀러 오티스",
+    "nameEn": "Wuthering Heights Chief Butler Outis",
+    "nameJa": "ワザリング・ハイツチーフバトラー ウーティス",
+    "rarity": 3,
+    "releaseDate": "2024-03-28",
+    "primarySin": "pride",
+    "keywords": [
+      "sinking"
+    ],
+    "hp": 214,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -3,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "먼지 털이",
+      "Dusting"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 151,
+    "sinnerId": 11,
+    "slug": "w-corp-l3-cleanup-captain-outis",
+    "nameKo": "W사 3등급 정리 요원 팀장 오티스",
+    "nameEn": "W Corp. L3 Cleanup Captain Outis",
+    "nameJa": "W社 3級整理要員チーフ ウーティス",
+    "rarity": 3,
+    "releaseDate": "2024-07-25",
+    "primarySin": "pride",
+    "keywords": [
+      "charge",
+      "rupture"
+    ],
+    "hp": 221,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "충전 도약",
+      "Charged Leap"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 152,
+    "sinnerId": 11,
+    "slug": "the-barber-of-la-manchaland-outis",
+    "nameKo": "라만차랜드 이발사 오티스",
+    "nameEn": "The Barber of La Manchaland Outis",
+    "nameJa": "ラ・マンチャランド理髪師 ウーティス",
+    "rarity": 3,
+    "releaseDate": "2024-10-17",
+    "primarySin": "gluttony",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 218,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "컷 오프",
+      "Scission"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 153,
+    "sinnerId": 11,
+    "slug": "heishou-pack-mao-branch-outis",
+    "nameKo": "흑수 - 묘 오티스",
+    "nameEn": "Heishou Pack - Mao Branch Outis",
+    "nameJa": "黒獣 - 卯 ウーティス",
+    "rarity": 3,
+    "releaseDate": "2025-03-20",
+    "primarySin": "sloth",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 221,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": -3,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "각주살검",
+      "Cursewrit Butcherblade"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 154,
+    "sinnerId": 11,
+    "slug": "t-corp-class-3-vdcu-staff-outis",
+    "nameKo": "T사 3등급 강력징수직 직원 오티스",
+    "nameEn": "T Corp. Class 3 VDCU Staff Outis",
+    "nameJa": "T社3級強制徴収職 職員 ウーティス",
+    "rarity": 3,
+    "releaseDate": "2025-07-31",
+    "primarySin": "pride",
+    "keywords": [
+      "tremor"
+    ],
+    "hp": 228,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 2,
+    "coins": 8,
+    "maxPower": 18,
+    "maxPowerSkill": [
+      "T사식 공진 모듈",
+      "T Corp. Microcavity Module"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 155,
+    "sinnerId": 11,
+    "slug": "lca-udjat-vanguard-team-3-leader-outis",
+    "nameKo": "LCA 우제트 선봉 3팀 팀장 오티스",
+    "nameEn": "LCA Udjat Vanguard Team 3 Leader Outis",
+    "nameJa": "LCAウアジェト先鋒三隊隊長 ウーティス",
+    "rarity": 3,
+    "releaseDate": "2025-12-31",
+    "primarySin": "pride",
+    "keywords": [
+      "sinking",
+      "tremor"
+    ],
+    "hp": 258,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 3,
+    "coins": 8,
+    "maxPower": 18,
+    "maxPowerSkill": [
+      "선봉에서 끝낸다",
+      "The Vanguard will See it Done"
+    ],
+    "stagger": [
+      50
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 177,
+    "sinnerId": 11,
+    "slug": "the-house-of-spiders-the-middle-nursefather-outis",
+    "nameKo": "거미집 중지 아비 오티스",
+    "nameEn": "The House of Spiders: The Middle Nursefather Outis",
+    "nameJa": "蜘蛛の巣中指の親方 ウーティス",
+    "rarity": 3,
+    "releaseDate": "2026-05-28",
+    "primarySin": "lust",
+    "keywords": [
+      "burn",
+      "bleed"
+    ],
+    "hp": 302,
+    "minSpeed": 4,
+    "maxSpeed": 7,
+    "defenseLevel": 5,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "고작 이거에 부서지지 말라고!",
+      "Don't Let Somethin' Like This Break You!"
+    ],
+    "stagger": [
+      75
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 156,
+    "sinnerId": 12,
+    "slug": "lcb-sinner-gregor",
+    "nameKo": "LCB 수감자 그레고르",
+    "nameEn": "LCB Sinner Gregor",
+    "nameJa": "LCB囚人 グレゴール",
+    "rarity": 1,
+    "releaseDate": "2023-02-27",
+    "primarySin": "gloom",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 233,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 4,
+    "maxPower": 15,
+    "maxPowerSkill": [
+      "후비기",
+      "Jag"
+    ],
+    "stagger": [
+      70,
+      30
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 157,
+    "sinnerId": 12,
+    "slug": "liu-assoc-south-section-6-gregor",
+    "nameKo": "남부 리우 협회 6과 그레고르",
+    "nameEn": "Liu Assoc. South Section 6 Gregor",
+    "nameJa": "南部リウ協会6課 グレゴール",
+    "rarity": 2,
+    "releaseDate": "2023-02-27",
+    "primarySin": "wrath",
+    "keywords": [
+      "burn"
+    ],
+    "hp": 204,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -4,
+    "coins": 9,
+    "maxPower": 12,
+    "maxPowerSkill": [
+      "연무 장타",
+      "Perfected Palm Strike"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 158,
+    "sinnerId": 12,
+    "slug": "rb-sous-chef-gregor",
+    "nameKo": "료.고.파. 조수 그레고르",
+    "nameEn": "R.B. Sous-chef Gregor",
+    "nameJa": "りょ・ミ・パ助手 グレゴール",
+    "rarity": 2,
+    "releaseDate": "2023-04-20",
+    "primarySin": "lust",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 252,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 7,
+    "maxPower": 14,
+    "maxPowerSkill": [
+      "싱싱한 재료인가?",
+      "You Fresh Enough?"
+    ],
+    "stagger": [
+      70,
+      30
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 159,
+    "sinnerId": 12,
+    "slug": "rosespanner-workshop-fixer-gregor",
+    "nameKo": "장미스패너 공방 해결사 그레고르",
+    "nameEn": "Rosespanner Workshop Fixer Gregor",
+    "nameJa": "バラのスパナ工房フィクサー グレゴール",
+    "rarity": 2,
+    "releaseDate": "2023-06-08",
+    "primarySin": "gluttony",
+    "keywords": [
+      "charge",
+      "rupture",
+      "tremor"
+    ],
+    "hp": 224,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": -2,
+    "coins": 6,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "사슬 윤활",
+      "Grease Chains"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 160,
+    "sinnerId": 12,
+    "slug": "kurokumo-clan-captain-gregor",
+    "nameKo": "흑운회 부조장 그레고르",
+    "nameEn": "Kurokumo Clan Captain Gregor",
+    "nameJa": "黒雲会副組長 グレゴール",
+    "rarity": 2,
+    "releaseDate": "2024-02-22",
+    "primarySin": "sloth",
+    "keywords": [
+      "bleed"
+    ],
+    "hp": 245,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 1,
+    "coins": 6,
+    "maxPower": 15,
+    "maxPowerSkill": [
+      "먹구름",
+      "Shadow Cloud"
+    ],
+    "stagger": [
+      65,
+      35,
+      15
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 161,
+    "sinnerId": 12,
+    "slug": "g-corp-manager-corporal-gregor",
+    "nameKo": "G사 일등대리 그레고르",
+    "nameEn": "G Corp. Manager Corporal Gregor",
+    "nameJa": "G社課長代理 グレゴール",
+    "rarity": 3,
+    "releaseDate": "2023-02-27",
+    "primarySin": "gluttony",
+    "keywords": [
+      "rupture"
+    ],
+    "hp": 214,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -2,
+    "coins": 7,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "사지절단",
+      "Dismember"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 162,
+    "sinnerId": 12,
+    "slug": "zwei-assoc-south-section-4-gregor",
+    "nameKo": "남부 츠바이 협회 4과 그레고르",
+    "nameEn": "Zwei Assoc. South Section 4 Gregor",
+    "nameJa": "南部ツヴァイ協会4課 グレゴール",
+    "rarity": 3,
+    "releaseDate": "2023-08-10",
+    "primarySin": "sloth",
+    "keywords": [],
+    "hp": 285,
+    "minSpeed": 4,
+    "maxSpeed": 8,
+    "defenseLevel": 5,
+    "coins": 9,
+    "maxPower": 15,
+    "maxPowerSkill": [
+      "유연한 제압",
+      "Flexible Suppression"
+    ],
+    "stagger": [
+      50
+    ],
+    "res": "FNI"
+  },
+  {
+    "id": 163,
+    "sinnerId": 12,
+    "slug": "twinhook-pirates-first-mate-gregor",
+    "nameKo": "쌍갈고리 해적단 부선장 그레고르",
+    "nameEn": "Twinhook Pirates First Mate Gregor",
+    "nameJa": "双鉤海賊団副船長 グレゴール",
+    "rarity": 3,
+    "releaseDate": "2023-11-16",
+    "primarySin": "sloth",
+    "keywords": [
+      "bleed",
+      "poise"
+    ],
+    "hp": 214,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": -3,
+    "coins": 6,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "예정된 결렬",
+      "Foregone Conclusion"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 164,
+    "sinnerId": 12,
+    "slug": "edgar-family-heir-gregor",
+    "nameKo": "에드가 가문 승계자 그레고르",
+    "nameEn": "Edgar Family Heir Gregor",
+    "nameJa": "エドガー家継承者 グレゴール",
+    "rarity": 3,
+    "releaseDate": "2024-04-04",
+    "primarySin": "envy",
+    "keywords": [
+      "sinking"
+    ],
+    "hp": 214,
+    "minSpeed": 3,
+    "maxSpeed": 8,
+    "defenseLevel": -4,
+    "coins": 7,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "르미즈",
+      "Remise"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 165,
+    "sinnerId": 12,
+    "slug": "the-priest-of-la-manchaland-gregor",
+    "nameKo": "라만차랜드 신부 그레고르",
+    "nameEn": "The Priest of La Manchaland Gregor",
+    "nameJa": "ラ・マンチャランド神父 グレゴール",
+    "rarity": 3,
+    "releaseDate": "2024-10-31",
+    "primarySin": "gluttony",
+    "keywords": [
+      "bleed",
+      "rupture"
+    ],
+    "hp": 330,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 5,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "씻을 수 없는 죄",
+      "The Unforgivable Sin"
+    ],
+    "stagger": [
+      80
+    ],
+    "res": "NFI"
+  },
+  {
+    "id": 166,
+    "sinnerId": 12,
+    "slug": "firefist-office-survivor-gregor",
+    "nameKo": "불주먹 사무소 생존자 그레고르",
+    "nameEn": "Firefist Office Survivor Gregor",
+    "nameJa": "炎拳事務所生存者 グレゴール",
+    "rarity": 3,
+    "releaseDate": "2025-03-06",
+    "primarySin": "lust",
+    "keywords": [
+      "burn"
+    ],
+    "hp": 274,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 3,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "불주먹",
+      "Firefist"
+    ],
+    "stagger": [
+      70,
+      0
+    ],
+    "res": "IFN"
+  },
+  {
+    "id": 167,
+    "sinnerId": 12,
+    "slug": "heishou-pack-si-branch-gregor",
+    "nameKo": "흑수 - 사 그레고르",
+    "nameEn": "Heishou Pack - Si Branch Gregor",
+    "nameJa": "黒獣 - 巳 グレゴール",
+    "rarity": 3,
+    "releaseDate": "2025-05-15",
+    "primarySin": "pride",
+    "keywords": [
+      "poise",
+      "rupture"
+    ],
+    "hp": 224,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 6,
+    "maxPower": 22,
+    "maxPowerSkill": [
+      "절사완철",
+      "Serpentshear Puncturing Arm"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 168,
+    "sinnerId": 12,
+    "slug": "night-awls-capitano-gregor",
+    "nameKo": "밤의 송곳 카피타노 그레고르",
+    "nameEn": "Night Awls Capitano Gregor",
+    "nameJa": "夜の錐カピターノ グレゴール",
+    "rarity": 3,
+    "releaseDate": "2025-11-06",
+    "primarySin": "sloth",
+    "keywords": [
+      "bleed",
+      "tremor"
+    ],
+    "hp": 224,
+    "minSpeed": 3,
+    "maxSpeed": 6,
+    "defenseLevel": -2,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "스틸레토 도피오",
+      "Stiletto Doppio"
+    ],
+    "stagger": [
+      70,
+      40,
+      20
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 169,
+    "sinnerId": 12,
+    "slug": "lobotomy-ego-lamp-gregor",
+    "nameKo": "로보토미 E.G.O::램프 그레고르",
+    "nameEn": "Lobotomy E.G.O::Lamp Gregor",
+    "nameJa": "ロボトミーE.G.O::ランプ グレゴール",
+    "rarity": 3,
+    "releaseDate": "2026-02-05",
+    "primarySin": "wrath",
+    "keywords": [
+      "burn",
+      "sinking"
+    ],
+    "hp": 290,
+    "minSpeed": 1,
+    "maxSpeed": 4,
+    "defenseLevel": 5,
+    "coins": 9,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "등불에 현혹된 것에는 구원을",
+      "Salvation for those Enchanted by the Lamp"
+    ],
+    "stagger": [
+      40
+    ],
+    "res": "NIF"
+  },
+  {
+    "id": 170,
+    "sinnerId": 12,
+    "slug": "lce-ego-aedd-gregor",
+    "nameKo": "LCE E.G.O::AEDD 그레고르",
+    "nameEn": "LCE E.G.O::AEDD Gregor",
+    "nameJa": "LCE E.G.O::AEDD グレゴール",
+    "rarity": 3,
+    "releaseDate": "2026-03-19",
+    "primarySin": "gluttony",
+    "keywords": [
+      "charge",
+      "rupture"
+    ],
+    "hp": 290,
+    "minSpeed": 5,
+    "maxSpeed": 7,
+    "defenseLevel": 3,
+    "coins": 8,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "고압 전류 방전",
+      "High-voltage Current Discharge"
+    ],
+    "stagger": [
+      60,
+      30
+    ],
+    "res": "INF"
+  },
+  {
+    "id": 182,
+    "sinnerId": 12,
+    "slug": "dawn-office-rep-gregor",
+    "nameKo": "새벽 사무소 대표 그레고르",
+    "nameEn": "Dawn Office Rep Gregor",
+    "nameJa": "夜明事務所代表 グレゴール",
+    "rarity": 3,
+    "releaseDate": "2026-07-09",
+    "primarySin": "sloth",
+    "keywords": [
+      "tremor",
+      "burn"
+    ],
+    "hp": 287,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 4,
+    "coins": 9,
+    "maxPower": 16,
+    "maxPowerSkill": [
+      "노을빛 검",
+      "Sunset Blade"
+    ],
+    "stagger": [
+      55
+    ],
+    "res": "INF"
+  }
+]

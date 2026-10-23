@@ -29,13 +29,44 @@ import { Search, Star, Edit3, CheckCircle, Info, Clock, Compass, Sparkles, X, He
 import { useStore } from '../stores/useStore.js';
 import { imagePreloader } from '../utils/imagePreloader.js';
 import sinnersData from '../data/sinners.json';
+import traitsDictionary from '../data/traitsDictionary.json';
 import { normalizeText, normalizeSinnerId, getSinnerInfo, getSinnerSortIndex, parseSeasonNumber, getCardImageUrl } from '../utils/textUtils.js';
+import { searchIdentityEffects, EFFECT_SCOPES, getBracketColor, getIdentityRecordRank } from '../utils/limbusDeckEngine.js';
 
 const SIN_COLORS = { Wrath: '#dc2626', Lust: '#ea580c', Sloth: '#ca8a04', Gluttony: '#16a34a', Gloom: '#0ea5e9', Pride: '#4f46e5', Envy: '#9333ea' };
 const KEYWORD_COLORS = { Burn: '#ef4444', Bleed: '#dc2626', Tremor: '#d97706', Rupture: '#22c55e', Sinking: '#3b82f6', Poise: '#06b6d4', Charge: '#8b5cf6' };
 const ATTACK_TYPES = ['Slash', 'Pierce', 'Blunt'];
+const META_TIER_STYLES = {
+  S: 'bg-amber-500/25 border-amber-400 text-amber-200 shadow-[0_0_8px_rgba(245,158,11,0.3)]',
+  A: 'bg-purple-500/25 border-purple-400 text-purple-200',
+  B: 'bg-sky-500/25 border-sky-400 text-sky-200',
+  C: 'bg-zinc-500/25 border-zinc-400 text-zinc-300',
+};
 
-const IdCard = React.memo(function IdCard({ id, meta, acquired, onToggleAcquired, onEdit, onClickDetails }) {
+function EffectMatchCardLine({ match }) {
+  if (!match) return null;
+  const line = match.line || '';
+  const bracketMatch = line.match(/^\s*(\[[^\]]+\])\s*(.*)$/);
+  if (!bracketMatch) {
+    return (
+      <div className="mb-2 px-2 py-1 rounded bg-black/80 border border-amber-500/30 text-[10px] leading-snug text-gray-200">
+        <span className="font-black text-amber-400 mr-1.5">[{match.source}]</span>
+        <span className="line-clamp-2">{line}</span>
+      </div>
+    );
+  }
+  const [, rawTag, rest] = bracketMatch;
+  const color = getBracketColor(rawTag);
+  return (
+    <div className="mb-2 px-2 py-1 rounded bg-black/80 border border-amber-500/30 text-[10px] leading-snug text-gray-200">
+      <span className="font-black text-amber-400 mr-1.5">[{match.source}]</span>
+      <span className="font-bold mr-1" style={{ color }}>{rawTag}</span>
+      <span className="line-clamp-2">{rest}</span>
+    </div>
+  );
+}
+
+const IdCard = React.memo(function IdCard({ id, meta, acquired, onToggleAcquired, onEdit, onClickDetails, effectMatches }) {
   const sinnerInfo = getSinnerInfo(id.sinner);
   const [imgError, setImgError] = useState(false);
   const [useAltUrl, setUseAltUrl] = useState(false);
@@ -44,6 +75,14 @@ const IdCard = React.memo(function IdCard({ id, meta, acquired, onToggleAcquired
   const defaultBg = getCardImageUrl(id);
   const altBg = id.slug ? `https://assets.limbusdeck.com/identities/full/${id.slug}.webp` : null;
   const bgUrl = imgError ? null : (useAltUrl ? altBg : defaultBg);
+  const metaTier = id.metaTier || traitsDictionary?.metaTiers?.[id.ldId] || traitsDictionary?.metaTiers?.[id.slug] || null;
+  const topRank = useMemo(() => {
+    for (const cat of ['hp', 'speed', 'defense', 's3Power', 'totalCoins']) {
+      const r = getIdentityRecordRank(id.ldId || id.slug, cat, 3);
+      if (r && r.rank === 1) return { cat, rank: 1 };
+    }
+    return null;
+  }, [id.ldId, id.slug]);
 
   return (
     <div 
@@ -92,6 +131,16 @@ const IdCard = React.memo(function IdCard({ id, meta, acquired, onToggleAcquired
           }`} title={id.season === null ? 'Walpurgisnacht Exclusive' : id.season === 7 ? 'Season 7 (Unshardable in Season 8)' : id.season === 8 ? 'Season 8' : id.season === 0 ? 'Standard' : `Season ${id.season}`}>
             {id.season === null ? '🌙 Walpurgis' : id.season === 7 ? 'S7 🔒' : id.season === 8 ? 'Season 8' : id.season === 0 ? 'Standard' : `S${id.season}`}
           </span>
+          {metaTier && (
+            <span className={`text-[9px] font-black px-1.5 py-0.5 rounded border ${META_TIER_STYLES[metaTier] || ''}`} title={`LimbusDeck Meta Tier ${metaTier}`}>
+              {metaTier}
+            </span>
+          )}
+          {topRank && (
+            <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-amber-950/90 border border-amber-400/70 text-amber-300" title="Hall of Records #1">
+              🏆 #1
+            </span>
+          )}
         </div>
         <p className="text-sm font-bold drop-shadow-md" style={{ color: sinnerInfo?.color || '#fff' }}>
           {sinnerInfo?.name || id.sinner}
@@ -100,7 +149,11 @@ const IdCard = React.memo(function IdCard({ id, meta, acquired, onToggleAcquired
       
       {/* Bottom Section */}
       <div className="relative mt-auto p-3 z-10">
-        <h3 className="font-bold text-[16px] leading-tight text-white drop-shadow-md mb-2">{id.name}</h3>
+        <h3 className="font-bold text-[16px] leading-tight text-white drop-shadow-md mb-1.5">{id.name}</h3>
+
+        {effectMatches && effectMatches.length > 0 && (
+          <EffectMatchCardLine match={effectMatches[0]} />
+        )}
         
         <div className="flex flex-wrap gap-1 mb-3">
           {meta.keywords?.length > 0 ? meta.keywords.map(kw => (
@@ -129,6 +182,11 @@ export default function IdentitiesPage() {
   const navigate = useNavigate();
   const { identitiesData, acquiredIds, toggleAcquiredId, customMetadata, updateCustomMetadata } = useStore();
   const [search, setSearch] = useState('');
+  const [effectQuery, setEffectQuery] = useState('');
+  const [effectScope, setEffectScope] = useState('all');
+  const [includeVariants, setIncludeVariants] = useState(false);
+  const [selectedTrait, setSelectedTrait] = useState('');
+  const [selectedMetaTier, setSelectedMetaTier] = useState('');
   const [filters, setFilters] = useState({ sinners: new Set(), rarity: new Set(), sins: new Set(), attackTypes: new Set(), keywords: new Set() });
   const [showAcquiredOnly, setShowAcquiredOnly] = useState(false);
   const [sortBy, setSortBy] = useState('Newest');
@@ -250,8 +308,27 @@ export default function IdentitiesPage() {
     return metadataMap.get(id.name) || { sins: [], attackTypes: [], keywords: [] };
   }, [metadataMap]);
 
+  const allTraits = useMemo(() => {
+    const map = traitsDictionary?.traits || {};
+    return Object.entries(map)
+      .map(([key, val]) => ({ key, label: val?.en || key }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, []);
+
+  const effectMatchesMap = useMemo(() => {
+    const map = new Map();
+    const q = effectQuery.trim();
+    if (!q || !identitiesData) return map;
+    for (const id of identitiesData) {
+      const matches = searchIdentityEffects(id, q, effectScope, includeVariants);
+      if (matches.length > 0) map.set(id.name, matches);
+    }
+    return map;
+  }, [identitiesData, effectQuery, effectScope, includeVariants]);
+
   const filteredIdentities = useMemo(() => {
     const normSearch = normalizeText(search);
+    const hasEffectQuery = effectQuery.trim().length > 0;
     const selectedSinnerIds = new Set(Array.from(filters.sinners).map(s => normalizeSinnerId(s)));
 
     let result = (identitiesData || []).filter(id => {
@@ -262,6 +339,12 @@ export default function IdentitiesPage() {
         const isRodyaSearch = normSearch === 'rodya' || normSearch.includes('rodya');
         const matchesRodya = isRodyaSearch && (normSinner.includes('rodion') || normName.includes('rodion'));
         if (!normName.includes(normSearch) && !normSinner.includes(normSearch) && !matchesRodya) return false;
+      }
+      if (hasEffectQuery && !effectMatchesMap.has(id.name)) return false;
+      if (selectedTrait && !(id.traits || []).includes(selectedTrait)) return false;
+      if (selectedMetaTier) {
+        const tier = id.metaTier || traitsDictionary?.metaTiers?.[id.ldId] || traitsDictionary?.metaTiers?.[id.slug];
+        if (tier !== selectedMetaTier) return false;
       }
       if (showAcquiredOnly && !acquiredIds.has(id.name)) return false;
       if (selectedSinnerIds.size > 0 && !selectedSinnerIds.has(normalizeSinnerId(id.sinner))) return false;
@@ -298,7 +381,7 @@ export default function IdentitiesPage() {
       return a.name.localeCompare(b.name);
     });
     return result;
-  }, [search, filters, showAcquiredOnly, sortBy, acquiredIds, customMetadata]);
+  }, [search, effectQuery, effectMatchesMap, selectedTrait, selectedMetaTier, filters, showAcquiredOnly, sortBy, acquiredIds, customMetadata, getMetadata]);
 
   return (
     <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="p-6 text-[#e5e5e5] min-h-full">
@@ -314,11 +397,56 @@ export default function IdentitiesPage() {
       </div>
 
       <div className="glass-card p-5 mb-6 flex flex-col gap-4">
-        <div className="flex justify-between items-center">
-          <div className="relative w-1/3">
+        <div className="flex flex-wrap justify-between items-center gap-3">
+          <div className="relative flex-1 min-w-[240px] max-w-md">
             <Search className="absolute left-3 top-2.5 w-5 h-5 text-[#737373]" />
-            <input type="text" placeholder="Search 185 identities..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full bg-[#0a0a0a] border border-[#333] rounded pl-10 pr-4 py-2 focus:border-[#c9a84c] outline-none transition-colors" />
+            <input type="text" placeholder={`Search ${identitiesData.length} identities...`} value={search} onChange={(e) => setSearch(e.target.value)} className="w-full bg-[#0a0a0a] border border-[#333] rounded pl-10 pr-4 py-2 focus:border-[#c9a84c] outline-none transition-colors" />
           </div>
+
+          {/* LimbusDeck Advanced Skill/Passive Effect Text Search */}
+          <div className="flex flex-wrap items-center gap-2 flex-1 min-w-[300px]">
+            <div className="relative flex-1 min-w-[200px]">
+              <Sparkles className="absolute left-3 top-2.5 w-4 h-4 text-[#c9a84c]" />
+              <input
+                type="text"
+                placeholder="Search skill & passive effects (e.g. [On Hit], Coin Power, Fragile, SP)..."
+                value={effectQuery}
+                onChange={(e) => setEffectQuery(e.target.value)}
+                className="w-full bg-[#0a0a0a] border border-[#333] rounded pl-9 pr-7 py-2 text-sm focus:border-[#c9a84c] outline-none transition-colors"
+              />
+              {effectQuery && (
+                <button
+                  onClick={() => setEffectQuery('')}
+                  className="absolute right-2 top-2.5 text-gray-500 hover:text-white cursor-pointer"
+                >
+                  <X size={14} />
+                </button>
+              )}
+            </div>
+            <div className="flex items-center bg-[#0a0a0a] border border-[#333] rounded p-0.5">
+              {EFFECT_SCOPES.map((sc) => (
+                <button
+                  key={sc.id}
+                  onClick={() => setEffectScope(sc.id)}
+                  className={`px-2 py-1 rounded text-[11px] font-bold transition-colors cursor-pointer ${
+                    effectScope === sc.id ? 'bg-[#c9a84c] text-black' : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  {sc.label}
+                </button>
+              ))}
+            </div>
+            <label className="flex items-center gap-1.5 text-xs text-gray-400 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={includeVariants}
+                onChange={() => setIncludeVariants(!includeVariants)}
+                className="limbus-checkbox"
+              />
+              <span>+Variants</span>
+            </label>
+          </div>
+
           <label className="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" checked={showAcquiredOnly} onChange={() => setShowAcquiredOnly(!showAcquiredOnly)} className="limbus-checkbox" />
             <span className="font-bold text-sm">Acquired Only</span>
@@ -329,7 +457,15 @@ export default function IdentitiesPage() {
         <div className="space-y-3 pt-2 border-t border-[#333]">
           <div className="flex justify-between items-center mb-1">
             <span className="text-xs text-[#737373] uppercase tracking-widest font-bold">Filters</span>
-            <button onClick={() => setFilters({ sinners: new Set(), rarity: new Set(), sins: new Set(), attackTypes: new Set(), keywords: new Set() })} className="text-xs text-[#c9a84c] hover:text-white transition-colors border border-[#c9a84c] px-3 py-1 rounded-full">
+            <button
+              onClick={() => {
+                setFilters({ sinners: new Set(), rarity: new Set(), sins: new Set(), attackTypes: new Set(), keywords: new Set() });
+                setEffectQuery('');
+                setSelectedTrait('');
+                setSelectedMetaTier('');
+              }}
+              className="text-xs text-[#c9a84c] hover:text-white transition-colors border border-[#c9a84c] px-3 py-1 rounded-full cursor-pointer"
+            >
               Clear Filters
             </button>
           </div>
@@ -345,6 +481,27 @@ export default function IdentitiesPage() {
             {[1, 2, 3].map(r => (
               <button key={r} onClick={() => toggleFilter('rarity', r)} className={`filter-chip transition-all ${filters.rarity.has(r) ? 'bg-[#c9a84c] text-black border-[#c9a84c] font-black shadow-[0_0_10px_rgba(201,168,76,0.5)] scale-105' : 'hover:border-gray-400'}`}>{'★'.repeat(r)}</button>
             ))}
+            <span className="font-bold text-[#737373] ml-4 mr-1">Meta Tier:</span>
+            {['S', 'A', 'B', 'C'].map(tier => (
+              <button
+                key={tier}
+                onClick={() => setSelectedMetaTier(prev => prev === tier ? '' : tier)}
+                className={`filter-chip transition-all ${selectedMetaTier === tier ? 'bg-[#c9a84c] text-black border-[#c9a84c] font-black shadow-[0_0_10px_rgba(201,168,76,0.5)] scale-105' : 'hover:border-gray-400'}`}
+              >
+                Tier {tier}
+              </button>
+            ))}
+            <span className="font-bold text-[#737373] ml-4 mr-1">Faction/Trait:</span>
+            <select
+              value={selectedTrait}
+              onChange={(e) => setSelectedTrait(e.target.value)}
+              className="bg-[#0a0a0a] border border-[#333] rounded px-2.5 py-1 text-xs text-gray-200 focus:border-[#c9a84c] outline-none"
+            >
+              <option value="">All Factions / Traits ({allTraits.length})</option>
+              {allTraits.map(t => (
+                <option key={t.key} value={t.key}>{t.label}</option>
+              ))}
+            </select>
           </div>
           <div className="flex flex-wrap gap-2 items-center text-sm">
             <span className="font-bold text-[#737373] w-24">Affinities:</span>
@@ -1466,6 +1623,7 @@ export default function IdentitiesPage() {
                     onToggleAcquired={toggleAcquiredId}
                     onEdit={() => setEditingId(id)}
                     onClickDetails={() => setDetailsId(id)}
+                    effectMatches={effectMatchesMap.get(id.name)}
                   />
                 ))}
             </div>

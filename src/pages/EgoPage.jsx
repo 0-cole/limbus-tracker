@@ -4,7 +4,7 @@ import { Search, Edit3, CheckCircle, Info, Sparkles, AlertTriangle, X, ShieldAle
 import { useStore } from '../stores/useStore.js';
 import { imagePreloader } from '../utils/imagePreloader.js';
 import sinnersData from '../data/sinners.json';
-import { parseEffectsIntoTriggerGroups, getSkillTriggerColor, extractKeywordsFromEffects } from '../utils/skillParser';
+import EgoDetailsModal from '../components/EgoDetailsModal.jsx';
 
 const ALEPH_EGOS = [
   {
@@ -579,7 +579,7 @@ export default function EgoPage() {
       )}
 
       {detailsId && (
-        <IdDetailsModal 
+        <EgoDetailsModal 
           egoData={detailsId} 
           meta={getMetadata(detailsId)} 
           onClose={() => setDetailsId(null)} 
@@ -593,199 +593,6 @@ export default function EgoPage() {
         />
       )}
     </motion.div>
-  );
-}
-
-function IdDetailsModal({ egoData, meta, onClose }) {
-  const maxTier = (egoData?.maxThreadspin === 5 || (egoData?.upties && egoData.upties[5] && egoData.upties[5].length > 0)) ? 5 : 4;
-  const [selectedThreadspin, setSelectedThreadspin] = useState(maxTier);
-  
-  // Use CDN for background image
-  const slug = egoData.slug || generateSlug(egoData.name);
-  const bgUrl = `https://assets.limbusdeck.com/egos/full/${slug}.webp`;
-
-  const currentSkills = (egoData.upties && egoData.upties[selectedThreadspin] && egoData.upties[selectedThreadspin].length > 0) ? egoData.upties[selectedThreadspin] : egoData.skills;
-
-  return (
-    <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4 md:p-6 backdrop-blur-sm" onClick={onClose}>
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card max-w-5xl w-full h-[85vh] flex flex-col bg-[#0a0a0a] border border-[#333] overflow-hidden relative shadow-[0_0_50px_rgba(0,0,0,0.8)] rounded-xl" onClick={e => e.stopPropagation()}>
-        
-        {/* BLURRY BACKGROUND */}
-        <div className="absolute inset-0 bg-cover bg-top bg-no-repeat opacity-40 blur-md pointer-events-none scale-105 transition-all duration-500" style={{ backgroundImage: `url(${bgUrl})` }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/30 via-[#0a0a0a]/80 to-[#0a0a0a] pointer-events-none" />
-
-        <div className="p-6 border-b border-white/10 flex justify-between items-start relative z-10 bg-black/20">
-          <div className="flex gap-6 items-end">
-            <div className="w-28 h-28 md:w-36 md:h-36 rounded-xl overflow-hidden border-2 border-[#c9a84c]/50 shadow-2xl shrink-0">
-              <img src={bgUrl} className="w-full h-full object-cover" alt="EGO Art" />
-            </div>
-            <div className="pb-2">
-              <h2 className="text-3xl md:text-4xl font-black text-white drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-tight">{egoData.name}</h2>
-              <div className="flex items-center gap-4 mt-1">
-                 <p className="text-[#c9a84c] text-lg capitalize font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,1)] flex items-center gap-2">
-                    <span>{egoData.sinner}</span>
-                    <span className="text-white/30">•</span>
-                    <span>{egoData.grade}</span>
-                 </p>
-                 {/* THREADSPIN SELECTOR */}
-                 <div className="flex bg-black/50 rounded-lg p-1 border border-white/10 shadow-inner">
-                    {Array.from({ length: maxTier }, (_, i) => i + 1).map(ut => (
-                       <button 
-                         key={ut} 
-                         onClick={() => setSelectedThreadspin(ut)}
-                         className={`px-3 py-1 text-xs font-bold rounded-md transition-all ${
-                           selectedThreadspin === ut 
-                             ? (ut === 5 ? 'bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30' : 'bg-[#c9a84c] text-black shadow-md') 
-                             : 'text-gray-400 hover:text-white hover:bg-white/5'
-                         }`}
-                       >
-                         {ut === 5 ? 'Threadspin 5 🔥' : `Threadspin ${ut}`}
-                       </button>
-                    ))}
-                 </div>
-              </div>
-              <div className="flex gap-2 mt-3">
-                 {egoData.keywords && egoData.keywords.map(k => (
-                   <span key={k} className="px-2.5 py-0.5 text-[10px] uppercase tracking-wider rounded bg-black/60 border border-white/10 text-white font-bold backdrop-blur-md shadow-sm">{k}</span>
-                 ))}
-                 {egoData.traits && egoData.traits.map(t => (
-                   <span key={t} className="px-2.5 py-0.5 text-[10px] uppercase tracking-wider rounded bg-[#c9a84c]/20 border border-[#c9a84c]/40 text-[#c9a84c] font-bold backdrop-blur-md shadow-sm">{t}</span>
-                 ))}
-              </div>
-            </div>
-          </div>
-          <button onClick={onClose} className="w-10 h-10 flex justify-center items-center bg-black/50 hover:bg-red-500/80 hover:text-white border border-white/10 rounded-full font-bold transition-all backdrop-blur-md z-20 shrink-0 text-white/50">✕</button>
-        </div>
-        
-        <div className="p-6 overflow-y-auto space-y-8 text-sm relative z-10 scrollbar-hide">
-          {!currentSkills || currentSkills.length === 0 ? (
-            <div className="p-4 rounded border border-blue-900/50 bg-blue-900/10 text-blue-200 flex gap-3 backdrop-blur-md">
-              <Info className="shrink-0 mt-0.5" size={18} />
-              <div>
-                <p className="font-bold mb-1">Threadspin Data Syncing</p>
-                <p>The background scraper is currently pulling the deep skill breakdown for this specific Threadspin tier from the wiki. Check back in a moment.</p>
-              </div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {currentSkills.map((skill, i) => {
-                const label = skill.name.includes('Corrosion') ? 'Corrosion' : 'Awakening';
-                const borderColor = SIN_COLORS[skill.affinity] || '#333';
-                const bgColor = borderColor + '20';
-                const maxPower = skill.basePower + (skill.coinPower * (skill.coins || 1));
-                
-                const triggerGroups = parseEffectsIntoTriggerGroups(skill.effects || []);
-                const kws = extractKeywordsFromEffects(skill.effects);
-                
-                return (
-                  <div key={i} className="rounded-xl overflow-hidden bg-[#0a0a0a] backdrop-blur-md shadow-lg border flex flex-col" style={{ borderColor: borderColor + '50' }}>
-                    <div className="flex flex-col gap-1 p-2.5 font-bold border-b" style={{backgroundColor: bgColor, borderBottomColor: borderColor + '50', borderTop: `4px solid ${borderColor}`}}>
-                      <div className="flex justify-between items-center w-full">
-                         <span style={{color: borderColor}} className="text-[10px] uppercase tracking-wider">{label}</span>
-                         <div className="flex gap-1 items-center">
-                            <span className="text-[10px] text-gray-300 font-medium">{skill.type}</span>
-                            <span className="text-[10px] font-bold ml-1" style={{color: borderColor}}>{skill.affinity}</span>
-                         </div>
-                      </div>
-                      <span className="text-white truncate font-bold text-sm tracking-tight">{skill.name}</span>
-                    </div>
-                    <div className="p-3 space-y-3 flex-1 flex flex-col">
-                      <div className="flex justify-center items-center text-xs bg-black/40 p-3 rounded-lg border border-white/5 w-full mx-auto max-w-[200px]">
-                        <div className="font-bold flex items-center justify-between w-full">
-                          <div className="flex flex-col items-center">
-                            <span className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Base</span>
-                            <span className="text-white text-lg leading-none">{skill.basePower}</span>
-                          </div>
-                          <span className="text-gray-600 font-black text-lg">+</span>
-                          <div className="flex flex-col items-center">
-                            <span className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Coin</span>
-                            <span className="text-[#c9a84c] text-lg leading-none flex items-center"><span className="text-xs mr-0.5">x</span>{Math.abs(skill.coinPower)}</span>
-                          </div>
-                          <span className="text-gray-600 font-black text-lg">=</span>
-                          <div className="flex flex-col items-center">
-                            <span className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Max</span>
-                            <span className={skill.coinPower >= 0 ? "text-green-400 text-xl leading-none" : "text-red-400 text-xl leading-none"}>{maxPower}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex gap-1.5 px-1 py-1">
-                        {Array.from({length: skill.coins || 1}).map((_, idx) => (
-                           <div key={idx} className={`w-5 h-5 rounded-full border shadow-[0_0_10px_rgba(234,179,8,0.3)] ${skill.coinPower < 0 ? 'bg-gradient-to-br from-red-500 to-red-800 border-red-400 shadow-[0_0_10px_rgba(239,68,68,0.3)]' : 'bg-gradient-to-br from-yellow-300 to-yellow-600 border-yellow-200'}`}></div>
-                        ))}
-                      </div>
-                      
-                      {triggerGroups.length > 0 && (
-                        <div className="pt-2 border-t border-white/5 space-y-2 mt-auto">
-                          {triggerGroups.map((group, idx) => (
-                            <div key={idx} className="text-xs leading-relaxed">
-                              {group.trigger !== 'Passive' && (
-                                <span className="inline-block px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider mr-1.5 text-white shadow-sm" style={{ backgroundColor: getSkillTriggerColor(group.trigger) }}>
-                                  {group.trigger}
-                                </span>
-                              )}
-                              <span className={group.trigger === 'Passive' ? 'text-gray-400' : 'text-gray-200'}>{group.text}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                      
-                      {kws.length > 0 && (
-                         <div className="flex flex-wrap gap-1 pt-2 mt-2 border-t border-white/5">
-                           {kws.map(([kw]) => (
-                             <span key={kw} className="text-[9px] px-1.5 py-0.5 rounded text-white font-medium bg-black/60 border shadow-sm" style={{ borderColor: KEYWORD_COLORS[kw] + '50' }}>
-                               <span style={{color: KEYWORD_COLORS[kw]}}>●</span> {kw}
-                             </span>
-                           ))}
-                         </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {/* PASSIVES */}
-          {egoData.passives && egoData.passives.length > 0 && (
-            <div className="space-y-4 pt-6 border-t border-white/10">
-              <h3 className="font-bold text-[#c9a84c] text-xl pb-2 border-b border-white/5 uppercase tracking-widest drop-shadow">Passives</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 {egoData.passives.map((passive, i) => (
-                    <div key={i} className="bg-black/50 border border-white/10 rounded-xl p-4 backdrop-blur-md">
-                       <h4 className="font-bold text-white mb-2 pb-2 border-b border-white/5">{passive.name}</h4>
-                       <p className="text-xs text-gray-400 leading-relaxed font-mono">{Array.isArray(passive.effects) ? passive.effects.join('\n') : (passive.effects || passive.description)}</p>
-                    </div>
-                 ))}
-              </div>
-            </div>
-          )}
-
-          <div className="grid grid-cols-2 gap-6 mt-6 pt-6 border-t border-[#222]">
-            <div className="space-y-4">
-              <h3 className="font-bold text-[#c9a84c] text-lg border-b border-[#333] pb-2">Sin Resource Cost</h3>
-              <div className="flex gap-2 flex-wrap">
-                {egoData.cost ? 
-                  Object.entries(egoData.cost).map(([sin, amount]) => (
-                    <span key={sin} className="px-2 py-1 rounded text-white font-bold flex gap-1 items-center" style={{ backgroundColor: SIN_COLORS[sin] }}>
-                       <span>{sin}</span>
-                       <span className="bg-black/40 px-1.5 rounded">{amount}</span>
-                    </span>
-                  ))
-                : meta.cost?.map(sin => <span key={sin} className="px-2 py-1 rounded text-white" style={{ backgroundColor: SIN_COLORS[sin] }}>{sin}</span>)}
-              </div>
-              {egoData.sanityCost && <p className="text-gray-400 mt-2">Sanity Cost: <span className="text-white">{egoData.sanityCost}</span></p>}
-            </div>
-            
-            <div className="space-y-4">
-              <h3 className="font-bold text-[#c9a84c] text-lg border-b border-[#333] pb-2">Defensive Affinity</h3>
-              <div className="flex gap-2 flex-wrap">
-                {(egoData.affinity || meta.affinity) ? <span className="px-2 py-1 rounded text-white font-bold" style={{ backgroundColor: SIN_COLORS[egoData.affinity || meta.affinity] }}>{egoData.affinity || meta.affinity}</span> : <span className="text-gray-500">Not set</span>}
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-    </div>
   );
 }
 

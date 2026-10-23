@@ -1,521 +1,1478 @@
-import React, { useState } from 'react';
+// src/components/IdDetailsModal.jsx
+// Complete LimbusDeck.com-style Character Detail Modal (ported via REA from 3u3bm5ir4bed9.js & 444a_5rtna8p8.js)
+// Features all 10 LimbusDeck detail sections + interactive Status Popover Tooltips +
+// 7-color Bracket Tag Parser + Level 1-60 Stat Scaler + Pre/Post-Uptie Side-by-Side & Lightbox +
+// "Based on My Pool" Synergy Check + Built-in Markov-Chain Clash Simulator + Tactical Dossier.
+
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Heart,
+  Zap,
+  Shield,
+  Sparkles,
+  CheckCircle,
+  Columns,
+  Maximize2,
+  X,
+  Calendar,
+  Users,
+  Award,
+  Calculator,
+  ExternalLink,
+  ChevronLeft,
+  ChevronRight,
+  Swords,
+  Layers
+} from 'lucide-react';
+import { useStore } from '../stores/useStore.js';
 import { getShardabilityStatus } from '../utils/limbusCalculator.js';
 import { getIdentityTactics, KEYWORD_THEMES } from '../utils/identityTactics.js';
-
-const KEYWORD_COLORS = { Burn: '#ef4444', Bleed: '#dc2626', Tremor: '#eab308', Poise: '#22c55e', Charge: '#a855f7', Rupture: '#0ea5e9', Sinking: '#3b82f6' };
-const SIN_COLORS = { Wrath: '#dc2626', Lust: '#ea580c', Sloth: '#ca8a04', Gluttony: '#16a34a', Gloom: '#0ea5e9', Pride: '#4f46e5', Envy: '#9333ea' };
+import {
+  LD_SIN_COLORS,
+  LD_KEYWORD_COLORS,
+  SINNER_META,
+  getEgoLinkedInfo,
+  getTraitLabel,
+  getMetaTierLabel,
+  getIdentityRecordRank,
+  computeIdentityPoolImpact,
+  solveClash,
+  headsProbability
+} from '../utils/limbusDeckEngine.js';
+import {
+  StatusTermsProvider,
+  StatusSection,
+  LimbusDeckSkillCard,
+  LimbusDeckPassiveCard,
+  SinBadge,
+  CoinDots
+} from './limbusdeck/SkillComponents.jsx';
 
 function generateSlug(name) {
-  return name.toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  return (name || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
     .trim();
 }
 
-export default function IdDetailsModal({ idData, onClose }) {
-  const [activeTab, setActiveTab] = useState(0);
-  const [navSection, setNavSection] = useState('tactics');
-  const tactics = React.useMemo(() => getIdentityTactics(idData), [idData]);
+const RESISTANCE_STYLES = {
+  ineffective: { label: 'Ineffective (×0.5)', cls: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' },
+  endured: { label: 'Endured (×0.75)', cls: 'bg-teal-500/15 text-teal-300 border-teal-500/30' },
+  normal: { label: 'Normal (×1.0)', cls: 'bg-white/10 text-gray-300 border-white/15' },
+  fatal: { label: 'Fatal (×2.0)', cls: 'bg-red-500/15 text-red-300 border-red-500/30' }
+};
 
-  const slug = idData.slug || generateSlug(idData.name);
-  const rarity = idData.rarity || 3;
-  const bgUrl = `https://assets.limbusdeck.com/identities/${rarity === 1 ? 'full' : 'full-uptied'}/${slug}.webp`;
+function QuickClashDrawer({ initialSkill, identityName, allIdentities, onClose }) {
+  const [sideA, setSideA] = useState(() => ({
+    label: `${identityName} — ${initialSkill?.nameEn || initialSkill?.name || 'Skill'}`,
+    basePower: initialSkill?.basePower ?? 4,
+    coinPower: initialSkill?.coinPower ?? 4,
+    coinCount: initialSkill?.coinCount ?? initialSkill?.coins ?? 2,
+    sanity: 45,
+    paralysis: 0,
+    offenseLevel: 60 + (initialSkill?.offenseLevel ?? 0),
+    mods: { base: 0, coin: 0, final: 0, clash: 0 }
+  }));
 
-  const skills = idData.skills || [];
-  const passives = idData.passives || [];
-  const alternateSkills = idData.alternateSkills || [];
-  
-  const defenseSkill = idData.defense || null;
-  const attackSkills = skills;
+  const [sideB, setSideB] = useState({
+    label: 'Enemy / Opponent Skill',
+    basePower: 4,
+    coinPower: 4,
+    coinCount: 3,
+    sanity: 0,
+    paralysis: 0,
+    offenseLevel: 60,
+    mods: { base: 0, coin: 0, final: 0, clash: 0 }
+  });
 
-  const renderSkillBlock = (skill, idx, isAlt = false) => {
-    if (!skill) return null;
-    
-    // Parse effects string for UI triggers if any
-    const renderEffectLine = (effStr, i) => {
-        if (typeof effStr !== 'string') effStr = String(effStr);
-        // Find triggers like [On Hit], [Clash Win]
-        const triggerMatch = effStr.match(/^\[(.*?)\]\s*(.*)$/);
-        let trigger = null;
-        let text = effStr;
-        if (triggerMatch) {
-            trigger = triggerMatch[1];
-            text = triggerMatch[2];
-        }
+  const [enemyPresetSearch, setEnemyPresetSearch] = useState('');
 
-        return (
-            <div key={i} className="flex gap-3 text-sm text-gray-300">
-                <div className="shrink-0 w-20 pt-0.5">
-                    {trigger ? (
-                        <span className="text-[10px] font-black uppercase tracking-wider text-[#c9a84c] bg-[#c9a84c]/10 px-2 py-0.5 rounded border border-[#c9a84c]/30 text-center inline-block min-w-full">
-                            {trigger}
-                        </span>
-                    ) : (
-                        <div className="flex items-center gap-1.5 justify-center">
-                            <span className="text-[10px] font-bold text-gray-500">EFFECT</span>
-                        </div>
-                    )}
-                </div>
-                <div className="flex-1 leading-relaxed">
-                    {text}
-                </div>
+  const outcome = useMemo(() => solveClash(sideA, sideB), [sideA, sideB]);
+
+  const matchingPresets = useMemo(() => {
+    const q = enemyPresetSearch.trim().toLowerCase();
+    if (!q) return [];
+    const list = [];
+    for (const id of (allIdentities || [])) {
+      if ((id.name || '').toLowerCase().includes(q) || (id.sinner || '').toLowerCase().includes(q)) {
+        (id.ldSkills || id.skills || []).forEach((sk, idx) => {
+          list.push({
+            idName: id.name,
+            slot: `S${idx + 1}`,
+            skill: sk
+          });
+        });
+        if (list.length >= 12) break;
+      }
+    }
+    return list.slice(0, 12);
+  }, [enemyPresetSearch, allIdentities]);
+
+  const renderSideControls = (side, setSide, accentColor) => (
+    <div className="rounded-xl border border-[#333] bg-[#111] p-4 space-y-3">
+      <div className="flex items-center justify-between border-b border-white/10 pb-2">
+        <span className="text-xs font-black uppercase tracking-wider truncate" style={{ color: accentColor }}>
+          {side.label}
+        </span>
+        <span className="text-[11px] font-mono text-gray-400 shrink-0">
+          Heads: {Math.round(headsProbability(side.sanity) * 100)}%
+        </span>
+      </div>
+
+      <div className="grid grid-cols-3 gap-2">
+        <label className="text-[11px] text-gray-400 flex flex-col gap-1">
+          <span>Base Power</span>
+          <input
+            type="number"
+            value={side.basePower}
+            onChange={e => setSide(s => ({ ...s, basePower: Number(e.target.value) || 0 }))}
+            className="bg-[#0a0a0e] border border-[#333] rounded-lg px-2.5 py-1.5 text-sm font-mono font-bold text-white"
+          />
+        </label>
+        <label className="text-[11px] text-gray-400 flex flex-col gap-1">
+          <span>Coin Power</span>
+          <input
+            type="number"
+            value={side.coinPower}
+            onChange={e => setSide(s => ({ ...s, coinPower: Number(e.target.value) || 0 }))}
+            className="bg-[#0a0a0e] border border-[#333] rounded-lg px-2.5 py-1.5 text-sm font-mono font-bold text-white"
+          />
+        </label>
+        <label className="text-[11px] text-gray-400 flex flex-col gap-1">
+          <span>Coin Count</span>
+          <input
+            type="number"
+            min={1}
+            max={12}
+            value={side.coinCount}
+            onChange={e => setSide(s => ({ ...s, coinCount: Math.max(1, Math.min(12, Number(e.target.value) || 1)) }))}
+            className="bg-[#0a0a0e] border border-[#333] rounded-lg px-2.5 py-1.5 text-sm font-mono font-bold text-white"
+          />
+        </label>
+      </div>
+
+      <div className="grid grid-cols-3 gap-2">
+        <label className="text-[11px] text-gray-400 flex flex-col gap-1">
+          <span>Sanity (-45..45)</span>
+          <input
+            type="number"
+            min={-45}
+            max={45}
+            value={side.sanity}
+            onChange={e => setSide(s => ({ ...s, sanity: Math.max(-45, Math.min(45, Number(e.target.value) || 0)) }))}
+            className="bg-[#0a0a0e] border border-[#333] rounded-lg px-2.5 py-1.5 text-sm font-mono font-bold text-white"
+          />
+        </label>
+        <label className="text-[11px] text-gray-400 flex flex-col gap-1">
+          <span>Offense Lv</span>
+          <input
+            type="number"
+            value={side.offenseLevel}
+            onChange={e => setSide(s => ({ ...s, offenseLevel: Number(e.target.value) || 60 }))}
+            className="bg-[#0a0a0e] border border-[#333] rounded-lg px-2.5 py-1.5 text-sm font-mono font-bold text-white"
+          />
+        </label>
+        <label className="text-[11px] text-gray-400 flex flex-col gap-1">
+          <span>Paralysis</span>
+          <input
+            type="number"
+            min={0}
+            max={20}
+            value={side.paralysis}
+            onChange={e => setSide(s => ({ ...s, paralysis: Math.max(0, Number(e.target.value) || 0) }))}
+            className="bg-[#0a0a0e] border border-[#333] rounded-lg px-2.5 py-1.5 text-sm font-mono font-bold text-white"
+          />
+        </label>
+      </div>
+    </div>
+  );
+
+  const winPct = (outcome.win * 100).toFixed(1);
+  const losePct = (outcome.lose * 100).toFixed(1);
+
+  return (
+    <div
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-3xl rounded-2xl border border-[#c9a84c]/50 bg-[#0c0c10] p-5 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between border-b border-[#333] pb-3">
+          <div className="flex items-center gap-2">
+            <Calculator className="text-[#c9a84c]" size={20} />
+            <h3 className="text-lg font-black text-white uppercase tracking-wider">
+              Markov-Chain Clash Calculator
+            </h3>
+          </div>
+          <button
+            onClick={onClose}
+            className="btn-inline rounded-lg bg-white/10 px-2.5 py-1 text-xs font-bold text-gray-300 hover:text-white cursor-pointer"
+          >
+            ✕ Close
+          </button>
+        </div>
+
+        {/* Win Rate Bar */}
+        <div className="rounded-xl border border-[#333] bg-[#14141a] p-4 space-y-2.5">
+          <div className="flex justify-between items-baseline">
+            <div>
+              <span className="text-xs uppercase font-bold text-emerald-400 block">Ally Win Rate</span>
+              <span className="text-3xl font-black font-mono text-emerald-400">{winPct}%</span>
             </div>
-        );
-    };
+            <div className="text-center">
+              <span className="text-[11px] text-gray-400 font-mono block">
+                Avg Clash Rounds: <strong className="text-white">{outcome.expectedRounds.toFixed(2)}</strong>
+              </span>
+              <span className="text-[11px] text-gray-400 font-mono block">
+                Round 1: W {(outcome.first.win * 100).toFixed(0)}% · T {(outcome.first.tie * 100).toFixed(0)}% · L {(outcome.first.lose * 100).toFixed(0)}%
+              </span>
+            </div>
+            <div className="text-right">
+              <span className="text-xs uppercase font-bold text-red-400 block">Opponent Win Rate</span>
+              <span className="text-3xl font-black font-mono text-red-400">{losePct}%</span>
+            </div>
+          </div>
 
-    return (
-      <>
-      <div key={skill.name} className="mb-6 rounded-lg overflow-hidden border border-[#333] bg-[#0a0a0a]">
-        <div className="flex justify-between items-center p-3 border-b border-[#333] bg-black/40">
-          <div className="flex items-center gap-3">
-             <div className="flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: SIN_COLORS[skill.affinity] || '#fff' }}></span>
-                <span className="text-sm font-bold text-white">{skill.affinity || 'Unknown'}</span>
-             </div>
-             <span className="text-[#333]">|</span>
-             <span className="text-sm font-bold text-gray-300">{skill.type || 'Unknown'}</span>
-             {(() => {
-               const st = tactics?.skillsTactical?.[idx];
-               if (!st || isAlt) return null;
-               return (
-                 <span className="ml-2 text-[10px] font-bold text-[#c9a84c] bg-[#c9a84c]/10 border border-[#c9a84c]/30 px-2 py-0.5 rounded shadow-sm">
-                   {st.roleTag}
-                 </span>
-               );
-             })()}
+          <div className="h-3.5 w-full rounded-full bg-red-500/30 overflow-hidden flex">
+            <div
+              className="h-full bg-emerald-500 transition-all duration-300"
+              style={{ width: `${Math.max(0, Math.min(100, outcome.win * 100))}%` }}
+            />
+          </div>
+
+          {/* Remaining Coins Breakdown */}
+          <div className="grid grid-cols-2 gap-3 pt-2 border-t border-white/10 text-xs">
+            <div>
+              <span className="text-[10px] uppercase font-bold text-gray-400 block mb-1">
+                Ally Wins by Remaining Coins
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {outcome.winByCoins.slice(1).map((prob, idx) => (
+                  <span key={idx} className="rounded bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 font-mono text-[11px] text-emerald-300">
+                    {idx + 1}c: {(prob * 100).toFixed(1)}%
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="text-right">
+              <span className="text-[10px] uppercase font-bold text-gray-400 block mb-1">
+                Opponent Wins by Remaining Coins
+              </span>
+              <div className="flex flex-wrap gap-1.5 justify-end">
+                {outcome.loseByCoins.slice(1).map((prob, idx) => (
+                  <span key={idx} className="rounded bg-red-500/10 border border-red-500/30 px-2 py-0.5 font-mono text-[11px] text-red-300">
+                    {idx + 1}c: {(prob * 100).toFixed(1)}%
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="p-4 border-b border-[#333] bg-gradient-to-r from-[#111] to-black">
-           <div className="flex justify-between items-center">
-             <div>
-               <h4 className="text-2xl font-black text-white tracking-wide">{skill.name}</h4>
-               {(() => {
-                 const st = tactics?.skillsTactical?.[idx];
-                 if (!st || isAlt) return null;
-                 return (
-                   <p className="text-xs text-gray-400 mt-1 italic">{st.tacticalSummary}</p>
-                 );
-               })()}
-             </div>
-             
-             <div className="flex items-center gap-4 bg-black/80 px-4 py-2 rounded-lg border border-[#333] shadow-inner">
-                 <div className="flex flex-col items-center">
-                    <span className="text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1">Base</span>
-                    <span className="text-xl font-bold text-white">{skill.basePower !== undefined ? skill.basePower : '?'}</span>
-                 </div>
-                 <span className="text-xl font-black text-[#c9a84c]">+</span>
-                 <div className="flex flex-col min-w-[80px]">
-                    <span className="text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1">Coin</span>
-                    <div className="flex items-center gap-1 justify-center">
-                       <div className="flex gap-0.5">
-                         {Array.from({ length: skill.coins || 1 }).map((_, i) => (
-                            <div key={i} className="w-4 h-4 rounded-full border border-[#c9a84c] bg-[#c9a84c]/20 shadow-[0_0_5px_rgba(201,168,76,0.2)]"></div>
-                         ))}
-                       </div>
-                        {skill.coinPower > 0 ? (
-                          <span className="text-lg font-bold text-white ml-2">x +{skill.coinPower}</span>
-                        ) : skill.coinPower < 0 ? (
-                          <span className="text-lg font-bold text-red-400 ml-2">x {skill.coinPower}</span>
-                        ) : null}
-                    </div>
-                 </div>
-                 <span className="text-xl font-black text-gray-600">=</span>
-                 <div className="flex flex-col items-center">
-                    <span className="text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1">Max</span>
-                    <span className="text-xl font-black text-yellow-500">
-                        {skill.basePower !== undefined && skill.coinPower !== undefined && skill.coins !== undefined 
-                            ? (skill.coinPower < 0 ? `${skill.basePower} (Tails Max)` : (skill.basePower + (skill.coinPower * skill.coins))) 
-                            : '?'}
-                    </span>
-                 </div>
-             </div>
-           </div>
+        {/* Opponent Preset Loader */}
+        <div className="space-y-1.5">
+          <input
+            type="text"
+            placeholder="Load opponent skill from any Identity (type Sinner or Identity name)..."
+            value={enemyPresetSearch}
+            onChange={e => setEnemyPresetSearch(e.target.value)}
+            className="w-full rounded-lg border border-[#333] bg-[#111] px-3 py-2 text-xs text-white outline-none focus:border-[#c9a84c]"
+          />
+          {matchingPresets.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto p-1">
+              {matchingPresets.map((item, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => {
+                    setSideB(s => ({
+                      ...s,
+                      label: `${item.idName} (${item.slot}: ${item.skill.nameEn || item.skill.name})`,
+                      basePower: item.skill.basePower ?? 4,
+                      coinPower: item.skill.coinPower ?? 4,
+                      coinCount: item.skill.coinCount ?? item.skill.coins ?? 1,
+                      offenseLevel: 60 + (item.skill.offenseLevel ?? 0)
+                    }));
+                    setEnemyPresetSearch('');
+                  }}
+                  className="btn-inline rounded-md border border-[#333] bg-[#181820] px-2 py-1 text-[11px] text-gray-200 hover:border-[#c9a84c] hover:text-[#c9a84c] cursor-pointer"
+                >
+                  <strong>{item.slot}</strong> {item.idName} — {item.skill.nameEn || item.skill.name}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
-        {skill.effects && skill.effects.length > 0 && (
-          <div className="p-4 flex flex-col gap-3 bg-[#0a0a0a]">
-            {skill.effects.map((eff, i) => renderEffectLine(eff, i))}
-            {(() => {
-              const clientSkill = idData.clientSkills?.find(cs => cs.name?.toLowerCase() === skill.name?.toLowerCase()) || idData.clientSkills?.[idx];
-              if (!clientSkill?.coinlist || !clientSkill.coinlist.some(c => c.coindescs && c.coindescs.length > 0)) return null;
-              return (
-                <div className="mt-3 pt-3 border-t border-[#222] space-y-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-[#c9a84c] bg-[#c9a84c]/10 px-2 py-0.5 rounded border border-[#c9a84c]/30">
-                      Authoritative Uptie IV Coins
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {renderSideControls(sideA, setSideA, '#34d399')}
+          {renderSideControls(sideB, setSideB, '#f87171')}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function IdDetailsModal({ idData, onClose }) {
+  const { identitiesData, acquiredIds, toggleAcquiredId } = useStore();
+  const [currentId, setCurrentId] = useState(idData);
+  const [level, setLevel] = useState(60);
+  const [showKo, setShowKo] = useState(false);
+  const [artTab, setArtTab] = useState(1); // 0 = Before Uptie, 1 = After Uptie
+  const [artSideBySide, setArtSideBySide] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(null);
+  const [clashSkill, setClashSkill] = useState(null);
+  const [activeSection, setActiveSection] = useState('hero');
+  const scrollContainerRef = useRef(null);
+
+  useEffect(() => {
+    setCurrentId(idData);
+    setArtTab(idData?.rarity === 1 ? 0 : 1);
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [idData]);
+
+  const switchIdentity = (nextId) => {
+    if (!nextId) return;
+    setCurrentId(nextId);
+    setArtTab(nextId.rarity === 1 ? 0 : 1);
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const slug = currentId.slug || generateSlug(currentId.name);
+  const rarity = currentId.rarity || 3;
+  const hasUptiedArt = rarity > 1 && !currentId.isDummy;
+  const artBeforeUrl = `https://assets.limbusdeck.com/identities/full/${slug}.webp`;
+  const artAfterUrl = `https://assets.limbusdeck.com/identities/${hasUptiedArt ? 'full-uptied' : 'full'}/${slug}.webp`;
+  const heroBgUrl = hasUptiedArt ? artAfterUrl : artBeforeUrl;
+
+  const sinnerMeta = useMemo(() => {
+    return (
+      SINNER_META.find(s => s.id === currentId.sinnerId) ||
+      SINNER_META.find(s => s.name.toLowerCase() === (currentId.sinner || '').toLowerCase()) ||
+      SINNER_META[0]
+    );
+  }, [currentId]);
+
+  const isAcquired = acquiredIds.has(currentId.name);
+  const shardStatus = useMemo(() => getShardabilityStatus(currentId), [currentId]);
+  const tactics = useMemo(() => getIdentityTactics(currentId), [currentId]);
+  const tierInfo = useMemo(() => getMetaTierLabel(currentId.metaTier), [currentId.metaTier]);
+  const egoLinked = useMemo(() => getEgoLinkedInfo(slug), [slug]);
+
+  const poolImpact = useMemo(
+    () => computeIdentityPoolImpact(currentId, acquiredIds, identitiesData || []),
+    [currentId, acquiredIds, identitiesData]
+  );
+
+  // Scaled HP formula from LimbusDeck (mod 992418): floor(hpBase + hpGrowth * (level - 1))
+  const scaledHp = useMemo(() => {
+    if (currentId.hpBase && currentId.hpGrowth !== undefined) {
+      return Math.floor(currentId.hpBase + currentId.hpGrowth * (level - 1));
+    }
+    return currentId.hp || '?';
+  }, [currentId, level]);
+
+  const hpRank = useMemo(() => getIdentityRecordRank(currentId.ldId, 'hpMax'), [currentId.ldId]);
+  const speedRank = useMemo(() => getIdentityRecordRank(currentId.ldId, 'speedMax'), [currentId.ldId]);
+  const powerRank = useMemo(() => getIdentityRecordRank(currentId.ldId, 'power'), [currentId.ldId]);
+
+  const skills = currentId.ldSkills?.length ? currentId.ldSkills : (currentId.skills || []);
+  const defenseSkills = currentId.ldDefenseSkills?.length
+    ? currentId.ldDefenseSkills
+    : (currentId.defense && typeof currentId.defense === 'object' ? [currentId.defense] : []);
+  const passives = currentId.ldPassives?.length ? currentId.ldPassives : (currentId.passives || []);
+  const statuses = currentId.statuses || [];
+
+  const otherSameSinnerIdentities = useMemo(() => {
+    return (identitiesData || [])
+      .filter(
+        i =>
+          !i.isDummy &&
+          i.name !== currentId.name &&
+          (i.sinnerId === currentId.sinnerId || i.sinner === currentId.sinner)
+      )
+      .sort((a, b) => (b.releaseDate || '').localeCompare(a.releaseDate || ''));
+  }, [identitiesData, currentId]);
+
+  const daysSinceRelease = useMemo(() => {
+    if (!currentId.releaseDate) return null;
+    const rel = new Date(currentId.releaseDate);
+    if (isNaN(rel.getTime())) return null;
+    const diff = Math.floor((Date.now() - rel.getTime()) / (1000 * 60 * 60 * 24));
+    return diff >= 0 ? `${diff}d ago` : `in ${-diff}d`;
+  }, [currentId.releaseDate]);
+
+  const sections = [
+    { id: 'hero', label: 'Overview' },
+    { id: 'pull', label: 'My Pool' },
+    { id: 'art', label: 'Artwork' },
+    { id: 'skills', label: `Skills (${skills.length})` },
+    ...(defenseSkills.length > 0 ? [{ id: 'defense', label: 'Defense' }] : []),
+    ...(passives.length > 0 ? [{ id: 'passives', label: `Passives (${passives.length})` }] : []),
+    ...(statuses.length > 0 ? [{ id: 'statuses', label: `Statuses (${statuses.length})` }] : []),
+    { id: 'tactics', label: 'Tactics' },
+    ...(poolImpact?.containingCount > 0 || poolImpact?.commonTeammates?.length > 0
+      ? [{ id: 'parties', label: 'Teams' }]
+      : []),
+    ...(otherSameSinnerIdentities.length > 0
+      ? [{ id: 'related', label: `More ${sinnerMeta.name}` }]
+      : [])
+  ];
+
+  const scrollToSection = (secId) => {
+    setActiveSection(secId);
+    const el = scrollContainerRef.current?.querySelector(`#modal-sec-${secId}`);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const lightboxImages = hasUptiedArt
+    ? [
+        { src: artBeforeUrl, label: 'Pre-Uptie (Uptie I)' },
+        { src: artAfterUrl, label: 'Uptied (Uptie III / IV)' }
+      ]
+    : [{ src: artBeforeUrl, label: 'Identity Artwork' }];
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-3 md:p-5 backdrop-blur-md"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="glass-card max-w-6xl w-full h-[92vh] flex flex-col bg-[#0a0a0e] border border-[#333] overflow-hidden relative shadow-[0_0_60px_rgba(0,0,0,0.9)] rounded-2xl"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Ambient Blurred Artwork Backdrop */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-15 blur-3xl pointer-events-none scale-110"
+          style={{ backgroundImage: `url(${heroBgUrl})` }}
+        />
+
+        {/* Sticky Top Header & Section Jump Bar */}
+        <div className="relative z-20 flex flex-wrap items-center justify-between gap-2 px-5 py-3 border-b border-[#333] bg-[#0d0d12]/95 backdrop-blur-md">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-1.5 text-xs text-gray-400 min-w-0">
+            <span className="font-bold text-gray-300">Identities</span>
+            <ChevronRight size={14} className="shrink-0 text-gray-600" />
+            <span className="font-bold shrink-0" style={{ color: sinnerMeta.color }}>
+              {sinnerMeta.name}
+            </span>
+            <ChevronRight size={14} className="shrink-0 text-gray-600" />
+            <span className="font-bold text-white truncate">{currentId.nameEn || currentId.name}</span>
+          </div>
+
+          {/* Section Quick-Jump Pills */}
+          <div className="flex items-center gap-1 overflow-x-auto max-w-full py-0.5">
+            {sections.map(sec => (
+              <button
+                key={sec.id}
+                type="button"
+                onClick={() => scrollToSection(sec.id)}
+                className={`btn-inline px-2.5 py-1 rounded-full text-[11px] font-bold whitespace-nowrap transition-all cursor-pointer ${
+                  activeSection === sec.id
+                    ? 'bg-[#c9a84c] text-black shadow-sm'
+                    : 'bg-[#16161d] text-gray-400 hover:text-white border border-[#2a2a35]'
+                }`}
+              >
+                {sec.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Language Toggle & Close */}
+          <div className="flex items-center gap-2">
+            {currentId.nameKo && (
+              <button
+                type="button"
+                onClick={() => setShowKo(v => !v)}
+                className={`btn-inline px-2.5 py-1 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
+                  showKo
+                    ? 'border-[#c9a84c] bg-[#c9a84c]/20 text-[#c9a84c]'
+                    : 'border-[#333] bg-[#16161d] text-gray-300 hover:text-white'
+                }`}
+                title="Toggle English / Korean Skill & Passive Text"
+              >
+                {showKo ? '🇰🇷 한국어' : '🌐 EN / KO'}
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={onClose}
+              className="btn-inline w-8 h-8 rounded-full bg-white/10 hover:bg-red-500/80 text-gray-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+              title="Close (Esc)"
+            >
+              <X size={16} />
+            </button>
+          </div>
+        </div>
+
+        {/* Main Scrollable LimbusDeck Detail Body */}
+        <div
+          ref={scrollContainerRef}
+          className="relative z-10 flex-1 overflow-y-auto custom-scrollbar px-5 py-6 sm:px-8 space-y-10"
+        >
+          <StatusTermsProvider statuses={statuses}>
+            {/* SECTION 1: HERO & OVERVIEW (`#hero`) */}
+            <section
+              id="modal-sec-hero"
+              className="grid gap-6 md:grid-cols-[300px_minmax(0,1fr)] lg:grid-cols-[340px_minmax(0,1fr)]"
+            >
+              {/* Left Column: Portrait Card with Hover Uptie Preview & Jump to Art */}
+              <div className="flex flex-col gap-3 self-start">
+                <button
+                  type="button"
+                  onClick={() => scrollToSection('art')}
+                  className="card-btn group relative block w-full aspect-[4/5] overflow-hidden rounded-2xl border-2 border-[#333] hover:border-[#c9a84c] bg-[#121218] transition-all cursor-pointer shadow-xl text-left"
+                  title="Click to jump to full Artwork Viewer & Lightbox"
+                >
+                  <img
+                    src={heroBgUrl}
+                    alt={currentId.name}
+                    className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/40" />
+
+                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                    <span className="text-yellow-400 text-sm font-black drop-shadow-md">
+                      {'★'.repeat(rarity)}
                     </span>
-                    <span className="text-[10px] text-gray-500 font-mono">Game Client Dossier</span>
+                    <span className="rounded-md bg-black/75 border border-white/15 px-2 py-0.5 text-[10px] font-bold text-gray-200">
+                      {hasUptiedArt ? 'Uptie III/IV Art' : 'Base Art'}
+                    </span>
                   </div>
-                  <div className="grid grid-cols-1 gap-2 pt-1">
-                    {clientSkill.coinlist.map((c, coinIdx) => {
-                      if (!c.coindescs || c.coindescs.length === 0) return null;
+
+                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-gray-200">
+                    <span className="font-bold text-[#c9a84c] group-hover:underline">
+                      View Pre/Post-Uptie Art &rarr;
+                    </span>
+                    <Maximize2 size={14} className="text-gray-300" />
+                  </div>
+                </button>
+
+                {/* Acquire & Shardability Status Card */}
+                <div className="rounded-xl border border-[#333] bg-[#111] p-3.5 flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-gray-400 block">
+                      Dispenser Status
+                    </span>
+                    <span
+                      className={`text-xs font-bold ${
+                        shardStatus.shardable ? 'text-emerald-400' : 'text-amber-400'
+                      }`}
+                    >
+                      ● {shardStatus.message}
+                    </span>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => toggleAcquiredId(currentId.name)}
+                    className={`btn-inline shrink-0 px-3.5 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer ${
+                      isAcquired
+                        ? 'bg-[#c9a84c] text-black shadow-[0_0_15px_rgba(201,168,76,0.4)]'
+                        : 'bg-[#1c1c24] text-white border border-white/20 hover:border-[#c9a84c]'
+                    }`}
+                  >
+                    <CheckCircle size={14} />
+                    {isAcquired ? 'Owned in Pool' : 'Add to Pool'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Column: Metadata, Keywords, Traits, Interactive Level Stats & Resistances */}
+              <div className="flex min-w-0 flex-col gap-4">
+                <div>
+                  <p className="mb-1 font-mono text-xs font-black uppercase tracking-[0.25em] text-[#c9a84c]">
+                    {currentId.isWalpurgis
+                      ? `Identity · Walpurgisnacht ${currentId.ldSeason || ''}`
+                      : currentId.isStandard
+                      ? `Identity · Standard Fare`
+                      : `Identity · Season ${currentId.ldSeason ?? currentId.season ?? ''}`}
+                  </p>
+
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-gray-400">
+                    <span className="text-yellow-400 font-black text-sm">
+                      {'★'.repeat(rarity)}
+                    </span>
+                    <span className="font-bold text-white" style={{ color: sinnerMeta.color }}>
+                      {sinnerMeta.name}
+                    </span>
+                    <span>·</span>
+                    <span
+                      className="rounded-md px-2 py-0.5 font-mono text-xs font-black border"
+                      style={{
+                        color: tierInfo.color,
+                        backgroundColor: tierInfo.bg,
+                        borderColor: `${tierInfo.color}55`
+                      }}
+                    >
+                      {tierInfo.tier}
+                    </span>
+                    {currentId.releaseDate && (
+                      <>
+                        <span>·</span>
+                        <span className="inline-flex items-center gap-1 font-mono text-gray-300">
+                          <Calendar size={13} className="text-[#c9a84c]" />
+                          {currentId.releaseDate}
+                          {daysSinceRelease && (
+                            <span className="text-gray-400">({daysSinceRelease})</span>
+                          )}
+                        </span>
+                      </>
+                    )}
+                    {powerRank && (
+                      <>
+                        <span>·</span>
+                        <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 text-[11px] font-bold text-amber-300">
+                          <Award size={12} />#{powerRank.rank} Max Power ({powerRank.value})
+                        </span>
+                      </>
+                    )}
+                  </div>
+
+                  <h1 className="mt-2 text-2xl sm:text-3xl font-black text-white leading-tight tracking-tight">
+                    {showKo && currentId.nameKo ? currentId.nameKo : (currentId.nameEn || currentId.name)}
+                  </h1>
+                  {(currentId.nameKo || currentId.nameJa) && (
+                    <p className="mt-1 text-xs text-gray-400 font-medium">
+                      {[currentId.nameKo, currentId.nameJa].filter(Boolean).join(' · ')}
+                    </p>
+                  )}
+                </div>
+
+                {/* Keywords & EGO-Linked Keywords */}
+                {((currentId.keywords && currentId.keywords.length > 0) || egoLinked) && (
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {(currentId.keywords || []).map(kw => {
+                      const color = LD_KEYWORD_COLORS[kw.toLowerCase()] || '#c9a84c';
                       return (
-                        <div key={coinIdx} className="flex items-start gap-2 text-xs bg-black/60 p-2 rounded border border-[#222]">
-                          <span className="w-5 h-5 rounded-full bg-[#c9a84c]/20 border border-[#c9a84c] text-[#c9a84c] flex items-center justify-center font-black text-[10px] shrink-0">
-                            {coinIdx + 1}
+                        <span
+                          key={kw}
+                          className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold border shadow-sm"
+                          style={{
+                            color,
+                            borderColor: `${color}66`,
+                            backgroundColor: `${color}1a`
+                          }}
+                        >
+                          <span>●</span> {kw}
+                        </span>
+                      );
+                    })}
+
+                    {egoLinked && (
+                      <span
+                        className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-[#c9a84c]/60 bg-[#c9a84c]/10 px-3 py-1 text-xs font-semibold text-gray-200"
+                        title="Keyword unlocked when paired with linked E.G.O"
+                      >
+                        <span className="text-[#c9a84c]">E.G.O Link · {egoLinked.viaEn}:</span>
+                        {egoLinked.keywords.map(k => (
+                          <span
+                            key={k}
+                            className="font-bold uppercase"
+                            style={{ color: LD_KEYWORD_COLORS[k] || '#fff' }}
+                          >
+                            {k}
                           </span>
-                          <div className="space-y-1 text-gray-300">
-                            {c.coindescs.map((cd, cdIdx) => (
-                              <div key={cdIdx}>{cd.desc}</div>
-                            ))}
-                          </div>
+                        ))}
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                {/* Traits / Factions Row */}
+                {currentId.traits && currentId.traits.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <span className="mr-1 text-xs font-black uppercase tracking-wider text-[#c9a84c]">
+                      Traits:
+                    </span>
+                    {currentId.traits.map(tr => (
+                      <span
+                        key={tr}
+                        className="inline-flex h-6 items-center rounded-full bg-[#181820] border border-[#333] px-2.5 text-xs font-semibold text-gray-300"
+                      >
+                        {getTraitLabel(tr)}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Interactive Level 1–60 Stat Scaler & 4-Stat Grid */}
+                <div className="space-y-2.5 pt-1">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-xs font-black uppercase tracking-wider text-gray-300">
+                      Combat Stats (Lv. {level})
+                    </span>
+                    {currentId.hpBase && (
+                      <div className="flex items-center gap-2 text-xs">
+                        <span className="text-gray-400 font-mono">Lv 1</span>
+                        <input
+                          type="range"
+                          min={1}
+                          max={60}
+                          value={level}
+                          onChange={e => setLevel(Number(e.target.value))}
+                          className="w-28 accent-[#c9a84c] cursor-pointer"
+                        />
+                        <span className="text-[#c9a84c] font-mono font-bold">Lv 60</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                    {/* HP Box */}
+                    <div className="rounded-xl border border-[#333] bg-[#111] px-3.5 py-3">
+                      <p className="flex items-center gap-1 text-xs text-gray-400">
+                        <Heart className="size-3.5 text-emerald-400 shrink-0" /> HP
+                      </p>
+                      <p className="font-mono text-xl font-black text-white tabular-nums mt-0.5">
+                        {scaledHp}
+                      </p>
+                      {hpRank && (
+                        <p className="text-[11px] font-semibold text-[#c9a84c] mt-0.5">
+                          Rank #{hpRank.rank} / {hpRank.total}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Speed Box */}
+                    <div className="rounded-xl border border-[#333] bg-[#111] px-3.5 py-3">
+                      <p className="flex items-center gap-1 text-xs text-gray-400">
+                        <Zap className="size-3.5 text-amber-400 shrink-0" /> Speed
+                      </p>
+                      <p className="font-mono text-xl font-black text-white tabular-nums mt-0.5">
+                        {currentId.minSpeed && currentId.maxSpeed
+                          ? `${currentId.minSpeed}~${currentId.maxSpeed}`
+                          : currentId.speed || '?'}
+                      </p>
+                      {speedRank && (
+                        <p className="text-[11px] font-semibold text-[#c9a84c] mt-0.5">
+                          Rank #{speedRank.rank} / {speedRank.total}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Defense Type Box */}
+                    <div className="rounded-xl border border-[#333] bg-[#111] px-3.5 py-3">
+                      <p className="flex items-center gap-1 text-xs text-gray-400">
+                        <Shield className="size-3.5 text-sky-400 shrink-0" /> Defense
+                      </p>
+                      <p className="text-base font-black text-white capitalize mt-0.5">
+                        {defenseSkills[0]?.attackType || defenseSkills[0]?.type || 'Guard'}
+                        {currentId.defenseLevel !== undefined && (
+                          <span className="ml-1.5 text-xs font-mono text-gray-400">
+                            ({currentId.defenseLevel >= 0 ? `+${currentId.defenseLevel}` : currentId.defenseLevel})
+                          </span>
+                        )}
+                      </p>
+                    </div>
+
+                    {/* Defense Sin Box */}
+                    <div className="rounded-xl border border-[#333] bg-[#111] px-3.5 py-3">
+                      <p className="flex items-center gap-1 text-xs text-gray-400">
+                        <span
+                          className="size-3 rounded-full shrink-0"
+                          style={{
+                            backgroundColor:
+                              LD_SIN_COLORS[(defenseSkills[0]?.sin || defenseSkills[0]?.affinity || '').toLowerCase()] ||
+                              '#6b7280'
+                          }}
+                        />
+                        Defense Sin
+                      </p>
+                      <div className="mt-1">
+                        {defenseSkills[0]?.sin || defenseSkills[0]?.affinity ? (
+                          <SinBadge sin={defenseSkills[0].sin || defenseSkills[0].affinity} />
+                        ) : (
+                          <span className="text-sm text-gray-400">None</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Resistances & Stagger Thresholds */}
+                <div className="space-y-2">
+                  <h3 className="text-xs font-black uppercase tracking-wider text-gray-300">
+                    Physical Resistances & Stagger
+                  </h3>
+                  <div className="grid grid-cols-3 gap-2.5">
+                    {['slash', 'pierce', 'blunt'].map(atk => {
+                      const resKey = currentId.resistances?.[atk] || 'normal';
+                      const style = RESISTANCE_STYLES[resKey] || RESISTANCE_STYLES.normal;
+                      return (
+                        <div
+                          key={atk}
+                          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 rounded-xl border border-[#333] bg-[#111] px-3 py-2.5 text-xs"
+                        >
+                          <span className="font-bold text-gray-200 capitalize">{atk}</span>
+                          <span
+                            className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-bold ${style.cls}`}
+                          >
+                            {style.label}
+                          </span>
                         </div>
                       );
                     })}
                   </div>
-                </div>
-              );
-            })()}
-          </div>
-        )}
-      </div>
-      
-      {/* ALTERNATE SKILLS — slot/index based, no fragile name matching */}
-      {!isAlt && alternateSkills && alternateSkills.length > 0 && (() => {
-        const tabIdx = idx;
-        const relevant = alternateSkills.filter(alt => {
-          if (alt.slot !== undefined && alt.slot !== null) return alt.slot === tabIdx;
-          if (alt.replaces !== undefined && alt.replaces !== null) return alt.replaces === tabIdx;
-          // No positional data — show under last skill tab only
-          return tabIdx === (attackSkills.length - 1);
-        });
-        if (!relevant.length) return null;
-        return relevant.map((alt, altIdx) => (
-          <div key={`alt-${altIdx}`} className="mt-6 mb-6 rounded-lg overflow-hidden border-2 border-dashed border-[#c9a84c]/50 bg-black/40 p-1">
-            <div className="text-[11px] text-[#c9a84c] uppercase tracking-widest font-bold mb-1 mt-1 ml-2">Alternate / Enhanced Skill</div>
-            {renderSkillBlock(alt, idx, true)}
-          </div>
-        ));
-      })()}
-    </>
-  );
-  };
 
-  return (
-    <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4 md:p-6 backdrop-blur-sm" onClick={onClose}>
-      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="glass-card max-w-7xl w-full h-[90vh] flex flex-col md:flex-row bg-[#0a0a0a] border border-[#333] overflow-hidden relative shadow-[0_0_50px_rgba(0,0,0,0.8)] rounded-xl" onClick={e => e.stopPropagation()}>
-        
-        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20 blur-2xl pointer-events-none scale-110" style={{ backgroundImage: `url(${bgUrl})` }} />
-
-        <div className="w-full md:w-[350px] shrink-0 border-r border-[#333] flex flex-col bg-black/60 relative z-10 overflow-y-auto custom-scrollbar">
-            <div className="relative w-full aspect-[2/3] group cursor-crosshair border-b border-[#333]">
-                <img src={bgUrl} className="w-full h-full object-cover transition-opacity duration-300 absolute inset-0 opacity-100" alt="Art" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-[#000000aa] to-transparent pointer-events-none" />
-                <div className="absolute bottom-4 left-4 right-4">
-                   <div className="flex items-center gap-2 mb-1">
-                      <span className="bg-[#c9a84c] text-black text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest shadow-sm">Identity</span>
-                      <span className="text-yellow-500 text-sm drop-shadow-md">{'★'.repeat(idData.rarity || 1)}</span>
-                   </div>
-                   <h2 className="text-2xl font-black text-white leading-tight drop-shadow-md">{idData.name}</h2>
-                   {(() => {
-                     const shardStatus = getShardabilityStatus(idData);
-                     return (
-                       <div className="mt-1.5 flex flex-wrap items-center gap-2">
-                         <span className={`text-[10px] font-black px-2 py-0.5 rounded shadow-sm uppercase tracking-wider ${
-                           shardStatus.reason === 'walpurgis'
-                             ? 'bg-purple-950/90 text-purple-300 border border-purple-600/60'
-                             : shardStatus.reason === 'previous_season'
-                             ? 'bg-zinc-900/90 text-zinc-300 border border-zinc-600'
-                             : shardStatus.reason === 'current_season'
-                             ? 'bg-amber-950/90 text-amber-300 border border-amber-500/80'
-                             : shardStatus.reason === 'standard'
-                             ? 'bg-gray-900/80 text-gray-400 border border-gray-700'
-                             : 'bg-black/70 text-gray-300 border border-white/20'
-                         }`}>
-                           {shardStatus.fullBadge}
-                         </span>
-                         {idData.gameId && (
-                           <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded shadow-sm bg-blue-950/80 text-blue-300 border border-blue-600/50 flex items-center gap-1">
-                             <span>💎 ID #{idData.gameId}</span>
-                             <span className="text-blue-400">• Official Data</span>
-                           </span>
-                         )}
-                         <span className={`text-xs font-semibold ${
-                           shardStatus.shardable ? 'text-green-400' : 'text-amber-400'
-                         }`}>
-                           ● {shardStatus.message}
-                         </span>
-                       </div>
-                     );
-                   })()}
-                </div>
-            </div>
-
-            <div className="p-4 flex flex-col gap-4">
-                <div className="bg-[#111] border border-[#333] rounded-lg p-4 space-y-2.5">
-                   <h3 className="text-[10px] text-[#c9a84c] uppercase tracking-widest font-bold mb-1">Combat Profile</h3>
-                   <div className="flex justify-between items-center pb-2 border-b border-[#222]">
-                       <span className="text-xs text-gray-500 font-medium">HP</span>
-                       <span className="text-green-400 font-bold text-sm">{idData.hp || '?'}</span>
-                   </div>
-                   <div className="flex justify-between items-center pb-2 border-b border-[#222]">
-                       <span className="text-xs text-gray-500 font-medium">Speed</span>
-                       <span className="text-yellow-400 font-bold text-sm">{idData.speed || '?'}</span>
-                   </div>
-                   <div className="flex justify-between items-center pb-2 border-b border-[#222]">
-                       <span className="text-xs text-gray-500 font-medium">Defense</span>
-                       <span className="text-gray-200 font-bold text-xs">
-                         {defenseSkill ? `${defenseSkill.type || 'Guard'} (${defenseSkill.affinity || 'None'})` : 'None'}
-                       </span>
-                   </div>
-                    <div className="flex justify-between items-center pb-2 border-b border-[#222]">
-                        <span className="text-xs text-gray-500 font-medium">Max Clash</span>
-                        <span className="text-amber-400 font-black text-sm">
-                          {skills.reduce((max, s) => {
-                            const p = (s.coinPower || 0) < 0 ? (s.basePower || 0) : (s.basePower || 0) + (s.coinPower || 0) * (s.coins || 1);
-                            return Math.max(max, p);
-                          }, 0)}
-                        </span>
+                  {currentId.staggerThresholds && currentId.staggerThresholds.length > 0 && (
+                    <div className="flex items-center justify-between rounded-xl border border-[#333] bg-[#111] px-3.5 py-2.5 text-xs">
+                      <span className="font-bold text-gray-300">
+                        Stagger Thresholds ({currentId.staggerThresholds.length}×)
+                      </span>
+                      <span className="font-mono text-sm font-black text-[#c9a84c]">
+                        {currentId.staggerThresholds.join('% / ')}% HP
+                      </span>
                     </div>
-                   <div>
-                       <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider block mb-1">Archetype</span>
-                       <div className="flex flex-wrap gap-1">
-                         {tactics.primaryKeywords.map(kw => {
-                           const theme = KEYWORD_THEMES[kw];
-                           return (
-                             <span key={kw} className={`text-[10px] font-bold px-2 py-0.5 rounded ${theme?.bg || 'bg-white/10'} ${theme?.text || 'text-white'} border ${theme?.border || 'border-white/20'}`}>
-                               {theme?.icon || '✦'} {kw}
-                             </span>
-                           );
-                         })}
-                       </div>
-                   </div>
+                  )}
                 </div>
-            </div>
-        </div>
+              </div>
+            </section>
 
-        <div className="flex-1 flex flex-col relative z-10 bg-[#0a0a0a]/90 overflow-hidden">
-            
-            <div className="flex justify-between items-center p-6 border-b border-[#333] bg-black/60 flex-wrap gap-3">
-                <h3 className="text-xl font-black text-white uppercase tracking-wider">
-                   {navSection === 'tactics' ? 'Tactical Dossier' : navSection === 'skills' ? 'Combat Skills' : navSection === 'defense' ? 'Defense Skill' : 'Passives'}
-                </h3>
-                
-                <div className="flex bg-[#111] p-1 rounded-lg border border-[#333] shadow-md">
-                   {['tactics', 'skills', 'defense', 'passives'].map(sec => (
-                     <button 
-                        key={sec}
-                        onClick={() => setNavSection(sec)}
-                        className={`px-4 py-1.5 text-xs font-bold rounded-md uppercase tracking-widest transition-all ${navSection === sec ? 'bg-[#c9a84c] text-black shadow-sm' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}
-                     >
-                        {sec === 'tactics' ? '⚔️ Tactics' : sec}
-                     </button>
-                   ))}
+            {/* SECTION 2: "BASED ON MY POOL" IMPACT (`#pull`) */}
+            {poolImpact && (
+              <section
+                id="modal-sec-pull"
+                className="scroll-mt-20 rounded-2xl border border-[#333] bg-[#111] overflow-hidden shadow-lg"
+              >
+                <div className="px-5 py-4 border-b border-[#333] flex flex-wrap items-center justify-between gap-2 bg-[#15151c]">
+                  <div>
+                    <span className="font-mono text-[10px] font-black uppercase tracking-[0.25em] text-[#c9a84c] block">
+                      My Pool Diagnostics
+                    </span>
+                    <h2 className="text-lg font-black text-white">
+                      Based on My Roster ({isAcquired ? 'Currently Owned' : 'If Dispensed / Pulled'})
+                    </h2>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs">
+                    {poolImpact.readyAfter > 0 && (
+                      <span className="rounded-full bg-emerald-500/15 border border-emerald-500/40 px-3 py-1 font-bold text-emerald-300">
+                        {poolImpact.readyAfter} Ready Meta {poolImpact.readyAfter === 1 ? 'Team' : 'Teams'}
+                      </span>
+                    )}
+                    {poolImpact.oneShortCount > 0 && (
+                      <span className="rounded-full bg-amber-500/15 border border-amber-500/40 px-3 py-1 font-bold text-amber-300">
+                        {poolImpact.oneShortCount} One-Short {poolImpact.oneShortCount === 1 ? 'Team' : 'Teams'}
+                      </span>
+                    )}
+                  </div>
                 </div>
-            </div>
 
-            <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
-                <AnimatePresence mode="wait">
-                   {navSection === 'tactics' && tactics && (
-                     <motion.div key="tactics" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
-                       
-                       {/* Archetype & Role Overview Banner */}
-                       <div className="p-5 rounded-xl border border-[#c9a84c]/40 bg-gradient-to-br from-[#1a1815] via-[#111] to-black shadow-lg relative overflow-hidden">
-                         <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-                           <div className="flex items-center gap-2">
-                             <span className="text-[10px] uppercase font-black tracking-widest text-[#c9a84c] bg-[#c9a84c]/20 px-2 py-0.5 rounded border border-[#c9a84c]/40">
-                               Combat Strategy
-                             </span>
-                             <span className="text-xs text-gray-400 font-mono">
-                               {tactics.isCurated ? '★ Specialized Tactical Analysis' : '● General Combat Evaluation'}
-                             </span>
-                           </div>
-                           <div className="flex gap-1.5 flex-wrap">
-                             {tactics.primaryKeywords.map(kw => {
-                               const theme = KEYWORD_THEMES[kw] || { text: 'text-gray-300', bg: 'bg-white/10', border: 'border-white/20', icon: '✦' };
-                               return (
-                                 <span key={kw} className={`text-xs font-bold px-2.5 py-1 rounded-full border ${theme.border} ${theme.bg} ${theme.text} flex items-center gap-1 shadow-sm`}>
-                                   <span>{theme.icon}</span> {kw}
-                                 </span>
-                               );
-                             })}
-                           </div>
-                         </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#2a2a35]">
+                  {/* Col 1: Keyword Decks */}
+                  <div className="p-4 space-y-2">
+                    <h3 className="text-xs font-black uppercase tracking-wider text-gray-400">
+                      Archetype Decks Enabled
+                    </h3>
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {(currentId.keywords || []).length > 0 ? (
+                        (currentId.keywords || []).map(kw => {
+                          const color = LD_KEYWORD_COLORS[kw.toLowerCase()] || '#c9a84c';
+                          return (
+                            <span
+                              key={kw}
+                              className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
+                              style={{ color, borderColor: `${color}55`, backgroundColor: `${color}15` }}
+                            >
+                              ● {kw} Deck
+                            </span>
+                          );
+                        })
+                      ) : (
+                        <span className="text-xs text-gray-500">Generalist / Raw Power Unit</span>
+                      )}
+                      {(currentId.keywords || []).length >= 2 && (
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c9a84c]/50 bg-[#c9a84c]/15 px-3 py-1 text-xs font-bold text-[#c9a84c]">
+                          ✦ {currentId.keywords.slice(0, 2).join(' · ')} Hybrid
+                        </span>
+                      )}
+                    </div>
+                  </div>
 
-                         <h3 className="text-2xl font-black text-white mb-1 tracking-wide">{tactics.archetype}</h3>
-                         <p className="text-sm text-gray-300 font-medium leading-relaxed mb-4">
-                           Primary Combat Role: <strong className="text-[#c9a84c]">{tactics.role}</strong>
-                         </p>
+                  {/* Col 2: Recommended Parties Readiness */}
+                  <div className="p-4 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xs font-black uppercase tracking-wider text-gray-400">
+                        Recommended Teams
+                      </h3>
+                      <span className="text-xs font-mono text-gray-400">
+                        In {poolImpact.containingCount} builds
+                      </span>
+                    </div>
+                    {poolImpact.containingCount === 0 ? (
+                      <p className="text-xs text-gray-500 pt-1">Not required in curated meta presets.</p>
+                    ) : (
+                      <div className="space-y-1.5 text-xs">
+                        <div className="flex justify-between">
+                          <span className="text-gray-300">Ready Teams (All Owned):</span>
+                          <strong className="font-mono text-emerald-400">
+                            {poolImpact.readyBefore} &rarr; {poolImpact.readyAfter}
+                          </strong>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-300">1 Short (6/7 Owned):</span>
+                          <strong className="font-mono text-amber-400">{poolImpact.oneShortCount}</strong>
+                        </div>
+                        <div className="flex flex-wrap gap-1 pt-1">
+                          {poolImpact.partyChanges.slice(0, 3).map(({ party, status, owned, total }) => (
+                            <span
+                              key={party.id}
+                              onClick={() => scrollToSection('parties')}
+                              className="cursor-pointer inline-flex items-center gap-1 rounded-full border border-[#333] bg-[#181820] px-2 py-0.5 text-[11px] hover:border-[#c9a84c]"
+                            >
+                              <span
+                                className={`rounded-full px-1.5 text-[9px] font-black uppercase ${
+                                  status === 'complete'
+                                    ? 'bg-emerald-500/20 text-emerald-300'
+                                    : status === 'near'
+                                    ? 'bg-amber-500/20 text-amber-300'
+                                    : 'bg-white/10 text-gray-400'
+                                }`}
+                              >
+                                {owned}/{total}
+                              </span>
+                              <span className="truncate max-w-[120px] text-gray-200">
+                                {party.nameEn || party.name}
+                              </span>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
-                          {/* Custom Status Effects & Kit Mechanics Decoded */}
-                          <div className="space-y-3 pt-4 border-t border-white/10">
-                            <div className="flex items-center justify-between">
-                              <h4 className="text-xs uppercase tracking-widest font-black text-[#c9a84c] flex items-center gap-1.5">
-                                <span>⚡</span> Custom Status Effects & Kit Mechanics
-                              </h4>
-                              <span className="text-[10px] text-gray-400 font-mono">
-                                {tactics.uniqueMechanics.length} Active System{tactics.uniqueMechanics.length > 1 ? 's' : ''}
+                  {/* Col 3: Sinner & Faction Collection Progress */}
+                  <div className="p-4 space-y-2">
+                    <h3 className="text-xs font-black uppercase tracking-wider text-gray-400">
+                      {sinnerMeta.name} & Faction Set
+                    </h3>
+                    <div className="space-y-2 text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-gray-300">{sinnerMeta.name} Owned:</span>
+                        <strong className="font-mono text-white">
+                          {poolImpact.sinnerStats.owned}/{poolImpact.sinnerStats.total}{' '}
+                          <span className="text-[#c9a84c]">
+                            (★★★ {poolImpact.sinnerStats.threeStarOwned}/{poolImpact.sinnerStats.threeStarTotal})
+                          </span>
+                        </strong>
+                      </div>
+
+                      {poolImpact.traitSet && (
+                        <div className="space-y-1">
+                          <div className="flex justify-between">
+                            <span className="text-gray-300 truncate">{poolImpact.traitSet.traitName} Set:</span>
+                            <strong className="font-mono text-[#c9a84c]">
+                              {poolImpact.traitSet.owned}/{poolImpact.traitSet.total}
+                            </strong>
+                          </div>
+                          <div className="h-2 w-full rounded-full bg-[#1c1c24] overflow-hidden">
+                            <div
+                              className="h-full bg-[#c9a84c] transition-all"
+                              style={{
+                                width: `${
+                                  poolImpact.traitSet.total > 0
+                                    ? (poolImpact.traitSet.owned / poolImpact.traitSet.total) * 100
+                                    : 0
+                                }%`
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* SECTION 3: ARTWORK VIEWER & LIGHTBOX (`#art`) */}
+            <section id="modal-sec-art" className="scroll-mt-20 space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#333] pb-2">
+                <h2 className="text-lg font-black uppercase tracking-wider text-[#c9a84c]">
+                  Illustration & Uptie Artwork
+                </h2>
+
+                <div className="flex items-center gap-2">
+                  {hasUptiedArt && !artSideBySide && (
+                    <div className="inline-flex rounded-lg bg-[#16161d] p-1 border border-[#333]">
+                      <button
+                        type="button"
+                        onClick={() => setArtTab(0)}
+                        className={`btn-inline px-3 py-1 rounded-md text-xs font-bold transition-colors cursor-pointer ${
+                          artTab === 0 ? 'bg-[#c9a84c] text-black' : 'text-gray-400 hover:text-white'
+                        }`}
+                      >
+                        Pre-Uptie (I)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setArtTab(1)}
+                        className={`btn-inline px-3 py-1 rounded-md text-xs font-bold transition-colors cursor-pointer ${
+                          artTab === 1 ? 'bg-[#c9a84c] text-black' : 'text-gray-400 hover:text-white'
+                        }`}
+                      >
+                        Uptied (III / IV)
+                      </button>
+                    </div>
+                  )}
+
+                  {hasUptiedArt && (
+                    <button
+                      type="button"
+                      onClick={() => setArtSideBySide(v => !v)}
+                      className={`btn-inline inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-bold transition-colors cursor-pointer ${
+                        artSideBySide
+                          ? 'border-[#c9a84c] bg-[#c9a84c] text-black'
+                          : 'border-[#333] bg-[#16161d] text-gray-300 hover:text-white'
+                      }`}
+                    >
+                      <Columns size={14} />
+                      Side-by-Side
+                    </button>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => setLightboxIndex(artSideBySide ? 0 : artTab)}
+                    className="btn-inline inline-flex items-center gap-1.5 rounded-lg border border-[#333] bg-[#16161d] px-3 py-1.5 text-xs font-bold text-gray-300 hover:text-white hover:border-[#c9a84c] transition-colors cursor-pointer"
+                  >
+                    <Maximize2 size={14} />
+                    Enlarge
+                  </button>
+                </div>
+              </div>
+
+              {artSideBySide && hasUptiedArt ? (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  {[
+                    { src: artBeforeUrl, label: 'Pre-Uptie (Uptie I)', idx: 0 },
+                    { src: artAfterUrl, label: 'Uptied (Uptie III / IV)', idx: 1 }
+                  ].map(item => (
+                    <figure key={item.idx} className="space-y-1.5">
+                      <button
+                        type="button"
+                        onClick={() => setLightboxIndex(item.idx)}
+                        className="card-btn relative block aspect-video w-full overflow-hidden rounded-2xl border border-[#333] bg-[#0d0d12] hover:border-[#c9a84c] transition-colors cursor-pointer"
+                      >
+                        <img
+                          src={item.src}
+                          alt={item.label}
+                          loading="lazy"
+                          className="w-full h-full object-contain"
+                        />
+                      </button>
+                      <figcaption className="text-center text-xs text-gray-400 font-semibold">
+                        {item.label}
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setLightboxIndex(artTab)}
+                  className="card-btn relative block aspect-video w-full overflow-hidden rounded-2xl border border-[#333] bg-[#0d0d12] hover:border-[#c9a84c] transition-colors cursor-pointer"
+                >
+                  <img
+                    src={artTab === 1 && hasUptiedArt ? artAfterUrl : artBeforeUrl}
+                    alt={currentId.name}
+                    loading="lazy"
+                    className="w-full h-full object-contain"
+                  />
+                  <span className="absolute left-3 top-3 rounded-md bg-black/75 border border-white/15 px-2.5 py-1 text-xs font-bold text-white">
+                    {artTab === 1 && hasUptiedArt ? 'Uptied (Uptie III / IV)' : 'Pre-Uptie (Uptie I)'}
+                  </span>
+                </button>
+              )}
+            </section>
+
+            {/* SECTION 4: SKILLS (`#skills`) */}
+            <section id="modal-sec-skills" className="scroll-mt-20 space-y-3">
+              <div className="flex items-center justify-between border-b border-[#333] pb-2">
+                <h2 className="text-lg font-black uppercase tracking-wider text-[#c9a84c] flex items-center gap-2">
+                  <Swords size={18} /> Combat Skills ({skills.length})
+                </h2>
+                <span className="text-xs text-gray-400">
+                  Click any dotted status name for tooltip · Click "Clash Calc" to simulate
+                </span>
+              </div>
+
+              {skills.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-[#333] p-6 text-center text-sm text-gray-500">
+                  Skill data pending release sync.
+                </div>
+              ) : (
+                <div className="grid gap-3.5">
+                  {skills.map((sk, idx) => (
+                    <LimbusDeckSkillCard
+                      key={idx}
+                      skill={sk}
+                      index={idx}
+                      showKo={showKo}
+                      onOpenClashCalc={skillObj => setClashSkill(skillObj)}
+                    />
+                  ))}
+                </div>
+              )}
+            </section>
+
+            {/* SECTION 5: DEFENSE SKILLS (`#defense`) */}
+            {defenseSkills.length > 0 && (
+              <section id="modal-sec-defense" className="scroll-mt-20 space-y-3">
+                <div className="flex items-center justify-between border-b border-[#333] pb-2">
+                  <h2 className="text-lg font-black uppercase tracking-wider text-[#c9a84c] flex items-center gap-2">
+                    <Shield size={18} /> Defense Skills ({defenseSkills.length})
+                  </h2>
+                </div>
+                <div className="grid gap-3.5">
+                  {defenseSkills.map((df, idx) => (
+                    <LimbusDeckSkillCard
+                      key={idx}
+                      skill={df}
+                      index={idx}
+                      isDefense={true}
+                      showKo={showKo}
+                    />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* SECTION 6: PASSIVES (`#passives`) */}
+            {passives.length > 0 && (
+              <section id="modal-sec-passives" className="scroll-mt-20 space-y-3">
+                <div className="flex items-center justify-between border-b border-[#333] pb-2">
+                  <h2 className="text-lg font-black uppercase tracking-wider text-[#c9a84c] flex items-center gap-2">
+                    <Layers size={18} /> Combat & Support Passives ({passives.length})
+                  </h2>
+                </div>
+                <div className="grid gap-3.5 md:grid-cols-2">
+                  {passives.map((pas, idx) => (
+                    <LimbusDeckPassiveCard key={idx} passive={pas} showKo={showKo} />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* SECTION 7: STATUSES & MECHANICS GLOSSARY (`#statuses`) */}
+            <StatusSection statuses={statuses} id="modal-sec-statuses" />
+
+            {/* SECTION 8: TACTICAL DOSSIER & TURN ROTATION (`#tactics`) */}
+            {tactics && (
+              <section id="modal-sec-tactics" className="scroll-mt-20 space-y-4">
+                <div className="flex items-center justify-between border-b border-[#333] pb-2">
+                  <h2 className="text-lg font-black uppercase tracking-wider text-[#c9a84c]">
+                    ⚔️ Tactical Playbook & Turn Rotation
+                  </h2>
+                  <span className="text-xs text-gray-400 font-mono">
+                    Role: <strong className="text-white">{tactics.role}</strong>
+                  </span>
+                </div>
+
+                {tactics.hazardAlert && (
+                  <div className="p-4 rounded-xl border border-red-500/60 bg-red-950/30 flex items-start gap-3">
+                    <span className="text-xl shrink-0">⚠️</span>
+                    <div>
+                      <span className="text-xs font-black uppercase tracking-wider text-red-400 block">
+                        Critical Combat Warning ({tactics.hazardAlert.badge})
+                      </span>
+                      <p className="text-xs text-red-200/90 mt-0.5 leading-relaxed">
+                        {tactics.hazardAlert.message}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                  {[
+                    { step: 1, title: 'Turn 1: Opener', text: tactics.combatRotation.opener },
+                    { step: 2, title: 'Mid-Fight: Clash & Engine', text: tactics.combatRotation.midGame },
+                    { step: 3, title: 'Finisher: Win Condition', text: tactics.combatRotation.finisher }
+                  ].map(rot => (
+                    <div key={rot.step} className="rounded-xl border border-[#333] bg-[#111] p-4 space-y-2">
+                      <div className="flex items-center gap-2">
+                        <span className="w-6 h-6 rounded-full bg-[#c9a84c]/20 border border-[#c9a84c]/50 text-[#c9a84c] text-xs font-black flex items-center justify-center">
+                          {rot.step}
+                        </span>
+                        <span className="text-xs font-black text-white uppercase tracking-wider">
+                          {rot.title}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-300 leading-relaxed">{rot.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* SECTION 9: COMMON TEAMMATES & RECOMMENDED META TEAMS (`#parties`) */}
+            {poolImpact && (poolImpact.commonTeammates.length > 0 || poolImpact.partyChanges.length > 0) && (
+              <section id="modal-sec-parties" className="scroll-mt-20 space-y-6">
+                {poolImpact.commonTeammates.length > 0 && (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between border-b border-[#333] pb-2">
+                      <h2 className="text-lg font-black uppercase tracking-wider text-[#c9a84c] flex items-center gap-2">
+                        <Users size={18} /> Common Teammates (Synergy Partners)
+                      </h2>
+                      <span className="text-xs text-gray-400">Click any teammate to inspect</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {poolImpact.commonTeammates.map(({ identity: partner, rate }) => {
+                        const partnerOwned = partner.rarity === 1 || acquiredIds.has(partner.name);
+                        const pSlug = partner.slug || generateSlug(partner.name);
+                        return (
+                          <button
+                            key={partner.name}
+                            type="button"
+                            onClick={() => switchIdentity(partner)}
+                            className="card-btn flex items-center gap-3 rounded-xl border border-[#333] bg-[#111] p-3 hover:border-[#c9a84c] transition-all text-left cursor-pointer"
+                          >
+                            <img
+                              src={`https://assets.limbusdeck.com/identities/thumbnail/${pSlug}.webp`}
+                              onError={e => {
+                                e.currentTarget.src = `https://assets.limbusdeck.com/identities/full/${pSlug}.webp`;
+                              }}
+                              alt={partner.name}
+                              className="w-12 h-12 rounded-lg object-cover shrink-0 border border-[#333]"
+                            />
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center justify-between gap-1">
+                                <span className="text-xs font-bold text-white truncate">
+                                  {partner.nameEn || partner.name}
+                                </span>
+                                {partnerOwned && (
+                                  <span className="text-[10px] font-bold text-emerald-400 shrink-0">✓ Owned</span>
+                                )}
+                              </div>
+                              <div className="mt-1.5 flex items-center gap-2">
+                                <div className="h-1.5 flex-1 rounded-full bg-[#222] overflow-hidden">
+                                  <div
+                                    className="h-full bg-[#c9a84c]"
+                                    style={{ width: `${Math.min(100, rate)}%` }}
+                                  />
+                                </div>
+                                <span className="font-mono text-xs font-bold text-[#c9a84c] shrink-0">
+                                  {rate}%
+                                </span>
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {poolImpact.partyChanges.length > 0 && (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between border-b border-[#333] pb-2">
+                      <h2 className="text-lg font-black uppercase tracking-wider text-[#c9a84c]">
+                        Recommended Meta Teams Featuring This Identity ({poolImpact.partyChanges.length})
+                      </h2>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                      {poolImpact.partyChanges.map(({ party, status, owned, total, missingMembers }) => (
+                        <div
+                          key={party.id}
+                          className="rounded-xl border border-[#333] bg-[#111] p-4 flex flex-col justify-between gap-3"
+                        >
+                          <div>
+                            <div className="flex items-center justify-between gap-2 mb-1">
+                              <h3 className="text-sm font-black text-white">
+                                {party.nameEn || party.nameKo}
+                              </h3>
+                              <span
+                                className={`rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase border ${
+                                  status === 'complete'
+                                    ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40'
+                                    : status === 'near'
+                                    ? 'bg-amber-500/15 text-amber-300 border-amber-500/40'
+                                    : 'bg-white/10 text-gray-300 border-white/20'
+                                }`}
+                              >
+                                {status === 'complete'
+                                  ? `✓ Ready (${owned}/${total})`
+                                  : status === 'near'
+                                  ? `1 Short (${owned}/${total})`
+                                  : `${owned}/${total} Owned`}
                               </span>
                             </div>
+                            <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">
+                              {party.descriptionEn || party.descriptionKo}
+                            </p>
+                          </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-                              {tactics.uniqueMechanics.map((mech, i) => (
-                                <div key={i} className="p-4 rounded-xl bg-black/70 border border-[#333] hover:border-[#c9a84c]/50 transition-all flex flex-col justify-between space-y-2 shadow-md">
-                                  <div className="flex items-center justify-between border-b border-white/5 pb-2">
-                                    <span className="font-bold text-white text-sm tracking-wide">{mech.title}</span>
-                                    <span className="text-[9px] font-black uppercase tracking-wider bg-[#c9a84c]/10 text-[#c9a84c] border border-[#c9a84c]/30 px-2 py-0.5 rounded">
-                                      {mech.badge}
-                                    </span>
-                                  </div>
-
-                                  {mech.trigger && (
-                                    <div className="text-[11px] text-[#c9a84c]/90 font-mono flex items-start gap-1.5 bg-white/[0.02] p-2 rounded-lg border border-white/5">
-                                      <span className="font-bold flex-shrink-0 text-[#c9a84c]">⚡ Trigger:</span>
-                                      <span>{mech.trigger}</span>
-                                    </div>
-                                  )}
-
-                                  <div className="text-xs text-gray-300 leading-relaxed font-sans">
-                                    <span className="text-gray-400 font-bold block mb-0.5 text-[10px] uppercase tracking-wider">Combat Application:</span>
-                                    {mech.explanation}
-                                  </div>
-                                </div>
+                          <div className="flex items-center justify-between pt-2 border-t border-white/10 text-xs">
+                            <div className="flex flex-wrap gap-1">
+                              {(party.targetKeywords || []).map(kw => (
+                                <span
+                                  key={kw}
+                                  className="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase"
+                                  style={{
+                                    color: LD_KEYWORD_COLORS[kw] || '#c9a84c',
+                                    backgroundColor: `${LD_KEYWORD_COLORS[kw] || '#c9a84c'}20`
+                                  }}
+                                >
+                                  {kw}
+                                </span>
                               ))}
                             </div>
+                            {party.youtubeUrl && (
+                              <a
+                                href={party.youtubeUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1 text-xs font-bold text-[#c9a84c] hover:underline"
+                              >
+                                Video Guide <ExternalLink size={12} />
+                              </a>
+                            )}
                           </div>
+
+                          {missingMembers && missingMembers.length > 0 && (
+                            <p className="text-[11px] text-amber-300/90">
+                              Missing: {missingMembers.map(m => m.nameEn || m.name).join(', ')}
+                            </p>
+                          )}
                         </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </section>
+            )}
 
-                        {/* Critical Hazard Alert Banner */}
-                        {tactics.hazardAlert && (
-                          <div className="p-4 rounded-xl border border-red-500/60 bg-red-950/30 shadow-[0_0_25px_rgba(239,68,68,0.2)] flex items-start gap-3.5">
-                            <span className="text-2xl flex-shrink-0 mt-0.5 animate-pulse">⚠️</span>
-                            <div className="space-y-1">
-                              <div className="flex items-center gap-2">
-                                <span className="text-xs font-black uppercase tracking-wider text-red-400">Critical Combat Warning</span>
-                                <span className="text-[10px] font-bold text-red-300 bg-red-500/20 px-2 py-0.5 rounded border border-red-500/40">{tactics.hazardAlert.badge}</span>
-                              </div>
-                              <p className="text-xs text-red-200/90 leading-relaxed font-medium">{tactics.hazardAlert.message}</p>
-                            </div>
-                          </div>
-                        )}
+            {/* SECTION 10: OTHER IDENTITIES OF THE SAME SINNER (`#related`) */}
+            {otherSameSinnerIdentities.length > 0 && (
+              <section id="modal-sec-related" className="scroll-mt-20 space-y-3 pb-4">
+                <div className="flex items-center justify-between border-b border-[#333] pb-2">
+                  <h2 className="text-lg font-black uppercase tracking-wider text-[#c9a84c]">
+                    Other Identities of {sinnerMeta.name} ({otherSameSinnerIdentities.length})
+                  </h2>
+                  <span className="text-xs text-gray-400">Click any card to switch dossier</span>
+                </div>
 
-                       {/* Turn-by-Turn Combat Rotation */}
-                       <div className="p-5 rounded-xl border border-[#333] bg-[#111] space-y-4 shadow-md">
-                         <h4 className="text-xs uppercase tracking-widest font-black text-[#c9a84c] flex items-center gap-2">
-                           <span>⚔️</span> How to Play in Battle (Turn Rotation)
-                         </h4>
-                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                           <div className="p-3.5 rounded-lg bg-black/50 border border-[#222]">
-                             <div className="flex items-center gap-2 mb-2">
-                               <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 text-xs font-black flex items-center justify-center border border-amber-500/40">1</span>
-                               <span className="text-xs font-bold text-white uppercase tracking-wider">Turn 1: Opener</span>
-                             </div>
-                             <p className="text-xs text-gray-300 leading-relaxed">{tactics.combatRotation.opener}</p>
-                           </div>
-                           <div className="p-3.5 rounded-lg bg-black/50 border border-[#222]">
-                             <div className="flex items-center gap-2 mb-2">
-                               <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 text-xs font-black flex items-center justify-center border border-amber-500/40">2</span>
-                               <span className="text-xs font-bold text-white uppercase tracking-wider">Mid-Fight: Clash & Engine</span>
-                             </div>
-                             <p className="text-xs text-gray-300 leading-relaxed">{tactics.combatRotation.midGame}</p>
-                           </div>
-                           <div className="p-3.5 rounded-lg bg-black/50 border border-[#222]">
-                             <div className="flex items-center gap-2 mb-2">
-                               <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 text-xs font-black flex items-center justify-center border border-amber-500/40">3</span>
-                               <span className="text-xs font-bold text-white uppercase tracking-wider">Finisher: Win Condition</span>
-                             </div>
-                             <p className="text-xs text-gray-300 leading-relaxed">{tactics.combatRotation.finisher}</p>
-                           </div>
-                         </div>
-                       </div>
-
-                       {/* Skills Tactical Summary */}
-                       <div className="p-5 rounded-xl border border-[#333] bg-[#111] space-y-3">
-                         <h4 className="text-xs uppercase tracking-widest font-black text-gray-400 flex items-center gap-2">
-                           <span>📋</span> Skill Tactical Breakdown
-                         </h4>
-                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                           {tactics.skillsTactical.map((st, i) => (
-                             <div key={i} className="p-3 rounded-lg bg-black/50 border border-[#333] flex flex-col justify-between gap-2">
-                               <div>
-                                 <div className="flex items-center justify-between mb-1">
-                                   <span className="text-[10px] font-bold text-gray-500 uppercase">Skill {st.slot}</span>
-                                   <span className="text-[10px] font-bold text-[#c9a84c] bg-[#c9a84c]/10 px-1.5 py-0.5 rounded border border-[#c9a84c]/30">
-                                     {st.roleTag}
-                                   </span>
-                                 </div>
-                                 <div className="text-sm font-bold text-white truncate" title={st.name}>{st.name}</div>
-                                 <p className="text-[11px] text-gray-300 mt-1 leading-snug">{st.tacticalSummary}</p>
-                               </div>
-                               <div className="flex items-center justify-between text-[10px] font-mono text-gray-400 pt-2 border-t border-[#222]">
-                                 <span>Max Clash: <strong className="text-yellow-400">{st.maxPower}</strong></span>
-                                 <span>{st.coins} Coin{st.coins > 1 ? 's' : ''}</span>
-                               </div>
-                             </div>
-                           ))}
-                         </div>
-                       </div>
-
-                       {/* Synergy & Best Partners */}
-                       <div className="p-4 rounded-xl border border-[#333] bg-black/50 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                         <div className="space-y-1">
-                           <span className="text-[10px] uppercase font-bold tracking-wider text-[#c9a84c]">Recommended Teammates</span>
-                           <div className="flex flex-wrap gap-1.5 pt-0.5">
-                             {tactics.teamSynergies.bestPartners.map((partner, i) => (
-                               <span key={i} className="text-xs bg-[#1a1a1a] text-gray-200 border border-[#444] px-2 py-0.5 rounded font-medium">
-                                 {partner}
-                               </span>
-                             ))}
-                           </div>
-                         </div>
-                         <p className="text-xs text-gray-400 italic max-w-sm">
-                           💡 {tactics.teamSynergies.tip}
-                         </p>
-                       </div>
-
-                     </motion.div>
-                   )}
-
-                   {navSection === 'skills' && (
-                     <motion.div key="skills" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                        <div className="flex border-b border-[#333] mb-6">
-                           {attackSkills.map((s, idx) => (
-                             <button
-                               key={idx}
-                               onClick={() => setActiveTab(idx)}
-                               className={`px-6 py-3 text-sm font-bold whitespace-nowrap transition-colors border-b-2 ${activeTab === idx ? 'text-[#c9a84c] border-[#c9a84c] bg-[#c9a84c]/5' : 'text-gray-500 border-transparent hover:text-gray-300 hover:border-[#333]'}`}
-                             >
-                               Skill {idx + 1}
-                             </button>
-                           ))}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                  {otherSameSinnerIdentities.map(other => {
+                    const oSlug = other.slug || generateSlug(other.name);
+                    const oOwned = other.rarity === 1 || acquiredIds.has(other.name);
+                    return (
+                      <button
+                        key={other.name}
+                        type="button"
+                        onClick={() => switchIdentity(other)}
+                        className={`card-btn group relative aspect-[5/6] overflow-hidden rounded-xl border-2 text-left transition-all cursor-pointer ${
+                          oOwned
+                            ? 'border-[#c9a84c]/70 hover:border-[#c9a84c]'
+                            : 'border-[#333] opacity-80 hover:opacity-100 hover:border-gray-400'
+                        }`}
+                      >
+                        <img
+                          src={`https://assets.limbusdeck.com/identities/${other.rarity === 1 ? 'full' : 'full-uptied'}/${oSlug}.webp`}
+                          onError={e => {
+                            e.currentTarget.src = `https://assets.limbusdeck.com/identities/full/${oSlug}.webp`;
+                          }}
+                          alt={other.name}
+                          loading="lazy"
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/50" />
+                        <div className="absolute top-2 left-2 right-2 flex justify-between items-center">
+                          <span className="text-yellow-400 text-xs font-black">
+                            {'★'.repeat(other.rarity || 1)}
+                          </span>
+                          {oOwned && (
+                            <span className="rounded bg-[#c9a84c] px-1.5 py-0.5 text-[9px] font-black text-black">
+                              OWNED
+                            </span>
+                          )}
                         </div>
-                        
-                        {attackSkills[activeTab] && renderSkillBlock(attackSkills[activeTab], activeTab)}
-                     </motion.div>
-                   )}
-
-                   {navSection === 'defense' && (
-                     <motion.div key="defense" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                        {defenseSkill ? renderSkillBlock(defenseSkill, 3) : <p className="text-gray-500 text-center py-10">No defense skill data available.</p>}
-                     </motion.div>
-                   )}
-
-                   {navSection === 'passives' && (
-                     <motion.div key="passives" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-4">
-                        {passives.map((p, idx) => (
-                           <div key={idx} className="bg-[#111] border-2 border-[#333] rounded-xl p-5 relative overflow-hidden shadow-md">
-                              <div className="flex justify-between items-start mb-4">
-                                 <div>
-                                   <span className="text-[10px] font-black uppercase tracking-widest text-[#c9a84c]">Passive</span>
-                                   <h4 className="text-lg font-bold text-white leading-tight mt-1">{p.name}</h4>
-                                 </div>
-                              </div>
-                              <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">{Array.isArray(p.effects) ? p.effects.join('\n') : (p.effects || p.description)}</p>
-                           </div>
-                        ))}
-                     </motion.div>
-                   )}
-                </AnimatePresence>
-            </div>
-
-            <button className="absolute top-4 right-4 text-gray-500 hover:text-white bg-black/50 w-8 h-8 flex items-center justify-center rounded-full border border-[#333] transition-colors hover:bg-[#333]" onClick={onClose}>
-                ✕
-            </button>
+                        <div className="absolute bottom-2 left-2 right-2">
+                          <p className="text-xs font-bold text-white leading-snug line-clamp-2">
+                            {other.nameEn || other.name}
+                          </p>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+          </StatusTermsProvider>
         </div>
+
+        {/* Fullscreen Lightbox Overlay */}
+        <AnimatePresence>
+          {lightboxIndex !== null && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[80] bg-black/95 flex flex-col items-center justify-center p-4"
+              onClick={() => setLightboxIndex(null)}
+            >
+              <div
+                className="flex items-center justify-between w-full max-w-5xl mb-3"
+                onClick={e => e.stopPropagation()}
+              >
+                <span className="text-sm font-bold text-white">
+                  {currentId.nameEn || currentId.name} — {lightboxImages[lightboxIndex]?.label}
+                </span>
+                <div className="flex items-center gap-2">
+                  {lightboxImages.length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => setLightboxIndex(i => (i === 0 ? 1 : 0))}
+                        className="btn-inline px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-bold text-white flex items-center gap-1 cursor-pointer"
+                      >
+                        <ChevronLeft size={14} /> Switch Pre / Post-Uptie <ChevronRight size={14} />
+                      </button>
+                    </>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setLightboxIndex(null)}
+                    className="btn-inline px-3 py-1.5 rounded-lg bg-red-500/80 hover:bg-red-500 text-xs font-bold text-white cursor-pointer"
+                  >
+                    ✕ Close
+                  </button>
+                </div>
+              </div>
+              <img
+                src={lightboxImages[lightboxIndex]?.src}
+                alt={currentId.name}
+                className="max-h-[82vh] max-w-[92vw] object-contain rounded-xl shadow-2xl"
+                onClick={e => e.stopPropagation()}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Built-in Markov-Chain Clash Simulator Drawer */}
+        {clashSkill && (
+          <QuickClashDrawer
+            initialSkill={clashSkill}
+            identityName={currentId.nameEn || currentId.name}
+            allIdentities={identitiesData}
+            onClose={() => setClashSkill(null)}
+          />
+        )}
       </motion.div>
     </div>
   );
