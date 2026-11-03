@@ -9,9 +9,39 @@
   - Dedicated **Walpth Charge Grinder Tribute Hub** (`/mirror-grinder`): A hilarious, over-the-top, late-night BTV infomercial celebrating Walpth's [Charge-Grinder](https://github.com/Walpth/Charge-Grinder/) repository.
   - **Spamton / Tenna Style TV Broadcast**: Unskippable retro CRT variety show presentation locking onto the screen, featuring Toby Fox's *Tenna Introduction* theme, 8 sliced equal-proportion animated GIFs from the official Tenna sprite sheet (`tenna_anim1.gif` through `tenna_anim8.gif`), dancing animations, and 10 extended, comfortably-paced comedy scenes.
 - **Repository**: [0-cole/limbus-tracker](https://github.com/0-cole/limbus-tracker)
-- **Current Deployed Release**: `v1.0.106`
+- **Current Deployed Release**: `v1.0.108`
 
 ---
+
+## 2. Recent Updates (v1.0.108 & v1.0.107)
+
+### 2.1 Canto 10 Identities (v1.0.108)
+- **Haute Couture Arc**:
+  - `Haute Couture::Le Noir 3F Public Address Room Hong Lu` (000, Sinner 6, Season 8, Tremor/Charge, 295 Max HP, full Uptie IV skills & passives).
+  - `Haute Couture::Le Rouge King of Needleworks Heathcliff` (000, Sinner 7, Season 8, Bleed/Charge, 260 Max HP, Pick-stitch variants, full Uptie IV skills & passives).
+- **Extracted Directly via REA from LimbusDeck**:
+  - Sourced from updated Turbopack build chunks (`0n7k8ctcu1zi7.js`, `16brweelehofr.js`, `0akfwzoof2v4-.js`).
+  - Total database now tracks **193 Identities**, **116 E.G.O**, and **1,444 game client status effects**.
+  - `recordsIndex.json` expanded to 192 entries.
+  - Sinner capitalization normalized across all entries (`Meursault`, `Faust`).
+
+### 2.2 Walpurgisnacht Approaching Advisory Suite (v1.0.108)
+- **Multi-Channel Notification Architecture**:
+  1. **WalpurgisNotificationModal (`WalpurgisNotificationModal.jsx`)**: Prominent launch advisory highlighting time-gated Dispenser rules, 400-shard reserve advisory, and Kenneth operational memo.
+  2. **Native OS Desktop Notification**: Dispatched via Electron IPC (`show-notification` via `electron/main.cjs` & `electron/preload.cjs`) and HTML5 Notification API (`🌙 Walpurgisnacht is Approaching!`).
+  3. **Dashboard Countdown & Advisory Banner**: Glowing purple/amber banner on `DashboardPage.jsx` with direct jump links to Want List and Schedule roadmap.
+  4. **Want List Dispensation Alerts**: `WantListPage.jsx` signals immediate time-gated notice on Walpurgis-exclusive units.
+  5. **Active Target Extraction Banner**: Updated in `useStore.js` to feature King of Needleworks Heathcliff & 3F Public Address Room Hong Lu with Walpurgis approaching metadata.
+
+### 2.3 LimbusDeck Reverse-Engineered Party Builder Suite (Phase 2 & Phase 1)
+- **Phase 1**: Complete LimbusDeck Character & E.G.O Detail Modals (`IdDetailsModal.jsx`, `EgoDetailsModal.jsx`), Skill UI (pre-rolls, numbered coin chips, 7-color bracket parser), Status popovers, and Advanced Effect Search.
+- **Phase 2**:
+  - `SynergyRadarChart.jsx`: High-fidelity SVG 5-axis radar chart (Performance, Keyword, Resonance, Coverage, Gimmick).
+  - `PassiveFeasibilityMatrix.jsx`: Combat and support passives evaluation against 15% sin share threshold.
+  - `RecommendedPartiesModal.jsx`: Browser for all 76 LimbusDeck meta archetypes with 1-click deployment.
+  - `DeckFinderModal.jsx`: Auto-formation engine prioritizing keywords and owned sinner pool.
+  - `DeckShareModal.jsx`: Bi-directional Base64URL deck string sharing 100% compatible with LimbusDeck URLs.
+  - Tabbed right-hand sidebar in `DeckBuilderPage.jsx` (`5-Axis Radar`, `Passives`, `Network & Sins`).
 
 ## 2. Critical Architecture & Invariants
 
