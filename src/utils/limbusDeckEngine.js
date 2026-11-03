@@ -646,3 +646,402 @@ export function solveClash(sideA, sideB, options = {}) {
   };
 }
 
+// ==========================================
+// Phase 2: Deck Building & Synergy Analysis
+// ==========================================
+
+export const SINS = ['wrath', 'lust', 'sloth', 'gluttony', 'gloom', 'pride', 'envy'];
+export const KEYWORDS = ['burn', 'bleed', 'tremor', 'rupture', 'sinking', 'poise', 'charge'];
+export const ATTACK_TYPES = ['slash', 'pierce', 'blunt'];
+export const DEFENSE_TYPES = ['guard', 'evade', 'counter'];
+
+export function normSin(s) {
+  if (!s) return null;
+  const l = String(s).toLowerCase();
+  return SINS.includes(l) ? l : null;
+}
+
+export function deckSinSupply(members) {
+  const copies = {};
+  const holders = {};
+  for (const sin of SINS) {
+    copies[sin] = 0;
+    holders[sin] = 0;
+  }
+  let total = 0;
+
+  for (const member of members) {
+    const id = member?.identity || member;
+    if (!id) continue;
+    const skills = id.ldSkills || id.skills || [];
+    const skillCounts = [3, 2, 1];
+    const memberSins = new Set();
+
+    skills.forEach((sk, idx) => {
+      const s = normSin(sk.sin || sk.affinity);
+      if (s) {
+        const count = sk.targetCount > 0 ? sk.targetCount : (skillCounts[idx] || 1);
+        copies[s] += count;
+        total += count;
+        memberSins.add(s);
+      }
+    });
+
+    const defSkills = id.ldDefenseSkills || id.defenseSkills || [];
+    defSkills.forEach(ds => {
+      const s = normSin(ds.sin || ds.affinity);
+      if (s) {
+        copies[s] += 1;
+        total += 1;
+        memberSins.add(s);
+      }
+    });
+
+    for (const s of memberSins) {
+      holders[s] = (holders[s] || 0) + 1;
+    }
+  }
+
+  return { copies, holders, total };
+}
+
+export function checkPartyPassives(members) {
+  const supply = deckSinSupply(members);
+  const combatCounts = { impossible: 0, hard: 0, possible: 0, total: 0 };
+  const supportCounts = { impossible: 0, hard: 0, possible: 0, total: 0 };
+
+  const rows = members.map((member, sIdx) => {
+    const id = member?.identity || member;
+    if (!id) return null;
+
+    const passives = id.ldPassives || id.passives || [];
+    const combat = [];
+    const support = [];
+
+    passives.forEach((p, pIdx) => {
+      const pSin = normSin(p.requiredSin || p.sin);
+      const req = p.requiredCount || p.requiredResonance || 0;
+      const cond = (p.conditionType || 'held').toLowerCase();
+      const pType = (p.type || (pIdx === 0 ? 'combat' : 'support')).toLowerCase();
+
+      let status = 'possible';
+      let reason = 'ok';
+      let copies = 0;
+      let share = 0;
+
+      if (pSin && req > 0) {
+        copies = supply.copies[pSin] || 0;
+        share = supply.total > 0 ? copies / supply.total : 0;
+
+        if (copies === 0) {
+          status = 'impossible';
+          reason = 'none';
+        } else if (cond === 'resonance' && copies < req) {
+          status = 'impossible';
+          reason = 'short';
+        } else if (share < 0.15) {
+          status = 'hard';
+          reason = 'low-share';
+        }
+      }
+
+      const item = {
+        name: p.name || `Passive ${pIdx + 1}`,
+        type: pType,
+        sin: pSin,
+        required: req,
+        conditionType: cond,
+        copies,
+        share,
+        status,
+        reason,
+        description: p.descriptionEn || p.description || p.effects
+      };
+
+      if (pType === 'combat') {
+        combat.push(item);
+        combatCounts[status]++;
+        combatCounts.total++;
+      } else {
+        support.push(item);
+        supportCounts[status]++;
+        supportCounts.total++;
+      }
+    });
+
+    const allStatuses = [...combat, ...support].map(x => x.status);
+    const overallStatus = allStatuses.includes('impossible') ? 'impossible' : (allStatuses.includes('hard') ? 'hard' : 'possible');
+
+    return {
+      sinnerId: id.sinnerId || (sIdx + 1),
+      identity: id,
+      combat,
+      support,
+      status: overallStatus
+    };
+  }).filter(Boolean);
+
+  return { supply, rows, combat: combatCounts, support: supportCounts };
+}
+
+export function analyzeParty(members, targetKeywords = []) {
+  const normKeywords = (targetKeywords || []).map(k => String(k).toLowerCase());
+  const supply = deckSinSupply(members);
+  
+  // 1. Performance Score (rarity, base power, coin power, coins, HP, speed range)
+  let perfTotal = 0;
+  for (const m of members) {
+    const id = m?.identity || m;
+    let score = id.rarity === 3 ? 45 : (id.rarity === 2 ? 25 : 10);
+    const skills = id.ldSkills || id.skills || [];
+    let skillPowerSum = 0;
+    let skillWeightSum = 0;
+    skills.forEach((sk, idx) => {
+      const weight = [3, 2, 1][idx] || 1;
+      const coins = sk.coins || sk.coinCount || 1;
+      const coinPower = sk.coinPower || 0;
+      const basePower = sk.basePower || 5;
+      const maxP = basePower + Math.max(0, coinPower * coins);
+      skillPowerSum += maxP * weight;
+      skillWeightSum += weight;
+    });
+    if (skillWeightSum > 0) {
+      score += Math.min(40, (skillPowerSum / skillWeightSum) * 2.2);
+    }
+    const speedSpan = (id.maxSpeed || 6) - (id.minSpeed || 3);
+    score += Math.min(6, speedSpan * 2);
+    score += Math.min(6, (id.hpBase || 150) / 25);
+    perfTotal += Math.min(100, Math.max(0, score));
+  }
+  const performance = members.length > 0 ? Math.round(perfTotal / members.length) : 0;
+
+  // 2. Keyword Score (target keyword match count, inflict, boost, consume)
+  let kwMatches = 0;
+  let kwCount = 0;
+  for (const m of members) {
+    const id = m?.identity || m;
+    const skills = id.ldSkills || id.skills || [];
+    let hasTargetKw = false;
+    for (const sk of skills) {
+      const kws = (sk.keywords || []).map(k => (typeof k === 'object' ? k?.keyword : k) || '').map(s => String(s).toLowerCase());
+      if (kws.some(k => normKeywords.includes(k))) {
+        hasTargetKw = true;
+        kwCount++;
+      }
+    }
+    if (hasTargetKw) kwMatches++;
+  }
+  const keyword = members.length > 0 
+    ? Math.min(100, Math.round((kwMatches / members.length) * 60 + Math.min(40, kwCount * 3.5)))
+    : 0;
+
+  // 3. Resonance Score (3+ generators of same sin, max single sin generation)
+  let resScore = 0;
+  for (const sin of SINS) {
+    const count = supply.copies[sin] || 0;
+    if (count >= 3) resScore += 15 + (count - 3) * 6;
+  }
+  const maxCopies = Math.max(0, ...Object.values(supply.copies));
+  if (maxCopies >= 6) resScore += 20;
+  const resonance = Math.min(100, Math.round(resScore));
+
+  // 4. Coverage Score (balance of Slash, Pierce, Blunt)
+  const atkCoverage = { slash: 0, pierce: 0, blunt: 0 };
+  for (const m of members) {
+    const id = m?.identity || m;
+    const skills = id.ldSkills || id.skills || [];
+    skills.forEach(sk => {
+      const t = String(sk.type || sk.attackType || '').toLowerCase();
+      if (atkCoverage[t] !== undefined) atkCoverage[t]++;
+    });
+  }
+  const totalAtk = atkCoverage.slash + atkCoverage.pierce + atkCoverage.blunt;
+  let coverage = 20;
+  if (totalAtk > 0) {
+    const shares = [atkCoverage.slash / totalAtk, atkCoverage.pierce / totalAtk, atkCoverage.blunt / totalAtk];
+    const nonZero = shares.filter(s => s > 0).length;
+    if (nonZero === 3) {
+      const diffFromEqual = shares.reduce((acc, s) => acc + Math.abs(s - (1/3)), 0);
+      coverage = Math.max(0, Math.round(100 - (diffFromEqual * 100)));
+    } else if (nonZero === 2) {
+      coverage = 50;
+    }
+  }
+
+  // 5. Gimmick / Faction Score (shared traits/factions like Liu, W Corp, Blade Lineage)
+  const factionCounts = new Map();
+  for (const m of members) {
+    const id = m?.identity || m;
+    const traits = id.traits || [];
+    for (const tr of traits) {
+      if (['sinner', 'syndicate', 'fixer'].includes(tr)) continue;
+      factionCounts.set(tr, (factionCounts.get(tr) || 0) + 1);
+    }
+  }
+  let gimmickScore = 0;
+  const detectedFactions = [];
+  for (const [faction, count] of factionCounts) {
+    if (count >= 2) {
+      detectedFactions.push({ faction, count });
+      if (count === 2) gimmickScore += 15;
+      else if (count === 3) gimmickScore += 35;
+      else if (count === 4) gimmickScore += 60;
+      else gimmickScore += 60 + (count - 4) * 10;
+    }
+  }
+  const gimmick = Math.min(100, gimmickScore);
+
+  // Total weighted score
+  const isKeywordFocused = normKeywords.length > 0;
+  const weights = isKeywordFocused
+    ? { performance: 0.50, keyword: 0.28, gimmick: 0.08, resonance: 0.08, coverage: 0.06 }
+    : { performance: 0.30, keyword: 0.25, gimmick: 0.20, resonance: 0.15, coverage: 0.10 };
+
+  const totalScore = Math.round(
+    performance * weights.performance +
+    keyword * weights.keyword +
+    gimmick * weights.gimmick +
+    resonance * weights.resonance +
+    coverage * weights.coverage
+  );
+
+  return {
+    scores: { performance, keyword, resonance, coverage, gimmick },
+    totalScore,
+    detectedFactions,
+    sinDistribution: supply.copies,
+    attackTypeCoverage: atkCoverage
+  };
+}
+
+export function encodePartyState({ partySize = 7, primaryKeywords = [], slots = [] }) {
+  const normKeywords = (primaryKeywords || []).map(k => String(k).toLowerCase());
+  const identityIds = Array(12).fill(0);
+
+  // slots can be { sinnerId, identity } or direct array
+  for (const slot of slots) {
+    const sId = slot?.sinnerId;
+    const id = slot?.identity || (slot?.name ? slot : null);
+    if (sId >= 1 && sId <= 12 && id?.ldId) {
+      identityIds[sId - 1] = id.ldId;
+    }
+  }
+
+  const raw = `${partySize}|${normKeywords.join(',')}|${identityIds.join(',')}`;
+  if (typeof btoa !== 'undefined') {
+    return btoa(raw).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+  }
+  return Buffer.from(raw).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
+export function decodePartyState(code) {
+  if (!code || typeof code !== 'string') return null;
+  try {
+    const cleaned = code.trim();
+    const padded = cleaned + '='.repeat((4 - (cleaned.length % 4)) % 4);
+    let decoded = '';
+    if (typeof atob !== 'undefined') {
+      decoded = atob(padded.replace(/-/g, '+').replace(/_/g, '/'));
+    } else {
+      decoded = Buffer.from(padded.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf8');
+    }
+    const parts = decoded.split('|');
+    if (parts.length < 3) return null;
+
+    const partySize = parseInt(parts[0], 10) || 7;
+    const primaryKeywords = parts[1] ? parts[1].split(',').filter(Boolean) : [];
+    const identityIds = parts[2].split(',').map(n => parseInt(n, 10) || 0);
+
+    return { partySize, primaryKeywords, identityIds };
+  } catch (err) {
+    return null;
+  }
+}
+
+export function findOptimalDecks({
+  identities = [],
+  targetKeyword = 'burn',
+  ownedIds = null,
+  fixedSinners = [],
+  excludedSinners = [],
+  partySize = 7
+}) {
+  const normKw = String(targetKeyword).toLowerCase();
+  const validSinners = SINNER_META.filter(s => !excludedSinners.includes(s.name) && !excludedSinners.includes(s.id));
+
+  // Find best candidate ID for each Sinner matching targetKeyword
+  const sinnerCandidates = [];
+  for (const sinner of validSinners) {
+    const sId = sinner.id;
+    let pool = identities.filter(id => {
+      const matchSinner = (id.sinnerId === sId) || (normalizeText(id.sinner) === normalizeText(sinner.name));
+      if (!matchSinner) return false;
+      if (ownedIds && !ownedIds.has(id.name)) return false;
+      return true;
+    });
+
+    if (pool.length === 0) continue;
+
+    // Rank candidates by keyword relevance & rarity & meta tier
+    pool.sort((a, b) => {
+      const aSkills = a.ldSkills || a.skills || [];
+      const bSkills = b.ldSkills || b.skills || [];
+      const aMatches = aSkills.filter(sk => (sk.keywords || []).some(k => String(typeof k === 'object' ? k?.keyword : k).toLowerCase() === normKw)).length;
+      const bMatches = bSkills.filter(sk => (sk.keywords || []).some(k => String(typeof k === 'object' ? k?.keyword : k).toLowerCase() === normKw)).length;
+      if (aMatches !== bMatches) return bMatches - aMatches;
+      if (a.rarity !== b.rarity) return b.rarity - a.rarity;
+      return 0;
+    });
+
+    sinnerCandidates.push({
+      sinner,
+      identity: pool[0],
+      alternatives: pool.slice(1, 3)
+    });
+  }
+
+  // Sort candidate Sinners prioritizing fixedSinners, then keyword matches, then tier
+  sinnerCandidates.sort((a, b) => {
+    const aFixed = fixedSinners.includes(a.sinner.name) || fixedSinners.includes(a.sinner.id);
+    const bFixed = fixedSinners.includes(b.sinner.name) || fixedSinners.includes(b.sinner.id);
+    if (aFixed && !bFixed) return -1;
+    if (!aFixed && bFixed) return 1;
+
+    const aSkills = a.identity.ldSkills || a.identity.skills || [];
+    const bSkills = b.identity.ldSkills || b.identity.skills || [];
+    const aMatches = aSkills.filter(sk => (sk.keywords || []).some(k => String(typeof k === 'object' ? k?.keyword : k).toLowerCase() === normKw)).length;
+    const bMatches = bSkills.filter(sk => (sk.keywords || []).some(k => String(typeof k === 'object' ? k?.keyword : k).toLowerCase() === normKw)).length;
+    if (aMatches !== bMatches) return bMatches - aMatches;
+    return b.identity.rarity - a.identity.rarity;
+  });
+
+  const selected = sinnerCandidates.slice(0, partySize);
+  const selectedIdentities = selected.map(s => s.identity);
+  const analysis = analyzeParty(selectedIdentities, [normKw]);
+  const passives = checkPartyPassives(selectedIdentities);
+
+  // Check overlap with 76 Recommended Meta Parties
+  let bestMetaMatch = null;
+  let maxShared = 0;
+  for (const party of recommendedParties) {
+    if (!party.targetKeywords?.map(k => k.toLowerCase()).includes(normKw)) continue;
+    const pLdIds = new Set(party.members.map(m => m.identityId));
+    let shared = 0;
+    for (const id of selectedIdentities) {
+      if (pLdIds.has(id.ldId)) shared++;
+    }
+    if (shared > maxShared) {
+      maxShared = shared;
+      bestMetaMatch = { party, shared, total: party.members.length };
+    }
+  }
+
+  return {
+    members: selected,
+    analysis,
+    passives,
+    metaMatch: bestMetaMatch
+  };
+}
+
+

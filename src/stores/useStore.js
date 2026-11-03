@@ -346,15 +346,17 @@ export const useStore = create((set, get) => ({
         }
 
         const DEFAULT_S8_BANNER = {
-          text: "Haute Couture::Le Noir Brand Manager Don Quixote & Haute Couture::Alteration Shop Rodion",
-          title: "Haute Couture::Le Noir Brand Manager Don Quixote & Haute Couture::Alteration Shop Rodion",
-          imageUrl: "https://limbuscompany.wiki.gg/images/Target_Extraction_-_Haute_Couture_Le_Noir_Brand_Manager_Don_Quixote.png",
-          dateRange: "2026.10.1 12:00 - 2026.10.15 10:00",
-          rawString: "2026.10.1 12:00 - 2026.10.15 10:00 Haute Couture::Le Noir Brand Manager Don Quixote Haute Couture::Alteration Shop Rodion"
+          text: "Haute Couture::Le Rouge King of Needleworks Heathcliff & Haute Couture::Le Noir 3F Public Address Room Hong Lu",
+          title: "Target Extraction: Haute Couture King of Needleworks Heathcliff & 3F Public Address Room Hong Lu",
+          imageUrl: "https://limbuscompany.wiki.gg/images/Target_Extraction_-_Haute_Couture_Le_Rouge_King_of_Needleworks_Heathcliff.png",
+          dateRange: "2026.10.29 12:00 - 2026.11.12 10:00",
+          rawString: "2026.10.29 12:00 - 2026.11.12 10:00 Haute Couture King of Needleworks Heathcliff Public Address Room Hong Lu",
+          walpurgisApproaching: true,
+          walpurgisNotice: "WALPURGISNACHT IS APPROACHING — The 7th Walpurgis Night limited crossover extraction opens soon! Prepare your Lunacy & Egoshards."
         };
 
         let resolvedBanner = dynamicData.activeBanner;
-        if (!resolvedBanner || !resolvedBanner.text || resolvedBanner.text.includes('Season 7') || resolvedBanner.text.includes('Kumo no ito') || resolvedBanner.text === 'Season 8: PUNCTUM' || resolvedBanner.text.includes('Ishmael') && resolvedBanner.text.includes('Ryōshū')) {
+        if (!resolvedBanner || !resolvedBanner.text || resolvedBanner.text.includes('Season 7') || resolvedBanner.text.includes('Kumo no ito') || resolvedBanner.text === 'Season 8: PUNCTUM' || (resolvedBanner.text.includes('Ishmael') && resolvedBanner.text.includes('Ryōshū')) || (resolvedBanner.text.includes('Don Quixote') && resolvedBanner.text.includes('Rodion'))) {
           resolvedBanner = DEFAULT_S8_BANNER;
         }
 
@@ -389,15 +391,17 @@ export const useStore = create((set, get) => ({
         });
       } else {
         const DEFAULT_S8_BANNER = {
-          text: "Haute Couture::Le Noir Brand Manager Don Quixote & Haute Couture::Alteration Shop Rodion",
-          title: "Haute Couture::Le Noir Brand Manager Don Quixote & Haute Couture::Alteration Shop Rodion",
-          imageUrl: "https://limbuscompany.wiki.gg/images/Target_Extraction_-_Haute_Couture_Le_Noir_Brand_Manager_Don_Quixote.png",
-          dateRange: "2026.10.1 12:00 - 2026.10.15 10:00",
-          rawString: "2026.10.1 12:00 - 2026.10.15 10:00 Haute Couture::Le Noir Brand Manager Don Quixote Haute Couture::Alteration Shop Rodion"
+          text: "Haute Couture::Le Rouge King of Needleworks Heathcliff & Haute Couture::Le Noir 3F Public Address Room Hong Lu",
+          title: "Target Extraction: Haute Couture King of Needleworks Heathcliff & 3F Public Address Room Hong Lu",
+          imageUrl: "https://limbuscompany.wiki.gg/images/Target_Extraction_-_Haute_Couture_Le_Rouge_King_of_Needleworks_Heathcliff.png",
+          dateRange: "2026.10.29 12:00 - 2026.11.12 10:00",
+          rawString: "2026.10.29 12:00 - 2026.11.12 10:00 Haute Couture King of Needleworks Heathcliff Public Address Room Hong Lu",
+          walpurgisApproaching: true,
+          walpurgisNotice: "WALPURGISNACHT IS APPROACHING — The 7th Walpurgis Night limited crossover extraction opens soon! Prepare your Lunacy & Egoshards."
         };
 
         let resolvedBanner = dynamicData.activeBanner;
-        if (!resolvedBanner || !resolvedBanner.text || resolvedBanner.text.includes('Season 7') || resolvedBanner.text.includes('Kumo no ito') || resolvedBanner.text === 'Season 8: PUNCTUM' || resolvedBanner.text.includes('Ishmael') && resolvedBanner.text.includes('Ryōshū')) {
+        if (!resolvedBanner || !resolvedBanner.text || resolvedBanner.text.includes('Season 7') || resolvedBanner.text.includes('Kumo no ito') || resolvedBanner.text === 'Season 8: PUNCTUM' || (resolvedBanner.text.includes('Ishmael') && resolvedBanner.text.includes('Ryōshū')) || (resolvedBanner.text.includes('Don Quixote') && resolvedBanner.text.includes('Rodion'))) {
           resolvedBanner = DEFAULT_S8_BANNER;
         }
 
@@ -1375,6 +1379,22 @@ export const useStore = create((set, get) => ({
     const { activeDeck, savedDecks, saveStore } = get();
     const updatedDeck = { ...activeDeck, slots: {}, updatedAt: Date.now() };
     const updatedDecks = (savedDecks || []).map(d => d.id === updatedDeck.id ? updatedDeck : d);
+    set({ activeDeck: updatedDeck, savedDecks: updatedDecks });
+    saveStore();
+  },
+
+  applySquadToDeck: (slotsMap, optionalName) => {
+    const { activeDeck, savedDecks, saveStore } = get();
+    const updatedDeck = {
+      ...activeDeck,
+      slots: { ...slotsMap },
+      ...(optionalName ? { name: optionalName } : {}),
+      updatedAt: Date.now()
+    };
+    const updatedDecks = (savedDecks || []).map(d => d.id === updatedDeck.id ? updatedDeck : d);
+    if (!updatedDecks.some(d => d.id === updatedDeck.id)) {
+      updatedDecks.push(updatedDeck);
+    }
     set({ activeDeck: updatedDeck, savedDecks: updatedDecks });
     saveStore();
   },

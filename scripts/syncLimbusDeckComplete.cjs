@@ -53,16 +53,34 @@ const KW_CAP = {
   charge: 'Charge'
 };
 
-// 1. Extract LimbusDeck IDENTITIES (190) & EGOS (116)
-const idChunk = fs.readFileSync(path.join(EXTRACTED_DIR, '3o-8c1-ji611u.js'), 'utf8');
-const idMatch = idChunk.match(/let t=(\[\{.*?\}\]);for\(let e of t\)/s);
-if (!idMatch) throw new Error('Failed to match IDENTITIES in 3o-8c1-ji611u.js');
-const ldIdentities = eval(idMatch[1]);
+// 1. Extract LimbusDeck IDENTITIES (192) & EGOS (116)
+let ldIdentities, ldEgos;
+const BRAIN_CHUNKS = 'C:/Users/cdbla/.gemini/antigravity/brain/9beca90b-f2da-4618-bde8-a9209f8a8a44/scratch/latest_chunks';
+const newIdChunkPath = path.join(BRAIN_CHUNKS, '0n7k8ctcu1zi7.js');
+if (fs.existsSync(newIdChunkPath)) {
+  const idChunk = fs.readFileSync(newIdChunkPath, 'utf8');
+  const start = idChunk.indexOf('let n=[');
+  const end = idChunk.indexOf(';e.s(["IDENTITIES",0,n', start);
+  ldIdentities = eval(idChunk.slice(start + 6, end));
+} else {
+  const idChunk = fs.readFileSync(path.join(EXTRACTED_DIR, '3o-8c1-ji611u.js'), 'utf8');
+  const idMatch = idChunk.match(/let t=(\[\{.*?\}\]);for\(let e of t\)/s);
+  if (!idMatch) throw new Error('Failed to match IDENTITIES in 3o-8c1-ji611u.js');
+  ldIdentities = eval(idMatch[1]);
+}
 
-const egoChunk = fs.readFileSync(path.join(EXTRACTED_DIR, '0fsrk512cua9c.js'), 'utf8');
-const egoMatch = egoChunk.match(/let t=(\[\{.*?\}\]);for\(let n of t\)/s);
-if (!egoMatch) throw new Error('Failed to match EGOS in 0fsrk512cua9c.js');
-const ldEgos = eval(egoMatch[1]);
+const newEgoChunkPath = path.join(BRAIN_CHUNKS, '0akfwzoof2v4-.js');
+if (fs.existsSync(newEgoChunkPath)) {
+  const egoChunk = fs.readFileSync(newEgoChunkPath, 'utf8');
+  const start = egoChunk.indexOf('let n=[');
+  const end = egoChunk.indexOf(';e.s(["EGOS",0,n', start);
+  ldEgos = eval(egoChunk.slice(start + 6, end));
+} else {
+  const egoChunk = fs.readFileSync(path.join(EXTRACTED_DIR, '0fsrk512cua9c.js'), 'utf8');
+  const egoMatch = egoChunk.match(/let t=(\[\{.*?\}\]);for\(let n of t\)/s);
+  if (!egoMatch) throw new Error('Failed to match EGOS in 0fsrk512cua9c.js');
+  ldEgos = eval(egoMatch[1]);
+}
 
 // Extract JA names from 11k7o81q3jnw-.js (mod 371351)
 const c11 = fs.readFileSync(path.join(EXTRACTED_DIR, '11k7o81q3jnw-.js'), 'utf8');
@@ -79,10 +97,18 @@ for (const ego of ldEgos) {
   if (jaEgoNames[ego.id]) ego.nameJa = jaEgoNames[ego.id];
 }
 
-// 2. Extract RECORDS_INDEX from 3py36gywokrwg.js
-const recChunk = fs.readFileSync(path.join(EXTRACTED_DIR, '3py36gywokrwg.js'), 'utf8');
-const recMatch = recChunk.match(/"RECORDS_INDEX",0,(\[\{.*?\}\])\]/s);
-const recordsIndex = recMatch ? eval(recMatch[1]) : [];
+// 2. Extract RECORDS_INDEX from 16brweelehofr.js or 3py36gywokrwg.js
+const newRecChunkPath = path.join(BRAIN_CHUNKS, '16brweelehofr.js');
+let recordsIndex = [];
+if (fs.existsSync(newRecChunkPath)) {
+  const recChunk = fs.readFileSync(newRecChunkPath, 'utf8');
+  const recMatch = recChunk.match(/"RECORDS_INDEX",0,(\[\{.*?\}\])\]/s);
+  if (recMatch) recordsIndex = eval(recMatch[1]);
+} else {
+  const recChunk = fs.readFileSync(path.join(EXTRACTED_DIR, '3py36gywokrwg.js'), 'utf8');
+  const recMatch = recChunk.match(/"RECORDS_INDEX",0,(\[\{.*?\}\])\]/s);
+  if (recMatch) recordsIndex = eval(recMatch[1]);
+}
 fs.writeFileSync(path.join(DATA_DIR, 'recordsIndex.json'), JSON.stringify(recordsIndex, null, 2));
 console.log(`Saved recordsIndex.json (${recordsIndex.length} entries)`);
 
@@ -266,7 +292,7 @@ const localIds = JSON.parse(fs.readFileSync(localIdsPath, 'utf8'));
 const matchedSlugs = new Set();
 
 function convertLdIdentityToTrackerFormat(ld, existing = {}) {
-  const sinnerName = existing.sinner || SINNER_NAMES[ld.sinnerId] || 'Yi Sang';
+  const sinnerName = SINNER_NAMES[ld.sinnerId] || existing.sinner || 'Yi Sang';
   const hpMax = Math.floor(ld.hpBase + ld.hpGrowth * (60 - 1));
   const textCorpus = [
     ...(ld.skills || []).flatMap(s => [

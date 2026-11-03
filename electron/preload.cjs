@@ -29,4 +29,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onMirrorGrinderLog: (cb) => ipcRenderer.on('mirror-grinder-log', (_, log) => cb(log)),
   removeMirrorGrinderLog: () => ipcRenderer.removeAllListeners('mirror-grinder-log'),
   testDiscordWebhook: (data) => ipcRenderer.invoke('mirror-grinder-test-webhook', data),
+  showNotification: (options) => ipcRenderer.invoke('show-notification', options),
 });

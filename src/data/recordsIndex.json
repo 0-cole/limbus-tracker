@@ -987,7 +987,7 @@
     "slug": "shi-assoc-south-section-5-director-don-quixote",
     "nameKo": "남부 시 협회 5과 부장 돈키호테",
     "nameEn": "Shi Assoc. South Section 5 Director Don Quixote",
-    "nameJa": "南部シ協会5課 ドンキホーテ",
+    "nameJa": "南部シ協会5課 部長 ドンキホーテ",
     "rarity": 2,
     "releaseDate": "2023-02-27",
     "primarySin": "wrath",
@@ -1344,7 +1344,7 @@
     "slug": "the-index-proxy-effloresced-ego-procuration-don-quixote",
     "nameKo": "검지 대행자 - 개화 E.G.O::대행 돈키호테",
     "nameEn": "The Index Proxy - Effloresced E.G.O::Procuration Don Quixote",
-    "nameJa": "人差し指代行者 - 開花E.G.O::代行 ドンキホーテ",
+    "nameJa": "人差し指代行者 -開花E.G.O::代行 ドンキホーテ",
     "rarity": 3,
     "releaseDate": "2026-01-08",
     "primarySin": "lust",
@@ -2793,6 +2793,35 @@
     "res": "NIF"
   },
   {
+    "id": 191,
+    "sinnerId": 6,
+    "slug": "haute-couture-le-noir-3f-public-address-room-hong-lu",
+    "nameKo": "오트쿠튀르::르누아르 3F 방송실 홍루",
+    "nameEn": "Haute Couture::Le Noir 3F Public Address Room Hong Lu",
+    "nameJa": "オートクチュール::ル・ノワール 3F 放送室 ホンル",
+    "rarity": 3,
+    "releaseDate": "2026-10-29",
+    "primarySin": "gloom",
+    "keywords": [
+      "tremor",
+      "charge"
+    ],
+    "hp": 316,
+    "minSpeed": 4,
+    "maxSpeed": 6,
+    "defenseLevel": 4,
+    "coins": 7,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "끔찍한 반복 재생",
+      "Horribly Infinite Replay"
+    ],
+    "stagger": [
+      45
+    ],
+    "res": "NFI"
+  },
+  {
     "id": 85,
     "sinnerId": 7,
     "slug": "lcb-sinner-heathcliff",
@@ -3266,6 +3295,36 @@
       20
     ],
     "res": "INF"
+  },
+  {
+    "id": 192,
+    "sinnerId": 7,
+    "slug": "haute-couture-le-rouge-king-of-needleworks-heathcliff",
+    "nameKo": "오트쿠튀르::르루주 바느질의 왕 히스클리프",
+    "nameEn": "Haute Couture::Le Rouge King of Needleworks Heathcliff",
+    "nameJa": "オートクチュール::ル・ルージュ 裁縫の王 ヒースクリフ",
+    "rarity": 3,
+    "releaseDate": "2026-10-29",
+    "primarySin": "envy",
+    "keywords": [
+      "bleed",
+      "charge"
+    ],
+    "hp": 280,
+    "minSpeed": 3,
+    "maxSpeed": 7,
+    "defenseLevel": 0,
+    "coins": 10,
+    "maxPower": 17,
+    "maxPowerSkill": [
+      "피크스티치 일부러 눈에 띄게 박았냐고?! 그렇게 쳐박아주마!",
+      "Pick stitch too obvious, you say?! I'll pick-stitch your bum!"
+    ],
+    "stagger": [
+      50,
+      30
+    ],
+    "res": "FIN"
   },
   {
     "id": 99,

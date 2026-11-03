@@ -34,6 +34,12 @@ import {
   detectSynergyPairs
 } from '../utils/identityTactics.js';
 import IdDetailsModal from '../components/IdDetailsModal.jsx';
+import SynergyRadarChart from '../components/limbusdeck/SynergyRadarChart.jsx';
+import PassiveFeasibilityMatrix from '../components/limbusdeck/PassiveFeasibilityMatrix.jsx';
+import RecommendedPartiesModal from '../components/limbusdeck/RecommendedPartiesModal.jsx';
+import DeckFinderModal from '../components/limbusdeck/DeckFinderModal.jsx';
+import DeckShareModal from '../components/limbusdeck/DeckShareModal.jsx';
+import { analyzeParty, checkPartyPassives } from '../utils/limbusDeckEngine.js';
 
 // Canonical LimbusDeck Keyword Styling Colors
 const LIMBUSDECK_KEYWORD_STYLES = {
@@ -56,6 +62,7 @@ export default function DeckBuilderPage() {
     setDeckSlot,
     clearDeckSlot,
     clearAllDeckSlots,
+    applySquadToDeck,
     setDeckName,
     createDeckPreset,
     loadDeckPreset,
@@ -71,6 +78,12 @@ export default function DeckBuilderPage() {
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState('');
   const [shareToast, setShareToast] = useState(false);
+
+  // LimbusDeck Modals & Analysis Tabs State
+  const [showRecommendedModal, setShowRecommendedModal] = useState(false);
+  const [showFinderModal, setShowFinderModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [analysisTab, setAnalysisTab] = useState('radar'); // 'radar' | 'passives' | 'constellation'
 
   // Selector Modal Filters
   const [pickerSearch, setPickerSearch] = useState('');
@@ -101,10 +114,66 @@ export default function DeckBuilderPage() {
     return Object.values(slottedIdentitiesMap);
   }, [slottedIdentitiesMap]);
 
-  // Comprehensive Team Synergy Analysis
+  // Comprehensive Team Synergy Analysis (Legacy Tactics)
   const synergyData = useMemo(() => {
     return analyzeTeamSynergy(allSlottedList);
   }, [allSlottedList]);
+
+  // LimbusDeck 5-Axis Synergy Analysis & Passive Feasibility
+  const limbusDeckAnalysis = useMemo(() => {
+    return analyzeParty(allSlottedList, selectedKeyword ? [selectedKeyword] : []);
+  }, [allSlottedList, selectedKeyword]);
+
+  const limbusDeckPassives = useMemo(() => {
+    return checkPartyPassives(allSlottedList);
+  }, [allSlottedList]);
+
+  // Slotted members formatted for DeckShareModal
+  const activeSquadSlots = useMemo(() => {
+    return CANONICAL_SINNER_ORDER.map((sKey, sIdx) => {
+      const id = slottedIdentitiesMap[sKey];
+      return {
+        sinnerId: sIdx + 1,
+        identity: id || null
+      };
+    });
+  }, [slottedIdentitiesMap]);
+
+  // Handlers for applying squad formations
+  const handleApplyParty = (party, identitiesList) => {
+    const slotsMap = {};
+    for (const id of identitiesList || []) {
+      const sKey = normalizeSinnerId(id.sinner);
+      if (sKey) slotsMap[sKey] = id.name;
+    }
+    applySquadToDeck(slotsMap, party.nameEn || party.name || 'Meta Squad');
+    if (party.targetKeywords?.[0]) {
+      const capKw = party.targetKeywords[0].charAt(0).toUpperCase() + party.targetKeywords[0].slice(1).toLowerCase();
+      setSelectedKeyword(capKw);
+    }
+  };
+
+  const handleApplyFinderSquad = (identitiesList) => {
+    const slotsMap = {};
+    for (const id of identitiesList || []) {
+      const sKey = normalizeSinnerId(id.sinner);
+      if (sKey) slotsMap[sKey] = id.name;
+    }
+    applySquadToDeck(slotsMap, `Optimal ${selectedKeyword || 'Meta'} Squad`);
+  };
+
+  const handleApplyImportedSquad = ({ squad, primaryKeywords: impKeywords }) => {
+    const slotsMap = {};
+    for (const item of squad || []) {
+      const sKey = normalizeSinnerId(item.identity?.sinner || item.sinner?.name);
+      if (sKey && item.identity?.name) slotsMap[sKey] = item.identity.name;
+    }
+    applySquadToDeck(slotsMap, 'Imported LimbusDeck Squad');
+    if (impKeywords?.[0]) {
+      const capKw = impKeywords[0].charAt(0).toUpperCase() + impKeywords[0].slice(1).toLowerCase();
+      setSelectedKeyword(capKw);
+    }
+  };
 
   // Handlers for Preset Management
   const handleStartRename = () => {
@@ -339,23 +408,53 @@ export default function DeckBuilderPage() {
               </div>
             </div>
 
-            {/* Action Buttons: My Pool Only, Clear All, Share (NO Auto-Fill!) */}
-            <div className="flex gap-2 items-center">
+            {/* Action Buttons: Meta Builds, Deck Finder, Share & Import, My Pool, Clear */}
+            <div className="flex gap-2 items-center flex-wrap">
+              {/* 76 Recommended Meta Parties Button */}
+              <button
+                onClick={() => setShowRecommendedModal(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#c9a84c]/15 hover:bg-[#c9a84c]/25 border border-[#c9a84c]/40 text-[#c9a84c] text-xs font-black transition-all cursor-pointer shadow-xs"
+                title="Browse 76 Recommended Meta Builds"
+              >
+                <Sparkles size={13} />
+                <span>76 Meta Builds</span>
+              </button>
+
+              {/* Deck Finder Button */}
+              <button
+                onClick={() => setShowFinderModal(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/10 hover:bg-primary/20 border border-primary/30 text-primary text-xs font-bold transition-all cursor-pointer shadow-xs"
+                title="Synthesize optimal formation with Deck Finder"
+              >
+                <Zap size={13} />
+                <span>Deck Finder</span>
+              </button>
+
+              {/* Share & Import Button */}
+              <button
+                onClick={() => setShowShareModal(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border hover:bg-muted text-xs font-bold transition-all cursor-pointer"
+                title="Export or Import Deck Code / LimbusDeck URL"
+              >
+                <Link2 size={13} />
+                <span>Share & Import</span>
+              </button>
+
               {/* My Pool Only Toggle */}
               <button
                 onClick={() => setOnlyOwned(!onlyOwned)}
-                className={`flex-1 min-w-0 px-2 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all truncate cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                   onlyOwned
                     ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold'
                     : 'bg-muted/50 text-muted-foreground hover:bg-muted'
                 }`}
               >
-                My Pool Only {onlyOwned && `(${acquiredIds.size})`}
+                My Pool {onlyOwned && `(${acquiredIds.size})`}
               </button>
 
               {/* Clear All Button */}
               {showClearConfirm ? (
-                <div className="flex-1 flex items-center gap-1 bg-destructive/10 border border-destructive/40 px-2 py-1 rounded-lg">
+                <div className="flex items-center gap-1 bg-destructive/10 border border-destructive/40 px-2 py-1 rounded-lg">
                   <span className="text-[11px] text-destructive font-medium mr-1">Clear all?</span>
                   <button
                     onClick={() => {
@@ -377,21 +476,11 @@ export default function DeckBuilderPage() {
                 <button
                   onClick={() => setShowClearConfirm(true)}
                   disabled={allSlottedList.length === 0}
-                  className="flex-1 min-w-0 px-2 py-1.5 rounded-lg border font-medium text-xs sm:text-sm hover:bg-muted/50 transition-all active:scale-95 truncate disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg border font-medium text-xs hover:bg-muted/50 transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ml-auto"
                 >
                   Clear All
                 </button>
               )}
-
-              {/* Share Button */}
-              <button
-                onClick={handleShareDeck}
-                aria-label="Share"
-                className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border font-medium text-xs sm:text-sm hover:bg-muted/50 transition-all active:scale-95 shrink-0 cursor-pointer"
-              >
-                <Link2 className="w-3.5 h-3.5 shrink-0" />
-                <span className="hidden sm:inline truncate">Share</span>
-              </button>
             </div>
           </div>
 
@@ -552,290 +641,338 @@ export default function DeckBuilderPage() {
         {/* RIGHT COLUMN (380px Sidebar Matching LimbusDeck) */}
         <div className="space-y-4">
           
-          {/* 1. Synergy Map */}
-          <div className="rounded-2xl border bg-card p-4 overflow-hidden shadow-sm">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-              Synergy Map
-            </h3>
-            {allSlottedList.length < 2 ? (
-              <div className="flex items-center justify-center py-8">
-                <p className="text-xs text-muted-foreground text-center">
-                  Select 2+ members<br />to see synergy map
-                </p>
-              </div>
-            ) : (
-              <SynergyNetworkMap slottedIdentities={allSlottedList} />
-            )}
+          {/* Analysis View Mode Tabs */}
+          <div className="flex items-center gap-1 p-1 bg-muted/40 border border-border/80 rounded-xl">
+            <button
+              onClick={() => setAnalysisTab('radar')}
+              className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                analysisTab === 'radar'
+                  ? 'bg-amber-500 text-stone-950 shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+              }`}
+            >
+              <span>5-Axis Radar</span>
+            </button>
+            <button
+              onClick={() => setAnalysisTab('passives')}
+              className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                analysisTab === 'passives'
+                  ? 'bg-amber-500 text-stone-950 shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+              }`}
+            >
+              <span>Passives</span>
+            </button>
+            <button
+              onClick={() => setAnalysisTab('constellation')}
+              className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                analysisTab === 'constellation'
+                  ? 'bg-amber-500 text-stone-950 shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+              }`}
+            >
+              <span>Network & Sins</span>
+            </button>
           </div>
 
-          {/* 2. Keyword Coverage */}
-          <div className="rounded-2xl border bg-card p-4 shadow-sm">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-              Keyword Coverage
-            </h3>
-            {allSlottedList.length === 0 ? (
-              <div className="text-sm text-muted-foreground py-4 text-center">
-                Select members
+          {/* TAB 1: 5-Axis Synergy Radar & Tactical Summary */}
+          {analysisTab === 'radar' && (
+            <div className="space-y-4">
+              <SynergyRadarChart 
+                analysis={limbusDeckAnalysis} 
+                targetKeyword={selectedKeyword} 
+              />
+              <div data-slot="card" className="flex flex-col gap-4 rounded-xl border bg-card p-4 text-card-foreground shadow-sm">
+                <div className="font-semibold text-xs uppercase tracking-wider text-muted-foreground">Tactical Squad Breakdown</div>
+                <SquadTacticalSummary 
+                  slottedCount={allSlottedList.length}
+                  synergyData={synergyData}
+                />
               </div>
-            ) : (
-              <div className="space-y-2.5">
-                {KEYWORDS.map(kw => {
-                  const count = synergyData.keywordCounts[kw] || 0;
-                  const ratio = allSlottedList.length > 0 ? (count / allSlottedList.length) * 100 : 0;
-                  const style = LIMBUSDECK_KEYWORD_STYLES[kw];
-                  const isDominant = count >= 3;
-
-                  return (
-                    <div key={kw} className="space-y-1">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="flex items-center gap-1.5 font-medium">
-                          <span 
-                            className="w-2 h-2 rounded-full inline-block" 
-                            style={{ backgroundColor: style?.color || '#888' }} 
-                          />
-                          <span className={count > 0 ? 'text-foreground font-semibold' : 'text-muted-foreground'}>
-                            {kw}
-                          </span>
-                        </span>
-                        <div className="flex items-center gap-1.5">
-                          {isDominant && (
-                            <span 
-                              className="text-[9px] px-1.5 py-0.2 rounded font-semibold uppercase tracking-wider"
-                              style={{ backgroundColor: style?.bg, color: style?.color, border: `1px solid ${style?.border}` }}
-                            >
-                              Core Focus
-                            </span>
-                          )}
-                          <span className="text-xs font-mono text-muted-foreground">
-                            {count} IDs
-                          </span>
-                        </div>
-                      </div>
-                      <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
-                        <div
-                          className="h-full rounded-full transition-all duration-300"
-                          style={{
-                            width: `${ratio}%`,
-                            backgroundColor: style?.color || '#888'
-                          }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-
-          {/* 3. Affiliation / Faction Synergies */}
-          <div className="rounded-2xl border bg-card p-4 shadow-sm">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Faction Synergy
-              </h3>
-              {synergyData.activeAffiliations.length > 0 && (
-                <span className="text-[10px] text-amber-400 font-semibold px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
-                  {synergyData.activeAffiliations.length} Active
-                </span>
-              )}
             </div>
+          )}
 
-            {allSlottedList.length === 0 ? (
-              <div className="text-sm text-muted-foreground py-4 text-center">
-                Select members
-              </div>
-            ) : synergyData.activeAffiliations.length === 0 ? (
-              <div className="text-xs text-muted-foreground py-3 text-center">
-                No faction synergies active. Slot 2+ identities from The Thumb, Blade Lineage, Zwei, W Corp, etc.
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {synergyData.activeAffiliations.map(aff => (
-                  <div 
-                    key={aff.name}
-                    className="p-2.5 rounded-xl border border-border/80 bg-muted/20 space-y-1.5"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
-                        <Shield size={12} className="text-amber-400" />
-                        <span>{aff.name}</span>
-                      </span>
-                      <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold">
-                        {aff.count} {aff.count === 1 ? 'member' : 'members'}
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-muted-foreground leading-snug">
-                      {aff.desc}
+          {/* TAB 2: Passive Feasibility Matrix */}
+          {analysisTab === 'passives' && (
+            <div className="space-y-4">
+              <PassiveFeasibilityMatrix 
+                passivesData={limbusDeckPassives} 
+              />
+            </div>
+          )}
+
+          {/* TAB 3: Constellation, Factions & Sin Network */}
+          {analysisTab === 'constellation' && (
+            <div className="space-y-4">
+              {/* 1. Synergy Map */}
+              <div className="rounded-2xl border bg-card p-4 overflow-hidden shadow-sm">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                  Synergy Map
+                </h3>
+                {allSlottedList.length < 2 ? (
+                  <div className="flex items-center justify-center py-8">
+                    <p className="text-xs text-muted-foreground text-center">
+                      Select 2+ members<br />to see synergy map
                     </p>
-                    <div className="flex flex-wrap gap-1 pt-1">
-                      {aff.members.map(m => (
-                        <span key={m} className="text-[9px] px-1.5 py-0.2 rounded bg-card border text-muted-foreground truncate max-w-[140px]">
-                          {m}
-                        </span>
-                      ))}
-                    </div>
                   </div>
-                ))}
+                ) : (
+                  <SynergyNetworkMap slottedIdentities={allSlottedList} />
+                )}
               </div>
-            )}
-          </div>
 
-          {/* 4. Sin Distribution */}
-          <div className="rounded-2xl border bg-card p-4 shadow-sm">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-              Sin Distribution
-            </h3>
-            {allSlottedList.length === 0 ? (
-              <div className="text-sm text-muted-foreground py-4 text-center">-</div>
-            ) : (
-              <div className="space-y-3">
-                {/* Attack Types Balance */}
-                <div className="grid grid-cols-3 gap-2 pb-2 border-b border-border/60">
-                  {[
-                    { label: 'Slash', count: synergyData.attackCounts.Slash, icon: '🗡️', col: 'text-red-400' },
-                    { label: 'Pierce', count: synergyData.attackCounts.Pierce, icon: '🏹', col: 'text-amber-400' },
-                    { label: 'Blunt', count: synergyData.attackCounts.Blunt, icon: '🔨', col: 'text-blue-400' }
-                  ].map(atk => (
-                    <div key={atk.label} className="text-center p-2 rounded-lg bg-muted/30 border border-border/50">
-                      <div className="text-sm">{atk.icon}</div>
-                      <div className="text-[10px] text-muted-foreground font-medium">{atk.label}</div>
-                      <div className={`text-xs font-bold font-mono ${atk.col}`}>{atk.count}</div>
-                    </div>
-                  ))}
+              {/* 2. Keyword Coverage */}
+              <div className="rounded-2xl border bg-card p-4 shadow-sm">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                  Keyword Coverage
+                </h3>
+                {allSlottedList.length === 0 ? (
+                  <div className="text-sm text-muted-foreground py-4 text-center">
+                    Select members
+                  </div>
+                ) : (
+                  <div className="space-y-2.5">
+                    {KEYWORDS.map(kw => {
+                      const count = synergyData.keywordCounts[kw] || 0;
+                      const ratio = allSlottedList.length > 0 ? (count / allSlottedList.length) * 100 : 0;
+                      const style = LIMBUSDECK_KEYWORD_STYLES[kw];
+                      const isDominant = count >= 3;
+
+                      return (
+                        <div key={kw} className="space-y-1">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="flex items-center gap-1.5 font-medium">
+                              <span 
+                                className="w-2 h-2 rounded-full inline-block" 
+                                style={{ backgroundColor: style?.color || '#888' }} 
+                              />
+                              <span className={count > 0 ? 'text-foreground font-semibold' : 'text-muted-foreground'}>
+                                {kw}
+                              </span>
+                            </span>
+                            <div className="flex items-center gap-1.5">
+                              {isDominant && (
+                                <span 
+                                  className="text-[9px] px-1.5 py-0.2 rounded font-semibold uppercase tracking-wider"
+                                  style={{ backgroundColor: style?.bg, color: style?.color, border: `1px solid ${style?.border}` }}
+                                >
+                                  Core Focus
+                                </span>
+                              )}
+                              <span className="text-xs font-mono text-muted-foreground">
+                                {count} IDs
+                              </span>
+                            </div>
+                          </div>
+                          <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+                            <div
+                              className="h-full rounded-full transition-all duration-300"
+                              style={{
+                                width: `${ratio}%`,
+                                backgroundColor: style?.color || '#888'
+                              }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* 3. Affiliation / Faction Synergies */}
+              <div className="rounded-2xl border bg-card p-4 shadow-sm">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    Faction Synergy
+                  </h3>
+                  {synergyData.activeAffiliations.length > 0 && (
+                    <span className="text-[10px] text-amber-400 font-semibold px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
+                      {synergyData.activeAffiliations.length} Active
+                    </span>
+                  )}
                 </div>
 
-                {/* Sins Spectrum */}
-                <div className="space-y-1.5">
-                  {Object.entries(synergyData.sinCounts).map(([sin, count]) => {
-                    const color = SIN_COLORS[sin] || '#666';
-                    const maxSins = Math.max(...Object.values(synergyData.sinCounts), 1);
-                    const pct = (count / maxSins) * 100;
+                {allSlottedList.length === 0 ? (
+                  <div className="text-sm text-muted-foreground py-4 text-center">
+                    Select members
+                  </div>
+                ) : synergyData.activeAffiliations.length === 0 ? (
+                  <div className="text-xs text-muted-foreground py-3 text-center">
+                    No faction synergies active. Slot 2+ identities from The Thumb, Blade Lineage, Zwei, W Corp, etc.
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {synergyData.activeAffiliations.map(aff => (
+                      <div 
+                        key={aff.name}
+                        className="p-2.5 rounded-xl border border-border/80 bg-muted/20 space-y-1.5"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                            <Shield size={12} className="text-amber-400" />
+                            <span>{aff.name}</span>
+                          </span>
+                          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold">
+                            {aff.count} {aff.count === 1 ? 'member' : 'members'}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-muted-foreground leading-snug">
+                          {aff.desc}
+                        </p>
+                        <div className="flex flex-wrap gap-1 pt-1">
+                          {aff.members.map(m => (
+                            <span key={m} className="text-[9px] px-1.5 py-0.2 rounded bg-card border text-muted-foreground truncate max-w-[140px]">
+                              {m}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* 4. Sin Distribution */}
+              <div className="rounded-2xl border bg-card p-4 shadow-sm">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                  Sin Distribution
+                </h3>
+                {allSlottedList.length === 0 ? (
+                  <div className="text-sm text-muted-foreground py-4 text-center">-</div>
+                ) : (
+                  <div className="space-y-3">
+                    {/* Attack Types Balance */}
+                    <div className="grid grid-cols-3 gap-2 pb-2 border-b border-border/60">
+                      {[
+                        { label: 'Slash', count: synergyData.attackCounts.Slash, icon: '🗡️', col: 'text-red-400' },
+                        { label: 'Pierce', count: synergyData.attackCounts.Pierce, icon: '🏹', col: 'text-amber-400' },
+                        { label: 'Blunt', count: synergyData.attackCounts.Blunt, icon: '🔨', col: 'text-blue-400' }
+                      ].map(atk => (
+                        <div key={atk.label} className="text-center p-2 rounded-lg bg-muted/30 border border-border/50">
+                          <div className="text-sm">{atk.icon}</div>
+                          <div className="text-[10px] text-muted-foreground font-medium">{atk.label}</div>
+                          <div className={`text-xs font-bold font-mono ${atk.col}`}>{atk.count}</div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Sins Spectrum */}
+                    <div className="space-y-1.5">
+                      {Object.entries(synergyData.sinCounts).map(([sin, count]) => {
+                        const color = SIN_COLORS[sin] || '#666';
+                        const maxSins = Math.max(...Object.values(synergyData.sinCounts), 1);
+                        const pct = (count / maxSins) * 100;
+
+                        return (
+                          <div key={sin} className="flex items-center gap-2 text-xs">
+                            <span className="w-16 font-medium text-[11px] flex items-center gap-1" style={{ color }}>
+                              <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: color }} />
+                              {sin}
+                            </span>
+                            <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+                              <div
+                                className="h-full rounded-full transition-all duration-300"
+                                style={{
+                                  width: `${pct}%`,
+                                  backgroundColor: color
+                                }}
+                              />
+                            </div>
+                            <span className="w-5 text-right font-mono text-muted-foreground text-[11px]">
+                              {count}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* 5. Synergy Pairs */}
+              <div className="rounded-2xl border bg-card p-4 shadow-sm">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                  Synergy Pairs
+                </h3>
+                {allSlottedList.length < 2 ? (
+                  <div className="text-sm text-muted-foreground py-4 text-center">Need 2+ members</div>
+                ) : synergyData.synergyPairs.length === 0 ? (
+                  <div className="text-xs text-muted-foreground py-3 text-center">
+                    No specific pair gimmicks detected. Focus on matching dominant keywords or resonance.
+                  </div>
+                ) : (
+                  <div className="space-y-2.5">
+                    {synergyData.synergyPairs.map((pair, idx) => (
+                      <div 
+                        key={idx}
+                        className="p-2.5 rounded-xl border border-border bg-muted/20 space-y-1"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-foreground">
+                            {pair.title}
+                          </span>
+                          <span className="text-[9px] px-1.5 py-0.2 rounded font-semibold bg-primary/20 text-primary border border-primary/30">
+                            {pair.tag}
+                          </span>
+                        </div>
+                        <div className="text-[10px] text-muted-foreground font-mono">
+                          {pair.duo.join(' + ')}
+                        </div>
+                        <p className="text-[11px] text-muted-foreground leading-tight pt-0.5">
+                          {pair.desc}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* 6. Resonance */}
+              <div className="rounded-2xl border bg-card p-4 shadow-sm">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                  Resonance
+                </h3>
+                <div className="flex gap-1.5 flex-wrap">
+                  {['Wrath', 'Lust', 'Sloth', 'Gluttony', 'Gloom', 'Pride', 'Envy'].map(sin => {
+                    const count = synergyData.sinCounts[sin] || 0;
+                    const color = SIN_COLORS[sin] || '#888';
+                    const isHighRes = count >= 4;
+                    const isActive = count > 0;
 
                     return (
-                      <div key={sin} className="flex items-center gap-2 text-xs">
-                        <span className="w-16 font-medium text-[11px] flex items-center gap-1" style={{ color }}>
-                          <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: color }} />
-                          {sin}
-                        </span>
-                        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
-                          <div
-                            className="h-full rounded-full transition-all duration-300"
-                            style={{
-                              width: `${pct}%`,
-                              backgroundColor: color
-                            }}
-                          />
-                        </div>
-                        <span className="w-5 text-right font-mono text-muted-foreground text-[11px]">
-                          {count}
-                        </span>
+                      <div
+                        key={sin}
+                        style={
+                          isActive
+                            ? {
+                                backgroundColor: `${color}15`,
+                                color: color,
+                                border: `1px solid ${color}60`,
+                                opacity: 1
+                              }
+                            : {
+                                backgroundColor: 'transparent',
+                                color: 'var(--muted-foreground)',
+                                border: '1px solid var(--border)',
+                                opacity: 0.3
+                              }
+                        }
+                        className="px-2.5 py-1 rounded-lg text-[10px] font-medium transition-all duration-300 flex items-center gap-1.5"
+                      >
+                        <span>{sin}</span>
+                        <span className="font-mono font-bold">{count}</span>
+                        {isHighRes && (
+                          <span className="text-[8px] font-bold uppercase bg-amber-500/30 text-amber-300 px-1 rounded">
+                            ⚡ A-Res
+                          </span>
+                        )}
                       </div>
                     );
                   })}
                 </div>
               </div>
-            )}
-          </div>
-
-          {/* 5. Synergy Pairs */}
-          <div className="rounded-2xl border bg-card p-4 shadow-sm">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-              Synergy Pairs
-            </h3>
-            {allSlottedList.length < 2 ? (
-              <div className="text-sm text-muted-foreground py-4 text-center">Need 2+ members</div>
-            ) : synergyData.synergyPairs.length === 0 ? (
-              <div className="text-xs text-muted-foreground py-3 text-center">
-                No specific pair gimmicks detected. Focus on matching dominant keywords or resonance.
-              </div>
-            ) : (
-              <div className="space-y-2.5">
-                {synergyData.synergyPairs.map((pair, idx) => (
-                  <div 
-                    key={idx}
-                    className="p-2.5 rounded-xl border border-border bg-muted/20 space-y-1"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-foreground">
-                        {pair.title}
-                      </span>
-                      <span className="text-[9px] px-1.5 py-0.2 rounded font-semibold bg-primary/20 text-primary border border-primary/30">
-                        {pair.tag}
-                      </span>
-                    </div>
-                    <div className="text-[10px] text-muted-foreground font-mono">
-                      {pair.duo.join(' + ')}
-                    </div>
-                    <p className="text-[11px] text-muted-foreground leading-tight pt-0.5">
-                      {pair.desc}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* 6. Resonance (Exact LimbusDeck Styling with 0.3 Inactive Opacity) */}
-          <div className="rounded-2xl border bg-card p-4 shadow-sm">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-              Resonance
-            </h3>
-            <div className="flex gap-1.5 flex-wrap">
-              {['Wrath', 'Lust', 'Sloth', 'Gluttony', 'Gloom', 'Pride', 'Envy'].map(sin => {
-                const count = synergyData.sinCounts[sin] || 0;
-                const color = SIN_COLORS[sin] || '#888';
-                const isHighRes = count >= 4;
-                const isActive = count > 0;
-
-                return (
-                  <div
-                    key={sin}
-                    style={
-                      isActive
-                        ? {
-                            backgroundColor: `${color}15`,
-                            color: color,
-                            border: `1px solid ${color}60`,
-                            opacity: 1
-                          }
-                        : {
-                            backgroundColor: 'transparent',
-                            color: 'var(--muted-foreground)',
-                            border: '1px solid var(--border)',
-                            opacity: 0.3
-                          }
-                    }
-                    className="px-2.5 py-1 rounded-lg text-[10px] font-medium transition-all duration-300 flex items-center gap-1.5"
-                  >
-                    <span>{sin}</span>
-                    <span className="font-mono font-bold">{count}</span>
-                    {isHighRes && (
-                      <span className="text-[8px] font-bold uppercase bg-amber-500/30 text-amber-300 px-1 rounded">
-                        ⚡ A-Res
-                      </span>
-                    )}
-                  </div>
-                );
-              })}
             </div>
-          </div>
-
-          {/* 7. Analyze Card */}
-          <div data-slot="card" className="flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm">
-            <div data-slot="card-header" className="grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 pb-2">
-              <div data-slot="card-title" className="font-semibold text-base">Analyze</div>
-            </div>
-            <div data-slot="card-content" className="px-6 space-y-3">
-              {allSlottedList.length === 0 ? (
-                <p className="text-sm text-muted-foreground">Select identities to see analysis</p>
-              ) : (
-                <SquadTacticalSummary 
-                  slottedCount={allSlottedList.length}
-                  synergyData={synergyData}
-                />
-              )}
-            </div>
-          </div>
+          )}
 
         </div>
       </div>

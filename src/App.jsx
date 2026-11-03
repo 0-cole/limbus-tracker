@@ -18,6 +18,7 @@ import OnboardingModal from './components/OnboardingModal';
 import TutorialTour from './components/TutorialTour';
 import UpdateNotification from './components/UpdateNotification';
 import Season8NoticeModal from './components/Season8NoticeModal';
+import WalpurgisNotificationModal from './components/WalpurgisNotificationModal';
 import SyncConflictModal from './components/SyncConflictModal';
 import MephistophelesBorderTrack from './components/MephistophelesBorderTrack';
 import { useStore } from './stores/useStore';
@@ -222,6 +223,7 @@ export default function App() {
       <OnboardingModal />
       <TutorialTour />
       <Season8NoticeModal />
+      <WalpurgisNotificationModal />
       <SyncConflictModal />
       {showTrumpetAlert && <SecondTrumpetModal onClose={() => setShowTrumpetAlert(false)} />}
       <div 

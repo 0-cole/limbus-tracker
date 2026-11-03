@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell, Tray, Menu, nativeImage, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, Tray, Menu, nativeImage, dialog, Notification } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
@@ -539,6 +539,26 @@ ipcMain.handle('mirror-grinder-stop', () => {
 
 ipcMain.handle('mirror-grinder-test-webhook', async (_, { url, roleId }) => {
   return await mirrorGrinder.testWebhook(url, roleId);
+});
+
+ipcMain.handle('show-notification', (_, { title, body, silent }) => {
+  try {
+    if (Notification.isSupported()) {
+      let iconPath = path.join(__dirname, '..', 'public', 'icon.png');
+      if (!fs.existsSync(iconPath)) iconPath = path.join(__dirname, '..', 'dist', 'icon.png');
+      const notif = new Notification({
+        title: title || 'Limbus Tracker',
+        body: body || '',
+        icon: fs.existsSync(iconPath) ? iconPath : undefined,
+        silent: !!silent
+      });
+      notif.show();
+      return true;
+    }
+  } catch (err) {
+    console.error('Notification error:', err);
+  }
+  return false;
 });
 
 app.whenReady().then(() => {

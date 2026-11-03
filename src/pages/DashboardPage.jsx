@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../stores/useStore.js';
-import { CheckCircle, XCircle, AlertCircle, Calendar, Target, Flame, CalendarDays, Battery, Archive, Award, Trash2, Clock, Check, Sparkles, X, RotateCcw } from 'lucide-react';
+import { CheckCircle, XCircle, AlertCircle, Calendar, Target, Flame, CalendarDays, Battery, Archive, Award, Trash2, Clock, Check, Sparkles, X, RotateCcw, Moon, ArrowRight, ShieldAlert } from 'lucide-react';
 import { calculateLimbusGrind, generateRoadmap } from '../utils/limbusCalculator.js';
 import { getNextResets, getLimbusCycleInfo } from '../utils/timeUtils.js';
 import { getSeasonEndDate } from '../utils/seasonUtils.js';
@@ -39,6 +39,13 @@ export default function DashboardPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const [showGasterApology, setShowGasterApology] = useState(false);
+  const [showWalpurgisBanner, setShowWalpurgisBanner] = useState(() => {
+    try {
+      return sessionStorage.getItem('lt_walpurgis_banner_hidden') !== 'true';
+    } catch (e) {
+      return true;
+    }
+  });
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -231,6 +238,71 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Walpurgisnacht Approaching Alert Banner */}
+      <AnimatePresence>
+        {showWalpurgisBanner && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+            className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-purple-950/80 via-[#180d28]/90 to-purple-950/80 border border-purple-500/50 shadow-[0_0_30px_rgba(168,85,247,0.25)] relative overflow-hidden"
+          >
+            {/* Pulsing Backlight */}
+            <div className="absolute top-0 right-0 w-64 h-full bg-purple-500/10 blur-2xl pointer-events-none" />
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
+              <div className="flex items-center gap-3.5">
+                <div className="w-11 h-11 rounded-xl bg-purple-500/20 border border-purple-400 flex items-center justify-center text-purple-300 shrink-0">
+                  <Moon size={22} className="text-purple-300 animate-pulse" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-sm font-black font-limbus text-white tracking-wide flex items-center gap-1.5">
+                      WALPURGISNACHT IS APPROACHING
+                    </span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/30 text-purple-200 border border-purple-400/40 font-mono">
+                      Target Extraction Soon
+                    </span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">
+                      Conserve Crates & Lunacy
+                    </span>
+                  </div>
+                  <p className="text-xs text-purple-200/90 mt-0.5 max-w-3xl leading-relaxed">
+                    The 7th Walpurgis Night limited crossover extraction opens soon! Walpurgis Identities & E.G.O are <strong className="text-amber-300 font-semibold">only craftable in the Dispenser</strong> while the event runs. Prepare 400 shards per target!
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
+                <button
+                  onClick={() => navigate('/identities')}
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 border border-purple-400/40 transition-colors flex items-center gap-1 cursor-pointer"
+                >
+                  <span>Review Pool</span>
+                  <ArrowRight size={13} />
+                </button>
+                <button
+                  onClick={() => navigate('/schedule')}
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition-colors cursor-pointer"
+                >
+                  <span>Plan Grind</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setShowWalpurgisBanner(false);
+                    try { sessionStorage.setItem('lt_walpurgis_banner_hidden', 'true'); } catch (e) {}
+                  }}
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                  title="Dismiss alert"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 items-start">
         {/* Daily Cycle Tracker (Unified) */}

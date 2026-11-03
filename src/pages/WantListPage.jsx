@@ -322,7 +322,7 @@ export default function WantListPage() {
                           {shardStatus.reason === 'walpurgis' ? (
                             <>
                               <span>🌙</span>
-                              <span>Walpurgisnacht Exclusive: Cannot be sharded until Walpurgisnacht (Date TBA)</span>
+                              <span>Walpurgisnacht Exclusive: Approaching soon! Dispenser exchange opens during Walpurgis event (Save 400 Shards)</span>
                             </>
                           ) : (
                             <>
